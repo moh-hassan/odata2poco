@@ -3,7 +3,9 @@
 
 #myignores
 .gitignore
+.nuget/
 #OData2Poco.Tests
+#OData2Poco.CommandLine
 temp/
 
 

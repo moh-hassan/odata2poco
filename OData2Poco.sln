@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2PocoConsoleTest", "OD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.Tests", "OData2Poco.Tests\OData2Poco.Tests.csproj", "{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.CommandLine", "OData2Poco.CommandLine\OData2Poco.CommandLine.csproj", "{59C02B8C-7388-490A-801C-AEA5244E3879}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.CommandLine.Test", "OData2Poco.CommandLine.Test\OData2Poco.CommandLine.Test.csproj", "{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59C02B8C-7388-490A-801C-AEA5244E3879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59C02B8C-7388-490A-801C-AEA5244E3879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59C02B8C-7388-490A-801C-AEA5244E3879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59C02B8C-7388-490A-801C-AEA5244E3879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,6 +19,7 @@ namespace OData2Poco.Tests
 
         //***********************http test*****************************
         [Test]
+        //expectedCount: number of generated classes
         [TestCase("http://services.odata.org/V4/OData/OData.svc", 11)] //v4
         [TestCase("http://services.odata.org/V3/OData/OData.svc", 11)] //v3
         public void GeneratePocoFromHttpTest(string url, int expecteCount)
