@@ -1,4 +1,4 @@
-﻿#define local
+﻿//#define local
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -19,8 +19,10 @@ namespace OData2Poco.Tests
 
         //***********************http test*****************************
         [Test]
+        
         [TestCase("http://services.odata.org/V4/OData/OData.svc", 11)] //v4
         [TestCase("http://services.odata.org/V3/OData/OData.svc", 11)] //v3
+        //expectedCount: number of generated classes
         public void GeneratePocoFromHttpTest(string url, int expecteCount)
         {
             var metaDataReader = new MetaDataReader(url);
@@ -29,10 +31,6 @@ namespace OData2Poco.Tests
             StringAssert.Contains("public class Product", code);
             StringAssert.Contains("public class FeaturedProduct", code);
             Assert.AreEqual(metaDataReader.ClassList.Count, expecteCount);
-            metaDataReader.ClassList.ForEach(m =>
-            {
-                Debug.WriteLine(m.Name);
-            });
         }
 
         [Test]
@@ -51,8 +49,8 @@ namespace OData2Poco.Tests
         [Test]
         public async void GeneratePocoWithValidAccountTes()
         {
-            string url = "http://asd-pc/odata2/api/northwind";
-            var metaDataReader = new MetaDataReader(url, "hassan", "123");
+            string url = "http://localhost/odata2/api/northwind";
+            var metaDataReader = new MetaDataReader(url, "user", "password");
             var code = await metaDataReader.GeneratePocoAsync();
             Assert.IsNotEmpty(code);
 
@@ -63,8 +61,8 @@ namespace OData2Poco.Tests
         public void GeneratePocoWithInValidAccountTest()
         {
             var msg = "The remote server returned an error: (401) Unauthorized";
-            string url = "http://asd-pc/odata2/api/northwind";
-            MetaDataReader metaDataReader = new MetaDataReader(url, "hassan123", "123");
+            string url = "http://localhost/odata2/api/northwind";
+            MetaDataReader metaDataReader = new MetaDataReader(url, "user_invalid", "password");
             var ex = Assert.Throws<WebException>(async () => await metaDataReader.GeneratePocoAsync());
             StringAssert.Contains(msg, ex.Message);
 
