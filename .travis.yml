@@ -1,0 +1,8 @@
+language: csharp
+solution: OData2Poco.sln
+before_install:
+  - sudo apt-get install nunit-console
+before_script:
+  - nuget restore OData2Poco.sln
+after_script:
+  - nunit-console /OData2Poco.Tests/bin/Debug
