@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Spatial;
 
 //uncomment for spatial data type and run Install-Package System.Spatial  
 //using System.Spatial; 
