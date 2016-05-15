@@ -13,7 +13,7 @@ using System.Spatial;
 //     MetaData Version: 1.0
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace ODataDemo
+namespace ODataDemo.Old
 {
     public class Product
     {
