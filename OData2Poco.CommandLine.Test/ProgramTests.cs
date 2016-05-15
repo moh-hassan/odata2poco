@@ -11,7 +11,7 @@ namespace OData2Poco.CommandLine.Test
     [TestFixture]
     public class ProgramTests
     {
-        private const double Timeout = 20; //sec
+        private const double Timeout = 30; //sec
 #if v3
         private string Url = "http://services.odata.org/V3/OData/OData.svc";
 #else
