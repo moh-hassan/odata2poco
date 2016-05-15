@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace OData2Poco
 {
@@ -31,7 +32,7 @@ namespace OData2Poco
 
         public string Generate(Language lang = Language.CS)
         {
-            if (lang == Language.CS) return CSGenerate();
+            if (lang == Language.CS) return CsGenerate();
             else return VBGenerate();
         }
 
@@ -39,24 +40,44 @@ namespace OData2Poco
         {
             throw new NotImplementedException();
         }
+        //v1.3
+        //wrapper
+        //private string CSGenerate()
+        //{
+        //    _metaDataReader = string.IsNullOrEmpty(User)
+        //    ? new MetaDataReader(Url)
+        //    : new MetaDataReader(Url, User, Password);
 
-        private string CSGenerate()
+        //    var code = _metaDataReader.GeneratePoco();
+        //    ServiceVersion = _metaDataReader.ServiceVersion;
+        //    MetaDataVersion = _metaDataReader.MetaDataVersion;
+        //    //ClassList = _metaDataReader.ClassList;
+        //    ServiceHeader = _metaDataReader.ServiceHeader;
+        //    MetaDataAsString = _metaDataReader.MetaDataAsString;
+        // //   File.WriteAllText(filename, code);
+        //    // return this;
+        //    return code;
+        //}
+
+        //v1.4, use Execute method , ToString () for code
+        private string CsGenerate()
         {
             _metaDataReader = string.IsNullOrEmpty(User)
             ? new MetaDataReader(Url)
             : new MetaDataReader(Url, User, Password);
 
-            var code = _metaDataReader.GeneratePoco();
+            var gen = _metaDataReader.Execute();
+            var code = gen.ToString(); //.GeneratePoco();
             ServiceVersion = _metaDataReader.ServiceVersion;
             MetaDataVersion = _metaDataReader.MetaDataVersion;
-            ClassList = _metaDataReader.ClassList;
+            ClassList = gen.ClassDictionary.Select(kvp=>kvp.Value).ToList();
             ServiceHeader = _metaDataReader.ServiceHeader;
             MetaDataAsString = _metaDataReader.MetaDataAsString;
-         //   File.WriteAllText(filename, code);
+            //   File.WriteAllText(filename, code);
             // return this;
             return code;
         }
-        public void SaveMetadata(string fname="meta.xml")
+        public void SaveMetadata(string fname = "meta.xml")
         {
             File.WriteAllText(fname, MetaDataAsString);
         }

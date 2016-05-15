@@ -67,7 +67,12 @@
     <Compile Include="IPocoGenerator.cs" />
     <Compile Include="MetaDataReader.cs" />
     <Compile Include="ODataVersion.cs" />
+    <Compile Include="PocoSetting.cs" />
     <Compile Include="PropertyTemplate.cs" />
+    <Compile Include="TextTransform\FluentTextTemplate.cs" />
+    <Compile Include="TextTransform\FluentCsTextTemplate.cs" />
+    <Compile Include="TextTransform\FluentTextTemplateT.cs" />
+    <Compile Include="TextTransform\IFluentTextTemplate.cs" />
     <Compile Include="V3\ClrConvertor-V3.cs" />
     <Compile Include="V3\Poco.cs" />
     <Compile Include="V4\ClrConvertor-V4.cs" />
