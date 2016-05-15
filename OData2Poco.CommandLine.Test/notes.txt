@@ -8,7 +8,7 @@ Successfully installed 'OData2Poco.CommandLine 1.4.0'.
 Adding 'OData2Poco.CommandLine 1.4.0' to OData2Poco.CommandLine.Test.
 Successfully added 'OData2Poco.CommandLine 1.4.0' to OData2Poco.CommandLine.Test.
 
- 2)
+ 2)Execute the program
  OData2Poco.CommandLine.Test\o2p\o2pgen -r http://services.odata.org/V4/OData/OData.svc -f  OData2Poco.CommandLine.Test\o2p\northwind.cs
 
  3) click show all files in solution explorer -> select the file -> click include in the project 
