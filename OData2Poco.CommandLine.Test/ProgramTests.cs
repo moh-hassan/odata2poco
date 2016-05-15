@@ -40,7 +40,7 @@ namespace OData2Poco.CommandLine.Test
             //Console.WriteLine(outText);
          //   Assert.AreEqual(0, exitCode);
             Tuple<int, string> tuple = new Tuple<int, string>(exitCode, outText + "\n" + errText);
-            Console.WriteLine(tuple.Item2);
+            //Console.WriteLine(tuple.Item2);
             return tuple;
         });
 
@@ -51,8 +51,8 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            var help = File.ReadAllText("help.txt");
-            Assert.IsTrue(output.Contains(help.Trim()));
+            //var help = File.ReadAllText("help.txt");
+            Assert.IsTrue(output.Contains("-r, --url"));
         }
         [Test]
         public void ShowAllArguments()
