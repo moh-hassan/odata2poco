@@ -16,12 +16,13 @@ namespace OData2Poco.Tests
     [TestFixture]
     public partial class MetaDataReaderAsyncTests
     {
-
+        const string UrlV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
+        const string UrlV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
+      
         //***********************http test*****************************
         [Test]
-
-        [TestCase("http://services.odata.org/V4/OData/OData.svc", 11)] //v4 //url , countof entities in the model
-        [TestCase("http://services.odata.org/V3/OData/OData.svc", 11)] //v3
+        [TestCase(UrlV4,26)]
+        [TestCase(UrlV3,26)]
         [TestCase(@"data\northwindV4.xml", 11)] //filename , countof entities in the model
         [TestCase(@"data\northwindV3.xml", 11)]
         //expectedCount: number of generated classes
@@ -31,20 +32,9 @@ namespace OData2Poco.Tests
             var code = metaDataReader.Execute().ToString();
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            StringAssert.Contains("public class FeaturedProduct", code);
             Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
         }
-
-        //[Test]
-        //[TestCase("http://not_valid_url.com")] //not valid url
-        //[TestCase("http://www.google.com")] //not odata support
-        //public void GeneratePocoInvalidODataOrUrlTest(string url)
-        //{
-        //    var code = "";
-        //    var metaDataReader = new MetaDataReader(url);
-        //    Assert.Throws<WebException>(async () => code = await metaDataReader.GeneratePocoAsync());
-        //    Assert.IsEmpty(code);
-        //}
+      
 
 #if local
         //test secured servers
@@ -71,8 +61,8 @@ namespace OData2Poco.Tests
         }
 #endif
 
-       
-     
+
+
         //[Test]
         //public void GeneratePocoFromFileNotExistTest()
         //{

@@ -50,7 +50,7 @@ namespace Northwind.Data
                 .EndClass()
                 .EndNamespace()
                 .ToString();
-            Console.WriteLine(result);
+            //Console.WriteLine(result);
             var compRegex = new StringCompIgnoreWhiteSpaceRegex();
           var flag=  compRegex.Equals(code, result);
            // StringAssert.Contains(code.Trim(), result.Trim());

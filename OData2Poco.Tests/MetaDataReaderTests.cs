@@ -42,7 +42,7 @@ namespace OData2Poco.Tests
         {
             var metaDataReader = new MetaDataReader(url);
             var version = metaDataReader.MetaDataVersion;
-            Console.WriteLine(version);
+            //Console.WriteLine(version);
             Assert.AreEqual(version, serviceVersion);
             //repeat operation
             var version2 = metaDataReader.MetaDataVersion;
@@ -64,11 +64,7 @@ namespace OData2Poco.Tests
             //var code = gen.ToString();
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            ////Assert.AreEqual(metaDataReader.ClassList.Count, expecteCount);
             Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
-            //Assert.AreEqual(metaDataReader.Execute().ClassDictionary.Count, expecteCount);
-
-
         }
 
         [Test]
@@ -88,16 +84,11 @@ namespace OData2Poco.Tests
                 AddRequiredAttribute = true,
                 AddNullableDataType = true
             }).ToString();
-            //Debug.WriteLine(code);
-            //var code = gen.ToString();
+           
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            ////Assert.AreEqual(metaDataReader.ClassList.Count, expecteCount);
             Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
-            //Assert.AreEqual(metaDataReader.Execute().ClassDictionary.Count, expecteCount);
-
-
-        }
+          }
 
         [Test]
         [TestCase(UrlV4, 26)]
@@ -110,13 +101,9 @@ namespace OData2Poco.Tests
             var metaDataReader = new MetaDataReader(url);
             var gen = metaDataReader.Generator; //.Execute();
             var code = gen.ToString();
-            //Console.WriteLine(code);
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            ////Assert.AreEqual(metaDataReader.ClassList.Count, expecteCount);
             Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
-            //Assert.AreEqual(metaDataReader.Execute().ClassDictionary.Count, expecteCount);
-
 
         }
 
