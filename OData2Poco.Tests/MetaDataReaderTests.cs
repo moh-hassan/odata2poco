@@ -10,13 +10,18 @@ using NUnit.Framework;
 
 namespace OData2Poco.Tests
 {
+      
 
     [TestFixture]
     public partial class MetaDataReaderTests
     {
+        const string UrlV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
+        const string UrlV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
+      
+
         [Test]
-        [TestCase("http://services.odata.org/V4/OData/OData.svc")] //v4
-        [TestCase("http://services.odata.org/V3/OData/OData.svc")] //v3
+        [TestCase(UrlV4)]
+        [TestCase(UrlV3)]
         [TestCase(@"data\northwindV4.xml")] //filename 
         [TestCase(@"data\northwindV3.xml")]
         public void ReadMetaDataAsStringTest(string url)
@@ -29,8 +34,8 @@ namespace OData2Poco.Tests
         }
 
         [Test]
-        [TestCase("http://services.odata.org/V4/OData/OData.svc", "4.0")] //v4
-        [TestCase("http://services.odata.org/V3/OData/OData.svc", "1.0")] //v3
+        [TestCase(UrlV4,"4.0")]
+        [TestCase(UrlV3,"1.0")]
         [TestCase(@"data\northwindV4.xml", "4.0")] //filename 
         [TestCase(@"data\northwindV3.xml", "1.0")]
         public void ReadMetaDataVersionTest(string url, string serviceVersion)
@@ -41,13 +46,13 @@ namespace OData2Poco.Tests
             Assert.AreEqual(version, serviceVersion);
             //repeat operation
             var version2 = metaDataReader.MetaDataVersion;
-            Console.WriteLine(version2);
+            //Console.WriteLine(version2);
             Assert.AreEqual(version2, serviceVersion);
         }
 
         [Test]
-        [TestCase("http://services.odata.org/V4/OData/OData.svc", 11)] //v4
-        [TestCase("http://services.odata.org/V3/OData/OData.svc", 11)] //v3
+        [TestCase(UrlV4, 26)]
+        [TestCase(UrlV3, 26)]
         [TestCase(@"data\northwindV4.xml", 11)] //filename , countof entities in the model
         [TestCase(@"data\northwindV3.xml", 11)]
         //expecteCount: count of classes /Entities
@@ -55,11 +60,10 @@ namespace OData2Poco.Tests
         {
             var metaDataReader = new MetaDataReader(url);
             var code = metaDataReader.Execute().ToString();
-            Debug.WriteLine(code);
+            //Debug.WriteLine(code);
             //var code = gen.ToString();
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            StringAssert.Contains("public class FeaturedProduct", code);
             ////Assert.AreEqual(metaDataReader.ClassList.Count, expecteCount);
             Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
             //Assert.AreEqual(metaDataReader.Execute().ClassDictionary.Count, expecteCount);
@@ -68,8 +72,8 @@ namespace OData2Poco.Tests
         }
 
         [Test]
-        [TestCase("http://services.odata.org/V4/OData/OData.svc", 11)] //v4
-        [TestCase("http://services.odata.org/V3/OData/OData.svc", 11)] //v3
+        [TestCase(UrlV4, 26)]
+        [TestCase(UrlV3, 26)]
         [TestCase(@"data\northwindV4.xml", 11)] //filename , countof entities in the model
         [TestCase(@"data\northwindV3.xml", 11)]
         //expecteCount: count of classes /Entities
@@ -84,11 +88,10 @@ namespace OData2Poco.Tests
                 AddRequiredAttribute = true,
                 AddNullableDataType = true
             }).ToString();
-            Debug.WriteLine(code);
+            //Debug.WriteLine(code);
             //var code = gen.ToString();
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            StringAssert.Contains("public class FeaturedProduct", code);
             ////Assert.AreEqual(metaDataReader.ClassList.Count, expecteCount);
             Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
             //Assert.AreEqual(metaDataReader.Execute().ClassDictionary.Count, expecteCount);
@@ -97,8 +100,8 @@ namespace OData2Poco.Tests
         }
 
         [Test]
-        [TestCase("http://services.odata.org/V4/OData/OData.svc", 11)] //v4
-        [TestCase("http://services.odata.org/V3/OData/OData.svc", 11)] //v3
+        [TestCase(UrlV4, 26)]
+        [TestCase(UrlV3, 26)]
         [TestCase(@"data\northwindV4.xml", 11)] //filename , countof entities in the model
         [TestCase(@"data\northwindV3.xml", 11)]
         //expecteCount: count of classes /Entities
@@ -107,10 +110,9 @@ namespace OData2Poco.Tests
             var metaDataReader = new MetaDataReader(url);
             var gen = metaDataReader.Generator; //.Execute();
             var code = gen.ToString();
-            Console.WriteLine(code);
+            //Console.WriteLine(code);
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            StringAssert.Contains("public class FeaturedProduct", code);
             ////Assert.AreEqual(metaDataReader.ClassList.Count, expecteCount);
             Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
             //Assert.AreEqual(metaDataReader.Execute().ClassDictionary.Count, expecteCount);
