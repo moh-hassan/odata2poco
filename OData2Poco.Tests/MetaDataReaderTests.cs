@@ -1,5 +1,6 @@
 ﻿//#define local
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Xml;
@@ -28,16 +29,16 @@ namespace OData2Poco.Tests
         }
 
         [Test]
-        [TestCase("http://services.odata.org/V4/OData/OData.svc","4.0")] //v4
-        [TestCase("http://services.odata.org/V3/OData/OData.svc","1.0")] //v3
-        [TestCase(@"data\northwindV4.xml","4.0")] //filename 
-        [TestCase(@"data\northwindV3.xml","1.0")]
+        [TestCase("http://services.odata.org/V4/OData/OData.svc", "4.0")] //v4
+        [TestCase("http://services.odata.org/V3/OData/OData.svc", "1.0")] //v3
+        [TestCase(@"data\northwindV4.xml", "4.0")] //filename 
+        [TestCase(@"data\northwindV3.xml", "1.0")]
         public void ReadMetaDataVersionTest(string url, string serviceVersion)
         {
             var metaDataReader = new MetaDataReader(url);
             var version = metaDataReader.MetaDataVersion;
             Console.WriteLine(version);
-            Assert.AreEqual(version,serviceVersion);
+            Assert.AreEqual(version, serviceVersion);
             //repeat operation
             var version2 = metaDataReader.MetaDataVersion;
             Console.WriteLine(version2);
@@ -45,25 +46,54 @@ namespace OData2Poco.Tests
         }
 
         [Test]
-        [TestCase("http://services.odata.org/V4/OData/OData.svc",11)] //v4
-        [TestCase("http://services.odata.org/V3/OData/OData.svc",11)] //v3
+        [TestCase("http://services.odata.org/V4/OData/OData.svc", 11)] //v4
+        [TestCase("http://services.odata.org/V3/OData/OData.svc", 11)] //v3
         [TestCase(@"data\northwindV4.xml", 11)] //filename , countof entities in the model
         [TestCase(@"data\northwindV3.xml", 11)]
         //expecteCount: count of classes /Entities
-        public void GeneratePocoFromHttporFileExecuteTest(string url,int expecteCount)
+        public void GeneratePocoFromHttporFileExecuteTest(string url, int expecteCount)
         {
             var metaDataReader = new MetaDataReader(url);
-            var gen = metaDataReader.Execute();
-
-            var code = gen.ToString();
+            var code = metaDataReader.Execute().ToString();
+            Debug.WriteLine(code);
+            //var code = gen.ToString();
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
             StringAssert.Contains("public class FeaturedProduct", code);
             ////Assert.AreEqual(metaDataReader.ClassList.Count, expecteCount);
             Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
             //Assert.AreEqual(metaDataReader.Execute().ClassDictionary.Count, expecteCount);
-            
-            
+
+
+        }
+
+        [Test]
+        [TestCase("http://services.odata.org/V4/OData/OData.svc", 11)] //v4
+        [TestCase("http://services.odata.org/V3/OData/OData.svc", 11)] //v3
+        [TestCase(@"data\northwindV4.xml", 11)] //filename , countof entities in the model
+        [TestCase(@"data\northwindV3.xml", 11)]
+        //expecteCount: count of classes /Entities
+        public void GeneratePocoFromHttporFileExecuteSettingTest(string url, int expecteCount)
+        {
+            var metaDataReader = new MetaDataReader(url);
+
+            var code = metaDataReader.Execute(new PocoSetting
+            {
+                AddKeyAttribute = true,
+                AddTableAttribute = true,
+                AddRequiredAttribute = true,
+                AddNullableDataType = true
+            }).ToString();
+            Debug.WriteLine(code);
+            //var code = gen.ToString();
+            Assert.IsNotEmpty(code);
+            StringAssert.Contains("public class Product", code);
+            StringAssert.Contains("public class FeaturedProduct", code);
+            ////Assert.AreEqual(metaDataReader.ClassList.Count, expecteCount);
+            Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
+            //Assert.AreEqual(metaDataReader.Execute().ClassDictionary.Count, expecteCount);
+
+
         }
 
         [Test]
@@ -131,7 +161,7 @@ namespace OData2Poco.Tests
             string url = "file_not_exist";
             MetaDataReader metaDataReader = new MetaDataReader(url);
             Assert.Throws<FileNotFoundException>(() => code = metaDataReader.GeneratePoco());
-           
+
             Assert.IsEmpty(code);
 
         }
@@ -143,9 +173,9 @@ namespace OData2Poco.Tests
             MetaDataReader metaDataReader = new MetaDataReader(url);
             Assert.Throws<XmlException>(() => code = metaDataReader.GeneratePoco());
             Assert.IsEmpty(code);
-           
+
         }
 
-       
+
     }
 }

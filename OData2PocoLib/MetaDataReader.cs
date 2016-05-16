@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -63,27 +64,25 @@ namespace OData2Poco
 
         public PocoClassGenerator Execute()
         {
+            PocoSetting setting = new PocoSetting();
+            return Execute(setting);
+        }
+
+        public PocoClassGenerator Execute(PocoSetting setting)
+        {
             //avoid double execution
             if (_generator == null)
             {
                 IPocoGenerator pocoFactory = PocoFactory.Create(MetaDataAsString, ServiceUrl);
-                _generator = new PocoClassGenerator(pocoFactory);
+                _generator = new PocoClassGenerator(pocoFactory,setting);
             }
             return _generator;
         }
-        //public async Task<PocoClassGenerator> ExecuteAsync()
-        //{
-        //    if (_generator == null)
-        //    {
-        //        IPocoGenerator pocoFactory = PocoFactory.Create(MetaDataAsString, ServiceUrl);
-        //        _generator = new PocoClassGenerator(pocoFactory);
-        //    }
-        //    return _generator;
-        //}
+       
 
         private string LoadMetaData()
         {
-            Console.WriteLine("LoadMetaData");
+            //Debug.WriteLine("LoadMetaData");
             string metaLocation = ServiceUrl;
             string content;
             //logger.Info("Connecting to: " +metaLocation);
@@ -235,19 +234,7 @@ namespace OData2Poco
             }
         }
 
-        //private void GetServiceHttpHeader(HttpResponseMessage response)
-        //{
-        //    foreach (var header in response.Headers)
-        //    {
-        //        if (header.Key.Contains("OData-Version") || header.Key.Contains("DataServiceVersion"))
-        //        {
-        //            ServiceVersion = header.Value.FirstOrDefault();
-        //        }
-        //        ServiceHeader.Add(header.Key, header.Value.FirstOrDefault());
-        //        //Debug.WriteLine("{0} {1} ", header.Key, header.Value.FirstOrDefault());
-        //    }
-        //}
-
+       
         #region CodeGeneration
         /// <summary>
         /// Generate cs code for all POCO classes as a one unit 
@@ -264,29 +251,7 @@ namespace OData2Poco
                 //var classList = generator.ClassDictionary.Select(kvp => kvp.Value).ToList();
                 return code;
         }
-        //call PocoFactory to get poco that match v3/v4 generation
-        //public async Task<string> GeneratePocoAsync()
-        //{
-
-        //    //MetaDataAsString = await LoadMetaDataAsync();
-        //    //Console.WriteLine("metalength {0}", MetaDataAsString);
-        //    if (!string.IsNullOrEmpty(MetaDataAsString))
-        //    {
-        //        //IPocoGenerator pocoFactory = PocoFactory.Create(MetaDataAsString, ServiceUrl);
-        //        //var generator = new PocoClassGenerator(pocoFactory);
-
-        //        var code = Generator.ToString(); //generate all classes
-        //        foreach (var item in _generator.ClassDictionary)
-        //        {
-        //            Console.WriteLine("dict {0} {1}", item.Key, item.Value.EntitySetName);
-        //        }
-        //        //ClassList = generator.ClassList.ToList();
-        //        //ClassList = generator.ClassDictionary.Select(kvp => kvp.Value).ToList();
-        //        //Console.WriteLine("classlist {0}", ClassList.Count);
-        //        return code;
-        //    }
-        //    return "";
-        //}
+       
         #endregion
         public void SaveMetadata(string fname)
         {

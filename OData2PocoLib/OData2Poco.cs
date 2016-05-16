@@ -17,6 +17,7 @@ namespace OData2Poco
         public string MetaDataVersion { get; set; }
         public string MetaDataAsString { get; private set; }
         public Dictionary<string, string> ServiceHeader { get; set; }
+        public PocoSetting Setting { get; set; }
         public O2P(string url)
         {
             Url = url;
@@ -34,6 +35,12 @@ namespace OData2Poco
         {
             if (lang == Language.CS) return CsGenerate();
             else return VBGenerate();
+        }
+
+        public string Generate(PocoSetting setting, Language lang = Language.CS)
+        {
+            Setting = setting;
+            return Generate(lang);
         }
 
         private string VBGenerate()
@@ -66,11 +73,11 @@ namespace OData2Poco
             ? new MetaDataReader(Url)
             : new MetaDataReader(Url, User, Password);
 
-            var gen = _metaDataReader.Execute();
+            var gen = _metaDataReader.Execute(Setting);
             var code = gen.ToString(); //.GeneratePoco();
             ServiceVersion = _metaDataReader.ServiceVersion;
             MetaDataVersion = _metaDataReader.MetaDataVersion;
-            ClassList = gen.ClassDictionary.Select(kvp=>kvp.Value).ToList();
+            ClassList = gen.ClassDictionary.Select(kvp => kvp.Value).ToList();
             ServiceHeader = _metaDataReader.ServiceHeader;
             MetaDataAsString = _metaDataReader.MetaDataAsString;
             //   File.WriteAllText(filename, code);

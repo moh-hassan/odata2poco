@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="FluentCsTextTemplateTest.cs" />
     <Compile Include="Helper\StringCompIgnoreWhiteSpaceRegex.cs" />
     <Compile Include="MetaDataReaderAsyncTests.cs">

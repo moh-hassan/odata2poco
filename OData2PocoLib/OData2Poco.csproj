@@ -82,6 +82,7 @@
   <ItemGroup>
     <Content Include="licence.txt" />
     <Content Include="ODataLogo-32.png" />
+    <None Include="ReleaseNotes.md" />
     <Content Include="TextFile1.txt" />
     <None Include="packages.config" />
     <Content Include="T4 Templates\T4Odata2Poco.tt.txt" />

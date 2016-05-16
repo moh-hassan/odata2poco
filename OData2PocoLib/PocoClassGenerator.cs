@@ -11,7 +11,7 @@ namespace OData2Poco
     internal class PocoClassGenerator
     {
         internal IDictionary<string, ClassTemplate> ClassDictionary; //= new Dictionary<string, ClassTemplate>();
-
+        private PocoSetting _PocoSetting =new PocoSetting() ;
         public ClassTemplate this[string key]
         {
             get { return ClassDictionary[key]; }
@@ -51,8 +51,9 @@ namespace OData2Poco
             return h.ToString();
         };
 
-        internal PocoClassGenerator(IPocoGenerator pocoGen)
+        internal PocoClassGenerator(IPocoGenerator pocoGen,PocoSetting setting)
         {
+            _PocoSetting = setting;
             _pocoGen = pocoGen;
             ClassDictionary = new Dictionary<string, ClassTemplate>();
             _template = new FluentCsTextTemplate();
@@ -65,7 +66,7 @@ namespace OData2Poco
         /// Generate C# code for all POCO classes in the model
         /// </summary>
         /// <returns></returns>
-        private string GeneratePoco()
+        private string GeneratePoco( )
         {
             //   ClassList = _pocoGen.GeneratePocoList(); //generate all classes from model
             _template.WriteLine(_header()); //header of the file (using xxx;....)
@@ -82,7 +83,7 @@ namespace OData2Poco
         /// Generate entry for every class to be written in separate file
         /// </summary>
         /// <returns></returns>
-        internal Dictionary<string, string> GeneratePocoMultiFile()
+        private Dictionary<string, string> GeneratePocoMultiFile()
         {
             Dictionary<string, string> codes = new Dictionary<string, string>();
             foreach (var item in ClassDictionary)
@@ -103,6 +104,7 @@ namespace OData2Poco
         /// <returns></returns>
         internal string CsClassToString(ClassTemplate ent, bool includeNamespace = false)
         {
+            
             var csTemplate = new FluentCsTextTemplate();
             if (includeNamespace) csTemplate.WriteLine(_header());
 
@@ -117,25 +119,44 @@ namespace OData2Poco
 
             //v1.4
             //add TableAttribute
-            if (ent.EntitySetName != "")
+            if (_PocoSetting.AddTableAttribute)
             {
-                var tableAtt = string.Format("Table(\"{0}\")", ent.EntitySetName);
-                csTemplate.PushIndent("\t").WriteLineAttribute(tableAtt).PopIndent();
+                if (ent.EntitySetName != "")
+                {
+                    var tableAtt = string.Format("Table(\"{0}\")", ent.EntitySetName);
+                    csTemplate.PushIndent("\t").WriteLineAttribute(tableAtt).PopIndent();
+                }
             }
             csTemplate.StartClass(ent.Name);
             foreach (var p in ent.Properties)
             {
                 //@@@ v1.0.0-rc3
-                //skip navigation properties
-                if (p.IsNavigate) continue;
+                // navigation properties
+                //v1.4 skip
+                //if (p.IsNavigate) continue;
+
+                //v1.5
+                if (p.IsNavigate)
+                {
+                    //Console.WriteLine("navigation entity {0}  prop: {1}",ent.Name, p.PropName);
+                    if (!_PocoSetting.AddNavigation) continue;
+
+                }
 
                 //v1.4
-                //add attributes
-                if (p.IsKey) csTemplate.WriteLineAttribute("Key");
-                if (!p.IsNullable) csTemplate.WriteLineAttribute("Required");
+                //add key attributes
+                if (_PocoSetting.AddKeyAttribute)
+                {
+                    if (p.IsKey) csTemplate.WriteLineAttribute("Key");
+                }
 
+                if (_PocoSetting.AddRequiredAttribute)
+                {
+                    if (!p.IsNullable) csTemplate.WriteLineAttribute("Required");
+                }
                 // if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>)) 
-                csTemplate.WriteLineProperty(p.PropType, p.PropName, comment: p.PropComment);
+                var virtualprop = (p.IsNavigate && _PocoSetting.AddNavigation);
+                csTemplate.WriteLineProperty(p.PropType, p.PropName, comment: p.PropComment, isVirtual: virtualprop);
             }
             csTemplate.EndClass();
             if (includeNamespace) csTemplate.EndNamespace(); //"}" for namespace
