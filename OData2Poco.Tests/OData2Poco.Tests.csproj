@@ -57,6 +57,7 @@
     <Compile Include="MetaDataReaderTests.cs" />
     <Compile Include="Model\Class1 - Copy.cs" />
     <Compile Include="Model\Class1.cs" />
+    <Compile Include="OData2PocoTest.cs" />
     <Compile Include="PocoFactoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
