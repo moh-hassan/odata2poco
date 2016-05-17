@@ -13,7 +13,7 @@ namespace OData2Poco.CommandLine.Test
     [TestFixture]
     public class ProgramTests
     {
-        private const double Timeout = 30; //sec
+        private const double Timeout = 3*60; //sec
         const string UrlV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
         const string UrlV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
         
