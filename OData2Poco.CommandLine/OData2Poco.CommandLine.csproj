@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    </PropertyGroup>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
@@ -68,6 +68,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="ReleaseNotes.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="licence.txt" />
@@ -85,7 +86,10 @@
     <Folder Include="o2p\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-   
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)packages\ilmerge.2.14.1208\tools\ILMerge.exe" /out:"$(ProjectDir)o2p\o2pgen.exe" "$(TargetDir)$(TargetName).exe" "$(TargetDir)*.dll" /target:exe /targetplatform:v4,C:\Windows\Microsoft.NET\Framework\v4.0.30319 /wildcards 
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

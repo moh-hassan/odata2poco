@@ -14,9 +14,27 @@ namespace OData2Poco.CommandLine
         private static Stopwatch sw = new Stopwatch();
         static void Main(string[] args)
         {
-            RunOptions(args);
-        }
+            try
+            {
 
+                //// Catch all unhandled exceptions in all threads.
+                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                RunOptions(args);
+            }
+            catch (Exception ex)
+            {
+                var argument = string.Join(" ", args);
+                Console.WriteLine("Error in executing the command: o2pgen {0}", argument);
+                Console.WriteLine("Error Message:\n {0}", ex.Message);
+                //Console.WriteLine("Error Details: {0}", ex);
+                Environment.Exit(-1);
+            }
+        }
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Console.WriteLine((e.ExceptionObject as Exception).Message);
+            Environment.Exit(-99);
+        }
         static void RunOptions(string[] args)
         {
             sw.Start();
