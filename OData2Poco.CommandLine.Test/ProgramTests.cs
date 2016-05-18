@@ -13,7 +13,7 @@ namespace OData2Poco.CommandLine.Test
     [TestFixture]
     public class ProgramTests
     {
-        private const double Timeout = 30; //sec
+        private const double Timeout = 3*60; //sec
         const string UrlV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
         const string UrlV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
         
@@ -51,11 +51,9 @@ namespace OData2Poco.CommandLine.Test
         }
 
         [Test]
-        [TestCase(UrlV4)]
-        [TestCase(UrlV3)]
         [TestCase(@"data\northwindv4.xml")]
         [TestCase(@"data\northwindv3.xml")]
-        public void AllArgumentTest(string url)
+        public void AllArgumentFileTest(string url)
         {
             var a = string.Format("-r {0} -d -l -v -m meta.xml -f north.cs ", url);
             var tuble = RunCommand(a);
@@ -63,25 +61,29 @@ namespace OData2Poco.CommandLine.Test
             Assert.AreEqual(0, tuble.Item1);
             Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("Saving generated code to file : north.cs")); //-f -r
-            Assert.IsTrue(output.Contains("HTTP Header")); //-d
+            Assert.IsFalse(output.Contains("HTTP Header")); //-d for http only
             Assert.IsTrue(output.Contains("POCO classes")); //-l
             Assert.IsTrue(output.Contains("Saving Metadata to file : meta.xml")); //-m
             Assert.IsTrue(output.Contains("public class Product")); //-v
 
         }
+
         [Test]
         [TestCase(UrlV4)]
         [TestCase(UrlV3)]
-        //-r
-        public void StartWith_r_ArgumentTest(string url)
+        [TestCase(@"data\northwindv4.xml")]
+        [TestCase(@"data\northwindv3.xml")]
+        public void UrlArgumentTest(string url)
         {
-            var a = string.Format("-r {0}", url);
+            var a = string.Format("-r {0} -v", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
+            Assert.IsTrue(output.Contains("public class Product")); //-v
 
-            Assert.IsTrue(output.Contains("Saving generated code to file : poco.cs"));
         }
+
+      
 
         [Test]
         [TestCase(UrlV4)]
@@ -89,7 +91,7 @@ namespace OData2Poco.CommandLine.Test
         //-r
         public void StartWith_r_u_p_ArgumentTest(string url)
         {
-            var a = string.Format("-r {0} -ux -py", url);
+            var a = string.Format("-r {0} -v -ux -py", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
@@ -103,9 +105,10 @@ namespace OData2Poco.CommandLine.Test
         [TestCase(@"http://www.google.com")] //not odata service
         public void InvalidUrlTest(string url)
         {
-            var a = String.Format("-r {0}", url);
+            var a = String.Format("-r {0} -vdl", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
+            Console.WriteLine(output);
             Assert.AreNotEqual(0, tuble.Item1);
             Assert.IsTrue(output.Contains("Error in executing the command"));
 
@@ -123,23 +126,35 @@ namespace OData2Poco.CommandLine.Test
         }
 
         [Test]
-        [TestCase(@"data\northwindv4.xml", 0)]
-        [TestCase(@"data\northwindv3.xml", 0)]
-        [TestCase(@"data\invalidxml.xml", -1)]
+      [TestCase(@"data\invalidxml.xml", -1)]
         public void FileReadingTest(string url, int exitCode)
         {
-            var a = string.Format("-r {0} -d -l -v -m meta.xml -f north.cs  ", url);
+         //   var a = string.Format("-r {0} -d -l -v -m meta.xml -f north.cs  ", url);
+            var a = string.Format("-r {0} -vld -m meta.xml -f north.cs  ", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
+            Console.WriteLine(output);
             Assert.AreEqual(exitCode, tuble.Item1);
 
         }
 
         [Test]
+        [TestCase(@"data\not_exist_file.xml", -1)]
+        public void FileNotExistReadingTest(string url, int exitCode)
+        {
+            //   var a = string.Format("-r {0} -d -l -v -m meta.xml -f north.cs  ", url);
+            var a = string.Format("-r {0} -vld -m meta.xml -f north.cs  ", url);
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            Console.WriteLine(output);
+            Assert.AreEqual(exitCode, tuble.Item1);
+
+        }
+     
+        //disable network card for this test
+        [Test]
         [TestCase(UrlV4)]
         [TestCase(UrlV3)]
-        [TestCase("http://localhost/odata2/api/northwind")] //not authorized
-        [TestCase("http://localhost/odata20/api/northwind")] //not found
         public void NotHangingInCaseNoConnectionTest(string url)
         {
             var expected = new List<int> { 0, -1 }; //-1 is valid exitcode if there's no connection to internet

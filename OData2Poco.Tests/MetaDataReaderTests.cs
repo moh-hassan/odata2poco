@@ -1,53 +1,42 @@
 ﻿//#define local
-using System;
-using System.Diagnostics;
+
 using System.IO;
 using System.Net;
 using System.Xml;
 using NUnit.Framework;
-//using System.Net.Http;
-
 
 namespace OData2Poco.Tests
 {
-      
 
     [TestFixture]
     public partial class MetaDataReaderTests
     {
         const string UrlV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
         const string UrlV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
-      
+        private const string LocalUrl = "http://asd-pc/odata2/api/northwind";
 
         [Test]
-        [TestCase(UrlV4)]
-        [TestCase(UrlV3)]
-        [TestCase(@"data\northwindV4.xml")] //filename 
-        [TestCase(@"data\northwindV3.xml")]
-        public void ReadMetaDataAsStringTest(string url)
+        
+        [TestCase(@"data\northwindV4.xml","4.0")] //filename 
+        [TestCase(@"data\northwindV3.xml","1.0")]
+        public void ReadMetaDataAsStringTest(string url ,string serviceVersion)
         {
-            var metaDataReader = new MetaDataReader(url);
-            var meta = metaDataReader.MetaDataAsString;
-            Assert.IsNotEmpty(meta);
-            var meta2 = metaDataReader.MetaDataAsString;
-            Assert.IsNotEmpty(meta2);
+            var metaData = new MetaDataReader(url).LoadMetaData();
+            Assert.AreEqual(metaData.MetaDataVersion, serviceVersion);
+            Assert.IsNotEmpty(metaData.MetaDataAsString);
+            Assert.AreEqual(metaData.ServiceHeader.Count, 0);
         }
 
+        //todo: check all metadata properties
         [Test]
         [TestCase(UrlV4,"4.0")]
         [TestCase(UrlV3,"1.0")]
-        [TestCase(@"data\northwindV4.xml", "4.0")] //filename 
-        [TestCase(@"data\northwindV3.xml", "1.0")]
-        public void ReadMetaDataVersionTest(string url, string serviceVersion)
+        public void ReadMetaDataHttpTest(string url, string serviceVersion)
         {
-            var metaDataReader = new MetaDataReader(url);
-            var version = metaDataReader.MetaDataVersion;
-            //Console.WriteLine(version);
-            Assert.AreEqual(version, serviceVersion);
-            //repeat operation
-            var version2 = metaDataReader.MetaDataVersion;
-            //Console.WriteLine(version2);
-            Assert.AreEqual(version2, serviceVersion);
+            var metaData = new MetaDataReader(url).LoadMetaData();
+            Assert.AreEqual(metaData.MetaDataVersion, serviceVersion);
+            Assert.IsNotEmpty(metaData.MetaDataAsString);
+            Assert.Greater(metaData.ServiceHeader.Count,1);
         }
 
         [Test]
@@ -59,12 +48,12 @@ namespace OData2Poco.Tests
         public void GeneratePocoFromHttporFileExecuteTest(string url, int expecteCount)
         {
             var metaDataReader = new MetaDataReader(url);
-            var code = metaDataReader.Execute().ToString();
+            var code = metaDataReader.Generate().ToString();
             //Debug.WriteLine(code);
             //var code = gen.ToString();
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
+            Assert.AreEqual(metaDataReader.Generate().ClassDictionary.Count, expecteCount);
         }
 
         [Test]
@@ -77,7 +66,7 @@ namespace OData2Poco.Tests
         {
             var metaDataReader = new MetaDataReader(url);
 
-            var code = metaDataReader.Execute(new PocoSetting
+            var code = metaDataReader.Generate(new PocoSetting
             {
                 AddKeyAttribute = true,
                 AddTableAttribute = true,
@@ -87,7 +76,7 @@ namespace OData2Poco.Tests
            
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
+            Assert.AreEqual(metaDataReader.Generate().ClassDictionary.Count, expecteCount);
           }
 
         [Test]
@@ -99,11 +88,11 @@ namespace OData2Poco.Tests
         public void GeneratePocoFromHttporFileGeneratorTest(string url, int expecteCount)
         {
             var metaDataReader = new MetaDataReader(url);
-            var gen = metaDataReader.Generator; //.Execute();
+            var gen = metaDataReader.Generate(); //.Generator; //.Execute();
             var code = gen.ToString();
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            Assert.AreEqual(metaDataReader.Generator.ClassDictionary.Count, expecteCount);
+            Assert.AreEqual(metaDataReader.Generate().ClassDictionary.Count, expecteCount);
 
         }
 
@@ -123,8 +112,7 @@ namespace OData2Poco.Tests
         [Test]
         public void GeneratePocoWithValidAccountTes()
         {
-            string url = "http://localhost/odata2/api/northwind";
-            var metaDataReader = new MetaDataReader(url,"user","password");
+            var metaDataReader = new MetaDataReader(LocalUrl, "user", "****");
             var code = metaDataReader.GeneratePoco();
             Assert.IsNotEmpty(code);
 
@@ -135,9 +123,9 @@ namespace OData2Poco.Tests
         public void GeneratePocoWithInValidAccountTest()
         {
             var msg = "The remote server returned an error: (401) Unauthorized";
-            string url = "http://alocalhost/odata2/api/northwind";
-            MetaDataReader metaDataReader = new MetaDataReader(url, "user_invalid", "password");
+            MetaDataReader metaDataReader = new MetaDataReader(LocalUrl, "user_invalid", "password");
             var ex = Assert.Throws<WebException>(() => metaDataReader.GeneratePoco());
+            Debug.WriteLine(ex.Message);
             StringAssert.Contains(msg, ex.Message);
 
         }
@@ -150,10 +138,9 @@ namespace OData2Poco.Tests
             string url = "file_not_exist";
             MetaDataReader metaDataReader = new MetaDataReader(url);
             Assert.Throws<FileNotFoundException>(() => code = metaDataReader.GeneratePoco());
-
             Assert.IsEmpty(code);
-
         }
+
         [Test]
         public void GeneratePocoFromNotValidXmlFileTest()
         {
