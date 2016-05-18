@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="ClassTemplate.cs" />
     <Compile Include="IClassTemplate.cs" />
+    <Compile Include="MetaDataInfo.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="Media.cs" />
     <Compile Include="OData2Poco.cs" />

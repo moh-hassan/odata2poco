@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using OData2Poco.TextTransform;
 
 namespace OData2Poco.Extension
@@ -38,49 +39,17 @@ namespace OData2Poco.Extension
         /// <param name="ent"> Class  to generate code</param>
         /// <param name="includeNamespace"></param>
         /// <returns></returns>
-        public static  string ToCsCode(this ClassTemplate ent, bool includeNamespace = false)
+     
+      static   public string DicToString(this Dictionary<string,string> header)
         {
-            var csTemplate = new FluentCsTextTemplate();
-            //if (includeNamespace) csTemplate.WriteLine(_header());
-
-
-            ////for enum
-            if (ent.IsEnum)
+            StringBuilder builder = new StringBuilder();
+            foreach (var item in header)
             {
-                var elements = string.Join(", ", ent.EnumElements.ToArray());
-                var enumString = string.Format("public enum {0} {{ {1} }}", ent.Name, elements);
-                return enumString;
+                builder.Append(item.Key).Append(": ").Append(item.Value).AppendLine();
             }
-
-            //v1.4
-            //add TableAttribute
-            if (ent.EntitySetName != "")
-            {
-                var tableAtt = string.Format("Table(\"{0}\")", ent.EntitySetName);
-                csTemplate.PushIndent("\t").WriteLineAttribute(tableAtt).PopIndent();
-            }
-            csTemplate.StartClass(ent.Name);
-            foreach (var p in ent.Properties)
-            {
-                //@@@ v1.0.0-rc3
-                //skip navigation properties
-                if (p.IsNavigate) continue;
-
-                //v1.4
-                //add attributes
-                if (p.IsKey) csTemplate.WriteLineAttribute("Key");
-                if (!p.IsNullable) csTemplate.WriteLineAttribute("Required");
-
-                // if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>)) 
-                csTemplate.WriteLineProperty(p.PropType, p.PropName, comment: p.PropComment);
-            }
-            csTemplate.EndClass();
-            if (includeNamespace) csTemplate.EndNamespace(); //"}" for namespace
-
-            return csTemplate.ToString();
+            string result = builder.ToString();
+            return result;
         }
-
-       
     }
 }
  

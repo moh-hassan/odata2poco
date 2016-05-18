@@ -27,18 +27,42 @@ namespace OData2Poco.V4
     /// </summary>
     internal partial class Poco : IPocoGenerator
     {
+       
+        public MetaDataInfo MetaData { get; set; }
 
-        public string MetaDataAsString { get; set; }
-        public string MetaDataVersion { get; set; }
-        public string ServiceUrl { get; set; }
-
-        internal Poco(string metaData, string serviceUrl)
+        public string MetaDataAsString
         {
-            MetaDataAsString = metaData;
-            ServiceUrl = serviceUrl;
-            MetaDataVersion = Helper.GetMetadataVersion(metaData);
+            get { return MetaData.MetaDataAsString; }  
+             
         }
 
+        public string MetaDataVersion
+        {
+            get
+            {
+                return MetaData.MetaDataVersion; 
+            }
+        }
+
+        public string ServiceUrl
+        {
+            get
+            {
+                return MetaData.ServiceUrl; 
+            }
+        }
+
+        //internal Poco(string metaData, string serviceUrl)
+        //{
+        //    MetaDataAsString = metaData;
+        //    ServiceUrl = serviceUrl;
+        //    //MetaDataVersion = Helper.GetMetadataVersion(metaData);
+        //}
+        internal Poco(MetaDataInfo metaData)
+        {
+            MetaData = metaData;
+            
+        }
         private IEnumerable<IEdmSchemaType> SchemaElements
         {
             get
@@ -64,15 +88,7 @@ namespace OData2Poco.V4
                 return entitySets;
             }
         }
-
-        //public void GetEntityMapping()
-        //{
-
-        //    foreach (var entity in EntitySets)
-        //    {
-        //        Console.WriteLine("name: {0} type: {1}  setname: {2} ", entity.Name, entity.EntityType().Name, GetEntitySetName(entity.EntityType().Name));
-        //    }
-        //}
+      
         public string GetEntitySetName(string entityName)
         {
             //Console.WriteLine("name {0}",entityName);
@@ -89,9 +105,7 @@ namespace OData2Poco.V4
             }
             return "";
         }
-
-        //internal Poco()
-        //{}
+        
         private List<string> GetEnumElements(IEdmSchemaType type)
         {
             List<string> enumList = new List<string>();

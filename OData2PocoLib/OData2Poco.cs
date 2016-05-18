@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+
 /*
  * todo: multi results may be stored in tuble named Data
  * multi interfaces to insure sequence of actions
@@ -16,30 +18,35 @@ using System.Linq;
  * */
 namespace OData2Poco
 {
-    //fluent api
+    /// <summary>
+    /// Flount Class 
+    /// </summary>
     public class O2P
     {
+        public PocoSetting Setting { get; set; }
+        private static MetaDataReader _metaDataReader;
+        private static MetaDataInfo MetaData
+        {
+            get { return _metaDataReader.MetaData; }
+
+        }
+
         private string User { get; set; }
         private string Password { get; set; }
         private string Url { get; set; }
-        private MetaDataReader _metaDataReader;
+
         public List<ClassTemplate> ClassList;
-        public string ServiceVersion { get; set; }
-        public string MetaDataVersion { get; set; }
-        public string MetaDataAsString { get; private set; }
-        public Dictionary<string, string> ServiceHeader { get; set; }
-        public PocoSetting Setting { get; set; }
+
+        private static string CodeText { get; set; }
         public O2P(string url)
+            : this()
         {
             Url = url;
-            Setting = new PocoSetting();
-           
         }
 
         public O2P()
         {
             Setting = new PocoSetting();
-
         }
 
         public O2P SetUrl(string url)
@@ -47,110 +54,96 @@ namespace OData2Poco
             Url = url;
             return this;
         }
-        public O2P SetUser(string user)
+        public O2P Authenticate(string user, string password)
         {
             User = user;
-            return this;
-        }
-        public O2P SetPassword(string password)
-        {
             Password = password;
             return this;
         }
-     public    O2P AddKeyAttribute()
-     {
-         Setting.AddKeyAttribute = true;
-         return this;
-     }
-     public O2P AddRequiredAttribute()
-     {
-         Setting.AddRequiredAttribute = true;
-         return this;
-     }
-     public O2P AddNavigation()
-     {
-         Setting.AddNavigation = true;
-         return this;
-     }
-     public O2P AddTableAttribute()
-     {
-         Setting.AddTableAttribute = true;
-         return this;
-     }
+
+        public O2P AddKeyAttribute()
+        {
+            Setting.AddKeyAttribute = true;
+            return this;
+        }
+        public O2P AddRequiredAttribute()
+        {
+            Setting.AddRequiredAttribute = true;
+            return this;
+        }
+        public O2P AddNavigation()
+        {
+            Setting.AddNavigation = true;
+            return this;
+        }
+        public O2P AddTableAttribute()
+        {
+            Setting.AddTableAttribute = true;
+            return this;
+        }
         public O2P(string url, string user, string password)
             : this(url)
         {
             User = user;
             Password = password;
-            //Url = _url;
         }
 
-        public string Generate()
+        public O2P SaveCodeTo(string fname = "poco.cs")
         {
-            //todo: check url is not null, other options
-            if (String.IsNullOrEmpty(Url))
-            {
-                throw new Exception("Url is empty");
-            }
-            return Generate(Setting);
+            CodeText = Generate();
+            File.WriteAllText(fname, CodeText);
+            return this;
+        }
+        public O2P SaveMetaDataTo(string fname = "meta.xml")
+        {
+            File.WriteAllText(fname, MetaData.MetaDataAsString);
+            return this;
+        }
+       
+        public O2P Generate()
+        {
+            Generate(Setting);
+            return this;
         }
 
-        public string Generate(Language lang = Language.CS)
+        public O2P Generate(PocoSetting pocoSetting)
         {
-            if (lang == Language.CS) return CsGenerate();
-            else return VBGenerate();
-        }
-
-        public string Generate(PocoSetting setting, Language lang = Language.CS)
-        {
-            Setting = setting;
-            return Generate(lang);
-        }
-
-        private string VBGenerate()
-        {
-            throw new NotImplementedException();
-        }
-        //v1.3
-        //wrapper
-        //private string CSGenerate()
-        //{
-        //    _metaDataReader = string.IsNullOrEmpty(User)
-        //    ? new MetaDataReader(Url)
-        //    : new MetaDataReader(Url, User, Password);
-
-        //    var code = _metaDataReader.GeneratePoco();
-        //    ServiceVersion = _metaDataReader.ServiceVersion;
-        //    MetaDataVersion = _metaDataReader.MetaDataVersion;
-        //    //ClassList = _metaDataReader.ClassList;
-        //    ServiceHeader = _metaDataReader.ServiceHeader;
-        //    MetaDataAsString = _metaDataReader.MetaDataAsString;
-        // //   File.WriteAllText(filename, code);
-        //    // return this;
-        //    return code;
-        //}
-
-        //v1.4, use Execute method , ToString () for code
-        private string CsGenerate()
-        {
+            if (Url == null)
+                throw new NullReferenceException("Url is empty");
+            
             _metaDataReader = string.IsNullOrEmpty(User)
             ? new MetaDataReader(Url)
             : new MetaDataReader(Url, User, Password);
 
-            var gen = _metaDataReader.Execute(Setting);
-            var code = gen.ToString(); //.GeneratePoco();
-            ServiceVersion = _metaDataReader.ServiceVersion;
-            MetaDataVersion = _metaDataReader.MetaDataVersion;
+            var gen = _metaDataReader.Generate(pocoSetting);
+            CodeText = gen.ToString();
             ClassList = gen.ClassDictionary.Select(kvp => kvp.Value).ToList();
-            ServiceHeader = _metaDataReader.ServiceHeader;
-            MetaDataAsString = _metaDataReader.MetaDataAsString;
-            //   File.WriteAllText(filename, code);
-            // return this;
-            return code;
+            return this;
         }
-        public void SaveMetadata(string fname = "meta.xml")
+
+
+        /// <summary>
+        /// Implicit Convertion to string and return generated c# code
+        /// </summary>
+        /// <param name="o2p"></param>
+        /// <returns></returns>
+        public static implicit operator string(O2P o2p)
         {
-            File.WriteAllText(fname, MetaDataAsString);
+            return CodeText;
+        }
+        /// <summary>
+        /// Implict conversion
+        /// </summary>
+        /// <param name="o2p"></param>
+        /// <returns></returns>
+        public static implicit operator MetaDataInfo(O2P o2p)
+        {
+            return MetaData;
+        }
+
+        public override string ToString()
+        {
+            return this;
         }
     }
 }

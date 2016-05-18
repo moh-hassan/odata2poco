@@ -4,10 +4,7 @@ namespace OData2Poco
 {
     public interface IPocoGenerator
     {
-        
-          string MetaDataAsString { get; set; }
-          string MetaDataVersion { get; set; }
-          string ServiceUrl { get; set; }
+        MetaDataInfo MetaData { get; set; }
         List<ClassTemplate> GeneratePocoList();
     }
 }

@@ -35,7 +35,7 @@ namespace OData2Poco
             //var metaDataVersion = _pocoGen.MetaDataVersion;
             // var metaDataAsString = _pocoGen.MetaDataAsString;
             //var serviceUrl = _pocoGen.ServiceUrl;
-            var schemaNamespace = Helper.GetNameSpace(_pocoGen.MetaDataAsString);
+            var schemaNamespace = Helper.GetNameSpace(_pocoGen.MetaData.MetaDataAsString);
             var h = new FluentCsTextTemplate();
             h.UsingNamespace("System")
              .UsingNamespace("System.Collections.Generic")
@@ -45,7 +45,7 @@ namespace OData2Poco
                 // .UsingNamespace("System.Spatial")
              .WriteLineComment("uncomment for spatial data type and run Install-Package System.Spatial ")
              .WriteLineComment("using System.Spatial;")
-             .WriteLine(comment, _pocoGen.ServiceUrl, _pocoGen.MetaDataVersion)
+             .WriteLine(comment, _pocoGen.MetaData.ServiceUrl, _pocoGen.MetaData.MetaDataVersion)
              .StartNamespace(schemaNamespace);
             //return h.ToString();
             return h.ToString();
