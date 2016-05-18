@@ -88,17 +88,20 @@ namespace OData2Poco.CommandLine
             if (options.MetaFilename != null)
             {
                 Console.WriteLine();
-                o2p.SaveMetadata(options.MetaFilename);
+                o2p.SaveMetaDataTo(options.MetaFilename);
                 Console.WriteLine("Saving Metadata to file : {0}", options.MetaFilename);
             }
 
-            //------------ header -h --------------------
-            if (options.Header)
+            //------------ header -h for http media only not file--------------------
+            if (options.Header && options.Url.StartsWith("http"))
             {
+                MetaDataInfo meta = o2p;
+                Console.WriteLine(meta.MetaDataAsString);
                 Console.WriteLine();
                 Console.WriteLine("HTTP Header");
                 Console.WriteLine(new string('=', 15));
-                o2p.ServiceHeader.ToList().ForEach(m =>
+              //  o2p.MetaData.ServiceHeader.ToList().ForEach(m =>
+                meta.ServiceHeader.ToList().ForEach(m =>
                 {
                     Console.WriteLine(" {0}: {1}", m.Key, m.Value);
                 });
