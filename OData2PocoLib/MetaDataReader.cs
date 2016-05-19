@@ -17,6 +17,7 @@ namespace OData2Poco
         public string ServiceUrl { get; set; }
         private string User { get; set; }
         private string Token { get; set; }
+
         public MetaDataReader(string url)
         {
             ServiceUrl = url;
@@ -29,19 +30,7 @@ namespace OData2Poco
             User = user;
         }
 
-        public PocoClassGenerator Generate()
-        {
-            PocoSetting setting = new PocoSetting();
-            return Generate(setting);
-        }
-
-        public PocoClassGenerator Generate(PocoSetting setting)
-        {
-            if (MetaData == null) MetaData = LoadMetaData();
-            IPocoGenerator pocoFactory = PocoFactory.Create(MetaData);
-            var generator = new PocoClassGenerator(pocoFactory, setting);
-            return generator;
-        }
+    
 
       public MetaDataInfo LoadMetaData()
         {
@@ -211,20 +200,42 @@ namespace OData2Poco
 
         #region CodeGeneration
         /// <summary>
+        /// Generate code PocoSetting setting =null, Language lang = Language.CS
+        /// </summary>
+        /// <returns></returns>
+        //public PocoClassGeneratorCs Generate()
+        //{
+        //    PocoSetting setting = new PocoSetting();
+        //    return Generate(setting);
+        //}
+
+        public PocoClassGeneratorCs Generate(PocoSetting setting, Language lang = Language.CS)
+        {
+            Console.WriteLine("metadatareader generate key: {0}", setting.AddKeyAttribute);
+            if (MetaData == null) MetaData = LoadMetaData();
+            IPocoGenerator pocoFactory = PocoFactory.Create(MetaData);
+            PocoClassGeneratorCs generator;
+            if (lang == Language.CS) generator= new PocoClassGeneratorCs(pocoFactory, setting); //.GeneratePoco();
+            else //vb ,java,...
+                throw new NotImplementedException();
+            return generator;
+
+        }
+        /// <summary>
         /// Generate cs code for all POCO classes as a one unit 
         /// </summary>
         /// <returns></returns>
-        public string GeneratePoco()
-        {
-            //  if (string.IsNullOrEmpty(MetaDataAsString)) return String.Empty;
-            MetaData = LoadMetaData();
-            //generator property have all information
-            //TODO: generate code for multi files (one file per class)
-            var code = Generate().ToString(); // Generator.ToString(); //one file for all classes
-            //populate ClassList
-            //var classList = generator.ClassDictionary.Select(kvp => kvp.Value).ToList();
-            return code;
-        }
+        //public IPocoClassGenerator GeneratePoco()
+        //{
+        //    //  if (string.IsNullOrEmpty(MetaDataAsString)) return String.Empty;
+        //    MetaData = LoadMetaData();
+        //    //generator property have all information
+        //    //TODO: generate code for multi files (one file per class)
+        //    IPocoClassGenerator  code = Generate(); //.ToString(); // Generator.ToString(); //one file for all classes
+        //    //populate ClassList
+        //    //var classList = generator.ClassDictionary.Select(kvp => kvp.Value).ToList();
+        //    return code;
+        //}
 
         #endregion
         public void SaveMetadata(string fname)

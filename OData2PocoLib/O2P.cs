@@ -23,7 +23,7 @@ namespace OData2Poco
     /// </summary>
     public class O2P
     {
-        public PocoSetting Setting { get; set; }
+      static  public PocoSetting Setting { get; set; }
         private static MetaDataReader _metaDataReader;
         private static MetaDataInfo MetaData
         {
@@ -39,16 +39,23 @@ namespace OData2Poco
 
         private static string CodeText { get; set; }
         public O2P(string url)
-            : this()
         {
             Url = url;
+            Setting = new PocoSetting();
         }
 
+
+        public O2P(string url, string user, string password)
+        {
+            Url = url;
+            User = user;
+            Password = password;
+            Setting = new PocoSetting();
+        }
         public O2P()
         {
             Setting = new PocoSetting();
         }
-
         public O2P SetUrl(string url)
         {
             Url = url;
@@ -64,11 +71,14 @@ namespace OData2Poco
         public O2P AddKeyAttribute()
         {
             Setting.AddKeyAttribute = true;
+            //Console.WriteLine("key :{0}", Setting.AddKeyAttribute);
             return this;
         }
         public O2P AddRequiredAttribute()
         {
+          
             Setting.AddRequiredAttribute = true;
+          
             return this;
         }
         public O2P AddNavigation()
@@ -81,43 +91,42 @@ namespace OData2Poco
             Setting.AddTableAttribute = true;
             return this;
         }
-        public O2P(string url, string user, string password)
-            : this(url)
-        {
-            User = user;
-            Password = password;
-        }
 
-        public O2P SaveCodeTo(string fname = "poco.cs")
-        {
-            CodeText = Generate();
-            File.WriteAllText(fname, CodeText);
-            return this;
-        }
+        //public O2P SaveCodeTo(string fname = "poco.cs")
+        //{
+        //    Generate(Setting);
+        //    File.WriteAllText(fname, CodeText);
+        //    return this;
+        //}
         public O2P SaveMetaDataTo(string fname = "meta.xml")
         {
             File.WriteAllText(fname, MetaData.MetaDataAsString);
             return this;
         }
-       
-        public O2P Generate()
-        {
-            Generate(Setting);
-            return this;
-        }
 
-        public O2P Generate(PocoSetting pocoSetting)
+        //public O2P Generate(string fname = "poco.cs")
+        //{
+        //    Generate(Setting);
+        //    File.WriteAllText(fname, CodeText);
+        //    return this;
+        //}
+
+        public O2P Generate(string fname = "meta.xml") //PocoSetting pocoSetting)
         {
+           
             if (Url == null)
                 throw new NullReferenceException("Url is empty");
-            
+
             _metaDataReader = string.IsNullOrEmpty(User)
             ? new MetaDataReader(Url)
             : new MetaDataReader(Url, User, Password);
-
-            var gen = _metaDataReader.Generate(pocoSetting);
+            Console.WriteLine("o2p generate key: {0}", Setting.AddKeyAttribute);
+            var gen = _metaDataReader.Generate(Setting);
+            
             CodeText = gen.ToString();
-            ClassList = gen.ClassDictionary.Select(kvp => kvp.Value).ToList();
+            File.WriteAllText(fname, CodeText);
+            //ClassList = gen.ClassDictionary.Select(kvp => kvp.Value).ToList();
+            ClassList = gen.ClassList;
             return this;
         }
 
@@ -140,10 +149,6 @@ namespace OData2Poco
         {
             return MetaData;
         }
-
-        public override string ToString()
-        {
-            return this;
-        }
+         
     }
 }

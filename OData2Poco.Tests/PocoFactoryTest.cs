@@ -23,7 +23,7 @@ namespace OData2Poco.Tests
         //expecteCount: count of classes /Entities
         public void Test2(string url, int expecteCount)
         {
-            var gen=  new MetaDataReader(url).Generate();
+            var gen=  new MetaDataReader(url).Generate(new PocoSetting() );
             var product = gen["Product"];
             var code = gen.ToString();
             Assert.IsNotEmpty(code);

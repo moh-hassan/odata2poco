@@ -55,15 +55,17 @@
   <ItemGroup>
     <Compile Include="ClassTemplate.cs" />
     <Compile Include="IClassTemplate.cs" />
+    <Compile Include="IPocoClassGenerator.cs" />
     <Compile Include="MetaDataInfo.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="Media.cs" />
-    <Compile Include="OData2Poco.cs" />
+    <Compile Include="O2P.cs" />
     <Compile Include="InternalsVisible.cs" />
     <Compile Include="Extension\Extensions.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="PocoClassGeneratorVb.cs" />
     <Compile Include="PocoFactory.cs" />
-    <Compile Include="PocoClassGenerator.cs" />
+    <Compile Include="PocoClassGeneratorCs.cs" />
     <Compile Include="EnumTemplate.cs" />
     <Compile Include="IPocoGenerator.cs" />
     <Compile Include="MetaDataReader.cs" />

@@ -62,27 +62,25 @@ namespace OData2Poco.CommandLine
         }
 
         static void ProcessComandLine(Options options)
-        {
-            //Console.WriteLine("BufferWidth {0} BufferHeight {1} ", Console.BufferWidth, Console.BufferHeight);
-            //var lines = 1000 / 2 / Console.BufferWidth;
-            //Console.SetBufferSize(Console.BufferWidth, lines);
-            //------- PocoSetting------
-            _PocoSetting.AddKeyAttribute = options.Key;
-            _PocoSetting.AddTableAttribute = options.Table;
-            _PocoSetting.AddRequiredAttribute = options.Required;
-            _PocoSetting.AddNavigation = options.Navigation;
-
-            //Console.WriteLine("key {0} table: {1} required: {2}", options.Key,options.Table,options.Required);
-
-
+         {
+           
             if (options.Url == null) return;
             O2P o2p = options.User == null
                 ? new O2P(options.Url)
                 : new O2P(options.Url, options.User, options.Password);
+          
+            //------- PocoSetting------
+            if (options.Key) o2p.AddKeyAttribute();
+            if (options.Table) o2p.AddTableAttribute();
+            if (options.Required) o2p.AddRequiredAttribute();
+            if (options.Navigation) o2p.AddNavigation();
 
-            var code = o2p.Generate(_PocoSetting);
+        
+             //var code = o2p.Generate(_PocoSetting);
+            string code = o2p.Generate(options.CodeFilename);
+            //.Generate(_PocoSetting);
             Console.WriteLine("Saving generated code to file : " + options.CodeFilename);
-            File.WriteAllText(options.CodeFilename, code);
+           // File.WriteAllText(options.CodeFilename, code);
 
             //---------metafile -m
             if (options.MetaFilename != null)
@@ -96,7 +94,6 @@ namespace OData2Poco.CommandLine
             if (options.Header && options.Url.StartsWith("http"))
             {
                 MetaDataInfo meta = o2p;
-                Console.WriteLine(meta.MetaDataAsString);
                 Console.WriteLine();
                 Console.WriteLine("HTTP Header");
                 Console.WriteLine(new string('=', 15));

@@ -29,10 +29,10 @@ namespace OData2Poco.Tests
         public void GeneratePocoFromHttporFileTest(string url, int expecteCount)
         {
             var metaDataReader = new MetaDataReader(url);
-            var code = metaDataReader.Generate().ToString();
+            var code = metaDataReader.Generate(new PocoSetting()).ToString();
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            Assert.AreEqual(metaDataReader.Generate().ClassDictionary.Count, expecteCount);
+            Assert.AreEqual(metaDataReader.Generate(new PocoSetting()).ClassList.Count, expecteCount);
         }
       
 

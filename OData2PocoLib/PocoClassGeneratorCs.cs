@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,19 +9,33 @@ using OData2Poco.TextTransform;
 //namespace OData2PocoLib.V4
 namespace OData2Poco
 {
-    internal class PocoClassGenerator
+    /// <summary>
+    /// Generate c# code g 
+    ///    PocoClassGeneratorCs(IPocoGenerator pocoGen, PocoSetting setting = null)
+    /// called from MetaDataReader class
+    /// </summary>
+    public sealed class PocoClassGeneratorCs  //: IPocoClassGenerator  
     {
-        internal IDictionary<string, ClassTemplate> ClassDictionary; //= new Dictionary<string, ClassTemplate>();
-        private PocoSetting _PocoSetting =new PocoSetting() ;
-        public ClassTemplate this[string key]
+        private readonly IDictionary<string, ClassTemplate> _classDictionary; //= new Dictionary<string, ClassTemplate>();
+        public PocoSetting PocoSetting { get; set; }  //   
+        public  ClassTemplate  this[string key]
         {
-            get { return ClassDictionary[key]; }
+            get { return _classDictionary[key]; }
         }
 
+        private static string CodeText { get; set; }
         private static IPocoGenerator _pocoGen;
-        private readonly FluentCsTextTemplate _template;
+        private   readonly FluentCsTextTemplate _template;
         //container for all classes
-        //public List<ClassTemplate> ClassList { get; set; }
+        public List<ClassTemplate> ClassList
+        {
+            get
+            {
+                return _classDictionary.Select(kvp => kvp.Value).ToList();
+            }
+             
+        }
+
         private readonly Func<string> _header = () =>
         {
             var comment = @"
@@ -47,64 +62,79 @@ namespace OData2Poco
              .WriteLineComment("using System.Spatial;")
              .WriteLine(comment, _pocoGen.MetaData.ServiceUrl, _pocoGen.MetaData.MetaDataVersion)
              .StartNamespace(schemaNamespace);
-            //return h.ToString();
+
             return h.ToString();
         };
-
-        internal PocoClassGenerator(IPocoGenerator pocoGen,PocoSetting setting)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="pocoGen"></param>
+        /// <param name="setting"></param>
+        public PocoClassGeneratorCs(IPocoGenerator pocoGen, PocoSetting setting )
         {
-            _PocoSetting = setting;
+           
+            //if (setting == null) PocoSetting = new PocoSetting();
+            //else
+                PocoSetting = setting;
+               
             _pocoGen = pocoGen;
-            ClassDictionary = new Dictionary<string, ClassTemplate>();
+            _classDictionary = new Dictionary<string, ClassTemplate>();
             _template = new FluentCsTextTemplate();
-            var classList = _pocoGen.GeneratePocoList(); //generate all classes from model
-            if (classList != null)
-                foreach (var item in classList) ClassDictionary[item.Name] = item;
+            var list = _pocoGen.GeneratePocoList(); //generate all classes from model
+            if (list != null)
+                foreach (var item in list) _classDictionary[item.Name] = item;
+            Console.WriteLine("PocoClassGeneratorCs key: {0}", PocoSetting.AddKeyAttribute);
         }
-
+       
         /// <summary>
         /// Generate C# code for all POCO classes in the model
         /// </summary>
         /// <returns></returns>
-        private string GeneratePoco( )
+        public string GeneratePoco()
         {
             //   ClassList = _pocoGen.GeneratePocoList(); //generate all classes from model
             _template.WriteLine(_header()); //header of the file (using xxx;....)
-            foreach (var item in ClassDictionary)
+            Console.WriteLine("wwwwwww before loop GeneratePoco call ClassToString key: {0}", PocoSetting.AddKeyAttribute);
+            foreach (var item in _classDictionary)
             {
-                _template.WriteLine(CsClassToString(item.Value)); //c# code of the class
+                Console.WriteLine("yyyyyy GeneratePoco call ClassToString key: {0}", PocoSetting.AddKeyAttribute);
+                _template.WriteLine(ClassToString(item.Value)); //c# code of the class
             }
             _template.EndNamespace(); //"}" for namespace
             return _template.ToString();
         }
-        //v1.4
-        //TODO: find other implementation for multifile to avoid change break in API
-        /// <summary>
-        /// Generate entry for every class to be written in separate file
-        /// </summary>
-        /// <returns></returns>
-        private Dictionary<string, string> GeneratePocoMultiFile()
-        {
-            Dictionary<string, string> codes = new Dictionary<string, string>();
-            foreach (var item in ClassDictionary)
-            {
-                var template = new FluentCsTextTemplate();
-                template.WriteLine(_header()); //header of the file (using xxx;....)
-                template.WriteLine(CsClassToString(item.Value)); //c# code of the class
-                template.EndNamespace(); //"}" for namespace
-                codes[item.Key] = template.ToString();
-            }
-            return codes;
-        }
+
+
+        ////v1.4
+        ////TODO: find other implementation for multifile to avoid change break in API
+        ///// <summary>
+        ///// Generate entry for every class to be written in separate file
+        ///// </summary>
+        ///// <returns></returns>
+        //private Dictionary<string, string> GeneratePocoMultiFile()
+        //{
+        //    Dictionary<string, string> codes = new Dictionary<string, string>();
+        //    foreach (var item in _classDictionary)
+        //    {
+        //        var template = new FluentCsTextTemplate();
+        //        template.WriteLine(_header()); //header of the file (using xxx;....)
+        //        template.WriteLine(ClassToString(item.Value)); //c# code of the class
+        //        template.EndNamespace(); //"}" for namespace
+        //        codes[item.Key] = template.ToString();
+        //    }
+        //    return codes;
+        //}
+
+
         /// <summary>
         /// Generte C# code for a given  Entity using FluentCsTextTemplate
         /// </summary>
         /// <param name="ent"> Class  to generate code</param>
         /// <param name="includeNamespace"></param>
         /// <returns></returns>
-        internal string CsClassToString(ClassTemplate ent, bool includeNamespace = false)
+        public string ClassToString(ClassTemplate ent, bool includeNamespace = false)
         {
-            
+            Console.WriteLine("zzzzzzzzzz ClassToString key: {0}", PocoSetting.AddKeyAttribute);
             var csTemplate = new FluentCsTextTemplate();
             if (includeNamespace) csTemplate.WriteLine(_header());
 
@@ -119,7 +149,7 @@ namespace OData2Poco
 
             //v1.4
             //add TableAttribute
-            if (_PocoSetting.AddTableAttribute)
+            if (PocoSetting.AddTableAttribute)
             {
                 if (ent.EntitySetName != "")
                 {
@@ -139,39 +169,52 @@ namespace OData2Poco
                 if (p.IsNavigate)
                 {
                     //Console.WriteLine("navigation entity {0}  prop: {1}",ent.Name, p.PropName);
-                    if (!_PocoSetting.AddNavigation) continue;
+                    if (!PocoSetting.AddNavigation) continue;
 
                 }
 
                 //v1.4
                 //add key attributes
-                if (_PocoSetting.AddKeyAttribute)
+                if (PocoSetting.AddKeyAttribute)
                 {
                     if (p.IsKey) csTemplate.WriteLineAttribute("Key");
                 }
 
-                if (_PocoSetting.AddRequiredAttribute)
+                if (PocoSetting.AddRequiredAttribute)
                 {
                     if (!p.IsNullable) csTemplate.WriteLineAttribute("Required");
                 }
                 // if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>)) 
-                var virtualprop = (p.IsNavigate && _PocoSetting.AddNavigation);
+                var virtualprop = (p.IsNavigate && PocoSetting.AddNavigation);
                 csTemplate.WriteLineProperty(p.PropType, p.PropName, comment: p.PropComment, isVirtual: virtualprop);
             }
             csTemplate.EndClass();
             if (includeNamespace) csTemplate.EndNamespace(); //"}" for namespace
-
-            return csTemplate.ToString();
+            CodeText = csTemplate.ToString();
+            return CodeText;
         }
 
         public override string ToString()
         {
-            return GeneratePoco();
+            return CodeText ?? (CodeText = GeneratePoco());
+           
         }
 
-        //static public implicit operator string(PocoClassGenerator pocoGen)
+        //public IEnumerator<string> GetEnumerator()
         //{
-        //    return GeneratePoco();
+        //    // throw new NotImplementedException();
+        //    return _classDictionary.Keys.GetEnumerator();
+        //}
+
+        //IEnumerator IEnumerable.GetEnumerator()
+        //{
+        //    return GetEnumerator();
+        //}
+
+        //public static string ToString(IPocoClassGenerator gen)
+        //{
+        //    return CodeText ?? (CodeText = GeneratePoco()); ;
         //}
     }
 }
+

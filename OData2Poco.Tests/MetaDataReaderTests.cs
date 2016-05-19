@@ -1,5 +1,6 @@
 ﻿//#define local
 
+using System;
 using System.IO;
 using System.Net;
 using System.Xml;
@@ -48,12 +49,12 @@ namespace OData2Poco.Tests
         public void GeneratePocoFromHttporFileExecuteTest(string url, int expecteCount)
         {
             var metaDataReader = new MetaDataReader(url);
-            var code = metaDataReader.Generate().ToString();
+            var code = metaDataReader.Generate(new PocoSetting()).ToString();
             //Debug.WriteLine(code);
             //var code = gen.ToString();
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            Assert.AreEqual(metaDataReader.Generate().ClassDictionary.Count, expecteCount);
+            Assert.AreEqual(metaDataReader.Generate(new PocoSetting()).ClassList.Count, expecteCount);
         }
 
         [Test]
@@ -76,7 +77,8 @@ namespace OData2Poco.Tests
            
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            Assert.AreEqual(metaDataReader.Generate().ClassDictionary.Count, expecteCount);
+            StringAssert.Contains("[Key]", code);
+            Assert.AreEqual(metaDataReader.Generate(new PocoSetting()).ClassList.Count, expecteCount);
           }
 
         [Test]
@@ -88,11 +90,12 @@ namespace OData2Poco.Tests
         public void GeneratePocoFromHttporFileGeneratorTest(string url, int expecteCount)
         {
             var metaDataReader = new MetaDataReader(url);
-            var gen = metaDataReader.Generate(); //.Generator; //.Execute();
+            var gen = metaDataReader.Generate(new PocoSetting()); //.Generator; //.Execute();
+             
             var code = gen.ToString();
             Assert.IsNotEmpty(code);
             StringAssert.Contains("public class Product", code);
-            Assert.AreEqual(metaDataReader.Generate().ClassDictionary.Count, expecteCount);
+            //Assert.AreEqual(metaDataReader.Generate().GetClassTemplateList().Count, expecteCount);
 
         }
 
@@ -101,9 +104,9 @@ namespace OData2Poco.Tests
         [TestCase("http://www.google.com")] //not odata support
         public void GeneratePocoInvalidODataOrUrlTest(string url)
         {
-            var code = "";
+            string  code ="";
             var metaDataReader = new MetaDataReader(url);
-            Assert.Throws<WebException>(() => code = metaDataReader.GeneratePoco());
+            Assert.Throws<WebException>(() => code = metaDataReader.Generate(new PocoSetting()).ToString()); //.GeneratePoco());
             Assert.IsEmpty(code);
         }
 
@@ -137,7 +140,8 @@ namespace OData2Poco.Tests
             string code = "";
             string url = "file_not_exist";
             MetaDataReader metaDataReader = new MetaDataReader(url);
-            Assert.Throws<FileNotFoundException>(() => code = metaDataReader.GeneratePoco());
+           // Assert.Throws<FileNotFoundException>(() => code = metaDataReader.GeneratePoco());
+            Assert.Throws<FileNotFoundException>(() => code = metaDataReader.Generate(new PocoSetting()).ToString()); //.GeneratePoco());
             Assert.IsEmpty(code);
         }
 
@@ -147,7 +151,7 @@ namespace OData2Poco.Tests
             string code = "";
             string url = @"data\invalidxml.xml";
             MetaDataReader metaDataReader = new MetaDataReader(url);
-            Assert.Throws<XmlException>(() => code = metaDataReader.GeneratePoco());
+            Assert.Throws<XmlException>(() => code = metaDataReader.Generate(new PocoSetting()).ToString()); //.GeneratePoco());
             Assert.IsEmpty(code);
 
         }
