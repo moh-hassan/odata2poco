@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>OData2Poco</id>
-    <version>1.4.2</version>
+    <version>2.0.0</version>
     <title>OData2Poco</title>
     <authors>Mohamed Hassan</authors>
     <owners>Mohamed Hassan</owners>

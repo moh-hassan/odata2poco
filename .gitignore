@@ -12,6 +12,8 @@ temp/
 #OData2Poco.Net45.Test/
 build/
 ILMerge/
+MyTester/
+
 
 # User-specific files
 *.suo
