@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 # OData2Poco.CommandLine (o2pgen) #
 
 ##  Version 1.4.1 ##
@@ -9,6 +10,26 @@
 
 ## Version 1.4.0 ##
 **Release Date:** May 1, 2016
+=======
+# OData2Poco.CommandLine #
+
+##  Version 1.5.0 ##
+**Release Date:**  
+
+**What is news:**
+
+- New feature: add option -k  to add KeyAttribute to the property 
+- New feature: add option -q to add RequiredAttribute to the property 
+- New feature: add option -t to  add TableAttribute to the class 
+- New feature: add option - n to add Navigation properties to the class
+- Return exitcode -1 for http  exceptions errors 401, 404
+- Add more unit test
+
+
+
+## Version 1.4.0 ##
+**Release Date:** Sunday, May 1, 2016
+>>>>>>> develop
 
 Available Options:
 

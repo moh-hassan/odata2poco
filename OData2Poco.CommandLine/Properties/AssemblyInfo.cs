@@ -34,4 +34,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.4.0.0")]
 [assembly: AssemblyFileVersion("1.4.0.0")]
 
+<<<<<<< HEAD
 [assembly: AssemblyInformationalVersion("1.4.1")]
+=======
+[assembly: AssemblyInformationalVersion("1.5.0RC1")]
+>>>>>>> develop

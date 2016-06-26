@@ -27,37 +27,89 @@ namespace OData2Poco.V4
     /// </summary>
     internal partial class Poco : IPocoGenerator
     {
+       
+        public MetaDataInfo MetaData { get; set; }
 
-        public string MetaDataAsString { get; set; }
-        public string MetaDataVersion { get; set; }
-        public string ServiceUrl { get; set; }
-
-        internal Poco(string metaData, string serviceUrl)
+        public string MetaDataAsString
         {
-            MetaDataAsString = metaData;
-            ServiceUrl = serviceUrl;
-            MetaDataVersion = Helper.GetMetadataVersion(metaData);
+            get { return MetaData.MetaDataAsString; }  
+             
         }
 
+        public string MetaDataVersion
+        {
+            get
+            {
+                return MetaData.MetaDataVersion; 
+            }
+        }
+
+        public string ServiceUrl
+        {
+            get
+            {
+                return MetaData.ServiceUrl; 
+            }
+        }
+
+        //internal Poco(string metaData, string serviceUrl)
+        //{
+        //    MetaDataAsString = metaData;
+        //    ServiceUrl = serviceUrl;
+        //    //MetaDataVersion = Helper.GetMetadataVersion(metaData);
+        //}
+        internal Poco(MetaDataInfo metaData)
+        {
+            MetaData = metaData;
+            
+        }
         private IEnumerable<IEdmSchemaType> SchemaElements
         {
             get
             {
                 var tr = new StringReader(MetaDataAsString);
                 var model2 = EdmxReader.Parse(XmlReader.Create(tr));
-               var schemaElements = model2.SchemaElements.OfType<IEdmSchemaType>();
+                var schemaElements = model2.SchemaElements.OfType<IEdmSchemaType>();
                 return schemaElements;
             }
         }
 
-
-
-        //internal Poco()
-        //{}
+        public IEnumerable<IEdmEntitySet> EntitySets
+        {
+            get
+            {
+                var tr = new StringReader(MetaDataAsString);
+                var model2 = EdmxReader.Parse(XmlReader.Create(tr));
+#if odataV3
+                  var entitySets = model2.EntityContainers().First().EntitySets();
+#else
+                var entitySets = model2.EntityContainer.EntitySets();
+#endif
+                return entitySets;
+            }
+        }
+      
+        public string GetEntitySetName(string entityName)
+        {
+            //Console.WriteLine("name {0}",entityName);
+            if (entityName == null) return "un";
+#if odataV3
+            var result = EntitySets.FirstOrDefault(m => m.ElementType.Name == entityName);
+#else
+            var result = EntitySets.FirstOrDefault(m => m.EntityType().Name == entityName);
+#endif
+            if (result != null)
+            {
+                //Console.WriteLine(result.Name);
+                return result.Name;
+            }
+            return "";
+        }
+        
         private List<string> GetEnumElements(IEdmSchemaType type)
         {
             List<string> enumList = new List<string>();
-           
+
             if (type.TypeKind == EdmTypeKind.Enum)
             {
                 var enumType = type as IEdmEnumType;
@@ -77,10 +129,10 @@ namespace OData2Poco.V4
             return enumList;
         }
 
-        /// <summary>
-        /// Fill List<ClassTemplate>  with class name and properties of corresponding entitie to be used for generating code 
-        /// </summary>
-        /// <returns>List<ClassTemplate></returns>
+       /// <summary>
+        /// Fill List with class name and properties of corresponding entitie to be used for generating code
+       /// </summary>
+       /// <returns></returns>
         public List<ClassTemplate> GeneratePocoList()
         {
             List<ClassTemplate> list = new List<ClassTemplate>();
@@ -93,7 +145,7 @@ namespace OData2Poco.V4
                 list.Add(ct);
 
             }
-           
+
             return list;
         }
 
@@ -113,9 +165,13 @@ namespace OData2Poco.V4
                    IsEnum = (enumType != null)
 
                };
-            
+
             //for enum type , stop here , no more information needed
             if (classTemplate.IsEnum) return classTemplate;
+
+            //fill setname
+            //v1.4
+            classTemplate.EntitySetName = GetEntitySetName(ent.Name);
 
             //fill keys 
             var list = GetKeys(ent);
@@ -171,14 +227,14 @@ namespace OData2Poco.V4
 
         private List<PropertyTemplate> GetClassProperties(IEdmSchemaType ent)
         {
-           
+
             //stop here for enum
             var enumType = ent as IEdmEnumType;
             if (enumType != null) return null;
 
             var structuredType = ent as IEdmStructuredType;
             var properties = structuredType.Properties();
-           
+
             var list = properties.Select(property => new PropertyTemplate()
             {
                 ToTrace = property.ToTraceString(),
@@ -187,7 +243,7 @@ namespace OData2Poco.V4
                 PropType = GetClrTypeName(property.Type),
                 ToDebugString = Helper.Dump(property)
             }).ToList();
-          
+
             return list;
         }
 
@@ -240,7 +296,7 @@ namespace OData2Poco.V4
                         }
                         return clrTypeName;
                     }
-                 
+
                     clrTypeName = EdmToClr(primitiveElementType);
                     clrTypeName = string.Format("List<{0}>", clrTypeName);
                 }

@@ -12,6 +12,12 @@ namespace OData2Poco.CommandLine
     // Define a class to receive parsed values
     class Options
     {
+        //public Options()
+        //{
+        //    // Since we create this instance the parser will not overwrite it
+        //    ConfigVerb = new ConfigSubOptions(); //{ Key = true };
+        //}
+
 
         [Option('r', "url", Required = true, HelpText = "URL of OData feed.")]
         public string Url { get; set; }
@@ -37,6 +43,19 @@ namespace OData2Poco.CommandLine
         [Option('l', "list", DefaultValue = false, HelpText = "List POCO classes to standard output.")]
         public bool ListPoco { get; set; }
 
+        //PocoSetting options
+        [Option('k', "key", DefaultValue = false, HelpText = "Add Key attribute [Key]")]
+        public bool Key { get; set; }
+        [Option('t', "table", DefaultValue = false, HelpText = "Add Table attribute")]
+        public bool Table { get; set; }
+
+        [Option('q', "required", DefaultValue = false, HelpText = "Add Required attribute")]
+        public bool Required { get; set; }
+
+        [Option('n', "Navigation", DefaultValue = false, HelpText = "Add Navigation Properties")]
+        public bool Navigation { get; set; }
+        //[VerbOption("config", HelpText = "Configure code generation.")]
+        //public ConfigSubOptions ConfigVerb { get; set; }
 
         [ParserState]
         public IParserState LastParserState { get; set; }
@@ -57,5 +76,11 @@ namespace OData2Poco.CommandLine
             help.AddOptions(this);
             return help;
         }
+    }
+
+     class ConfigSubOptions
+    {
+        [Option('k', "key", Required = false, HelpText = "Add Key Attribute")]
+        public string  Key { get; set; }
     }
 }

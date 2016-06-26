@@ -6,32 +6,20 @@ namespace OData2Poco
     // factory class
     internal class PocoFactory
     {
-        //private string MetaDataAsString { get; set; }
-        //public string ServiceUrl { get; set; }
-        //public PocoFactory( string metaDataAsString,string url)
-        //{
-        //    MetaDataAsString = metaDataAsString;
-        //    ServiceUrl = url;
-        //}
-
- 
-
-     //   public IPocoGenerator SelectPocoGenerator(string metaDataAsString)
-        public static IPocoGenerator Create(string metaDataAsString, string serviceUrl)
+        public static IPocoGenerator Create(MetaDataInfo metadata)
         {
-            if (string.IsNullOrEmpty(metaDataAsString)) throw new InvalidOperationException("No Metadata available"); 
+            if (string.IsNullOrEmpty(metadata.MetaDataAsString)) throw new InvalidOperationException("No Metadata available");
 
-            var metaDataVersion = Helper.GetMetadataVersion(metaDataAsString);
+            var metaDataVersion = metadata.MetaDataVersion;  
             switch (metaDataVersion)
             {
                 case ODataVersion.V4:
-                    return new Poco(metaDataAsString, serviceUrl);
-                   
+                    return new Poco(metadata);
+
                 case ODataVersion.V1:
                 case ODataVersion.V2:
                 case ODataVersion.V3:
-                    return new V3.Poco(metaDataAsString, serviceUrl);
-                   
+                    return new V3.Poco(metadata);
                 //throw new NotImplementedException();
 
                 default:

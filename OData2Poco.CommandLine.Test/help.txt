@@ -1,0 +1,20 @@
+﻿Usage: o2pGen [options]  
+
+  -r, --url         Required. URL of OData feed.
+
+  -u, --user        User name for authentication.
+
+  -p, --password    password for authentication.
+
+  -f, --filename    (Default: poco.cs) filename to save generated c# code.
+
+  -m, --metafile    Xml filename to save metadata.
+
+  -v, --verbose     (Default: False) Prints C# code to standard output.
+
+  -d, --header      (Default: False) List  http header of the service
+
+  -l, --list        (Default: False) List POCO classes to standard output.
+
+  --help            Display this help screen.
+

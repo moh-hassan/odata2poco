@@ -56,7 +56,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="o2p\northwind.cs" />
+=======
+>>>>>>> develop
     <Compile Include="ProgramTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -70,8 +73,13 @@
     <Content Include="Data\northwindV4.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+<<<<<<< HEAD
+=======
+    <Content Include="help.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+>>>>>>> develop
     <Content Include="notes.txt" />
-    <Content Include="o2p\O2Pgen.exe" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

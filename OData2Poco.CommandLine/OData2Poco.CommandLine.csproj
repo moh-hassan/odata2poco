@@ -82,7 +82,14 @@
       <Name>OData2Poco</Name>
     </ProjectReference>
   </ItemGroup>
+<<<<<<< HEAD
   <ItemGroup />
+=======
+  <ItemGroup>
+    <Folder Include="nuget\" />
+    <Folder Include="o2p\" />
+  </ItemGroup>
+>>>>>>> develop
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

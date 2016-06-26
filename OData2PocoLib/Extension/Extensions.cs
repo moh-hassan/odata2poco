@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using OData2Poco.TextTransform;
 
 namespace OData2Poco.Extension
 {
@@ -30,7 +32,24 @@ namespace OData2Poco.Extension
                 return string.Format("{0}\nException Details:\n {1}",msg ,ex);
             return msg;
         }
-       
+        //todo: _header implementation 
+        /// <summary>
+        /// Generte C# code for a given  Entity using FluentCsTextTemplate
+        /// </summary>
+        /// <param name="ent"> Class  to generate code</param>
+        /// <param name="includeNamespace"></param>
+        /// <returns></returns>
+     
+      static   public string DicToString(this Dictionary<string,string> header)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var item in header)
+            {
+                builder.Append(item.Key).Append(": ").Append(item.Value).AppendLine();
+            }
+            string result = builder.ToString();
+            return result;
+        }
     }
 }
  
