@@ -1,0 +1,2 @@
+..\.nuget\nuget spec
+pause

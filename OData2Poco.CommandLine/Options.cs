@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using CommandLine;
+﻿using CommandLine;
 using CommandLine.Text;
 
 //CommandLine is a class library developed by Authors: Giacomo Stelluti Scala, Copyright (c) 2005 - 2015 Giacomo Stelluti Scala gimmemoore under Mit License.
@@ -43,6 +42,7 @@ namespace OData2Poco.CommandLine
         [Option('l', "list", DefaultValue = false, HelpText = "List POCO classes to standard output.")]
         public bool ListPoco { get; set; }
 
+        //version 2.0
         //PocoSetting options
         [Option('k', "key", DefaultValue = false, HelpText = "Add Key attribute [Key]")]
         public bool Key { get; set; }
@@ -54,6 +54,9 @@ namespace OData2Poco.CommandLine
 
         [Option('n', "Navigation", DefaultValue = false, HelpText = "Add Navigation Properties")]
         public bool Navigation { get; set; }
+
+        [Option('b', "Nullable", DefaultValue = false, HelpText = "Add Nullable Data Types")]
+        public bool AddNullableDataType { get; set; }
         //[VerbOption("config", HelpText = "Configure code generation.")]
         //public ConfigSubOptions ConfigVerb { get; set; }
 
@@ -78,9 +81,9 @@ namespace OData2Poco.CommandLine
         }
     }
 
-     class ConfigSubOptions
-    {
-        [Option('k', "key", Required = false, HelpText = "Add Key Attribute")]
-        public string  Key { get; set; }
-    }
+    // class ConfigSubOptions
+    //{
+    //    [Option('k', "key", Required = false, HelpText = "Add Key Attribute")]
+    //    public string  Key { get; set; }
+    //}
 }

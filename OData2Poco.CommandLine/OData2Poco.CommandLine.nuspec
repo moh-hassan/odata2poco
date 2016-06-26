@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>OData2Poco.CommandLine</id>
+    <version>2.0.0</version>
+    <title>OData2Poco.CommandLine</title>
+    <authors>Mohamed Hassan</authors>
+    <owners>Mohamed Hassan</owners>
+    <licenseUrl>http://odata2poco.codeplex.com/license</licenseUrl>
+    <projectUrl>http://odata2poco.codeplex.com</projectUrl>
+    <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&amp;DownloadId=1562224</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds. Project site: http://odata2poco.codeplex.com</description>
+    <releaseNotes>Console tool published Apr 23,2016 based on the OData2Poco class library.</releaseNotes>
+    <copyright>© 2016 Mohamed Hassan</copyright>
+    <tags>OData code generation</tags>
+	<dependencies/>
+  </metadata>
+  <files>
+    <file src="bin\o2p\o2pgen.exe" target="o2p\o2pgen.exe" /> 
+	<file src="readme.txt" target="" />
+</files>
+</package>

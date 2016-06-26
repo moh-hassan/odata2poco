@@ -21,8 +21,5 @@ namespace OData2Poco
             EnumElements = new List<string>();
             Navigation = new List<string>();
         }
-        //v1.4.0
-        public string EntitySetName { get; set; }
-        public bool IsComplex { get; set; }
     }
 }

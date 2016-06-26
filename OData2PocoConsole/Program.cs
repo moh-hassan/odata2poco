@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using OData2Poco;
+//using O2P = OData2Poco.O2P;
+
 namespace OData2PocoConsole
 {
     class Program
@@ -12,25 +11,63 @@ namespace OData2PocoConsole
         //Install-Package OData2Poco
         static void Main(string[] args)
         {
-            Example1();
+            try
+            {
+                    var s =   Example1().Result;
+                    Console.WriteLine(s);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception {0}",ex.Message); //.FullExceptionMessage());
+            }
             Console.ReadKey();
+           
+           
         }
 
-        static void Example1()
+        //from url
+        static async Task<string> Example1()
         {
+            Console.WriteLine("example 1: loading from url with setting");
+            PocoSetting setting = new PocoSetting
+            {
+                AddNullableDataType = true,
+                AddKeyAttribute = true,
+                AddTableAttribute = true,
+                AddRequiredAttribute = true,
+                AddNavigation = true
+            };
             var url = "http://services.odata.org/V4/OData/OData.svc";
-            var code = new O2P(url).Generate();
-            Console.WriteLine(code);
+            var o2p = new O2P( setting);
+            var code = await o2p.GenerateAsync(new Uri(url));
+          //  Console.WriteLine(code);
+            return code;
         }
 
-        static void Example2()
+        
+        //load from xml
+        static async Task<string> Example2()
         {
-            var url = "http://services.odata.org/V4/OData/OData.svc";
-            var o2p = new O2P(url);
-        var    code = o2p.Generate();
-           // var version o2p.MetaDataVersion
+            Console.WriteLine("example 2: loading from xml");
+            PocoSetting setting = new PocoSetting
+            {
+                AddNullableDataType = true,
+                AddKeyAttribute = true,
+                AddTableAttribute = true,
+                AddRequiredAttribute = true,
+                AddNavigation = true
+            };
+           // var url = "http://services.odata.org/V4/OData/OData.svc";
+            string xml = File.ReadAllText(@"data\northwindV4.xml");
+            var o2p = new O2P(setting);
+            
+           // o2p.SetMetadataSource(xml);
+           // var code = await o2p.GenerateAsync();
+            var code =  o2p.Generate(xml);
             Console.WriteLine(code);
+            return code;
         }
+
 
     }
 }

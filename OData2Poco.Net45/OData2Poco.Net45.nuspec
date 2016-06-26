@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Mohamed Hassan</authors>
+    <owners>Mohamed Hassan</owners>
+    <licenseUrl>http://odata2poco.codeplex.com/license</licenseUrl>
+   <projectUrl>http://odata2poco.codeplex.com</projectUrl>
+    <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&amp;DownloadId=1562224</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+      <tags>odata2poco poco odata data rest net45 code-generation</tags>
+	 <dependencies>
+      <dependency id="Microsoft.Data.Edm" version="5.7.0" />
+      <dependency id="Microsoft.OData.Edm" version="6.15.0" />
+	  <dependency id="Microsoft.Spatial" version="6.15.0" />	 
+    </dependencies>
+  </metadata>
+</package>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,107 +10,163 @@ using System.Xml;
 
 namespace OData2Poco
 {
-    internal class MetaDataReader  //: IMetaDataReader
+    internal class MetaDataReader
     {
-        public MetaDataInfo MetaData { get; set; }
         public string ServiceUrl { get; set; }
         private string User { get; set; }
-        private string Token { get; set; }
+        private string Password { get; set; }
+        public string MetaDataAsString { get; set; }
+        public string MetaDataVersion { get; set; }
+        public string ServiceVersion { get; set; }
+        public string SchemaNamespace { get; set; }
+        public Dictionary<string, string> ServiceHeader { get; set; }
+        //public HttpStatusCode StatusCode { get; set; }
+        public Media MediaType { get; set; }
+        public List<ClassTemplate> ClassList { get; set; }
+        
         public MetaDataReader(string url)
         {
             ServiceUrl = url;
+            ServiceHeader = new Dictionary<string, string>();
+            ClassList = new List<ClassTemplate>();
         }
 
         public MetaDataReader(string url, string user, string pw)
             : this(url)
         {
-            Token = Convert.ToBase64String(Encoding.ASCII.GetBytes(user + ":" + pw));
+            //   ServiceUrl = url;
             User = user;
+            Password = pw;
+
         }
 
-        public PocoClassGenerator Generate()
-        {
-            PocoSetting setting = new PocoSetting();
-            return Generate(setting);
-        }
-
-        public PocoClassGenerator Generate(PocoSetting setting)
-        {
-            if (MetaData == null) MetaData = LoadMetaData();
-            IPocoGenerator pocoFactory = PocoFactory.Create(MetaData);
-            var generator = new PocoClassGenerator(pocoFactory, setting);
-            return generator;
-        }
-
-      public MetaDataInfo LoadMetaData()
-        {
-            string metaLocation = ServiceUrl;
-            if (metaLocation.StartsWith("http"))
-            {
-                return LoadMetaDataHttp();
-            }
-            return LoadMetaDataFile(); //file source
-        }
-
-        internal async Task<MetaDataInfo> LoadMetaDataAsync()
+        internal string LoadMetaData()
         {
             string metaLocation = ServiceUrl;
             string content;
-         
+            //logger.Info("Connecting to: " +metaLocation);
             if (metaLocation.StartsWith("http"))
             {
-                return await LoadMetaDataHttpAsync();
+                MediaType = Media.Http;
+                content = LoadMetaDataHttp();
             }
-            return await LoadMetaDataFileAsync();
-        
+            else
+            {
+                MediaType = Media.File;
+                content = LoadMetaDataFile();
+            }
+
+            if (!string.IsNullOrEmpty(content))
+            {
+                MetaDataAsString = content;
+                MetaDataVersion = Helper.GetMetadataVersion(content);
+              
+                // return content;
+            }
+
+            return content;
         }
 
-        private MetaDataInfo LoadMetaDataFile()
+        internal async Task<string> LoadMetaDataAsync()
+        {
+            string metaLocation = ServiceUrl;
+            string content;
+            //logger.Info("Connecting to: " +metaLocation);
+            if (metaLocation.StartsWith("http"))
+            {
+                MediaType = Media.Http;
+                content = await LoadMetaDataHttpAsync();
+            }
+            else
+            {
+                MediaType = Media.File;
+                content = await LoadMetaDataFileAsync();
+            }
+
+            if (!string.IsNullOrEmpty(content))
+            {
+                MetaDataAsString = content;
+                MetaDataVersion = Helper.GetMetadataVersion(content);
+                // return content;
+            }
+
+            return content;
+        }
+
+        internal string LoadMetaDataFile()
         {
             if (!File.Exists(ServiceUrl))
                 throw new FileNotFoundException("File not found: " + ServiceUrl);
-
-
             using (var reader = File.OpenText(ServiceUrl))
             {
                 var text = reader.ReadToEnd();
-                var metaData = new MetaDataInfo
-                {
-                    MetaDataAsString = text,
-                    MetaDataVersion = Helper.GetMetadataVersion(text),
-                     ServiceHeader = new Dictionary<string, string>( ), //http only
-                    ServiceVersion = "NA", //http only
-                    ServiceUrl = ServiceUrl,
-                    SchemaNamespace = "",
-                     MediaType = Media.File
-                };
-                return metaData;
+                return text;
             }
         }
 
-        private async Task<MetaDataInfo> LoadMetaDataFileAsync()
+        internal async Task<string> LoadMetaDataFileAsync()
         {
             if (!File.Exists(ServiceUrl))
                 throw new FileNotFoundException("File not found: " + ServiceUrl);
             using (var reader = File.OpenText(ServiceUrl))
             {
                 var text = await reader.ReadToEndAsync();
-                var metaData = new MetaDataInfo
-                {
-                    MetaDataAsString = text,
-                    MetaDataVersion = Helper.GetMetadataVersion(text),
-                    //ServiceHeader = null, //http only
-                    //ServiceVersion = null, //http only
-                    ServiceUrl = ServiceUrl,
-                    SchemaNamespace = "",
-                    MediaType = Media.File
-                };
-                return metaData;
+                return text;
             }
         }
-       
 
-        private MetaDataInfo LoadMetaDataHttp()
+        //httpclient
+        //private async Task<string> LoadMetaDataHttp2Async()
+        //{
+        //    string url = ServiceUrl.TrimEnd('/') + "/$metadata";
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        //credintial
+        //        if (!string.IsNullOrEmpty(User))
+        //        {
+        //            var byteArray = Encoding.ASCII.GetBytes(String.Format("{0}:{1}", User, Password)); // "USER:PASS"
+        //            httpClient.DefaultRequestHeaders.Authorization =
+        //                new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+        //        }
+
+        //        var response = await httpClient.GetAsync(new Uri(url));
+        //        response.EnsureSuccessStatusCode();    // Throw if not a success code.
+
+        //        StatusCode = response.StatusCode;
+        //        GetServiceHttpHeader(response);
+        //        var content = await response.Content.ReadAsStringAsync();
+        //        content = Helper.PrettyXml(content);
+        //        //Debug.WriteLine(content);
+        //        return content;
+        //    }
+        //}
+        internal async Task<string> LoadMetaDataHttpAsync()
+        {
+            string url = ServiceUrl.TrimEnd('/') + "/$metadata";
+            using (var httpClient = new WebClient())
+            {
+
+                //credintial
+                if (!string.IsNullOrEmpty(User))
+                {
+                    string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(User + ":" + Password));
+                    httpClient.Headers[HttpRequestHeader.Authorization] = string.Format("Basic {0}", credentials);
+                }
+
+                var content = await httpClient.DownloadStringTaskAsync(url);
+                //   response.EnsureSuccessStatusCode();    // Throw if not a success code.
+
+                if (!string.IsNullOrEmpty(content))
+                {
+                    content = Helper.PrettyXml(content);
+                    //Debug.WriteLine(content);
+                    GetServiceHttpHeader(httpClient);
+                }
+                return content;
+            }
+        }
+
+        internal string LoadMetaDataHttp()
         {
             string url = ServiceUrl.TrimEnd('/') + "/$metadata";
             using (var client = new WebClient())
@@ -119,8 +174,8 @@ namespace OData2Poco
                 //credintial
                 if (!string.IsNullOrEmpty(User))
                 {
-                  //  string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(User + ":" + Password));
-                    client.Headers[HttpRequestHeader.Authorization] = string.Format("Basic {0}", Token);
+                    string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(User + ":" + Password));
+                    client.Headers[HttpRequestHeader.Authorization] = string.Format("Basic {0}", credentials);
                 }
 
                 var content = client.DownloadString(url);
@@ -128,108 +183,93 @@ namespace OData2Poco
                 if (!string.IsNullOrEmpty(content))
                 {
                     content = Helper.PrettyXml(content);
+                    //Debug.WriteLine(content);
                     GetServiceHttpHeader(client);
-                    var metaData = new MetaDataInfo
-                    {
-                        MetaDataAsString = content,
-                        MetaDataVersion = Helper.GetMetadataVersion(content),
-                        ServiceHeader = GetServiceHttpHeader(client),
-                        //ServiceVersion = null,
-                        ServiceUrl = ServiceUrl,
-                        SchemaNamespace = "",
-                        MediaType = Media.Http
-                    };
-                    metaData.ServiceVersion = GetServiceVersion(metaData.ServiceHeader);
-                    return metaData;
                 }
-                return new MetaDataInfo();
+                return content;
             }
         }
 
-        private async Task<MetaDataInfo> LoadMetaDataHttpAsync()
+     
+        internal void GetServiceHttpHeader(WebClient client)
         {
-            string url = ServiceUrl.TrimEnd('/') + "/$metadata";
-            using (var client = new WebClient())
-            {
-                //credintial
-                if (!string.IsNullOrEmpty(User))
-                {
-                   
-                    //_token = Convert.ToBase64String(Encoding.ASCII.GetBytes(User + ":" + Password));
-                    client.Headers[HttpRequestHeader.Authorization] = string.Format("Basic {0}", Token);
-                }
-
-                var content = await client.DownloadStringTaskAsync(url);
-
-                if (!string.IsNullOrEmpty(content))
-                {
-                    content = Helper.PrettyXml(content);
-                    GetServiceHttpHeader(client);
-                    var metaData = new MetaDataInfo
-                    {
-                        MetaDataAsString = content,
-                        MetaDataVersion = Helper.GetMetadataVersion(content),
-                        ServiceHeader = GetServiceHttpHeader(client),
-                        //ServiceVersion = null,
-                        ServiceUrl = ServiceUrl,
-                        SchemaNamespace = "",
-                        MediaType = Media.Http
-                    };
-                    metaData.ServiceVersion = GetServiceVersion(metaData.ServiceHeader);
-                    return metaData;
-                }
-                return new MetaDataInfo();
-            }
-        }
-        
-        internal Dictionary<string, string> GetServiceHttpHeader(WebClient client)
-        {
-            Dictionary<string, string> header = new Dictionary<string, string>();
-          
             WebHeaderCollection whc = client.ResponseHeaders;
-            foreach (string key in whc)
-                header.Add(key, whc[key]);
-
-            //for (int i = 0; i < whc.Count; i++)
-            //{
-            //    var key = whc.GetKey(i);
-            //    var value = whc.Get(i);
-            //    header.Add(key, value);
-            //}
-            return header;
-        }
-        internal string GetServiceVersion(Dictionary<string, string> header)
-        {
-
-            foreach (var entry in header)
+            //Console.WriteLine("header count = {0}", whc.Count);
+            for (int i = 0; i < whc.Count; i++)
             {
-                if (entry.Key.Contains("OData-Version") || entry.Key.Contains("DataServiceVersion"))
-                    return  entry.Value;
+                var key = whc.GetKey(i);
+                var value = whc.Get(i);
+                //Console.WriteLine(key + " = " + value);
+                if (key.Contains("OData-Version") || key.Contains("DataServiceVersion"))
+                {
+                    ServiceVersion = value;
+                }
+                ServiceHeader.Add(key, value);
             }
-            return "";
         }
 
-        #region CodeGeneration
+        //private void GetServiceHttpHeader(HttpResponseMessage response)
+        //{
+        //    foreach (var header in response.Headers)
+        //    {
+        //        if (header.Key.Contains("OData-Version") || header.Key.Contains("DataServiceVersion"))
+        //        {
+        //            ServiceVersion = header.Value.FirstOrDefault();
+        //        }
+        //        ServiceHeader.Add(header.Key, header.Value.FirstOrDefault());
+        //        //Debug.WriteLine("{0} {1} ", header.Key, header.Value.FirstOrDefault());
+        //    }
+        //}
+
+
         /// <summary>
-        /// Generate cs code for all POCO classes as a one unit 
+        /// Generate cs code for all POCO classes
         /// </summary>
         /// <returns></returns>
         public string GeneratePoco()
         {
-            //  if (string.IsNullOrEmpty(MetaDataAsString)) return String.Empty;
-            MetaData = LoadMetaData();
-            //generator property have all information
-            //TODO: generate code for multi files (one file per class)
-            var code = Generate().ToString(); // Generator.ToString(); //one file for all classes
-            //populate ClassList
-            //var classList = generator.ClassDictionary.Select(kvp => kvp.Value).ToList();
-            return code;
+
+            MetaDataAsString = LoadMetaData();
+            //Console.WriteLine("metalength {0}", MetaDataAsString);
+            if (!string.IsNullOrEmpty(MetaDataAsString))
+            {
+                IPocoGenerator pocoFactory =  PocoFactory.Create(MetaDataAsString,ServiceUrl);
+                var generator = new PocoClassGenerator(pocoFactory);
+                //{
+                //    //ServiceUrl = ServiceUrl
+                //};
+              
+                var code = generator.GeneratePoco();
+                //populate ClassList
+                ClassList = generator.ClassList.ToList();
+                return code;
+            }
+            return "";
+        }
+        //call PocoFactory to get poco that match v3/v4 generation
+        public async Task<string> GeneratePocoAsync()
+        {
+
+            MetaDataAsString = await LoadMetaDataAsync();
+            //Console.WriteLine("metalength {0}", MetaDataAsString);
+            if (!string.IsNullOrEmpty(MetaDataAsString))
+            {
+                IPocoGenerator pocoFactory =  PocoFactory.Create(MetaDataAsString,ServiceUrl);
+                var generator = new PocoClassGenerator(pocoFactory);
+                //{
+                //    //ServiceUrl = ServiceUrl
+                //};
+             
+                var code = generator.GeneratePoco(); //generate all classes
+                ClassList = generator.ClassList.ToList();
+                return code;
+            }
+            return "";
         }
 
-        #endregion
         public void SaveMetadata(string fname)
         {
-            File.WriteAllText(fname, MetaData.MetaDataAsString);
+            File.WriteAllText(fname, MetaDataAsString);
         }
     }
 }

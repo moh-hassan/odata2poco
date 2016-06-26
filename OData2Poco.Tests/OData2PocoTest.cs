@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace OData2Poco.Tests
 {
 
     [TestFixture]
-    class OData2PocoTest
+    class O2PTest
     {
         const string UrlV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
         const string UrlV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
@@ -29,15 +30,16 @@ namespace OData2Poco.Tests
         [TestCase(@"data\northwindV3.xml", "1.0")]
         public void ImplicitConversionTest(string url, string version)
         {
-            var o2p=  new O2P()
+            var o2p = new O2P()
                 .SetUrl(url)
-                // .Generate();
-                .SaveCodeTo("north.cs")
+                .AddKeyAttribute()
+                 .Generate("north.cs")
+                //.SaveCodeTo("north.cs")
                 .SaveMetaDataTo("metanorth.xml");
 
             //implicit conversion
             MetaDataInfo meta = o2p;
-            
+
 
             //implicit conversion as string
             Console.WriteLine(o2p);
@@ -51,15 +53,15 @@ namespace OData2Poco.Tests
             }
             else
             {
-                Assert.AreEqual(meta.ServiceHeader.Count, 0); 
+                Assert.AreEqual(meta.ServiceHeader.Count, 0);
             }
-           
+
             Assert.AreEqual(meta.MetaDataVersion, version);
 
-            Assert.AreEqual(((MetaDataInfo)o2p).MetaDataVersion, version);
-          
+            Assert.AreEqual(((MetaDataInfo)o2p).MetaDataVersion, version, "metadataversion");
+
             Console.WriteLine(meta.ServiceHeader.DicToString());
-         
+
             //implicit conversion test
 
         }
@@ -73,8 +75,8 @@ namespace OData2Poco.Tests
         {
             string code = new O2P()
                 .SetUrl(url)
-                // .Generate();
-                .SaveCodeTo("north.cs")
+                 .Generate("north.cs")
+                //.SaveCodeTo("north.cs")
                 .SaveMetaDataTo();
 
             var code2 = File.ReadAllText("north.cs");
@@ -90,19 +92,25 @@ namespace OData2Poco.Tests
         [TestCase(@"data\northwindV3.xml")]
         public void GenerateCodeWithAttributeTest(string url)
         {
-            string code = new O2P()
-                .SetUrl(url)
-                // .BasicAuthenticate("user","pw")
-                .AddKeyAttribute()
+            string o2p = new O2P()
+              .AddKeyAttribute()
                 .AddRequiredAttribute()
                 .AddNavigation()
                 .AddTableAttribute()
-                .Generate();
-            Console.WriteLine(code);
-            Assert.IsTrue(code.Contains("public class Product"));
-            Assert.IsTrue(code.Contains("[Key]"));
-            Assert.IsTrue(code.Contains("[Required]"));
-            Assert.IsTrue(code.Contains("[Table(\"Products\")]"));
+                  .SetUrl(url)
+                 .Generate("north.cs");
+            //.SaveCodeTo();
+            //Console.WriteLine(File.ReadAllText("north.cs"));
+            Console.WriteLine(o2p);
+            //Assert.IsTrue(MatchFileContent("north.cs", o2p));
+            if (!o2p.Contains("[Key]")) Console.WriteLine("eeeeeeeeeeeeeeerror");
+            else Console.WriteLine("exxxxxxxxxxxxist");
+            // .SaveCodeTo();
+            Console.WriteLine(o2p);
+            //Assert.IsTrue(code.Contains("public class Product"));
+            Assert.IsTrue(o2p.Contains("Key"));
+            Assert.IsTrue(o2p.Contains("Required"));
+            Assert.IsTrue(o2p.Contains("Table"));
         }
 
         [Test]
