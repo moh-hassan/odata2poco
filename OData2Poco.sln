@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco", "OData2PocoLib\OData2Poco.csproj", "{BCC5139D-A1C0-46E7-ABA7-72E9660607DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2PocoConsole.Demo", "OData2PocoConsole\OData2PocoConsole.Demo.csproj", "{4E3533A8-B294-4C86-AC87-9C0F1E21F1B4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.CommandLine", "OData2Poco.CommandLine\OData2Poco.CommandLine.csproj", "{59C02B8C-7388-490A-801C-AEA5244E3879}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.CommandLine.Test", "OData2Poco.CommandLine.Test\OData2Poco.CommandLine.Test.csproj", "{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}"
@@ -22,10 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Version.cs = Version.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.Net45", "OData2Poco.Net45\OData2Poco.Net45.csproj", "{5D6D7DA1-14A1-4377-A909-D00F56AB2164}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.Net45.Test", "OData2Poco.Net45.Test\OData2Poco.Net45.Test.csproj", "{C4AC94C0-C2CB-49AA-9658-2B8C240D3969}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7B7CAD16-9C46-4382-B75C-22DC0C13BFA9}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
@@ -33,19 +27,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7B7CAD
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OData2Poco.Shared", "OData2Poco.Shared\OData2Poco.Shared.shproj", "{633D7691-30B9-488A-A987-8ACBCA8D8A4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.Net40", "OData2Poco.Net40\OData2Poco.Net40.csproj", "{14753443-0DA1-4A87-9389-1F6608AE1020}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D69DB09-904B-4145-A7CB-C8A448F9FDF8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.Net40.Test", "OData2Poco.Net40.Test\OData2Poco.Net40.Test.csproj", "{A6325069-A243-4321-A50E-28C314280100}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.Tests", "OData2Poco.Tests\OData2Poco.Tests.csproj", "{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		OData2Poco.Shared\OData2Poco.Shared.projitems*{5d6d7da1-14a1-4377-a909-d00f56ab2164}*SharedItemsImports = 4
 		OData2Poco.Shared\OData2Poco.Shared.projitems*{633d7691-30b9-488a-a987-8acbca8d8a4a}*SharedItemsImports = 13
-		OData2Poco.Shared\OData2Poco.Shared.projitems*{14753443-0da1-4a87-9389-1f6608ae1020}*SharedItemsImports = 4
 		OData2Poco.Shared\OData2Poco.Shared.projitems*{bcc5139d-a1c0-46e7-aba7-72e9660607de}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,11 +45,6 @@ Global
 		{BCC5139D-A1C0-46E7-ABA7-72E9660607DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCC5139D-A1C0-46E7-ABA7-72E9660607DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCC5139D-A1C0-46E7-ABA7-72E9660607DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E3533A8-B294-4C86-AC87-9C0F1E21F1B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E3533A8-B294-4C86-AC87-9C0F1E21F1B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E3533A8-B294-4C86-AC87-9C0F1E21F1B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E3533A8-B294-4C86-AC87-9C0F1E21F1B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E3533A8-B294-4C86-AC87-9C0F1E21F1B4}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{59C02B8C-7388-490A-801C-AEA5244E3879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59C02B8C-7388-490A-801C-AEA5244E3879}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59C02B8C-7388-490A-801C-AEA5244E3879}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,22 +53,6 @@ Global
 		{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D6D7DA1-14A1-4377-A909-D00F56AB2164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D6D7DA1-14A1-4377-A909-D00F56AB2164}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D6D7DA1-14A1-4377-A909-D00F56AB2164}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D6D7DA1-14A1-4377-A909-D00F56AB2164}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4AC94C0-C2CB-49AA-9658-2B8C240D3969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4AC94C0-C2CB-49AA-9658-2B8C240D3969}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4AC94C0-C2CB-49AA-9658-2B8C240D3969}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4AC94C0-C2CB-49AA-9658-2B8C240D3969}.Release|Any CPU.Build.0 = Release|Any CPU
-		{14753443-0DA1-4A87-9389-1F6608AE1020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14753443-0DA1-4A87-9389-1F6608AE1020}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14753443-0DA1-4A87-9389-1F6608AE1020}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14753443-0DA1-4A87-9389-1F6608AE1020}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6325069-A243-4321-A50E-28C314280100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6325069-A243-4321-A50E-28C314280100}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6325069-A243-4321-A50E-28C314280100}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A6325069-A243-4321-A50E-28C314280100}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -96,8 +63,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4} = {0D69DB09-904B-4145-A7CB-C8A448F9FDF8}
-		{C4AC94C0-C2CB-49AA-9658-2B8C240D3969} = {0D69DB09-904B-4145-A7CB-C8A448F9FDF8}
-		{A6325069-A243-4321-A50E-28C314280100} = {0D69DB09-904B-4145-A7CB-C8A448F9FDF8}
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA} = {0D69DB09-904B-4145-A7CB-C8A448F9FDF8}
 	EndGlobalSection
 EndGlobal

@@ -67,12 +67,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OData2Poco.Net40\OData2Poco.Net40.csproj">
-      <Project>{14753443-0da1-4a87-9389-1f6608ae1020}</Project>
-      <Name>OData2Poco.Net40</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

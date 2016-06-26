@@ -62,12 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OData2Poco.Net45\OData2Poco.Net45.csproj">
-      <Project>{5d6d7da1-14a1-4377-a909-d00f56ab2164}</Project>
-      <Name>OData2Poco.Net45</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Data\trippinV4.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
