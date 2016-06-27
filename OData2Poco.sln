@@ -20,12 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Version.cs = Version.cs
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7B7CAD16-9C46-4382-B75C-22DC0C13BFA9}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\nuget.exe = .nuget\nuget.exe
-		.nuget\PushPackage.bat = .nuget\PushPackage.bat
-	EndProjectSection
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OData2Poco.Shared", "OData2Poco.Shared\OData2Poco.Shared.shproj", "{633D7691-30B9-488A-A987-8ACBCA8D8A4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D69DB09-904B-4145-A7CB-C8A448F9FDF8}"
