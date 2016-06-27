@@ -52,10 +52,10 @@ namespace OData2Poco.CommandLine
         [Option('q', "required", DefaultValue = false, HelpText = "Add Required attribute")]
         public bool Required { get; set; }
 
-        [Option('n', "Navigation", DefaultValue = false, HelpText = "Add Navigation Properties")]
+        [Option('n', "navigation", DefaultValue = false, HelpText = "Add Navigation Properties")]
         public bool Navigation { get; set; }
 
-        [Option('b', "Nullable", DefaultValue = false, HelpText = "Add Nullable Data Types")]
+        [Option('b', "nullable", DefaultValue = false, HelpText = "Add Nullable Data Types")]
         public bool AddNullableDataType { get; set; }
         //[VerbOption("config", HelpText = "Configure code generation.")]
         //public ConfigSubOptions ConfigVerb { get; set; }

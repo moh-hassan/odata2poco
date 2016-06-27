@@ -11,13 +11,23 @@
     <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&amp;DownloadId=1562224</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds. Project site: http://odata2poco.codeplex.com</description>
-    <releaseNotes>Console tool published Apr 23,2016 based on the OData2Poco class library.</releaseNotes>
+    <releaseNotes>
+		Release Date: June 27,2016 
+		Version: 2.0.0
+		What is new:
+		-new option: -k, --key           (Default: False) Add Key attribute [Key]
+		-new option: -t, --table         (Default: False) Add Table attribute
+		-new option: -q, --required      (Default: False) Add Required attribute
+		-new option: -n, --navigation    (Default: False) Add Navigation Properties
+		-new option: -b, --nullable      (Default: False) Add Nullable Data Types
+		-modify: -l option display classes and  the corresponding resource Url	
+	</releaseNotes>
     <copyright>© 2016 Mohamed Hassan</copyright>
     <tags>OData code generation</tags>
 	<dependencies/>
   </metadata>
   <files>
-    <file src="bin\o2p\o2pgen.exe" target="o2p\o2pgen.exe" /> 
+    <file src="bin\o2p\o2pgen.exe" target="content\o2p\o2pgen.exe" /> 
 	<file src="readme.txt" target="" />
 </files>
 </package>

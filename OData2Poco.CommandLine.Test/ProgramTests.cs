@@ -10,8 +10,8 @@ namespace OData2Poco.CommandLine.Test
     public class ProgramTests
     {
         private const double Timeout = 3 * 60; //sec
-
-        static Func<string, Command> TestCommand = (s => Command.Run("o2pgen", s.Split(' '),
+        private const string appCommand = @"o2pgen";
+        static Func<string, Command> TestCommand = (s => Command.Run(appCommand, s.Split(' '),
              options => options.Timeout(TimeSpan.FromSeconds(Timeout))));
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace OData2Poco.CommandLine.Test
         /// </summary>
         private Func<string, Tuple<int, string>> RunCommand = (s =>
       {
-          var command = Command.Run("o2pgen", s.Split(' '),
+          var command = Command.Run(appCommand, s.Split(' '),
            options => options.Timeout(TimeSpan.FromSeconds(Timeout)));
 
           var outText = command.Result.StandardOutput;
@@ -34,10 +34,10 @@ namespace OData2Poco.CommandLine.Test
         [TestCaseSource(typeof(TestSample), "UrlCases")]
         public void DefaultSettingTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0}  ", url);
+            var a = string.Format("-r {0} -v ", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
-            Debug.WriteLine(output);
+           // Debug.WriteLine(output);
             Assert.AreEqual(0, tuble.Item1);
             //Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("public class Product"));
@@ -51,7 +51,7 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            Console.WriteLine(tuble.Item2);
+          //  Console.WriteLine(tuble.Item2);
 
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("[Table(\"Products\")]")); //-t

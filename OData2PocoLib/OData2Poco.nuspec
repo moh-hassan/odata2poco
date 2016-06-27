@@ -14,9 +14,17 @@
 	 <description>
 	 OData2Poco is a class library supporting .NET 4.5 or higher with T4 Template to generate  plain-old CLR objects (POCO) from OData feeds that implement both V1-3 and V4 OData protocol,based on the metadata of the service stored on the  server. POCO classes can be used in typed RESTful client OData services
 	 </description>
-    <releaseNotes>
-	Release Date: June 18,2016.
-	fix: Handling Http Exceptions 
+    <releaseNotes>		
+		Release Date: June 27,2016 
+		Version: 2.0.0		
+		What is new:
+			-Add Class PocoSetting for managing code generation
+			- Add KeyAttribute to the property
+			- Add RequiredAttribute to the property
+			- Add TableAttribute to the class
+			- Add Navigation properties to the class
+			- Add Nullable DataTypes to the  properties.			
+			- Re-factoring code for portability readiness.
 	</releaseNotes>
     <copyright>© 2016 Mohamed Hassan</copyright>
     <tags>OData2Poco Poco OData data Rest Net45 code-generation</tags>

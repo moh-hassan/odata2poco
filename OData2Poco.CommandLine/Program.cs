@@ -101,7 +101,7 @@ namespace OData2Poco.CommandLine
                 code = o2p.Generate(xml);
 
             }
-            Console.WriteLine(code);
+         //   Console.WriteLine(code);
             //.Generate(_PocoSetting);
             Console.WriteLine("Saving generated code to file : " + options.CodeFilename);
             SaveToFile(options.CodeFilename, code, " c# code is empty");

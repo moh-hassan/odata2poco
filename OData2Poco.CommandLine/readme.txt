@@ -1,6 +1,6 @@
 ﻿
 Thanks for installing o2gen :-)
-O2Pgen version 1.4.0
+O2Pgen version 2.0.0
 o2gen is a CommandLine tool for generating c# POCO classes from OData feeds. Project site: http://odata2poco.codeplex.com
 
 Usage: o2pgen [options]  
