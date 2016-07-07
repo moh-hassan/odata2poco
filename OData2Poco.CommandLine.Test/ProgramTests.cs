@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Diagnostics;
 using Medallion.Shell;
 using NUnit.Framework;
-
-// The remote server returned an error: (401) Unauthorized.
-// The remote server returned an error: (404) Not Found.
 
 namespace OData2Poco.CommandLine.Test
 {
@@ -13,11 +9,9 @@ namespace OData2Poco.CommandLine.Test
     [TestFixture]
     public class ProgramTests
     {
-        private const double Timeout = 3*60; //sec
-        const string UrlV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
-        const string UrlV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
-        
-        static Func<string, Command> TestCommand = (s => Command.Run("o2pgen", s.Split(' '),
+        private const double Timeout = 3 * 60; //sec
+        private const string appCommand = @"o2pgen";
+        static Func<string, Command> TestCommand = (s => Command.Run(appCommand, s.Split(' '),
              options => options.Timeout(TimeSpan.FromSeconds(Timeout))));
 
         /// <summary>
@@ -25,32 +19,32 @@ namespace OData2Poco.CommandLine.Test
         /// </summary>
         private Func<string, Tuple<int, string>> RunCommand = (s =>
       {
-          var command = Command.Run("o2pgen", s.Split(' '),
+          var command = Command.Run(appCommand, s.Split(' '),
            options => options.Timeout(TimeSpan.FromSeconds(Timeout)));
-          //var command = TestCommand(s);
-          // in an async method, we could use var result = await command.Task;
+
           var outText = command.Result.StandardOutput;
           var errText = command.Result.StandardError;
           var exitCode = command.Result.ExitCode;
-          //Console.WriteLine(outText);
-          //   Assert.AreEqual(0, exitCode);
           Tuple<int, string> tuple = new Tuple<int, string>(exitCode, outText + "\n" + errText);
           //Console.WriteLine(tuple.Item2);
           return tuple;
       });
 
         [Test]
-        public void ShowHelpIfNoArgumentsTest()
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void DefaultSettingTest(string url, string version, int n)
         {
-            var a = "";
+            var a = string.Format("-r {0} -v ", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
+          //  Console.WriteLine(output);
             Assert.AreEqual(0, tuble.Item1);
-            //var help = File.ReadAllText("help.txt");
-            Assert.IsTrue(output.Contains("-r, --url"));
+            //Console.WriteLine(tuble.Item2);
+            Assert.IsTrue(output.Contains("public class Product"));
         }
 
         [Test]
+<<<<<<< HEAD
 <<<<<<< HEAD
         [TestCase(UrlV4)]
         [TestCase(UrlV3)]
@@ -62,11 +56,16 @@ namespace OData2Poco.CommandLine.Test
         [TestCase(@"data\northwindv3.xml")]
         public void AllArgumentFileTest(string url)
 >>>>>>> develop
+=======
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void PocoSettingTest(string url, string version, int n)
+>>>>>>> develop
         {
-            var a = string.Format("-r {0} -d -l -v -m meta.xml -f north.cs ", url);
+            var a = string.Format("-r {0} -v -k -t -q -n -b", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
+<<<<<<< HEAD
             Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("Saving generated code to file : north.cs")); //-f -r
 <<<<<<< HEAD
@@ -77,7 +76,16 @@ namespace OData2Poco.CommandLine.Test
             Assert.IsTrue(output.Contains("POCO classes")); //-l
             Assert.IsTrue(output.Contains("Saving Metadata to file : meta.xml")); //-m
             Assert.IsTrue(output.Contains("public class Product")); //-v
+=======
+          //  Console.WriteLine(tuble.Item2);
+>>>>>>> develop
 
+            Assert.IsTrue(output.Contains("public class Product"));
+            Assert.IsTrue(output.Contains("[Table(\"Products\")]")); //-t
+            Assert.IsTrue(output.Contains("[Key]")); //-k
+            Assert.IsTrue(output.Contains("[Required]"));  //-q
+            Assert.IsTrue(output.Contains("virtual public Supplier Supplier  {get;set;}")); //-n
+            Assert.IsTrue(output.Contains("int?"));  //-b
         }
 <<<<<<< HEAD
         [Test]
@@ -97,40 +105,71 @@ namespace OData2Poco.CommandLine.Test
 =======
 
         [Test]
-        [TestCase(UrlV4)]
-        [TestCase(UrlV3)]
-        [TestCase(@"data\northwindv4.xml")]
-        [TestCase(@"data\northwindv3.xml")]
-        public void UrlArgumentTest(string url)
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void FileDefaultSettingTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0} -v", url);
+            var a = string.Format("-r {0} -v ", url);
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            //Debug.WriteLine(output);
+            Assert.AreEqual(0, tuble.Item1);
+            //Console.WriteLine(tuble.Item2);
+            Assert.IsTrue(output.Contains("public class Product"));
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "FileCases")]
+        public void FileWithSettingTest(string url, string version, int n)
+        {
+            var a = string.Format("-r {0} -v -k -t -q -n", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            Assert.IsTrue(output.Contains("public class Product")); //-v
+            //Console.WriteLine(tuble.Item2);
 
+            Assert.IsTrue(output.Contains("public class Product"));
+            Assert.IsTrue(output.Contains("[Table")); //-t
+            Assert.IsTrue(output.Contains("[Key]")); //-k
+            Assert.IsTrue(output.Contains("[Required]"));  //-q
+            Assert.IsTrue(output.Contains("virtual public")); //-n
         }
-
-      
 
 >>>>>>> develop
         [Test]
-        [TestCase(UrlV4)]
-        [TestCase(UrlV3)]
-        //-r
-        public void StartWith_r_u_p_ArgumentTest(string url)
+        public void ShowHelpIfNoArgumentsTest()
         {
+<<<<<<< HEAD
 <<<<<<< HEAD
             var a = string.Format("-r {0} -ux -py", url);
 =======
             var a = string.Format("-r {0} -v -ux -py", url);
 >>>>>>> develop
+=======
+            var a = "";
+>>>>>>> develop
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            Assert.IsTrue(output.Contains("Saving generated code to file : poco.cs"));
+            //var help = File.ReadAllText("help.txt");
+            Assert.IsTrue(output.Contains("-r, --url"));
         }
 
+
+
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "FileCases")]
+        public void FolderMaybeNotExistTest(string url, string version, int n)
+        {
+            var fname = @"xyz.cs";
+            var a = string.Format("-r {0} -v -f {1}", url, fname);
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            //Console.WriteLine(output);
+            Assert.AreEqual(0, tuble.Item1);
+            Assert.IsTrue(output.Contains("public class Product")); //-v
+
+        }
 
 
         [Test]
@@ -146,7 +185,11 @@ namespace OData2Poco.CommandLine.Test
             var a = String.Format("-r {0} -vdl", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
+<<<<<<< HEAD
             Console.WriteLine(output);
+>>>>>>> develop
+=======
+            //Console.WriteLine(output);
 >>>>>>> develop
             Assert.AreNotEqual(0, tuble.Item1);
             Assert.IsTrue(output.Contains("Error in executing the command"));
@@ -155,8 +198,8 @@ namespace OData2Poco.CommandLine.Test
 
 
         [Test]
-        [TestCase(UrlV4)]
-        public void InValidArgumentTest(string url)
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void InValidArgumentTest(string url, string version, int n)
         {
             var a = string.Format("-r {0} -z ", url); //-z invalid argument
             var result = RunCommand(a);
@@ -164,6 +207,7 @@ namespace OData2Poco.CommandLine.Test
             Assert.IsTrue(result.Item2.Contains("-r, --url"));
         }
 
+<<<<<<< HEAD
         [Test]
 <<<<<<< HEAD
         [TestCase(@"data\northwindv4.xml", 0)]
@@ -185,8 +229,9 @@ namespace OData2Poco.CommandLine.Test
             Console.WriteLine(output);
 >>>>>>> develop
             Assert.AreEqual(exitCode, tuble.Item1);
+=======
+>>>>>>> develop
 
-        }
 
         [Test]
 <<<<<<< HEAD
@@ -202,10 +247,11 @@ namespace OData2Poco.CommandLine.Test
             var a = string.Format("-r {0} -vld -m meta.xml -f north.cs  ", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
-            Console.WriteLine(output);
+            //Console.WriteLine(output);
             Assert.AreEqual(exitCode, tuble.Item1);
 
         }
+<<<<<<< HEAD
      
         //disable network card for this test
         [Test]
@@ -264,6 +310,10 @@ namespace OData2Poco.CommandLine.Test
             Assert.IsTrue(output.Contains("[Required]"));  //-q
             Assert.IsTrue(output.Contains("virtual public Supplier Supplier  {get;set;}")); //-n
         }
+>>>>>>> develop
+=======
+
+
 >>>>>>> develop
 
     }//

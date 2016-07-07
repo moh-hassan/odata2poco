@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -29,5 +28,5 @@ using System.Runtime.InteropServices;
 /* 1.3.0  released on Sunday, April 10, 2016
  * 
  */
-[assembly: AssemblyInformationalVersion("1.4.0")]
+//[assembly: AssemblyInformationalVersion("1.4.0")]
 

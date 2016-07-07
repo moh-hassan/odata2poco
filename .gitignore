@@ -4,9 +4,15 @@
 #myignores
 .gitignore
 .nuget/
-#OData2Poco.Tests
-#OData2Poco.CommandLine
+OData2PocoConsole
 temp/
+OData2Poco.Net40/
+OData2Poco.Net40.Test/
+OData2Poco.Net45/
+OData2Poco.Net45.Test/
+build/
+ILMerge/
+MyTester/
 
 
 # User-specific files

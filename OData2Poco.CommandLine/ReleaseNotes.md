@@ -13,7 +13,7 @@
 =======
 # OData2Poco.CommandLine #
 
-##  Version 1.5.0 ##
+##  Version 2.0.0 ##
 **Release Date:**  
 
 **What is news:**
@@ -22,6 +22,7 @@
 - New feature: add option -q to add RequiredAttribute to the property 
 - New feature: add option -t to  add TableAttribute to the class 
 - New feature: add option - n to add Navigation properties to the class
+- New feature: add option to generate nullable data types
 - Return exitcode -1 for http  exceptions errors 401, 404
 - Add more unit test
 

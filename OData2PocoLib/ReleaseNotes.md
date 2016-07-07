@@ -5,6 +5,8 @@
 **Release Date:**  
 
 **What is news:**
+- fix:  error System.IO.DirectoryNotFoundException : Could not find a part of the path ....
+- fix: catch web exception  and set exit code =-1
 
 - New feature: add Class for managing code generation
 - New feature: add KeyAttribute to the property 
