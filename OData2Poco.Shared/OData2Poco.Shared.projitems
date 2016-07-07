@@ -40,18 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Docs\Api.md" />
-<<<<<<< HEAD
-    <None Include="$(MSBuildThisFileDirectory)ReleaseNotes.md" />
-=======
->>>>>>> develop
+
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)licence.txt" />
     <Content Include="$(MSBuildThisFileDirectory)ODataLogo-32.png" />
     <Content Include="$(MSBuildThisFileDirectory)T4 Templates\T4Odata2Poco.tt.txt" />
-<<<<<<< HEAD
-    <Content Include="$(MSBuildThisFileDirectory)TextFile1.txt" />
-=======
->>>>>>> develop
+
   </ItemGroup>
 </Project>

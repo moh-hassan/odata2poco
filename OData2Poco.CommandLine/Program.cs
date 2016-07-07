@@ -21,24 +21,6 @@ namespace OData2Poco.CommandLine
         // [STAThread]
         static void Main(string[] args)
         {
-<<<<<<< HEAD
-            try
-            {
-
-                //// Catch all unhandled exceptions in all threads.
-                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-                RunOptions(args);
-            }
-            catch (Exception ex)
-            {
-                var argument = string.Join(" ", args);
-                Console.WriteLine("Error in executing the command: o2pgen {0}", argument);
-                Console.WriteLine("Error Message:\n {0}", ex.Message);
-                //Console.WriteLine("Error Details: {0}", ex);
-                Environment.Exit(-1);
-            }
-        }
-=======
 
             try
             {
@@ -71,7 +53,6 @@ namespace OData2Poco.CommandLine
         }
 
 
->>>>>>> develop
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
 
@@ -94,28 +75,6 @@ namespace OData2Poco.CommandLine
             }
         }
 
-<<<<<<< HEAD
-        static void ProcessComandLine(Options options)
-         {
-           
-            if (options.Url == null) return;
-            O2P o2p = options.User == null
-                ? new O2P(options.Url)
-                : new O2P(options.Url, options.User, options.Password);
-          
-            //------- PocoSetting------
-            if (options.Key) o2p.AddKeyAttribute();
-            if (options.Table) o2p.AddTableAttribute();
-            if (options.Required) o2p.AddRequiredAttribute();
-            if (options.Navigation) o2p.AddNavigation();
-
-        
-             //var code = o2p.Generate(_PocoSetting);
-            string code = o2p.Generate(options.CodeFilename);
-            //.Generate(_PocoSetting);
-            Console.WriteLine("Saving generated code to file : " + options.CodeFilename);
-           // File.WriteAllText(options.CodeFilename, code);
-=======
         static async Task ProcessComandLineAsync(Options options)
         {
             //------- PocoSetting------
@@ -142,12 +101,11 @@ namespace OData2Poco.CommandLine
                 code = o2p.Generate(xml);
 
             }
-         //   Console.WriteLine(code);
+            //   Console.WriteLine(code);
             //.Generate(_PocoSetting);
             Console.WriteLine("Saving generated code to file : " + options.CodeFilename);
             SaveToFile(options.CodeFilename, code, " c# code is empty");
 
->>>>>>> develop
 
             //---------metafile -m
             if (options.MetaFilename != null)
@@ -162,11 +120,7 @@ namespace OData2Poco.CommandLine
             //------------ header -h for http media only not file--------------------
             if (options.Header && options.Url.StartsWith("http"))
             {
-<<<<<<< HEAD
-                MetaDataInfo meta = o2p;
-=======
                 //   MetaDataInfo meta = o2p;
->>>>>>> develop
                 Console.WriteLine();
                 Console.WriteLine("HTTP Header");
                 Console.WriteLine(new string('=', 15));
@@ -222,7 +176,7 @@ namespace OData2Poco.CommandLine
         }
 
 
-         
+
         public static string FormatXml(string xml)
         {
             XDocument doc = XDocument.Parse(xml);

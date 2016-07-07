@@ -12,9 +12,9 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <NuGetPackageImportStamp>cbf52326</NuGetPackageImportStamp>
+   
     <TargetFrameworkProfile />
-    <RestorePackages>true</RestorePackages>
+  
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,39 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <Compile Include="ClassTemplate.cs" />
-    <Compile Include="IClassTemplate.cs" />
-    <Compile Include="IPocoClassGenerator.cs" />
-    <Compile Include="MetaDataInfo.cs" />
-    <Compile Include="Language.cs" />
-    <Compile Include="Media.cs" />
-    <Compile Include="O2P.cs" />
-    <Compile Include="InternalsVisible.cs" />
-    <Compile Include="Extension\Extensions.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="PocoClassGeneratorVb.cs" />
-    <Compile Include="PocoFactory.cs" />
-    <Compile Include="PocoClassGeneratorCs.cs" />
-    <Compile Include="EnumTemplate.cs" />
-    <Compile Include="IPocoGenerator.cs" />
-    <Compile Include="MetaDataReader.cs" />
-    <Compile Include="ODataVersion.cs" />
-    <Compile Include="PocoSetting.cs" />
-    <Compile Include="PropertyTemplate.cs" />
-    <Compile Include="TextTransform\FluentTextTemplate.cs" />
-    <Compile Include="TextTransform\FluentCsTextTemplate.cs" />
-    <Compile Include="TextTransform\FluentTextTemplateT.cs" />
-    <Compile Include="TextTransform\IFluentTextTemplate.cs" />
-    <Compile Include="V3\ClrConvertor-V3.cs" />
-    <Compile Include="V3\Poco.cs" />
-    <Compile Include="V4\ClrConvertor-V4.cs" />
-    <Compile Include="V4\Poco.cs" />
-=======
-    <Compile Include="..\Version.cs">
-      <Link>Version.cs</Link>
-    </Compile>
->>>>>>> develop
+
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
