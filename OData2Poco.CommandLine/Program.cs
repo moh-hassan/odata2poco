@@ -82,7 +82,10 @@ namespace OData2Poco.CommandLine
             if (options.Table) _PocoSetting.AddTableAttribute = true;
             if (options.Required) _PocoSetting.AddRequiredAttribute = true;
             if (options.Navigation) _PocoSetting.AddNavigation = true;
+            if (options.Eager) _PocoSetting.AddEager = true;
             if (options.AddNullableDataType) _PocoSetting.AddNullableDataType = true;
+            _PocoSetting.Inherit = string.IsNullOrWhiteSpace(options.Inherit) ? string.Empty : options.Inherit;
+            _PocoSetting.NamespacePrefix = string.IsNullOrWhiteSpace(options.Namespace) ? string.Empty : options.Namespace;
 
             //  if (options.Url == null) return;
             //O2P o2p = options.User == null

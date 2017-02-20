@@ -24,5 +24,5 @@ namespace OData2Poco
         //v1.4.0
         public string EntitySetName { get; set; }
         public bool IsComplex { get; set; }
-    }
+     }
 }

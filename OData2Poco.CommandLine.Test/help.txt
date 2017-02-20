@@ -16,5 +16,21 @@
 
   -l, --list        (Default: False) List POCO classes to standard output.
 
+  -k  --key         (Deafault: False) Add Key attribute [Key]
+
+  -t  --table       (Default: False) Add Table attribute
+
+  -q  --required    (Default: False) Add Required attribute
+
+  -n  --navigation  (Default: False) Add navigation properties
+
+  -e  --eager       Add non virtual navigation properties
+
+  -b  --nullable    Add nullable data types
+
+  -i  --inherit     Base class and/or interfaces
+
+  -m  --namespace   A namespace prefix for the OData namespace
+
   --help            Display this help screen.
 

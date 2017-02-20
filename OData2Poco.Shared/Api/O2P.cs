@@ -114,6 +114,11 @@ namespace OData2Poco
             Setting.AddTableAttribute = true;
 
         }
+        public void AddEager()
+        {
+            Setting.AddEager = true;
+
+        }
 
         public async Task<string> GenerateAsync(Uri uri,string user="",string password="")
         {

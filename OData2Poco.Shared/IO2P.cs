@@ -17,7 +17,9 @@ namespace OData2Poco
         void AddKeyAttribute();
         void AddRequiredAttribute();
         void AddNavigation();
+        void AddFluent();
         void AddTableAttribute();
+        void AddEager();
         //Task<string> SaveMetaDataTo(string fname = "meta.xml");
         Task<string> Generate(string fname = "poco.cs");
     }

@@ -30,7 +30,8 @@ namespace OData2Poco.Tests
             Assert.AreEqual(o2p.MetaDataVersion, version);
             Assert.AreEqual(o2p.ClassList.Count, n);
             Assert.IsTrue(code.Contains(o2p.SchemaNamespace));
-            
+            StringAssert.DoesNotContain("System.ComponentModel.DataAnnotations.Schema", code);
+            StringAssert.DoesNotContain("System.ComponentModel.DataAnnotations", code);
         }
 
         [Test]
@@ -58,7 +59,99 @@ namespace OData2Poco.Tests
              StringAssert.Contains("[Key]", code);
              StringAssert.Contains("[Required]", code);
              StringAssert.Contains("[Table", code);
+             StringAssert.Contains("virtual public Supplier Supplier  {get;set;}", code);
+             StringAssert.DoesNotContain("public class Product :",code);
+             StringAssert.Contains("System.ComponentModel.DataAnnotations.Schema",code); 
+             StringAssert.Contains("System.ComponentModel.DataAnnotations",code); 
 
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public async void GenerateFromHttpWithSettingEagerTest(string url, string version, int n)
+        {
+            PocoSetting setting = new PocoSetting
+            {
+                AddEager = true
+            };
+
+            //var url = "http://services.odata.org/V4/OData/OData.svc";
+            O2P o2p = new O2P(setting);
+            var code = await o2p.GenerateAsync(new Uri(url));
+            Debug.WriteLine(code);
+
+            Assert.AreEqual(o2p.MetaDataVersion, version);
+            Assert.AreEqual(o2p.ClassList.Count, n);
+            Assert.IsTrue(code.Contains(o2p.SchemaNamespace));
+
+            StringAssert.Contains("public Supplier Supplier  {get;set;}", code);
+            
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public async void GenerateFromHttpWithSettingInheritTest(string url, string version, int n)
+        {
+            PocoSetting setting = new PocoSetting
+            {
+                Inherit = "MyBaseClass, MyInterface"
+            };
+
+            //var url = "http://services.odata.org/V4/OData/OData.svc";
+            O2P o2p = new O2P(setting);
+            var code = await o2p.GenerateAsync(new Uri(url));
+            Debug.WriteLine(code);
+
+            Assert.AreEqual(o2p.MetaDataVersion, version);
+            Assert.AreEqual(o2p.ClassList.Count, n);
+            Assert.IsTrue(code.Contains(o2p.SchemaNamespace));
+
+            StringAssert.Contains(": MyBaseClass, MyInterface", code);
+
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public async void GenerateFromHttpWithSettingNamepaceTest(string url, string version, int n)
+        {
+            PocoSetting setting = new PocoSetting
+            {
+                NamespacePrefix = "MyNamespace1.MyNamespace2"
+            };
+
+            //var url = "http://services.odata.org/V4/OData/OData.svc";
+            O2P o2p = new O2P(setting);
+            var code = await o2p.GenerateAsync(new Uri(url));
+            Debug.WriteLine(code);
+
+            Assert.AreEqual(o2p.MetaDataVersion, version);
+            Assert.AreEqual(o2p.ClassList.Count, n);
+
+            var namespc = (setting.NamespacePrefix + "." + o2p.SchemaNamespace).Replace("..", ".");
+            namespc = namespc.TrimEnd('.');
+            //Assert.IsFalse(code.Contains(o2p.SchemaNamespace));
+            StringAssert.Contains(namespc, code);
+
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public async void GenerateFromHttpWithSettingEmptyNamepaceTest(string url, string version, int n)
+        {
+            PocoSetting setting = new PocoSetting
+            {
+                NamespacePrefix = ""
+            };
+
+            //var url = "http://services.odata.org/V4/OData/OData.svc";
+            O2P o2p = new O2P(setting);
+            var code = await o2p.GenerateAsync(new Uri(url));
+            Debug.WriteLine(code);
+
+            Assert.AreEqual(o2p.MetaDataVersion, version);
+            Assert.AreEqual(o2p.ClassList.Count, n);
+            Assert.IsTrue(code.Contains($"namespace {o2p.SchemaNamespace}"));
+            
         }
 
         [Test]
