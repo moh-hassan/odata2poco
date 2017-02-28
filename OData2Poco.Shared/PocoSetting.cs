@@ -3,7 +3,7 @@
     public class PocoSetting
     {
         /// <summary>
-        /// SEt nullabable ? to the type of property
+        /// Set nullabable ? to the type of property
         /// Example int? , double?
         /// </summary>
         public bool AddNullableDataType { get; set; }
@@ -23,6 +23,10 @@
         /// Add Navigation properties as virtual properties
         /// </summary>
         public bool AddNavigation { get; set; }
+        /// <summary>
+        /// Add Navigation properties as non virtual properties for eager loading
+        /// </summary>
+        public bool AddEager { get; set; }
         //public bool AddDataContractAttribute { get; set; }
         /// <summary>
         /// The language of code generation, Defalt is CS 
@@ -30,9 +34,27 @@
         /// </summary>
         public Language Lang { get; set; }
 
+        /// <summary>
+        /// Gets or sets the string to use after the colon of a class name for the base class to inherit and/or interfaces to implement
+        /// </summary>
+        /// <value>
+        /// Base class and/or interfaces to implement
+        /// </value>
+        public string Inherit { get; set; }
+
+        /// <summary>
+        /// Gets or sets a namespace prefix.
+        /// </summary>
+        /// <value>
+        /// The namespace.
+        /// </value>
+        public string NamespacePrefix { get; set; }
+
         public PocoSetting()
         {
             Lang= Language.CS;
+            NamespacePrefix = string.Empty;
+            Inherit = string.Empty;
         }
        
     }

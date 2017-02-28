@@ -68,11 +68,15 @@
             return this;
         }
 
-        public FluentCsTextTemplate StartClass(string name, string visibility = "public")
+        public FluentCsTextTemplate StartClass(string name, string inherit, string visibility = "public")
         {
             PushTabIndent();// ident one tab
             Write("{0} ", visibility);
-            WriteLine("class {0}", name);
+            if (string.IsNullOrWhiteSpace(inherit))
+                WriteLine("class {0}", name);
+            else
+                WriteLine("class {0} : {1}", name, inherit);
+
             LeftBrace();
 
             PushSpaceIndent(); //prepare for the next write

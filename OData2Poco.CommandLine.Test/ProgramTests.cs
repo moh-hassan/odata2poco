@@ -17,10 +17,15 @@ namespace OData2Poco.CommandLine.Test
         /// <summary>
         /// exitcode = tuble.item1  , output= tuble.item2
         /// </summary>
+        /// <remarks>
+        /// Command is split  simply using space as a delimiter so does not cope 
+        /// with spaces within quoted parameter values nor quotes themselves. Works well
+        /// enough for unit tests.
+        /// </remarks>
         private Func<string, Tuple<int, string>> RunCommand = (s =>
         {
-            var command = Command.Run(appCommand, s.Split(' '),
-             options => options.Timeout(TimeSpan.FromSeconds(Timeout)));
+           var command = Command.Run(appCommand, s.Split(' '),
+           options => options.Timeout(TimeSpan.FromSeconds(Timeout)));
 
             var outText = command.Result.StandardOutput;
             var errText = command.Result.StandardError;
@@ -41,6 +46,8 @@ namespace OData2Poco.CommandLine.Test
             Assert.AreEqual(0, tuble.Item1);
             //Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("public class Product"));
+            Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations")); //-k not set
+            Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //-t not set
         }
 
         [Test]
@@ -52,13 +59,59 @@ namespace OData2Poco.CommandLine.Test
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
             //  Console.WriteLine(tuble.Item2);
-
+            
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("[Table(\"Products\")]")); //-t
+            Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //-t
             Assert.IsTrue(output.Contains("[Key]")); //-k
+            Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations")); //-k
             Assert.IsTrue(output.Contains("[Required]"));  //-q
             Assert.IsTrue(output.Contains("virtual public Supplier Supplier  {get;set;}")); //-n
             Assert.IsTrue(output.Contains("int?"));  //-b
+            Assert.IsFalse(output.Contains("public class Product :")); // -i is not set
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void PocoSettingEagerTest(string url, string version, int n)
+        {
+            var a = string.Format("-r {0} -v -e", url);
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            Assert.AreEqual(0, tuble.Item1);
+            //  Console.WriteLine(tuble.Item2);
+            
+            Assert.IsTrue(output.Contains("public class Product")); //-v
+            Assert.IsTrue(output.Contains("public Supplier Supplier  {get;set;}")); //-e
+        
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void PocoSettingInheritTest(string url, string version, int n)
+        {
+            var a = string.Format("-r {0} -v -i {1}", url,"MyBaseClass,MyInterface");
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            Assert.AreEqual(0, tuble.Item1);
+            //  Console.WriteLine(tuble.Item2);
+           
+            Assert.IsTrue(output.Contains("public class Product : MyBaseClass,MyInterface")); //-i, -v
+
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void PocoSettingNamespaceTest(string url, string version, int n)
+        {
+            var a = string.Format("-r {0} -v -m {1}", url, "MyNamespace1.MyNamespace2");
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            Assert.AreEqual(0, tuble.Item1);
+            //  Console.WriteLine(tuble.Item2);
+
+            Assert.IsTrue(output.Contains("MyNamespace1.MyNamespace2.")); //-i, -v
+
         }
 
         [Test]
@@ -68,7 +121,7 @@ namespace OData2Poco.CommandLine.Test
             var a = string.Format("-r {0} -v ", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
-            //Debug.WriteLine(output);
+           
             Assert.AreEqual(0, tuble.Item1);
             //Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("public class Product"));
@@ -83,7 +136,7 @@ namespace OData2Poco.CommandLine.Test
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
             //Console.WriteLine(tuble.Item2);
-
+            
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("[Table")); //-t
             Assert.IsTrue(output.Contains("[Key]")); //-k

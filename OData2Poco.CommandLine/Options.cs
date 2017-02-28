@@ -52,13 +52,24 @@ namespace OData2Poco.CommandLine
         [Option('q', "required", DefaultValue = false, HelpText = "Add Required attribute")]
         public bool Required { get; set; }
 
-        [Option('n', "navigation", DefaultValue = false, HelpText = "Add Navigation Properties")]
+        [Option('n', "navigation", DefaultValue = false, HelpText = "Add navigation properties")]
         public bool Navigation { get; set; }
+    
+        [Option('e', "eager", DefaultValue = false, HelpText = "Add non virtual navigation Properties for Eager Loading")]
+        public bool Eager { get; set; }
 
-        [Option('b', "nullable", DefaultValue = false, HelpText = "Add Nullable Data Types")]
+        [Option('b', "nullable", DefaultValue = false, HelpText = "Add nullable data types")]
         public bool AddNullableDataType { get; set; }
+        
         //[VerbOption("config", HelpText = "Configure code generation.")]
         //public ConfigSubOptions ConfigVerb { get; set; }
+
+        [Option('i', "inherit", HelpText = "Base class and/or interfaces")]
+        public string Inherit { get; set; }
+
+        [Option('m', "namespace", HelpText = "A namespace prefix for the OData namespace")]
+        public string Namespace { get; set; }
+
 
         [ParserState]
         public IParserState LastParserState { get; set; }

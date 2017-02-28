@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>OData2Poco</id>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
     <title>OData2Poco</title>
     <authors>Mohamed Hassan</authors>
     <owners>Mohamed Hassan</owners>
@@ -16,15 +16,12 @@
 	 </description>
     <releaseNotes>		
 		Release Date: June 27,2016 
-		Version: 2.0.0		
+		Version: 2.1.0		
 		What is new:
-			-Add Class PocoSetting for managing code generation
-			- Add KeyAttribute to the property
-			- Add RequiredAttribute to the property
-			- Add TableAttribute to the class
-			- Add Navigation properties to the class
-			- Add Nullable DataTypes to the  properties.			
-			- Re-factoring code for portability readiness.
+			-new option: -e, --eager         (Default: False) Add non virtual navigation Properties for Eager Loading  
+            -new option: -i, --inherit       Base class and/or interfaces
+            -new option: -m, --namespace     A namespace prefix for the OData namespace
+
 	</releaseNotes>
     <copyright>© 2016 Mohamed Hassan</copyright>
     <tags>OData2Poco Poco OData data Rest Net45 code-generation</tags>
