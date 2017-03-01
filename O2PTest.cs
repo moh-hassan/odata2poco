@@ -150,7 +150,8 @@ namespace OData2Poco.Tests
 
             Assert.AreEqual(o2p.MetaDataVersion, version);
             Assert.AreEqual(o2p.ClassList.Count, n);
-            Assert.IsTrue(code.Contains($"namespace {o2p.SchemaNamespace}"));
+            //Assert.IsTrue(code.Contains($"namespace {o2p.SchemaNamespace}"));
+            Assert.IsTrue(code.Contains(string.Format("namespace {0}",o2p.SchemaNamespace)));
             
         }
 

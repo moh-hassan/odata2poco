@@ -2,7 +2,7 @@
 **OData2Poco** is a class library with T4 Template to generate  plain-old CLR objects (**POCO**) from OData feeds . 
 POCO classes can be used in typed RESTful client OData services.
 
-A new **OData2Poco.CommandLine (o2pgen)** Console Application is available. 
+Also, **OData2Poco.CommandLine (o2pgen)** Console Application is available to generate POCO with different options. 
 
 [![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)
 [![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)
@@ -12,25 +12,19 @@ A new **OData2Poco.CommandLine (o2pgen)** Console Application is available.
 **Features of OData2Poco**
    
 - Generate POCO classes corresponding to the Entities defined in the MetaDataString. **C#** is only supported in this version.     
-- Generation   is based on the metadata of the service stored on the  server/ or
- EDMX xml files.
+- Generation   is based on the Metadata of the service stored on the  server/ or  EDMX xml files.
 - Support http(s) with/without basic authentication   : user and password
 - Convert Data type of EDMX to the corresponding CLR data types
-- Support Entites, complex data type, Collections and Enum.
-- Exclude navigation properties.
-- Use List<T> For Collections.
+- Support Entites, complex data type, Collections  and navigation properties.
 - Support OData service version 1..4
 - Add comments to  the properties of the class which is a primary key / mandatory  in source entities.
+- Code generation is controlled by setting different options.
 - Save metadata to a file.
 - T4 template is included.
-- Extract http header (for http service).
-- Can be installed from nuget.
 - Support .NET 4.5 or higher
-- Tested with OData feeds.
-- CommandLine tool (one executable file o2pgen.exe) is provided.
+- Packaged as a Class library and CommandLine tool (one executable file o2pgen.exe).Packages can be installed from nuget site.
  
-There is a plan to add  extra features .
- I'm waiting the feedback from the community for bug fix and extra features.
+
  
 **Download** OData2Poco from [codeplex.com](http://odata2poco.codeplex.com) or install using [nuget](https://www.nuget.org/packages/OData2Poco/)
 ![enter image description here](http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&DownloadId=1562964)
@@ -48,29 +42,23 @@ Microsoft.OData.Edm  version="6.15.0" or higher
 note: The generated POCO classes code need not these EDM dependency libraries when POCO is used in your project.
 
 **Release Notes**
-Current version:  v1.3.0
+
+- v 2.1.0 March 1, 2017
+- v 2.0.0 June 27, 2016
+- v 1.3.0 April 10, 2016
+
+**Latest Changes**
+
+- Merged pull request #2 "Add option for non-virtual navigation properties, namespace and inherit BaseClass/Interface", thanks to @rsouthworth.
 
  **How to use**
-Install the library from nuget site :
-Install-Package OData2Poco
 
-Example 1:
-Simply, one line of code and you get CS code
-
-     var code = new O2P(url).Generate();
-
- 
- Example 2 :
- for basic authentication
-
-     var code = new O2P(url,user,password).Generate();
-
-**T4 Template**
-you can use the accompanied T4 template and fill values for url (for authentication, user and password )
+Read the documentation:[http://odata2poco.codeplex.com/documentation](http://odata2poco.codeplex.com/documentation "documentation")
 
 
 **Give it a try**
-you can use for test the open published OData service,
+
+You can use for test the open published OData service,
 
 V4: http://services.odata.org/V4/OData/OData.svc
 
