@@ -30,7 +30,9 @@ namespace OData2Poco.CommandLine
         [Option('f', "filename", DefaultValue = "poco.cs", HelpText = "filename to save generated c# code.")]
         public string CodeFilename { get; set; }
 
-        [Option('m', "metafile", HelpText = "Xml filename to save metadata.")]
+        //bugfix in 2.2.0
+        //change m to x , to be different than namespace
+        [Option('x', "metafile", HelpText = "Xml filename to save metadata.")]
         public string MetaFilename { get; set; }
 
         [Option('v', "verbose", DefaultValue = false, HelpText = "Prints C# code to standard output.")]
@@ -64,13 +66,28 @@ namespace OData2Poco.CommandLine
         //[VerbOption("config", HelpText = "Configure code generation.")]
         //public ConfigSubOptions ConfigVerb { get; set; }
 
-        [Option('i', "inherit", HelpText = "Base class and/or interfaces")]
+        [Option('i', "inherit", HelpText = "for class inheritance from  BaseClass and/or interfaces")]
         public string Inherit { get; set; }
 
         [Option('m', "namespace", HelpText = "A namespace prefix for the OData namespace")]
         public string Namespace { get; set; }
 
+        //camel /pascal , at least the first three chars Caps/lower or mixed e.g PAS or pas or Pas
+        [Option('c', "case", DefaultValue = "none", HelpText = "Type pas or camel to Convert Property Name to PascalCase or CamelCase")]
+        public string NameCase { get; set; }
 
+        //All attribues e.g -a key required json customAttribute
+        [OptionArray('a', "values",DefaultValue = new string[] {})]
+        public string[] Attributes { get; set; }
+
+        [Option('j', "Json", DefaultValue = false,
+            HelpText = "Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
+        public bool AddJsonAttribute { get; set; }
+
+        //todo: add feature, modify pocosetting
+        //external reference assemplies needed to be defined by user in using clause statement
+      //  [OptionArray('y', "values", DefaultValue = new string[] { })]
+        public string[] Assemplies { get; set; }
         [ParserState]
         public IParserState LastParserState { get; set; }
 

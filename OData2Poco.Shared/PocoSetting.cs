@@ -1,5 +1,10 @@
-﻿namespace OData2Poco
+﻿using OData2Poco.Shared;
+
+namespace OData2Poco
 {
+    /// <summary>
+    /// Setting options to control the code generation
+    /// </summary>
     public class PocoSetting
     {
         /// <summary>
@@ -49,12 +54,31 @@
         /// The namespace.
         /// </value>
         public string NamespacePrefix { get; set; }
+        /// <summary>
+        /// Gets or sets a NameCase: Pas/Camel/None for string conversion.
+        /// </summary>
+      //  public CaseEnum NameCase { get; set; }
+        public CaseEnum NameCase { get; set; }
 
+        /// <summary>
+        /// Add DataMember Attribute
+        /// </summary>
+        public bool AddDataMemberAttribute { get; set; }
+        /// <summary>
+        /// Add JsonProperty Attribute
+        ///example:     [JsonProperty(PropertyName = "email")]
+        /// </summary>
+        public bool AddJsonAttribute { get; set; }
+        /// <summary>
+        /// Initialization
+        /// </summary>
         public PocoSetting()
         {
             Lang= Language.CS;
             NamespacePrefix = string.Empty;
             Inherit = string.Empty;
+            NameCase= CaseEnum.None;
+            AddJsonAttribute= false;
         }
        
     }

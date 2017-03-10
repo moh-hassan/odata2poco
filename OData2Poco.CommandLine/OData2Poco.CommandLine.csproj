@@ -71,9 +71,11 @@
       <Link>Version.cs</Link>
     </Compile>
     <Compile Include="ApplicationInfo.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="ICommand.cs" />
     <Compile Include="Options.cs" />
     <Content Include="o2p\o2pgen.exe" />
-    <Content Include="Program - Copy.cs2.txt" />
+    <None Include="Program.Old.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility.cs">

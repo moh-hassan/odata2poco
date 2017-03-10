@@ -10,9 +10,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Api\O2P.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AssemplyManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CaseEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClassTemplate2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ClassTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnumTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extension\Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extension\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\O2PFluent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IClassTemplate.cs" />
@@ -28,6 +32,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)PocoClassGeneratorCs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PocoFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PocoSetting.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PropertyGenerator.cs" />
+    <None Include="$(MSBuildThisFileDirectory)PropertyTemplate2.cs.txt" />
     <Compile Include="$(MSBuildThisFileDirectory)PropertyTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TextTransform\FluentCsTextTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TextTransform\FluentTextTemplate.cs" />
@@ -40,12 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Docs\Api.md" />
-
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)licence.txt" />
     <Content Include="$(MSBuildThisFileDirectory)ODataLogo-32.png" />
     <Content Include="$(MSBuildThisFileDirectory)T4 Templates\T4Odata2Poco.tt.txt" />
-
   </ItemGroup>
 </Project>

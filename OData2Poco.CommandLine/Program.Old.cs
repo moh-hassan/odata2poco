@@ -12,34 +12,26 @@ using O2P = OData2Poco.O2P;
 //(c) 2016 Mohamed Hassan
 // MIT License
 //project site: http://odata2poco.codeplex.com/
-namespace OData2Poco.CommandLine
+//Refactored to Command Pattern
+namespace OData2Poco.CommandLine.Version1
 {
     class Program
     {
         private static readonly Stopwatch Sw = new Stopwatch();
-        //private static PocoSetting _pocoSetting = new PocoSetting();
+        private static PocoSetting _PocoSetting = new PocoSetting();
 
         // [STAThread]
-        static void Main(string[] args)
+        static void Main1(string[] args)
         {
 
             try
             {
-              //increase hight of screen
-                if (!Console.IsOutputRedirected)
-                {
-                    //Console.SetWindowSize(80, 30);
-                    //Console.SetBufferSize(80, Int16.MaxValue - 1);
-                    Console.BufferHeight = Int16.MaxValue - 1;
-                }
+
                 //// Catch all unhandled exceptions in all threads.
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-                Sw.Start();
-                RunOptionsAsync(args).Wait();
-                Sw.Stop();
-                Console.WriteLine();
-                Console.WriteLine("Total processing time: {0} sec", Sw.ElapsedMilliseconds / 1000.0);
 
+                Task t = RunOptionsAsync(args);
+                t.Wait();
                 Environment.Exit(0);
 #if DEBUG
                  Console.ReadKey();
@@ -53,7 +45,7 @@ namespace OData2Poco.CommandLine
 #if DEBUG
                 Console.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage(true));
 #else
-                Console.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage(true));
+                Console.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage());
 #endif
                 //Console.WriteLine("Error Details: {0}", ex);
                 Environment.Exit(-1);
@@ -65,30 +57,26 @@ namespace OData2Poco.CommandLine
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            var exception = e.ExceptionObject as Exception;
-            if (exception != null)
-                Console.WriteLine("Unhandled exception: {0}", exception.Message);
+
+            Console.WriteLine("Unhandled exception: {0}", (e.ExceptionObject as Exception).Message);
             Environment.Exit(-99);
         }
-
         static async Task RunOptionsAsync(string[] args)
         {
-            //Sw.Start();
+            Sw.Start();
             var options = new Options();
-         
+
             if (Parser.Default.ParseArguments(args, options))
             {
 
                 Console.WriteLine(ApplicationInfo.HeadingInfo);
                 Console.WriteLine(ApplicationInfo.Copyright);
                 Console.WriteLine(ApplicationInfo.Description);
-                //Console.WriteLine("Start processing url: " + options.Url);
-             //   await ProcessComandLineAsync(options);
-                //refactoring to Command Pattern
-                await new Command(options).Execute();
+                Console.WriteLine("Start processing url: " + options.Url);
+                await ProcessComandLineAsync(options);
             }
         }
-#if x
+
         static async Task ProcessComandLineAsync(Options options)
         {
             //------- PocoSetting------
@@ -179,9 +167,9 @@ namespace OData2Poco.CommandLine
             }
 
 
-            //Sw.Stop();
-            //Console.WriteLine();
-            //Console.WriteLine("Total processing time: {0} sec", Sw.ElapsedMilliseconds / 1000.0);
+            Sw.Stop();
+            Console.WriteLine();
+            Console.WriteLine("Total processing time: {0} sec", Sw.ElapsedMilliseconds / 1000.0);
 
         }
 
@@ -206,6 +194,6 @@ namespace OData2Poco.CommandLine
             XDocument doc = XDocument.Parse(xml);
             return doc.ToString();
         }
-#endif
+
     }
 }

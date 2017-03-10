@@ -2,13 +2,17 @@
 //#define local
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OData2Poco.Extension;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NorthwindModel;
 
 namespace OData2Poco.Tests
 {
@@ -59,7 +63,7 @@ namespace OData2Poco.Tests
              StringAssert.Contains("[Key]", code);
              StringAssert.Contains("[Required]", code);
              StringAssert.Contains("[Table", code);
-             StringAssert.Contains("virtual public Supplier Supplier  {get;set;}", code);
+             StringAssert.Contains("virtual public Supplier Supplier {get;set;}", code); //only one space bet words
              StringAssert.DoesNotContain("public class Product :",code);
              StringAssert.Contains("System.ComponentModel.DataAnnotations.Schema",code); 
              StringAssert.Contains("System.ComponentModel.DataAnnotations",code); 
@@ -84,7 +88,7 @@ namespace OData2Poco.Tests
             Assert.AreEqual(o2p.ClassList.Count, n);
             Assert.IsTrue(code.Contains(o2p.SchemaNamespace));
 
-            StringAssert.Contains("public Supplier Supplier  {get;set;}", code);
+            StringAssert.Contains("public Supplier Supplier {get;set;}", code);
             
         }
 
@@ -276,7 +280,39 @@ namespace OData2Poco.Tests
 
         }
 
- 
+        [Test]
+        public void TestJson()
+        {
+            var json = File.ReadAllText(@"data\northmodel.json");
+            JObject googleSearch = JObject.Parse(json);
+            //Console.WriteLine(googleSearch);
+            // get JSON result objects into a list
+            IList<JToken> results = googleSearch["Category"]["Properties"].Children().ToList();
+            Console.WriteLine(Helper.ToJson(results));
+            Console.WriteLine(results.Count);
+            //// serialize JSON results into .NET objects
+            IList<PropertyTemplate> searchResults = new List<PropertyTemplate>();
+            foreach (JToken result in results)
+            {
+                var searchResult = JsonConvert.DeserializeObject<PropertyTemplate>(result.ToString());
+                searchResults.Add(searchResult);
+            }
+            Console.WriteLine(Helper.ToJson(searchResults));
+        }
+
+        [Test]
+        public void TestJson2()
+        {
+           var json = Helper.ExtractClassFromJson(@"data\northmodel.json", "Category");
+            Console.WriteLine(json);
+            var categoryProperties = Helper.ToObject<PropertyTemplate[]>(json);
+            foreach (var p in categoryProperties)
+            {
+                Console.WriteLine(p.PropName);
+            }
+
+        }
+
         //---------------------------------------------
 #if local
         [Test]
