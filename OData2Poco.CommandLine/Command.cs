@@ -123,7 +123,7 @@ namespace OData2Poco.CommandLine
         #region Utility
 
         //utility functions
-        private bool SaveToFile(string fname, string text, string errorMsg)
+        private void SaveToFile(string fname, string text, string errorMsg)
         {
             //todo:check file exist
             if (string.IsNullOrEmpty(text))
@@ -134,7 +134,6 @@ namespace OData2Poco.CommandLine
             File.WriteAllText(fname, text);
             var length = new FileInfo(fname).Length;
             if (length == 0) throw new Exception(fname + " is empty");
-            return true;
         }
 
         #endregion

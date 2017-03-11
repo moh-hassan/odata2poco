@@ -131,7 +131,7 @@ For example:
                 return result;
             }
             
-            var lines = text.Split(new char[]{'\n','\r'}, StringSplitOptions.RemoveEmptyEntries);
+            var lines = text.Split(new[]{'\n','\r'}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
                 result += string.Format("{0}\n",trimmer.Replace(line.Trim(), " "));

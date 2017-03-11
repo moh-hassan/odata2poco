@@ -20,7 +20,7 @@ mkdir Build
 %nuget% pack "OData2PocoLib\OData2Poco.nuspec" -verbosity detailed -o Build -p Configuration=%config% %version%
 %nuget% pack "OData2Poco.CommandLine\OData2Poco.CommandLine.nuspec" -verbosity detailed -o Build -p Configuration=%config% %version%
 ::if not "%errorlevel%"=="0" goto failure
-
+pause
  
 :success
 exit 0
@@ -28,3 +28,4 @@ exit 0
 :failure
 exit -1
 
+pause

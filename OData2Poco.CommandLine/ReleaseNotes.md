@@ -5,11 +5,13 @@
 ##  Version 2.2.0 ##
 **Release Date:**   
 **What is news:**
-- New: add option  -c, --case camel/pascal to Convert property Name to CamelCase/PascalCase 
-- New: add option -j, --Json  to Add JsonProperty Attribute for the property, example: [JsonProperty(PropertyName = "email")
+- New: Coverting Property Name to camelCase/PasCase using the option  -c, --case camel/pascal.  
+- New: Generating JsonProperty Attribute for the property using the option -j, --Json, example: [JsonProperty(PropertyName = "email")]
+- New: Adding the option -a, --attribute  to enter all attributes separated by one or more space. Allowed values are:key required json table.
+  (equivqlant to -k -q -j -t options )
 - Change: the option metafile name changed to x (instead of m)  to be different than the namespace option (m)
-- New: Show option values with description to help review the options you typed (in verbose mode).
-- New -a, --attribute  to enter all attributes separated by one or more space. Allowed values are:key required json table.
+- New: Show the option values in the console to help review the options you typed (in verbose mode).
+
 
 
 

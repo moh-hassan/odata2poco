@@ -14,9 +14,6 @@ namespace OData2Poco.CommandLine
     class Program
     {
         private static readonly Stopwatch Sw = new Stopwatch();
-        //private static PocoSetting _pocoSetting = new PocoSetting();
-
-        // [STAThread]
         static void Main(string[] args)
         {
             try

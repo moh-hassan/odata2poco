@@ -18,22 +18,22 @@ Also, **OData2Poco.CommandLine (o2pgen)** Console Application is available to ge
 - Support Entites, complex data type, Collections  and navigation properties.
 - Support OData service version V1..V4
 - Code generation is controlled by setting different options:   
-   Add Attributes to properties: Key, Required.
-   Add JsonProperty to properties.
-   Add Attributes to class: Table.
-   generating public or virtual properties.
-   Convert name of properties to camelCase or PasCase
-   Add nullable datatypes, e.g. int?.
-   Generate (or not) navigation properties.
-   Generated class can inherit from a common BaseClass/interface.
-   Define namespace to overwrite the namespace of the model.
-- Add comments in the generated source entities to  the properties of the class which is a primary key / mandatory  .
-- Save metadata and generated code to a file.
+   - Add Key, Required Attributes to the properties. 
+   - Add JsonProperty to the properties.
+   - Add Table Attributes to class.
+   - Adding virtual modifier to the properties.
+   - Convert name of properties to camelCase or PasCase
+   - Add nullable datatypes, e.g. int?.
+   - Generate (or not) navigation properties.
+   - Generated class can inherit from a common BaseClass/interface.
+   - Define namespace to overwrite the namespace of the model.
+- Add primary key/mandatory comments to the properties of the class.   .
+- Save metadata and generated code to a user defined file name.
 - T4 template is included.
 - Support .NET 4.5 or higher
 - Support Windows or Linux (Mono)
-- Packaged as a Class library and CommandLine tool (one executable file o2pgen.exe).Packages can be installed from nuget site.
-- CSharp POCO classes  is only generated. Other languages may be supported in the near future based on the community needs.
+- Packaged as a Class library and CommandLine tool (one executable file o2pgen.exe) and can be installed from nuget web site.
+- Generating CSharp POCO classes. Other languages may be supported in the near future based on the community needs.
 - MIT License. 
 
  

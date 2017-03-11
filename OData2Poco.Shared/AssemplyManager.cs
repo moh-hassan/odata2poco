@@ -91,7 +91,6 @@ namespace OData2Poco.Shared
         /// <summary>
         /// Scan the model to find all uniqe dataTypes which may have referenced or external assemply
         /// </summary>
-        /// <param name="list"></param>
         /// <returns></returns>
         private void AddAssempliesOfDataType()
         {

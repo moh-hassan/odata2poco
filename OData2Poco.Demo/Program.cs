@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OData2Poco.CommandLine
+namespace OData2Poco.Demo
 {
-    interface ICommand
+    class Program
     {
-        Task Execute();
+        static void Main(string[] args)
+        {
+        }
     }
 }
