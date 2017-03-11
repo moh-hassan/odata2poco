@@ -5,7 +5,11 @@ using NUnit.Framework;
 
 namespace OData2Poco.CommandLine.Test
 {
-
+    /*
+     * Note for text contain check for properties of class
+     * all properties are declared with one and only one space between words
+     * example virtual public Supplier Supplier {get;set;}  //only one space bet all words
+     * */
     [TestFixture]
     public class ProgramTests
     {
@@ -42,7 +46,7 @@ namespace OData2Poco.CommandLine.Test
             var a = string.Format("-r {0} -v ", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
-            //  Console.WriteLine(output);
+            Console.WriteLine(output);
             Assert.AreEqual(0, tuble.Item1);
             //Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("public class Product"));
@@ -58,7 +62,7 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            //  Console.WriteLine(tuble.Item2);
+            Console.WriteLine(tuble.Item2);
             
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("[Table(\"Products\")]")); //-t
@@ -66,11 +70,80 @@ namespace OData2Poco.CommandLine.Test
             Assert.IsTrue(output.Contains("[Key]")); //-k
             Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations")); //-k
             Assert.IsTrue(output.Contains("[Required]"));  //-q
-            Assert.IsTrue(output.Contains("virtual public Supplier Supplier  {get;set;}")); //-n
+            Assert.IsTrue(output.Contains("virtual public Supplier Supplier {get;set;}")); //-n
             Assert.IsTrue(output.Contains("int?"));  //-b
             Assert.IsFalse(output.Contains("public class Product :")); // -i is not set
         }
 
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void NullableDatatypeTest(string url, string version, int n)
+        {
+            var a = string.Format("-r {0} -v  -n -b", url); //navigation propertis with complex data type
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            Assert.AreEqual(0, tuble.Item1);
+            Console.WriteLine(tuble.Item2);
+
+            Assert.IsTrue(output.Contains("public class Product"));
+            Assert.IsTrue(output.Contains("virtual public Supplier Supplier {get;set;}")); //-n
+            Assert.IsTrue(output.Contains("int?"));  //-b
+         
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void PocoSettingWithJsonAttributeTest(string url, string version, int n)
+        {
+            var a = string.Format("-r {0}  -j -v", url);
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            //Console.WriteLine(tuble.Item2);
+            Assert.AreEqual(0, tuble.Item1); //exit code
+            Assert.IsTrue(output.Contains("public class Category"));
+            Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
+            Assert.IsTrue(output.Contains("Category"));
+            Assert.IsTrue(output.Contains(" [JsonProperty(PropertyName = \"CategoryName\")]"));
+            Assert.IsTrue(output.Contains("CategoryName"));
+
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void PocoSettingWithJsonAttributeAndCamelCaseTest(string url, string version, int n)
+        {
+            var a = string.Format("-r {0}  -j -c cam -v", url);
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            //Assert.AreEqual(0, tuble.Item1);
+            Console.WriteLine(tuble.Item2);
+            Assert.IsTrue(output.Contains("public class Category"));
+            Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryName\")]"),"itshould be CategoryName");
+            Assert.IsTrue(output.Contains("categoryName"));
+            Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
+            Assert.IsTrue(output.Contains("category"));
+         
+
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void PocoSettingWithJsonAttributePasCaseTest(string url, string version, int n)
+        {
+            var a = string.Format("-r {0}  -jc PAS -v", url);
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            Assert.AreEqual(0, tuble.Item1);
+            //Console.WriteLine(tuble.Item2);
+
+            Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
+            Assert.IsTrue(output.Contains("Category"));
+            Assert.IsTrue(output.Contains(" [JsonProperty(PropertyName = \"CategoryName\")]"));
+            Assert.IsTrue(output.Contains("CategoryName"));
+
+        }
+       
+       
         [Test]
         [TestCaseSource(typeof(TestSample), "UrlCases")]
         public void PocoSettingEagerTest(string url, string version, int n)
@@ -79,10 +152,10 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            //  Console.WriteLine(tuble.Item2);
+            Console.WriteLine(tuble.Item2);
             
             Assert.IsTrue(output.Contains("public class Product")); //-v
-            Assert.IsTrue(output.Contains("public Supplier Supplier  {get;set;}")); //-e
+            Assert.IsTrue(output.Contains("public Supplier Supplier {get;set;}")); //-e
         
         }
 
@@ -135,13 +208,13 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            //Console.WriteLine(tuble.Item2);
+            Console.WriteLine(tuble.Item2);
             
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("[Table")); //-t
             Assert.IsTrue(output.Contains("[Key]")); //-k
             Assert.IsTrue(output.Contains("[Required]"));  //-q
-            Assert.IsTrue(output.Contains("virtual public")); //-n
+            Assert.IsTrue(output.Contains("virtual")); //-n
         }
 
         [Test]

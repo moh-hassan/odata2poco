@@ -1,0 +1,2287 @@
+﻿{
+  "Category": {
+    "Name": "Category",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "CategoryID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CategoryName",
+        "PropType": "string",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Description",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Picture",
+        "PropType": "byte[]",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Products",
+        "PropType": "List<Product>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CategoryID"
+    ],
+    "Navigation": [
+      "Products"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Categories",
+    "IsComplex": false
+  },
+  "CustomerDemographic": {
+    "Name": "CustomerDemographic",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "CustomerTypeID",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CustomerDesc",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Customers",
+        "PropType": "List<Customer>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CustomerTypeID"
+    ],
+    "Navigation": [
+      "Customers"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "CustomerDemographics",
+    "IsComplex": false
+  },
+  "Customer": {
+    "Name": "Customer",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "CustomerID",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CompanyName",
+        "PropType": "string",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ContactName",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ContactTitle",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Address",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "City",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Region",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "PostalCode",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Country",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Phone",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Fax",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Orders",
+        "PropType": "List<Order>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CustomerDemographics",
+        "PropType": "List<CustomerDemographic>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CustomerID"
+    ],
+    "Navigation": [
+      "Orders",
+      "CustomerDemographics"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Customers",
+    "IsComplex": false
+  },
+  "Employee": {
+    "Name": "Employee",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "EmployeeID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "LastName",
+        "PropType": "string",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "FirstName",
+        "PropType": "string",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Title",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "TitleOfCourtesy",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "BirthDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "HireDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Address",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "City",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Region",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "PostalCode",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Country",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "HomePhone",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Extension",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Photo",
+        "PropType": "byte[]",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Notes",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ReportsTo",
+        "PropType": "int",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "PhotoPath",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Employees1",
+        "PropType": "List<Employee>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Employee1",
+        "PropType": "Employee",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Orders",
+        "PropType": "List<Order>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Territories",
+        "PropType": "List<Territory>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "EmployeeID"
+    ],
+    "Navigation": [
+      "Employees1",
+      "Employee1",
+      "Orders",
+      "Territories"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Employees",
+    "IsComplex": false
+  },
+  "Order_Detail": {
+    "Name": "Order_Detail",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "OrderID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitPrice",
+        "PropType": "decimal",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Quantity",
+        "PropType": "short",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Discount",
+        "PropType": "float",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Order",
+        "PropType": "Order",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Product",
+        "PropType": "Product",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "OrderID",
+      "ProductID"
+    ],
+    "Navigation": [
+      "Order",
+      "Product"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Order_Details",
+    "IsComplex": false
+  },
+  "Order": {
+    "Name": "Order",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "OrderID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CustomerID",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "EmployeeID",
+        "PropType": "int",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "OrderDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "RequiredDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShippedDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipVia",
+        "PropType": "int",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Freight",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipName",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipAddress",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipCity",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipRegion",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipPostalCode",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipCountry",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Customer",
+        "PropType": "Customer",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Employee",
+        "PropType": "Employee",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Order_Details",
+        "PropType": "List<Order_Detail>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Shipper",
+        "PropType": "Shipper",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "OrderID"
+    ],
+    "Navigation": [
+      "Customer",
+      "Employee",
+      "Order_Details",
+      "Shipper"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Orders",
+    "IsComplex": false
+  },
+  "Product": {
+    "Name": "Product",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "ProductID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductName",
+        "PropType": "string",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "SupplierID",
+        "PropType": "int",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CategoryID",
+        "PropType": "int",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "QuantityPerUnit",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitPrice",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitsInStock",
+        "PropType": "short",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitsOnOrder",
+        "PropType": "short",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ReorderLevel",
+        "PropType": "short",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Discontinued",
+        "PropType": "bool",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Category",
+        "PropType": "Category",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Order_Details",
+        "PropType": "List<Order_Detail>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Supplier",
+        "PropType": "Supplier",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "ProductID"
+    ],
+    "Navigation": [
+      "Category",
+      "Order_Details",
+      "Supplier"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Products",
+    "IsComplex": false
+  },
+  "Region": {
+    "Name": "Region",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "RegionID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "RegionDescription",
+        "PropType": "string",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Territories",
+        "PropType": "List<Territory>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "RegionID"
+    ],
+    "Navigation": [
+      "Territories"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Regions",
+    "IsComplex": false
+  },
+  "Shipper": {
+    "Name": "Shipper",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "ShipperID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CompanyName",
+        "PropType": "string",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Phone",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Orders",
+        "PropType": "List<Order>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "ShipperID"
+    ],
+    "Navigation": [
+      "Orders"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Shippers",
+    "IsComplex": false
+  },
+  "Supplier": {
+    "Name": "Supplier",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "SupplierID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CompanyName",
+        "PropType": "string",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ContactName",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ContactTitle",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Address",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "City",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Region",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "PostalCode",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Country",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Phone",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Fax",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "HomePage",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Products",
+        "PropType": "List<Product>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "SupplierID"
+    ],
+    "Navigation": [
+      "Products"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Suppliers",
+    "IsComplex": false
+  },
+  "Territory": {
+    "Name": "Territory",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "TerritoryID",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "TerritoryDescription",
+        "PropType": "string",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "RegionID",
+        "PropType": "int",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Region",
+        "PropType": "Region",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Employees",
+        "PropType": "List<Employee>",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "TerritoryID"
+    ],
+    "Navigation": [
+      "Region",
+      "Employees"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Territories",
+    "IsComplex": false
+  },
+  "Alphabetical_list_of_product": {
+    "Name": "Alphabetical_list_of_product",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "ProductID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "SupplierID",
+        "PropType": "int",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CategoryID",
+        "PropType": "int",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "QuantityPerUnit",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitPrice",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitsInStock",
+        "PropType": "short",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitsOnOrder",
+        "PropType": "short",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ReorderLevel",
+        "PropType": "short",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Discontinued",
+        "PropType": "bool",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CategoryName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CategoryName",
+      "Discontinued",
+      "ProductID",
+      "ProductName"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Alphabetical_list_of_products",
+    "IsComplex": false
+  },
+  "Category_Sales_for_1997": {
+    "Name": "Category_Sales_for_1997",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "CategoryName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CategorySales",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CategoryName"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Category_Sales_for_1997",
+    "IsComplex": false
+  },
+  "Current_Product_List": {
+    "Name": "Current_Product_List",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "ProductID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "ProductID",
+      "ProductName"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Current_Product_Lists",
+    "IsComplex": false
+  },
+  "Customer_and_Suppliers_by_City": {
+    "Name": "Customer_and_Suppliers_by_City",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "City",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CompanyName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ContactName",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Relationship",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CompanyName",
+      "Relationship"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Customer_and_Suppliers_by_Cities",
+    "IsComplex": false
+  },
+  "Invoice": {
+    "Name": "Invoice",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "ShipName",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipAddress",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipCity",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipRegion",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipPostalCode",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipCountry",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CustomerID",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CustomerName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Address",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "City",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Region",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "PostalCode",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Country",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Salesperson",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "OrderID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "OrderDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "RequiredDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShippedDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipperName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitPrice",
+        "PropType": "decimal",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Quantity",
+        "PropType": "short",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Discount",
+        "PropType": "float",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ExtendedPrice",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Freight",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CustomerName",
+      "Discount",
+      "OrderID",
+      "ProductID",
+      "ProductName",
+      "Quantity",
+      "Salesperson",
+      "ShipperName",
+      "UnitPrice"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Invoices",
+    "IsComplex": false
+  },
+  "Order_Details_Extended": {
+    "Name": "Order_Details_Extended",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "OrderID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitPrice",
+        "PropType": "decimal",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Quantity",
+        "PropType": "short",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Discount",
+        "PropType": "float",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ExtendedPrice",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "Discount",
+      "OrderID",
+      "ProductID",
+      "ProductName",
+      "Quantity",
+      "UnitPrice"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Order_Details_Extendeds",
+    "IsComplex": false
+  },
+  "Order_Subtotal": {
+    "Name": "Order_Subtotal",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "OrderID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Subtotal",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "OrderID"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Order_Subtotals",
+    "IsComplex": false
+  },
+  "Orders_Qry": {
+    "Name": "Orders_Qry",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "OrderID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CustomerID",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "EmployeeID",
+        "PropType": "int",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "OrderDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "RequiredDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShippedDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipVia",
+        "PropType": "int",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Freight",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipName",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipAddress",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipCity",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipRegion",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipPostalCode",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShipCountry",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CompanyName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Address",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "City",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Region",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "PostalCode",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Country",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CompanyName",
+      "OrderID"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Orders_Qries",
+    "IsComplex": false
+  },
+  "Product_Sales_for_1997": {
+    "Name": "Product_Sales_for_1997",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "CategoryName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductSales",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CategoryName",
+      "ProductName"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Product_Sales_for_1997",
+    "IsComplex": false
+  },
+  "Products_Above_Average_Price": {
+    "Name": "Products_Above_Average_Price",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "ProductName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitPrice",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "ProductName"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Products_Above_Average_Prices",
+    "IsComplex": false
+  },
+  "Products_by_Category": {
+    "Name": "Products_by_Category",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "CategoryName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "QuantityPerUnit",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "UnitsInStock",
+        "PropType": "short",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Discontinued",
+        "PropType": "bool",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CategoryName",
+      "Discontinued",
+      "ProductName"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Products_by_Categories",
+    "IsComplex": false
+  },
+  "Sales_by_Category": {
+    "Name": "Sales_by_Category",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "CategoryID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CategoryName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ProductSales",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CategoryID",
+      "CategoryName",
+      "ProductName"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Sales_by_Categories",
+    "IsComplex": false
+  },
+  "Sales_Totals_by_Amount": {
+    "Name": "Sales_Totals_by_Amount",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "SaleAmount",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "OrderID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CompanyName",
+        "PropType": "string",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "ShippedDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CompanyName",
+      "OrderID"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Sales_Totals_by_Amounts",
+    "IsComplex": false
+  },
+  "Summary_of_Sales_by_Quarter": {
+    "Name": "Summary_of_Sales_by_Quarter",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "ShippedDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "OrderID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Subtotal",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "OrderID"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Summary_of_Sales_by_Quarters",
+    "IsComplex": false
+  },
+  "Summary_of_Sales_by_Year": {
+    "Name": "Summary_of_Sales_by_Year",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "ShippedDate",
+        "PropType": "DateTime",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "OrderID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Subtotal",
+        "PropType": "decimal",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "OrderID"
+    ],
+    "Navigation": [],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Summary_of_Sales_by_Years",
+    "IsComplex": false
+  }
+}

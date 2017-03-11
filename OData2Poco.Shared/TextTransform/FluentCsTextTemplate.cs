@@ -68,10 +68,13 @@
             return this;
         }
 
-        public FluentCsTextTemplate StartClass(string name, string inherit, string visibility = "public")
+        public FluentCsTextTemplate StartClass(string name, string inherit, string visibility = "public",bool partial=false)
         {
             PushTabIndent();// ident one tab
-            Write("{0} ", visibility);
+            //partial support v2.2.0
+            if (partial) Write("{0} {1} ", visibility, "partial");
+            else Write("{0} ", visibility);
+
             if (string.IsNullOrWhiteSpace(inherit))
                 WriteLine("class {0}", name);
             else

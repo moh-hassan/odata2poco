@@ -16,7 +16,7 @@ using System.Spatial;
 //------------------------------------------------------------------------------
 
 
-namespace ODataDemo
+namespace ODataDemo.V2
 {
 
         [Table("Products")]
