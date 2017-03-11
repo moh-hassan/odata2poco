@@ -64,6 +64,7 @@
     <Compile Include="..\O2PTest.cs">
       <Link>O2PTest.cs</Link>
     </Compile>
+    <Compile Include="AssemplyManagerTest.cs" />
     <Compile Include="HelperTest.cs" />
     <Compile Include="Model\poco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

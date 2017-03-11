@@ -5,10 +5,12 @@
 ##  Version 2.2.0 ##
 **Release Date:**   
 **What is news:**
-- New: add option  -c, --case camel/pascal to Convert property Name to CamelCase/PascalCase or 
--Change: the option metafile name to x (instead of m)  to be different than the namespace option (m)
--New: partial keyword is added for all class by default.
--New: Show option values with description to help insure that you need these options for class generation.
+- New: add option  -c, --case camel/pascal to Convert property Name to CamelCase/PascalCase 
+- New: add option -j, --Json  to Add JsonProperty Attribute for the property, example: [JsonProperty(PropertyName = "email")
+- Change: the option metafile name changed to x (instead of m)  to be different than the namespace option (m)
+- New: Show option values with description to help review the options you typed (in verbose mode).
+- New -a, --attribute  to enter all attributes separated by one or more space. Allowed values are:key required json table.
+
 
 
 ##  Version 2.1.0 ##

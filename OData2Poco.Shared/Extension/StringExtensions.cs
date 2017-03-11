@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace OData2Poco.Shared
 {
@@ -107,17 +112,36 @@ For example:
         }
 
         /// <summary>
-        /// remove extra white spaces
+        /// remove extra white spaces and keeping CRLF if needed
         /// </summary>
         /// <param name="text"></param>
+        /// <param name="keepCrLf"></param>
         /// <returns></returns>
-        public static string TrimAllSpace(this string text)
+        public static string TrimAllSpace(this string text,bool keepCrLf=false)
         {
+            //var pattern = @"\s+"; //@"[^\S\r\n]+";
+            Console.WriteLine("original:\n{0}",text);
+            var result = "";
             Regex trimmer = new Regex(@"\s+");
-            var result= trimmer.Replace(text.Trim(), " ");
+            if (!keepCrLf)
+            {
+                //Regex trimmer = new Regex(@"\s+");
+                 result = trimmer.Replace(text.Trim(), " ");
+                 Console.WriteLine("result:\n{0}",result);
+                return result;
+            }
+            
+            var lines = text.Split(new char[]{'\n','\r'}, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var line in lines)
+            {
+                result += string.Format("{0}\n",trimmer.Replace(line.Trim(), " "));
+            }
+            Console.WriteLine("result:\n{0}",result);
+            return result;
+             
             //Console.WriteLine(text);
             //Console.WriteLine(result);
-            return result;
+            
         }
         /// <summary>
         /// Convert name string to C# Attribute
@@ -144,6 +168,47 @@ For example:
             XDocument doc = XDocument.Parse(xml);
             return doc.ToString();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static string ToJson(this object data)
+        {
+            var json = JsonConvert.SerializeObject(data, Formatting.Indented);
+            //Console.WriteLine("-----{0}",json);
+            return json;
+        }
 
+        /// <summary>
+        /// Validate json string
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public static bool ValidateJson(this string json)
+        {
+            try
+            {
+                JToken.Parse(json);
+                return true;
+            }
+            catch (JsonReaderException ex)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Convert Json string to Typed object
+        /// </summary>
+        /// <param name="json"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T ToObject<T>(this string json)
+        {
+            var deserializedObject = JsonConvert.DeserializeObject<T>(json);
+            return deserializedObject;
+
+        }
     }
 }

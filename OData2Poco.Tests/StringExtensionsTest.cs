@@ -45,19 +45,34 @@ namespace OData2Poco.Tests
         }
 
         [Test]
-        public void TrimAllSpaceTest()
+        public void TrimAllSpaceAndCrLfTest()
         {
-            var text = @"
-this            is  line1
+            var text = @"this            is  line1
 
 
           and this is     line2";
             //Console.WriteLine(text);
             var expected = "this is line1 and this is line2";
-            //Console.WriteLine(text.TrimAllSpace());
+            Console.WriteLine(text.TrimAllSpace());
             Assert.AreEqual(text.TrimAllSpace(),expected);
         }
-        //public static string NewLine(this string text)
+
+        [Test]
+        public void TrimAllSpaceAndKeepCrLfTest()
+        {
+            //var text = "this            is  line1   \n\nand this is     line2";
+            var text = @"this            is  line1
+
+
+          and this is     line2";
+            var expected = "this is line1\nand this is line2\n";
+
+  
+            Console.WriteLine("expected:\n{0}",expected);
+            //var expected = "this is line1 and this is line2";
+            //Console.WriteLine(text.TrimAllSpace(true));
+            Assert.AreEqual(text.TrimAllSpace(true), expected);
+        }
 
       
     }

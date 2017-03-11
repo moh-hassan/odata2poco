@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace OData2Poco.Shared
 {
@@ -13,8 +10,8 @@ namespace OData2Poco.Shared
     /// </summary>
  public   class PropertyGenerator
     {
-        public readonly PropertyTemplate Property; //{ get; set; }
-        public readonly PocoSetting Setting;// { get; set; }
+        private readonly PropertyTemplate _property; //{ get; set; }
+        private readonly PocoSetting _setting;// { get; set; }
         /// <summary>
         /// Initialize in cto
         /// </summary>
@@ -22,102 +19,36 @@ namespace OData2Poco.Shared
         /// <param name="pocoSetting"></param>
         public PropertyGenerator(PropertyTemplate propertyTemplate, PocoSetting pocoSetting)
         {
-            Property = propertyTemplate;
-            Setting = pocoSetting;
+            _property = propertyTemplate;
+            _setting = pocoSetting;
         }
-
-        //public string JsonAttribute
-        //{
-        //    get
-        //    {
-        //        if (Setting.AddJsonAttribute)
-        //        {
-        //            return string.Format("[JsonProperty(PropertyName = \"{0}\")]", Property.PropName);
-        //        }
-        //        return string.Empty;
-        //    }
-        //}
-        //public string KeyAttribute
-        //{
-        //    get
-        //    {
-        //        if (Setting.AddKeyAttribute)
-        //        {
-        //            if (Property.IsKey) return string.Format("[{0}]", "Key");
-        //        }
-        //        return string.Empty;
-        //    }
-        //}
-        //[DataMember]
-        //public string DataMemberAttribute
-        //{
-        //    get
-        //    {
-        //        if (Setting.AddKeyAttribute)
-        //        {
-        //            return string.Format("[{0}]", "DataMember");
-        //        }
-        //        return string.Empty;
-        //    }
-        //}
-        //public string RequiredAttribute
-        //{
-        //    get
-        //    {
-        //        if (Setting.AddRequiredAttribute)
-        //        {
-        //            if (!Property.IsNullable) return string.Format("[{0}]", "Required");
-        //        }
-        //        return string.Empty;
-        //    }
-        //}
-
-
-        //private readonly Func<string, string> _getAttribute = (s) => string.Format("[{0}]", s);
-
-        //private readonly Func<string ,string> _getSet = (name) => name + " {get;set;}";
-        //public string Name
-        //{
-        //    get
-        //    {
-
-        //        switch (Setting.NameCase)
-        //        {
-        //            case CaseEnum.Pas:
-        //                return Property.PropName.ToPascalCase();
-
-        //            case CaseEnum.Camel:
-        //                return Property.PropName.ToCamelCase();
-
-        //            default:
-        //                return Property.PropName;
-        //        }
-
-        //    }
-        //}
-
+     //todo: support user defined custom attributes for properties/class
+        /// <summary>
+        /// Get all attributes based on PocoSetting initialization
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetAllAttributes()
         {
             var list = new List<string>();
 
             //required Attribute
-            if (Setting.AddRequiredAttribute)
+            if (_setting.AddRequiredAttribute)
             {
                 // if (!Property.IsNullable) list.Add(_getAttribute("Required"));
-                if (!Property.IsNullable) list.Add("Required".ToCsAttribute());
+                if (!_property.IsNullable) list.Add("Required".ToCsAttribute());
             }
 
-            if (Setting.AddKeyAttribute)
+            if (_setting.AddKeyAttribute)
             {
-                if (Property.IsKey) list.Add("Key".ToCsAttribute());
+                if (_property.IsKey) list.Add("Key".ToCsAttribute());
             }
 
-            if (Setting.AddJsonAttribute)
+            if (_setting.AddJsonAttribute)
             {
-                list.Add(string.Format("[JsonProperty(PropertyName = \"{0}\")]", Property.PropName));
+                list.Add(string.Format("[JsonProperty(PropertyName = \"{0}\")]", _property.PropName));
             }
 
-            if (Setting.AddDataMemberAttribute)
+            if (_setting.AddDataMemberAttribute)
             {
                 list.Add("DataMember".ToCsAttribute());
             }
@@ -130,125 +61,41 @@ namespace OData2Poco.Shared
         {
             get
             {
-                switch (Setting.NameCase)
+                switch (_setting.NameCase)
                 {
                     case CaseEnum.Pas:
-                        return Property.PropName.ToPascalCase();
+                        return _property.PropName.ToPascalCase();
 
                     case CaseEnum.Camel:
-                        return Property.PropName.ToCamelCase();
+                        return _property.PropName.ToCamelCase();
 
                     case CaseEnum.None:
-                        return Property.PropName;
+                        return _property.PropName;
                     default:
-                        return Property.PropName;
+                        return _property.PropName;
                 }
             }
         }
 
-        //public string PropertyDeclaration2()
-        //{
-
-        //    //set nullable data types,e.g: int ?
-        //    //var nulType = Setting.AddNullableDataType && Property.IsNullable
-        //    //    ? Helper.GetNullable(Property.PropType)
-        //    //    : "";
-        //    var isVirtual = (Setting.AddNavigation && !Setting.AddEager);
-
-        //    //string typeName = Property.PropType;
-        //    ////string name=Name;
-        //    string visiblity = "public";
-        //    ////bool isVirtual = virtualprop;
-        //    //bool isNullable = Property.IsNullable; // false;
-        //    //string comment = Property.PropComment;
-
-
-        //    //set nullable data types
-        //    var nulType = Setting.AddNullableDataType && Property.IsNullable ? Helper.GetNullable(Property.PropType) : "";
-
-        //    //var virtualprop = (PocoSetting.AddNavigation && !PocoSetting.AddEager);
-
-
-        //    //property is declared in that order:
-        //    //virtual public int? name  {get;set;} //comment
-
-        //    var virtualText = isVirtual ? "virtual" : string.Empty;
-        //    //var nullableText = Setting.AddNullableDataType && Property.IsNullable ? "?" : string.Empty;
-        //    //var text = string.Format("{0} {1} {2}{3} {4} {{get;set;}} {5}",
-        //    //    virtualText,
-        //    //    visiblity,
-        //    //    Property.PropType,
-        //    //    nulType,
-        //    //    Name,
-        //    //    Property.PropComment);
-
-        //    //declaration is in that order
-        //    List<string> list = new List<string>
-        //    {
-        //        virtualText,
-        //        visiblity,
-        //        Property.PropType + nulType,
-        //        Name,
-        //        "{get;set;}",
-        //        Property.PropComment
-        //    };
-
-        //    //return text.TrimAllSpace() + Environment.NewLine;
-        //    var result = String.Join(" ", list);
-        //    return result + Environment.NewLine;
-
-        //}
-        //public string GetDeclaration()
-        //{
-
-        //        //set nullable data types,e.g: int ?
-        //        //var nulType = Setting.AddNullableDataType && Property.IsNullable
-        //        //    ? Helper.GetNullable(Property.PropType)
-        //        //    : "";
-        //        var isVirtual = (Setting.AddNavigation && !Setting.AddEager);
-
-        //        //string typeName = Property.PropType;
-        //        ////string name=Name;
-        //        string visiblity = "public";
-        //        ////bool isVirtual = virtualprop;
-        //        //bool isNullable = Property.IsNullable; // false;
-        //        //string comment = Property.PropComment;
-
-
-        //        //set nullable data types
-        //        var nulType = Setting.AddNullableDataType && Property.IsNullable ? Helper.GetNullable(Property.PropType) : "";
-
-        //        //var virtualprop = (PocoSetting.AddNavigation && !PocoSetting.AddEager);
-
-
-
-        //        //virtual public int ? name  {get;set;} //comment
-
-        //        var virtualText = isVirtual ? "virtual " : string.Empty;
-        //        var nullableText = Setting.AddNullableDataType && Property.IsNullable ? "?" : string.Empty;
-        //        var text = string.Format("{0} {1} {2}{3} {4} {{get;set;}} {5}",
-        //            virtualText,
-        //            visiblity,
-        //            Property.PropType + nulType,
-        //            Name,
-        //            Property.PropComment);
-        //        return text.TrimAllSpace() + Environment.NewLine;
-
-        //}
-
+        /// <summary>
+        /// Virtual Modifier
+        /// </summary>
         public string VirtualModifier
         {
             get
             {
-                return Setting.AddNavigation && !Setting.AddEager ? "virtual" : String.Empty;
+                return _setting.AddNavigation && !_setting.AddEager ? "virtual" : String.Empty;
             }
         }
 
+        /// <summary>
+        /// NullableModifier represented by "?" added to type , e.g int?
+        /// </summary>
         public string NullableModifier
         {
             get
             {
-                return Setting.AddNullableDataType && Property.IsNullable ? Helper.GetNullable(Property.PropType) : String.Empty;
+                return _setting.AddNullableDataType && _property.IsNullable ? Helper.GetNullable(_property.PropType) : String.Empty;
             }
         }
 
@@ -260,7 +107,7 @@ namespace OData2Poco.Shared
             get
             {
                 return string.Format("{0} {1} {2} {3} {{get;set;}} {4}\n",
-                VirtualModifier, "public", Property.PropType + NullableModifier, Name, Property.PropComment);
+                VirtualModifier, "public", _property.PropType + NullableModifier, Name, _property.PropComment);
             }
         }
 
@@ -270,60 +117,7 @@ namespace OData2Poco.Shared
                 string.Join(Environment.NewLine,GetAllAttributes()), Declaration);
             return text;
         }
-
-        //public string GetDeclaration2()
-        //{
-
-        //    //set nullable data types,e.g: int ?
-        //    //var nulType = Setting.AddNullableDataType && Property.IsNullable
-        //    //    ? Helper.GetNullable(Property.PropType)
-        //    //    : "";
-        //    var isVirtual = (Setting.AddNavigation && !Setting.AddEager);
-
-        //    //string typeName = Property.PropType;
-        //    ////string name=Name;
-        //    string visibility = "public";
-        //    ////bool isVirtual = virtualprop;
-        //    //bool isNullable = Property.IsNullable; // false;
-        //    //string comment = Property.PropComment;
-
-
-        //    //set nullable data types
-        //    var nulType = Setting.AddNullableDataType && Property.IsNullable ? Helper.GetNullable(Property.PropType) : "";
-
-        //    //var virtualprop = (PocoSetting.AddNavigation && !PocoSetting.AddEager);
-
-
-        //    //property is declared in that order:
-        //    //virtual public int? name  {get;set;} //comment
-
-        //    var virtualText = isVirtual ? "virtual" : string.Empty;
-        //    //var nullableText = Setting.AddNullableDataType && Property.IsNullable ? "?" : string.Empty;
-        //    var text = string.Format("{0} {1} {2} {3} {{get;set;}} {4}",
-        //        virtualText,
-        //        visibility,
-        //        Property.PropType +nulType,
-        //        Name,
-        //        Property.PropComment);
-
-        //    //declaration is in that order
-        //    //List<string> list = new List<string>
-        //    //{
-        //    //    virtualText,
-        //    //    visibility,
-        //    //    Property.PropType + nulType,
-        //    //    _getSet(Name),
-        //    //    //Name,
-        //    //    //"{get;set;}",
-        //    //    Property.PropComment
-        //    //};
-
-        //    ////return text.TrimAllSpace() + Environment.NewLine;
-        //    //var result = String.Join(" ", list);
-        //    //return result + Environment.NewLine;
-        //    return text.TrimAllSpace().NewLine();
-
-        //}
+      
     }//
 }//
 

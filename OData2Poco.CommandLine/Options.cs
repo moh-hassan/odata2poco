@@ -16,15 +16,19 @@ namespace OData2Poco.CommandLine
         //    // Since we create this instance the parser will not overwrite it
         //    ConfigVerb = new ConfigSubOptions(); //{ Key = true };
         //}
-
+        public Options()
+        {
+            Attributes =new string[]{};
+            Assemplies = new string[] { };
+        }
 
         [Option('r', "url", Required = true, HelpText = "URL of OData feed.")]
         public string Url { get; set; }
 
-        [Option('u', "user", Required = false, HelpText = "User name for authentication.")]
+        [Option('u', "user",  HelpText = "User name for authentication.")]
         public string User { get; set; }
 
-        [Option('p', "password", Required = false, HelpText = "password for authentication.")]
+        [Option('p', "password", HelpText = "password for authentication.")]
         public string Password { get; set; }
 
         [Option('f', "filename", DefaultValue = "poco.cs", HelpText = "filename to save generated c# code.")]
@@ -77,7 +81,8 @@ namespace OData2Poco.CommandLine
         public string NameCase { get; set; }
 
         //All attribues e.g -a key required json customAttribute
-        [OptionArray('a', "values",DefaultValue = new string[] {})]
+        [OptionArray('a', "attribute",
+        HelpText = "Type all attributes separated by one or more space.Allowed are:key required json table.")]
         public string[] Attributes { get; set; }
 
         [Option('j', "Json", DefaultValue = false,

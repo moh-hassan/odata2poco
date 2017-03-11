@@ -99,38 +99,38 @@ namespace OData2Poco
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static string ToJson( object data)
-        {
-            var json = JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
-            //Console.WriteLine("-----{0}",json);
-            return json;
+        //public static string ToJson( object data)
+        //{
+        //    var json = JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
+        //    //Console.WriteLine("-----{0}",json);
+        //    return json;
 
-        }
+        //}
 
         /// <summary>
         /// Load json from fileName , then Extract class in json format 
         /// </summary>
         /// <param name="fname"></param>
         /// <param name="className"></param>
-        public static  string  ExtractClassFromJson(string fname,string className)
-        {
-            var json = File.ReadAllText(fname);
-            JObject googleSearch = JObject.Parse(json);
-            //Console.WriteLine(googleSearch);
-            // get JSON result objects into a list
-            IList<JToken> results = googleSearch[className]["Properties"].Children().ToList();
-            //Console.WriteLine(ToJson(results));
-            return ToJson(results);
+        //public static  string  ExtractClassFromJson(string fname,string className)
+        //{
+        //    var json = File.ReadAllText(fname);
+        //    JObject googleSearch = JObject.Parse(json);
+        //    //Console.WriteLine(googleSearch);
+        //    // get JSON result objects into a list
+        //    IList<JToken> results = googleSearch[className]["Properties"].Children().ToList();
+        //    //Console.WriteLine(ToJson(results));
+        //    return ToJson(results);
             
-        }
+        //}
 
 
-        public static T ToObject<T>(string json)
-        {
-            var deserializedObject = JsonConvert.DeserializeObject<T>(json);
-            return deserializedObject;
+        //public static T ToObject<T>(string json)
+        //{
+        //    var deserializedObject = JsonConvert.DeserializeObject<T>(json);
+        //    return deserializedObject;
 
-        }
+        //}
 
         
         //public static string Xml2Json(string xml)

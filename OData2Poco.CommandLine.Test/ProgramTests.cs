@@ -46,7 +46,7 @@ namespace OData2Poco.CommandLine.Test
             var a = string.Format("-r {0} -v ", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
-            //  Console.WriteLine(output);
+            Console.WriteLine(output);
             Assert.AreEqual(0, tuble.Item1);
             //Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("public class Product"));

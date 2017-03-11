@@ -79,6 +79,7 @@ namespace OData2Poco
             Inherit = string.Empty;
             NameCase= CaseEnum.None;
             AddJsonAttribute= false;
+            
         }
        
     }

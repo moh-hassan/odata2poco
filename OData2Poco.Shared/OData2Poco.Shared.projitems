@@ -33,7 +33,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)PocoFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PocoSetting.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PropertyGenerator.cs" />
-    <None Include="$(MSBuildThisFileDirectory)PropertyTemplate2.cs.txt" />
     <Compile Include="$(MSBuildThisFileDirectory)PropertyTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TextTransform\FluentCsTextTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TextTransform\FluentTextTemplate.cs" />

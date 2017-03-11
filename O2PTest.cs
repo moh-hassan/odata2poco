@@ -280,38 +280,38 @@ namespace OData2Poco.Tests
 
         }
 
-        [Test]
-        public void TestJson()
-        {
-            var json = File.ReadAllText(@"data\northmodel.json");
-            JObject googleSearch = JObject.Parse(json);
-            //Console.WriteLine(googleSearch);
-            // get JSON result objects into a list
-            IList<JToken> results = googleSearch["Category"]["Properties"].Children().ToList();
-            Console.WriteLine(Helper.ToJson(results));
-            Console.WriteLine(results.Count);
-            //// serialize JSON results into .NET objects
-            IList<PropertyTemplate> searchResults = new List<PropertyTemplate>();
-            foreach (JToken result in results)
-            {
-                var searchResult = JsonConvert.DeserializeObject<PropertyTemplate>(result.ToString());
-                searchResults.Add(searchResult);
-            }
-            Console.WriteLine(Helper.ToJson(searchResults));
-        }
+        //[Test]
+        //public void TestJson()
+        //{
+        //    var json = File.ReadAllText(@"data\northmodel.json");
+        //    JObject googleSearch = JObject.Parse(json);
+        //    //Console.WriteLine(googleSearch);
+        //    // get JSON result objects into a list
+        //    IList<JToken> results = googleSearch["Category"]["Properties"].Children().ToList();
+        //    //Console.WriteLine(Helper.ToJson(results));
+        //    //Console.WriteLine(results.Count);
+        //    //// serialize JSON results into .NET objects
+        //    IList<PropertyTemplate> searchResults = new List<PropertyTemplate>();
+        //    foreach (JToken result in results)
+        //    {
+        //        var searchResult = JsonConvert.DeserializeObject<PropertyTemplate>(result.ToString());
+        //        searchResults.Add(searchResult);
+        //    }
+        //    //Console.WriteLine(Helper.ToJson(searchResults));
+        //}
 
-        [Test]
-        public void TestJson2()
-        {
-           var json = Helper.ExtractClassFromJson(@"data\northmodel.json", "Category");
-            Console.WriteLine(json);
-            var categoryProperties = Helper.ToObject<PropertyTemplate[]>(json);
-            foreach (var p in categoryProperties)
-            {
-                Console.WriteLine(p.PropName);
-            }
+        //[Test]
+        //public void TestJson2()
+        //{
+        //   var json = Helper.ExtractClassFromJson(@"data\northmodel.json", "Category");
+        //    Console.WriteLine(json);
+        //    var categoryProperties = Helper.ToObject<PropertyTemplate[]>(json);
+        //    foreach (var p in categoryProperties)
+        //    {
+        //        Console.WriteLine(p.PropName);
+        //    }
 
-        }
+        //}
 
         //---------------------------------------------
 #if local

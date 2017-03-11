@@ -52,14 +52,11 @@ namespace OData2Poco.Tests
                 AddRequiredAttribute = true,
                 AddJsonAttribute = true
             });
-            Debug.WriteLine(pg);
-            string expected = "[Key] " +
-                              "[Required] " +
-                              "[JsonProperty(PropertyName = \"CategoryID\")] ";
-            Debug.WriteLine(expected);
-            Assert.IsTrue(pg.ToString().Contains("[Key]") && 
+            //Debug.WriteLine(pg);
+
+            Assert.IsTrue(pg.ToString().Contains("[Key]") &&
                 pg.ToString().Contains("[Required]") &&
-                pg.ToString().Contains( "[JsonProperty(PropertyName = \"CategoryID\")]" ));
+                pg.ToString().Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
         }
 
         [Test]
