@@ -11,19 +11,30 @@ Also, **OData2Poco.CommandLine (o2pgen)** Console Application is available to ge
 
 **Features of OData2Poco**
    
-- Generate POCO classes corresponding to the Entities defined in the MetaDataString. **C#** is only supported in this version.     
+- Generate POCO classes corresponding to the Entities defined in the XML MetaData stored in OData Feeds. *     
 - Generation   is based on the Metadata of the service stored on the  server/ or  EDMX xml files.
-- Support http(s) with/without basic authentication   : user and password
-- Convert Data type of EDMX to the corresponding CLR data types
+- Support http(s) with/without basic authentication   : user and password.
+- Convert Data type of EDMX to the corresponding CLR data types.
 - Support Entites, complex data type, Collections  and navigation properties.
-- Support OData service version 1..4
-- Add comments to  the properties of the class which is a primary key / mandatory  in source entities.
-- Code generation is controlled by setting different options.
-- Save metadata to a file.
+- Support OData service version V1..V4
+- Code generation is controlled by setting different options:   
+   - Add Key, Required Attributes to the properties. 
+   - Add JsonProperty to the properties.
+   - Add Table Attributes to class.
+   - Adding virtual modifier to the properties.
+   - Convert name of properties to camelCase or PasCase
+   - Add nullable datatypes, e.g. int?.
+   - Generate (or not) navigation properties.
+   - Generated class can inherit from a common BaseClass/interface.
+   - Define namespace to overwrite the namespace of the model.
+- Add primary key/mandatory comments to the properties of the class.   .
+- Save metadata and generated code to a user defined file name.
 - T4 template is included.
 - Support .NET 4.5 or higher
-- Packaged as a Class library and CommandLine tool (one executable file o2pgen.exe).Packages can be installed from nuget site.
- 
+- Support Windows or Linux (Mono)
+- Packaged as a Class library and CommandLine tool (one executable file o2pgen.exe) and can be installed from nuget web site.
+- Generating CSharp POCO classes. Other languages may be supported in the near future based on the community needs.
+- MIT License. 
 
  
 **Download** OData2Poco from [codeplex.com](http://odata2poco.codeplex.com) or install using [nuget](https://www.nuget.org/packages/OData2Poco/)

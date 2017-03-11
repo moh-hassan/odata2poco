@@ -1,6 +1,9 @@
 namespace OData2Poco
 {
-    public class PropertyTemplate
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class PropertyTemplate
     {
         public string PropName { get; set; }
         public string PropType { get; set; }
@@ -12,6 +15,8 @@ namespace OData2Poco
         public bool IsNullable { get; set; }
         public bool Iscomputed { get; set; }
         //public string ToTrace { get; set; }
+
+      
 
     }
 }

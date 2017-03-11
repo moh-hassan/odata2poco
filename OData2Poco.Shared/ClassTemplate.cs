@@ -2,7 +2,10 @@ using System.Collections.Generic;
 
 namespace OData2Poco
 {
-    public class ClassTemplate
+    /// <summary>
+    /// Define the propertis of the class 
+    /// </summary>
+    public partial class ClassTemplate
     {
         public string Name { get; set; }
         public string Comment { get; set; }

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>OData2Poco.CommandLine</id>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
     <title>OData2Poco.CommandLine</title>
     <authors>Mohamed Hassan</authors>
     <owners>Mohamed Hassan</owners>
@@ -11,13 +11,15 @@
     <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&amp;DownloadId=1562224</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds. Project site: http://odata2poco.codeplex.com</description>
-    <releaseNotes>
-		Release Date: Mar 1,2017
-		Version: 2.1.0
+    <releaseNotes>	
+		Version: 2.2.0
 		What is new:		
-		-new option: -e, --eager         (Default: False) Add non virtual navigation Properties for Eager Loading  
-        -new option: -i, --inherit       Base class and/or interfaces
-        -new option: -m, --namespace     A namespace prefix for the OData namespace
+		- New: Coverting Property Name to camelCase/PasCase. using the option  -c, --case camel/pascal.  
+		- New: Generating JsonProperty Attribute for the property using the option -j, --Json, example: [JsonProperty(PropertyName = "email")
+		- New: Adding the option -a, --attribute  to enter all attributes separated by one or more space. Allowed values are:key required json table.
+		  (equivqlant to -k -q -j -t options )
+		- Change: the option metafile name changed to x (instead of m)  to be different than the namespace option (m)
+		- New: Show the option values in the console to help review the options you typed (in verbose mode).
 
 	</releaseNotes>
     <copyright>© 2016 Mohamed Hassan</copyright>

@@ -1,21 +1,19 @@
-﻿using System;
+﻿//#define DEBUG
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
-
-
-//using Newtonsoft.Json;
-//using Formatting = System.Xml.Formatting;
-
-//using Formatting = Newtonsoft.Json.Formatting;
-//using Formatting = System.Xml.Formatting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using OData2Poco.Shared;
 
 namespace OData2Poco
 {
     public class Helper
     {
-        private static readonly Dictionary<string, string> NullableDataTypes = new Dictionary<string, string>
+        public static readonly Dictionary<string, string> NullableDataTypes = new Dictionary<string, string>
       {
             {"object" , ""}, 
             {"string" , ""}, 
@@ -34,13 +32,7 @@ namespace OData2Poco
             {"ulong" , "?"}, 
             {"void" , "?"}
         };
-        public static string GetNullable(Type type)
-        {
-            if (!type.IsByRef) return ""; // ref-type
-            if (Nullable.GetUnderlyingType(type) != null) return ""; // Nullable<T>
-            return "?"; // value-type
-
-        }
+       
         public static string GetNullable(string name)
         {
             if (NullableDataTypes.ContainsKey(name))
@@ -81,8 +73,21 @@ namespace OData2Poco
             return schemaNamespace;
         }
 
-
-
+        /// <summary>
+        /// Compare strings ignoring spaces and newline Cr/LF
+        /// </summary>
+        /// <param name="text1"></param>
+        /// <param name="text2"></param>
+        /// <returns></returns>
+        public static bool CompareStringIgnoringSpaceCr(string text1, string text2)
+        {
+            string fixedStringOne = text1.TrimAllSpace(); // Regex.Replace(text1.Trim(), @"\s+", " ");
+            string fixedStringTwo = text2.TrimAllSpace(); // Regex.Replace(text2.Trim(), @"\s+", " ");
+            //Debug.WriteLine("{0}\n{1}\n",fixedStringOne,fixedStringTwo);
+            bool isEqual = String.Equals(fixedStringOne, fixedStringTwo, StringComparison.OrdinalIgnoreCase);
+            return isEqual;
+        }
+ 
     }
 }
 
