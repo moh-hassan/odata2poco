@@ -66,11 +66,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Version.cs">
+      <Link>Version.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="ReleaseNotes.md" />
+    <Content Include="..\license.txt">
+      <Link>license.txt</Link>
+    </Content>
     <Content Include="TextFile1.txt" />
   </ItemGroup>
   <ItemGroup>
