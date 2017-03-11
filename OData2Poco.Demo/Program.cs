@@ -10,6 +10,8 @@ namespace OData2Poco.Demo
     {
         static void Main(string[] args)
         {
+            //you generated north.cs and included in the project
+            //you can use your POCO with HttpClient or any Rest client library 
         }
     }
 }

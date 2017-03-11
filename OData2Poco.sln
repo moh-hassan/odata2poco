@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.travis.yml = .travis.yml
 		appveyor.yml = appveyor.yml
 		CommonTestData.cs = CommonTestData.cs
+		OData2Poco.CommandLine\licence.txt = OData2Poco.CommandLine\licence.txt
 		O2PTest.cs = O2PTest.cs
 		packages.config = packages.config
 		README.md = README.md
@@ -25,6 +26,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D69DB09-904B-4145-A7CB-C8A448F9FDF8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.Tests", "OData2Poco.Tests\OData2Poco.Tests.csproj", "{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco.Demo", "OData2Poco.Demo\OData2Poco.Demo.csproj", "{284D4262-119B-4E37-84A0-15CAB47570A0}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -52,6 +55,10 @@ Global
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{284D4262-119B-4E37-84A0-15CAB47570A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{284D4262-119B-4E37-84A0-15CAB47570A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{284D4262-119B-4E37-84A0-15CAB47570A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{284D4262-119B-4E37-84A0-15CAB47570A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
