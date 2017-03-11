@@ -1,0 +1,62 @@
+﻿"Category": {
+    "Name": "Category",
+    "Comment": null,
+    "ToDebugString": null,
+    "Properties": [
+      {
+        "PropName": "CategoryID",
+        "PropType": "int",
+        "PropComment": "//PrimaryKey not null",
+        "IsKey": true,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "CategoryName",
+        "PropType": "string",
+        "PropComment": "// not null",
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": false,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Description",
+        "PropType": "string",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Picture",
+        "PropType": "byte[]",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": false,
+        "IsNullable": true,
+        "Iscomputed": false
+      },
+      {
+        "PropName": "Products",
+        "PropType": "List<Product>",
+        "PropComment": null,
+        "IsKey": false,
+        "IsNavigate": true,
+        "IsNullable": true,
+        "Iscomputed": false
+      }
+    ],
+    "Keys": [
+      "CategoryID"
+    ],
+    "Navigation": [
+      "Products"
+    ],
+    "IsEnum": false,
+    "EnumElements": [],
+    "EntitySetName": "Categories",
+    "IsComplex": false
+  }

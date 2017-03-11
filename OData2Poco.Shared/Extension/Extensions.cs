@@ -6,9 +6,15 @@ namespace OData2Poco.Extension
 {
     public static class Extensions
     {
-        public static string List2String(this List<string> list)
+        /// <summary>
+        /// Merge list to one string
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static string List2String(this List<string> list,string separator=",")
         {
-            string text = string.Join(",", list);
+            string text = string.Join(separator, list);
             return text;
         }
 

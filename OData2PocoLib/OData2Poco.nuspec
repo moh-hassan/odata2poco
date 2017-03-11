@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>OData2Poco</id>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
     <title>OData2Poco</title>
     <authors>Mohamed Hassan</authors>
     <owners>Mohamed Hassan</owners>
@@ -15,12 +15,10 @@
 	 OData2Poco is a class library supporting .NET 4.5 or higher with T4 Template to generate  plain-old CLR objects (POCO) from OData feeds that implement both V1-3 and V4 OData protocol,based on the metadata of the service stored on the  server. POCO classes can be used in typed RESTful client OData services
 	 </description>
     <releaseNotes>		
-		Release Date: June 27,2016 
-		Version: 2.1.0		
+		Version: 2.2.0		
 		What is new:
-			-new option: -e, --eager         (Default: False) Add non virtual navigation Properties for Eager Loading  
-            -new option: -i, --inherit       Base class and/or interfaces
-            -new option: -m, --namespace     A namespace prefix for the OData namespace
+		- New: Coverting Property Name to camelCase/PasCase.  
+		- New: Generating JsonProperty Attribute for the property.  example: [JsonProperty(PropertyName = "email")]  		
 
 	</releaseNotes>
     <copyright>© 2016 Mohamed Hassan</copyright>
@@ -28,6 +26,7 @@
     <dependencies>
       <dependency id="Microsoft.Data.Edm" version="5.7.0" />
       <dependency id="Microsoft.OData.Edm" version="6.15.0" />
+	  <dependency id="Newtonsoft.Json" version="8.0.2" />	  
     </dependencies>
 
   </metadata>  

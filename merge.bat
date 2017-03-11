@@ -11,5 +11,7 @@ del %outdir%\o2pgen.*
 echo start merging binaries in folder:
 echo %TargetDir%
 %ilmerge% /out:"%outdir%\o2pgen.exe" "%TargetDir%\%TargetName%.exe" "%TargetDir%\*.dll" /target:exe /targetplatform:v4,C:\Windows\Microsoft.NET\Framework\v4.0.30319 /wildcards 
+echo Show information of: %outdir%\o2pgen.exe
 dir %outdir%\o2pgen.exe
+pause
  
