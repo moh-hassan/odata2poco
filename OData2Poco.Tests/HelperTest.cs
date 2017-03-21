@@ -13,10 +13,10 @@ namespace OData2Poco.Tests
     {
         [Test]
         [TestCase("int","?")]
+        [TestCase("DateTime", "?")]
         public void GetNullableTest(string  type,string nullable)
         {
-            Console.WriteLine("tes");
-            Console.WriteLine("*** {0}",Helper.GetNullable(type));
+            
             Assert.AreEqual(Helper.GetNullable(type),nullable);
         }
     }

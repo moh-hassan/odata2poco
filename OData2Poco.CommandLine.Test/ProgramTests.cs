@@ -46,7 +46,7 @@ namespace OData2Poco.CommandLine.Test
             var a = string.Format("-r {0} -v ", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
-            Console.WriteLine(output);
+            //Console.WriteLine(output);
             Assert.AreEqual(0, tuble.Item1);
             //Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("public class Product"));
@@ -62,7 +62,7 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            Console.WriteLine(tuble.Item2);
+          //  Console.WriteLine(tuble.Item2);
             
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("[Table(\"Products\")]")); //-t
@@ -83,7 +83,7 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            Console.WriteLine(tuble.Item2);
+           // Console.WriteLine(tuble.Item2);
 
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("virtual public Supplier Supplier {get;set;}")); //-n
@@ -116,7 +116,7 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             //Assert.AreEqual(0, tuble.Item1);
-            Console.WriteLine(tuble.Item2);
+          //  Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("public class Category"));
             Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryName\")]"),"itshould be CategoryName");
             Assert.IsTrue(output.Contains("categoryName"));
@@ -152,7 +152,7 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            Console.WriteLine(tuble.Item2);
+          //  Console.WriteLine(tuble.Item2);
             
             Assert.IsTrue(output.Contains("public class Product")); //-v
             Assert.IsTrue(output.Contains("public Supplier Supplier {get;set;}")); //-e
@@ -208,7 +208,7 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            Console.WriteLine(tuble.Item2);
+           // Console.WriteLine(tuble.Item2);
             
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("[Table")); //-t
@@ -273,18 +273,18 @@ namespace OData2Poco.CommandLine.Test
 
 
 
-        [Test]
-        [TestCase(@"data\not_exist_file.xml", -1)]
-        public void FileNotExistReadingTest(string url, int exitCode)
-        {
-            //   var a = string.Format("-r {0} -d -l -v -m meta.xml -f north.cs  ", url);
-            var a = string.Format("-r {0} -vld -m meta.xml -f north.cs  ", url);
-            var tuble = RunCommand(a);
-            var output = tuble.Item2;
-            //Console.WriteLine(output);
-            Assert.AreEqual(exitCode, tuble.Item1);
+        //[Test]
+        //[TestCase(@"data\not_exist_file.xml", -1)]
+        //public void FileNotExistReadingTest(string url, int exitCode)
+        //{
+        //    //   var a = string.Format("-r {0} -d -l -v -m meta.xml -f north.cs  ", url);
+        //    var a = string.Format("-r {0} -vld -m meta.xml -f north.cs  ", url);
+        //    var tuble = RunCommand(a);
+        //    var output = tuble.Item2;
+        //    //Console.WriteLine(output);
+        //    Assert.AreEqual(exitCode, tuble.Item1);
 
-        }
+        //}
 
 
 
