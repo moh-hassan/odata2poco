@@ -2,11 +2,16 @@
 <<<<<<< HEAD
 # OData2Poco.CommandLine (o2pgen) #
 
-##  Version 2.2.0 ##
+##  Version 2.2.1 ##
 **Release Date:**   
 **What is news:**
-- New: Coverting Property Name to camelCase/PasCase using the option  -c, --case camel/pascal.  
-- New: Generating JsonProperty Attribute for the property using the option -j, --Json, example: [JsonProperty(PropertyName = "email")]
+- Support Nullable Data type: DateTime (issue #3), DateTimeOffset, TimeSpan, Guid
+
+##  Version 2.2.0 ##
+**Release Date:**   March 11, 2017
+**What is news:**
+- New: Coverting Property Name to camelCase/PasCase using the option  -c, --case camel/pascal (issue #1).  
+- New: Generating JsonProperty Attribute for the property using the option -j, --Json, example: [JsonProperty(PropertyName = "email")] (issue #1)
 - New: Adding the option -a, --attribute  to enter all attributes separated by one or more space. Allowed values are:key required json table.
   (equivqlant to -k -q -j -t options )
 - Change: the option metafile name changed to x (instead of m)  to be different than the namespace option (m)
@@ -16,16 +21,17 @@
 
 
 ##  Version 2.1.0 ##
-**Release Date:**  March 1, 2017
+**Release Date:**  February 28, 2017
 **What is news:**
-- New : add option -i, --inherit   for class inheritance from  BaseClass and/or interfaces
-- New : add option -m, --namespace     A namespace prefix for the OData namespace 
-- New : add option -e, --eager         Add non virtual navigation Properties for Eager Loading
+- New : add option -i, --inherit   for class inheritance from  BaseClass and/or interfaces (issue #2)
+- New : add option -m, --namespace     A namespace prefix for the OData namespace  (issue #2)
+- New : add option -e, --eager         Add non virtual navigation Properties for Eager Loading (issue #2)
 
   
 
 
 ##  Version 2.0.0 ##
+**Release Date:** June 27, 2016
 **What is news:**
 
 - New: add option -k  to add KeyAttribute to the property 

@@ -120,14 +120,14 @@ For example:
         public static string TrimAllSpace(this string text,bool keepCrLf=false)
         {
             //var pattern = @"\s+"; //@"[^\S\r\n]+";
-            Console.WriteLine("original:\n{0}",text);
+          //  Console.WriteLine("original:\n{0}",text);
             var result = "";
             Regex trimmer = new Regex(@"\s+");
             if (!keepCrLf)
             {
                 //Regex trimmer = new Regex(@"\s+");
                  result = trimmer.Replace(text.Trim(), " ");
-                 Console.WriteLine("result:\n{0}",result);
+                 //Console.WriteLine("result:\n{0}",result);
                 return result;
             }
             
@@ -136,7 +136,7 @@ For example:
             {
                 result += string.Format("{0}\n",trimmer.Replace(line.Trim(), " "));
             }
-            Console.WriteLine("result:\n{0}",result);
+           // Console.WriteLine("result:\n{0}",result);
             return result;
              
             //Console.WriteLine(text);

@@ -19,8 +19,8 @@ Also, **OData2Poco.CommandLine (o2pgen)** Console Application is available to ge
 - Support OData service version V1..V4
 - Code generation is controlled by setting different options:   
    - Add Key, Required Attributes to the properties. 
-   - Add JsonProperty to the properties.
-   - Add Table Attributes to class.
+   - Add JsonProperty Attribute to the properties.
+   - Add Table Attribute to the class.
    - Adding virtual modifier to the properties.
    - Convert name of properties to camelCase or PasCase
    - Add nullable datatypes, e.g. int?.
@@ -29,7 +29,6 @@ Also, **OData2Poco.CommandLine (o2pgen)** Console Application is available to ge
    - Define namespace to overwrite the namespace of the model.
 - Add primary key/mandatory comments to the properties of the class.   .
 - Save metadata and generated code to a user defined file name.
-- T4 template is included.
 - Support .NET 4.5 or higher
 - Support Windows or Linux (Mono)
 - Packaged as a Class library and CommandLine tool (one executable file o2pgen.exe) and can be installed from nuget web site.
@@ -50,17 +49,22 @@ OData2Poco requires .Net 4.5 or higher.
 **Dependency**
 Microsoft.Data.Edm  version="5.7.0"  or higher
 Microsoft.OData.Edm  version="6.15.0" or higher 
+
 note: The generated POCO classes code need not these EDM dependency libraries when POCO is used in your project.
 
 **Release Notes**
 
-- v 2.1.0 March 1, 2017
+- v 2.2.1 March 21, 2017 (last release)
+- v 2.2.0 March 11, 2017
+- v 2.1.0 February 28, 2017
 - v 2.0.0 June 27, 2016
 - v 1.3.0 April 10, 2016
 
 **Latest Changes**
 
-- Merged pull request #2 "Add option for non-virtual navigation properties, namespace and inherit BaseClass/Interface", thanks to @rsouthworth.
+- v2.2.1: Support Nullable Data type: DateTime (issue #3), DateTimeOffset, TimeSpan, Guid.
+
+[All Changes](ReleaseNotes.md)
 
  **How to use**
 

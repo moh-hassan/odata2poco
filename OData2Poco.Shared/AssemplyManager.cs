@@ -19,12 +19,12 @@ namespace OData2Poco.Shared
         /// <summary>
         /// Default using assemplies
         /// </summary>
-        public string[] DefaultAssemply = { "System","System.Collections.Generic"};
+        public string[] DefaultAssemply = { "System", "System.IO","System.Collections.Generic" };
         /// <summary>
         /// cto initialization
         /// </summary>
-        /// <param name="pocoSetting"></param>
-        /// <param name="model"></param>
+        /// <param name="pocoSetting">Seting parameters of generating code</param>
+        /// <param name="model">The model containing all classes </param>
         public AssemplyManager(PocoSetting pocoSetting, IDictionary<string, ClassTemplate> model)
         {
             _pocoSetting = pocoSetting;
@@ -42,34 +42,33 @@ namespace OData2Poco.Shared
         {
             foreach (var item in list)
             {
-                //Console.WriteLine(item);
                 if (!AssemplyReference.Exists(a => a.Contains(item)))
                 {
                     AssemplyReference.Add(item);
-                    //Console.WriteLine(entry);
                 }
             }
         }
         //add all assemplies for using either for attribute or datatype 
         //TODO: load entries from configuration file
         //TODO: Entries may be passed to pocosetting for external references defined by user
-        private readonly Dictionary<string, string> _assemplyDict = new Dictionary<string, string>
+        private readonly Dictionary<string, string> _assemplyDict = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
         {
             //assemplies for attributes
-            {"key","System.ComponentModel.DataAnnotations"},
-            {"required" ,"System.ComponentModel.DataAnnotations.Schema"},
-            {"table" ,"System.ComponentModel.DataAnnotations.Schema"},
-            {"json","Newtonsoft.Json"}, //extrnal type can be installed from nuget
+            {"Key","System.ComponentModel.DataAnnotations"},
+            {"Required" ,"System.ComponentModel.DataAnnotations"},
+            {"Table" ,"System.ComponentModel.DataAnnotations.Schema"},
+            {"Json","Newtonsoft.Json"}, //extrnal type can be installed from nuget
             //assemplies for Geographic data type
-            {"geometry","Microsoft.Spatial"}, //extrnal type can be installed from nuget
-            {"geography", "Microsoft.Spatial"} //extrnal type can be installed from nuget
+            {"Geometry","Microsoft.Spatial"}, //extrnal type can be installed from nuget
+            {"Geography", "Microsoft.Spatial"} ,//extrnal type can be installed from nuget
+            {"GeographyPoint","Microsoft.Spatial" }
+            
         };
 
 
         private void AddAssemplyByKey(string name)
         {
-            name = name.ToLower();
-            //Console.WriteLine("try to add " + name);
+            //name = name.ToLower();
             if (!_assemplyDict.ContainsKey(name)) return;
             var entry = _assemplyDict[name];
             AddAssemply(entry);
