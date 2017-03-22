@@ -53,7 +53,7 @@ namespace OData2Poco.Tests
           and this is     line2";
             //Console.WriteLine(text);
             var expected = "this is line1 and this is line2";
-            Console.WriteLine(text.TrimAllSpace());
+           // Console.WriteLine(text.TrimAllSpace());
             Assert.AreEqual(text.TrimAllSpace(),expected);
         }
 
@@ -68,7 +68,7 @@ namespace OData2Poco.Tests
             var expected = "this is line1\nand this is line2\n";
 
   
-            Console.WriteLine("expected:\n{0}",expected);
+          //  Console.WriteLine("expected:\n{0}",expected);
             //var expected = "this is line1 and this is line2";
             //Console.WriteLine(text.TrimAllSpace(true));
             Assert.AreEqual(text.TrimAllSpace(true), expected);

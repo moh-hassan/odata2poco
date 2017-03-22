@@ -1,38 +1,56 @@
-﻿//#define DEBUG
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Xml;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OData2Poco.Shared;
 
 namespace OData2Poco
 {
+    /// <summary>
+    /// Static Helper Functions
+    /// </summary>
     public class Helper
     {
+        //for test as accepting null
+        //private TimeSpan? ts;
+        //private DateTime? dt;
+        //private DateTimeOffset? dto;
+        //private Guid? guid;
+
+
+        /// <summary>
+        /// Nullable DataType
+        /// </summary>
         public static readonly Dictionary<string, string> NullableDataTypes = new Dictionary<string, string>
       {
-            {"object" , ""}, 
-            {"string" , ""}, 
-            {"bool" , "?"}, 
-            {"byte" , "?"}, 
-            {"char" , "?"}, 
-            {"decimal" , "?"}, 
-            {"double" , "?"}, 
-            {"short" , "?"}, 
-            {"int" , "?"}, 
-            {"long" , "?"}, 
-            {"sbyte" , "?"}, 
-            {"float" , "?"}, 
-            {"ushort" , "?"}, 
-            {"uint" , "?"}, 
-            {"ulong" , "?"}, 
-            {"void" , "?"}
+            {"object" , ""},
+            {"string" , ""},
+            {"bool" , "?"},
+            {"byte" , "?"},
+            {"char" , "?"},
+            {"decimal" , "?"},
+            {"double" , "?"},
+            {"short" , "?"},
+            {"int" , "?"},
+            {"long" , "?"},
+            {"sbyte" , "?"},
+            {"float" , "?"},
+            {"ushort" , "?"},
+            {"uint" , "?"},
+            {"ulong" , "?"},
+            {"void" , "?"},
+            ////Nullable DateTime issue #3 , included in v2.3.0
+            {"DateTime","?" },   
+            {"DateTimeOffset","?" },
+            {"TimeSpan","?" },
+            {"Guid","?" }
         };
-       
+
+        /// <summary>
+        /// Get nullable symbol ? for the registerd DataType
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static string GetNullable(string name)
         {
             if (NullableDataTypes.ContainsKey(name))
@@ -40,6 +58,13 @@ namespace OData2Poco
             return "";
         }
 
+        /// <summary>
+        /// Get MetaData Version from XML 
+        /// </summary>
+        /// <param name="metadataString">XML MetaData</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="XmlException"></exception>
         public static string GetMetadataVersion(string metadataString)
         {
             if (string.IsNullOrEmpty(metadataString)) throw new Exception("Metadata is not available");
@@ -52,6 +77,11 @@ namespace OData2Poco
 
         }
 
+        /// <summary>
+        /// Get OData Service  Version from Http Header
+        /// </summary>
+        /// <param name="header"></param>
+        /// <returns></returns>
         public static string GetServiceVersion(Dictionary<string, string> header)
         {
 
@@ -63,6 +93,11 @@ namespace OData2Poco
             return "";
         }
 
+        /// <summary>
+        /// Get NameSpace from XML
+        /// </summary>
+        /// <param name="metadataString">XML MetaData</param>
+        /// <returns></returns>
         public static string GetNameSpace(string metadataString)
         {
             if (string.IsNullOrEmpty(metadataString)) return "MyNameSpace";
@@ -87,7 +122,7 @@ namespace OData2Poco
             bool isEqual = String.Equals(fixedStringOne, fixedStringTwo, StringComparison.OrdinalIgnoreCase);
             return isEqual;
         }
- 
+
     }
 }
 

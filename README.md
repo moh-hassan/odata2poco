@@ -50,11 +50,15 @@ OData2Poco requires .Net 4.5 or higher.
 **Dependency**
 Microsoft.Data.Edm  version="5.7.0"  or higher
 Microsoft.OData.Edm  version="6.15.0" or higher 
+
 note: The generated POCO classes code need not these EDM dependency libraries when POCO is used in your project.
 
 **Release Notes**
 
-- v 2.1.0 March 1, 2017
+[[ReleaseNotes]]
+
+- v 2.2.0 March 11, 2017
+- v 2.1.0 February 28, 2017
 - v 2.0.0 June 27, 2016
 - v 1.3.0 April 10, 2016
 

@@ -34,7 +34,7 @@ namespace OData2Poco.Tests
                 IsKey = true
             };
             var pg = new PropertyGenerator(property, new PocoSetting());
-            Debug.WriteLine(pg);
+           // Debug.WriteLine(pg);
             Assert.IsTrue(pg.Declaration.Contains("public int CategoryID {get;set;}"));
         }
         [Test]
@@ -72,7 +72,7 @@ namespace OData2Poco.Tests
             {
                 NameCase = CaseEnum.Camel
             });
-            Debug.WriteLine(pg);
+           // Debug.WriteLine(pg);
             Assert.IsTrue(pg.Declaration.Contains("public int categoryID {get;set;}"));
         }
         [Test]
@@ -121,7 +121,7 @@ namespace OData2Poco.Tests
             {
                 AddJsonAttribute = true
             });
-            Debug.WriteLine(pg);
+          //  Debug.WriteLine(pg);
             var expected = "[JsonProperty(PropertyName = \"CategoryID\")]";
 
             Assert.IsTrue(pg.ToString().Contains(expected));
@@ -142,11 +142,11 @@ namespace OData2Poco.Tests
                 AddJsonAttribute = true,
                 NameCase = CaseEnum.Camel
             });
-            Debug.WriteLine(pg);
+          //  Debug.WriteLine(pg);
             var expected = "[JsonProperty(PropertyName = \"CategoryID\")] " +Environment.NewLine+
                            "public int categoryID {get;set;} ";
 
-            Debug.WriteLine("Expected: " + expected);
+         //   Debug.WriteLine("Expected: " + expected);
             //Assert.IsTrue(Helper.CompareStringIgnoringSpaceCr(pg.ToString(), expected));
             Assert.AreEqual(pg.ToString().TrimAllSpace(), expected.TrimAllSpace());
         }
@@ -163,7 +163,7 @@ namespace OData2Poco.Tests
             {
                 AddKeyAttribute = true
             });
-            Debug.WriteLine(pg);
+          //  Debug.WriteLine(pg);
             var expected = @"
 [Key]
 public int CategoryID {get;set;} ";
@@ -208,7 +208,7 @@ public int CategoryID {get;set;} ";
             {
                 AddNullableDataType = true
             });
-            Debug.WriteLine(pg);
+            //Debug.WriteLine(pg);
             Assert.IsTrue(pg.Declaration.Contains("public int? dummy1 {get;set;}"));
         }
 
@@ -231,7 +231,7 @@ public int CategoryID {get;set;} ";
                 AddEager = true,
                 AddNavigation = true
             });
-            Debug.WriteLine(pg);
+         //   Debug.WriteLine(pg);
             Assert.IsTrue(pg.Declaration.Contains("public List<Product> Products {get;set;}"));
         }
 
@@ -250,47 +250,11 @@ public int CategoryID {get;set;} ";
                 AddEager = false,
                 AddNavigation = true
             });
-            Debug.WriteLine(pg);
+         //   Debug.WriteLine(pg);
             Assert.IsTrue(pg.Declaration.Contains("virtual public List<Product> Products {get;set;}"));
         }
 
-        //load Properties of Category Class from json file
-        //this json file contain the schema of class/poperties of "Category" class in OData feeds
-        //the properties  are:
-        //CategoryID
-        //CategoryName
-        //Description
-        //Picture
-        //Products
-        //private PropertyTemplate[] properties;
-        //public PropertyGeneratorTest()
-        //{
-        //    var json = Helper.ExtractClassFromJson(@"data\northmodel.json", "Category");
-        //    Console.WriteLine(json);
-        //    properties = Helper.ToObject<PropertyTemplate[]>(json);
-        //    foreach (var p in properties)
-        //    {
-        //        Console.WriteLine(p.PropName);
-        //    }
-        //}
-
-        //[Test]
-        //public void TestJson2()
-        //{
-        //    //var json = Helper.ExtractClassFromJson(@"data\northmodel.json", "Category");
-        //    //Console.WriteLine(json);
-        //    //var categoryProperties = Helper.ToObject<PropertyTemplate[]>(json);
-        //    //foreach (var p in categoryProperties)
-        //    //{
-        //    //    Console.WriteLine(p.PropName);
-        //    //}
-
-        //    foreach (var p in properties)
-        //    {
-        //        Console.WriteLine(p.PropName);
-        //    }
-
-        //}
+       
 
     }
 }

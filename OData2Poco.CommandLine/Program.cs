@@ -18,28 +18,33 @@ namespace OData2Poco.CommandLine
         {
             try
             {
+                if (!(Console.IsOutputRedirected || Console.IsErrorRedirected))
+                    Console.BufferHeight = Int16.MaxValue - 1;
                 // Catch all unhandled exceptions in all threads.
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 Sw.Start();
                 RunOptionsAsync(args).Wait();
                 Sw.Stop();
                 Console.WriteLine();
-                Console.WriteLine("Total processing time: {0} sec", Sw.ElapsedMilliseconds/1000.0);
+                Console.WriteLine("Total processing time: {0} sec", Sw.ElapsedMilliseconds / 1000.0);
 
                 Environment.Exit(0);
 #if DEBUG
-                 Console.ReadKey();
+                Console.ReadKey();
 #endif
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 var argument = string.Join(" ", args);
                 Console.WriteLine("Error in executing the command: o2pgen {0}", argument);
 #if DEBUG
                 Console.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage(true));
+                Console.ReadKey();
 #else
                 Console.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage());
 #endif
+                Console.ForegroundColor = ConsoleColor.White;
                 //Console.WriteLine("Error Details: {0}", ex);
                 Environment.Exit(-1);
             }

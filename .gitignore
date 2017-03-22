@@ -13,7 +13,10 @@ OData2Poco.Net45.Test/
 ILMerge/
 MyTester/
 OData2Poco.Demo/
+<<<<<<< HEAD
 
+=======
+>>>>>>> release/2.2.1
 
 # User-specific files
 *.suo
