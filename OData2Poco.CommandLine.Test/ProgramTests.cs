@@ -56,6 +56,21 @@ namespace OData2Poco.CommandLine.Test
 
         [Test]
         [TestCaseSource(typeof(TestSample), "UrlCases")]
+        public void DefaultSettingPartialTest(string url, string version, int n)
+        {
+            var a = string.Format("-r {0} -v -g", url);
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+            //Console.WriteLine(output);
+            Assert.AreEqual(0, tuble.Item1);
+            //Console.WriteLine(tuble.Item2);
+            Assert.IsTrue(output.Contains("public partial class Product"));
+            Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations")); //-k not set
+            Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //-t not set
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), "UrlCases")]
         public void PocoSettingTest(string url, string version, int n)
         {
             var a = string.Format("-r {0} -v -k -t -q -n -b", url);

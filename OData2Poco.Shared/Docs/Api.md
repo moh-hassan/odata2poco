@@ -20,7 +20,8 @@ O2P is a puplic  wrapper class that expose all internal services and simplify AP
 		    AddKeyAttribute = true,
 		    AddTableAttribute = true,
 		    AddRequiredAttribute = true,
-		    AddNavigation = true
+		    AddNavigation = true,
+		    AddPartial = true
   		  }; 
     var url = "http://services.odata.org/V4/OData/OData.svc";
      var o2p = new O2P(setting);

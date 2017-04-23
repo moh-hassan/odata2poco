@@ -8,7 +8,7 @@ namespace OData2Poco
     public class PocoSetting
     {
         /// <summary>
-        /// Set nullabable ? to the type of property
+        /// Set nullable ? to the type of property
         /// Example int? , double?
         /// </summary>
         public bool AddNullableDataType { get; set; }
@@ -32,6 +32,10 @@ namespace OData2Poco
         /// Add Navigation properties as non virtual properties for eager loading
         /// </summary>
         public bool AddEager { get; set; }
+        /// <summary>
+        /// Create partial classes for the pocos.
+        /// </summary>
+        public bool AddPartial { get; set; }
         //public bool AddDataContractAttribute { get; set; }
         /// <summary>
         /// The language of code generation, Defalt is CS 

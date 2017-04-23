@@ -100,6 +100,17 @@ namespace OData2Poco.Shared
         }
 
         /// <summary>
+        /// Inserts the keyword 'partial'when that setting is enabled.
+        /// </summary>
+        public string PartialModifier
+        {
+            get
+            {
+                return _setting.AddPartial ? "partial" : String.Empty;
+            }
+        }
+
+        /// <summary>
         /// The declaration of property in C# 
         /// </summary>
         public string Declaration

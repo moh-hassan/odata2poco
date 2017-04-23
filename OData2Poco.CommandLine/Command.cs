@@ -24,6 +24,7 @@ namespace OData2Poco.CommandLine
                 AddTableAttribute = ArgOptions.Table,
                 AddRequiredAttribute = ArgOptions.Required,
                 AddNavigation = ArgOptions.Navigation,
+                AddPartial = ArgOptions.PartialPocoClasses,
                 AddNullableDataType = ArgOptions.AddNullableDataType,
                 AddEager = ArgOptions.Eager, //v2.1.0
                 Inherit = string.IsNullOrWhiteSpace(ArgOptions.Inherit) ? string.Empty : ArgOptions.Inherit, //v2.1.0
@@ -64,6 +65,7 @@ namespace OData2Poco.CommandLine
             Console.WriteLine("-c NameCase: {0}", ArgOptions.NameCase);
             Console.WriteLine("-j AddJsonAttribute: {0}", ArgOptions.AddJsonAttribute);
             Console.WriteLine("-b AddNullableDataType: {0}", ArgOptions.AddNullableDataType);
+            Console.WriteLine("-g PartialPocoClasses: {0}", ArgOptions.PartialPocoClasses);
             Console.WriteLine("-e Eager: {0}", ArgOptions.Eager);
             Console.WriteLine("-i Inherit: {0}", ArgOptions.Inherit);
             Console.WriteLine("-k Key: {0}", ArgOptions.Key);
@@ -100,6 +102,9 @@ namespace OData2Poco.CommandLine
                     case "tab":
                     case "table":
                         PocoSettingOptions.AddTableAttribute = true;
+                        break;
+                    case "par":
+                        PocoSettingOptions.AddPartial = true;
                         break;
                     case "nul":
                     case "null":

@@ -60,7 +60,10 @@ namespace OData2Poco.CommandLine
 
         [Option('n', "navigation", DefaultValue = false, HelpText = "Add navigation properties")]
         public bool Navigation { get; set; }
-    
+
+        [Option('g', "partial", DefaultValue = false, HelpText = "Generate the poco classes as partial")]
+        public bool PartialPocoClasses { get; set; }
+
         [Option('e', "eager", DefaultValue = false, HelpText = "Add non virtual navigation Properties for Eager Loading")]
         public bool Eager { get; set; }
 
