@@ -1,13 +1,29 @@
 # Welcome to OData2Poco
-**OData2Poco** is a class library with T4 Template to generate  plain-old CLR objects (**POCO**) from OData feeds . 
-POCO classes can be used in typed RESTful client OData services.
+**OData2Poco** is a code generation tool for generating plain-old CLR objects (POCO) from OData feeds. 
+POCO classes can be used in a typed RESTful client OData services and code generation can be controlled by setting many options.
 
-Also, **OData2Poco.CommandLine (o2pgen)** Console Application is available to generate POCO with different options. 
+OData2Poco is available in two flavers:
 
-[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)
-[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)
+A CLI tool: OData2Poco.CommandLine (a.k.a o2pgen).
 
-**Project Site**: [https://odata2poco.codeplex.com/](https://odata2poco.codeplex.com/)
+A class library: with T4 template.
+  
+Nuget: [![NuGet](https://img.shields.io/nuget/v/OData2Poco.svg)](https://www.nuget.org/packages/OData2Poco.CommandLine)
+Chocolatey: [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg)](https://chocolatey.org/packages/odata2poco-commandline)
+
+## Continuous integration
+|Build server                |Platform     |Build status                                                |
+|----------------------------|-------------|------------------------------------------------------------|
+|AppVeyor                    |Windows      |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
+|Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
+
+## What's news?
+Now, Odata2Poco.CommandLine is available in chocolatey Gallery.
+
+To install run the command:
+
+         choco install odata2poco-commandline 
+
 
 **Features of OData2Poco**
    
@@ -36,21 +52,34 @@ Also, **OData2Poco.CommandLine (o2pgen)** Console Application is available to ge
 - MIT License. 
 
  
-**Download** OData2Poco from [codeplex.com](http://odata2poco.codeplex.com) or install using [nuget](https://www.nuget.org/packages/OData2Poco/)
+## Install
+
+**OData2Poco.CommandLine (o2pgen) console application:** 
+
+From [Nuget Gallery](https://www.nuget.org/packages/OData2Poco.CommandLine):
+ ![](http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&DownloadId=1567512)
+
+From [Chocolatey Gallery](https://chocolatey.org/packages/odata2poco-commandline):
+
+     choco install odata2poco-commandline
+
+**OData2Poco Class library:** 
+
+From [Nuget Gallery](https://www.nuget.org/packages/OData2Poco/)
 ![enter image description here](http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&DownloadId=1562964)
 
-**OData2Poco.CommandLine (o2pgen) console application**
 
-![](http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&DownloadId=1567512)
+## .NET Requirements
 
-**.NET Requirements**
 OData2Poco requires .Net 4.5 or higher.  
 
-**Dependency**
+**Dependency of Odata2Poco Class Library**
+
 Microsoft.Data.Edm  version="5.7.0"  or higher
+
 Microsoft.OData.Edm  version="6.15.0" or higher 
 
-note: The generated POCO classes code need not these EDM dependency libraries when POCO is used in your project.
+**Note:** The generated POCO classes code need not these EDM dependency libraries when POCO is used in your project.
 
 **Release Notes**
 
@@ -62,23 +91,19 @@ note: The generated POCO classes code need not these EDM dependency libraries wh
 
 **Latest Changes**
 
-- v2.2.1: Support Nullable Data type: DateTime (issue #3), DateTimeOffset, TimeSpan, Guid.
+v2.2.1: Support Nullable Data type: DateTime (issue #3), DateTimeOffset, TimeSpan, Guid.
 
 [All Changes](ReleaseNotes.md)
 
+ **Try it:**
+ 
+       o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/
  **How to use**
 
-Read the documentation:[http://odata2poco.codeplex.com/documentation](http://odata2poco.codeplex.com/documentation "documentation")
+Read the documentation:[Wiki](https://github.com/moh-hassan/odata2poco/wiki)
 
+## Acknowledgements: 
 
-**Give it a try**
-
-You can use for test the open published OData service,
-
-V4: http://services.odata.org/V4/OData/OData.svc
-
-V3: http://services.odata.org/V3/OData/OData.svc
-# Acknowledgements: #
-# Thank you [JetBrains](https://www.jetbrains.com "JetBrain") for [Resharper](https://www.jetbrains.com/resharper/ "Resharper") open source license #
+**Thank you [JetBrains](https://www.jetbrains.com "JetBrain") for [Resharper](https://www.jetbrains.com/resharper/ "Resharper") open source license**
 
 ![](http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&DownloadId=1569779)
