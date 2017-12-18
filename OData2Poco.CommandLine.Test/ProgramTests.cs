@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using CommandLine;
 using Medallion.Shell;
 using NUnit.Framework;
 
@@ -15,7 +16,7 @@ namespace OData2Poco.CommandLine.Test
     {
         private const double Timeout = 3 * 60; //sec
         private const string appCommand = @"o2pgen";
-        static Func<string, Command> TestCommand = (s => Command.Run(appCommand, s.Split(' '),
+        static Func<string, Medallion.Shell.Command> TestCommand = (s => Medallion.Shell.Command.Run(appCommand, s.Split(' '),
              options => options.Timeout(TimeSpan.FromSeconds(Timeout))));
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace OData2Poco.CommandLine.Test
         /// </remarks>
         private Func<string, Tuple<int, string>> RunCommand = (s =>
         {
-           var command = Command.Run(appCommand, s.Split(' '),
+           var command = Medallion.Shell.Command.Run(appCommand, s.Split(' '),
            options => options.Timeout(TimeSpan.FromSeconds(Timeout)));
 
             var outText = command.Result.StandardOutput;
@@ -287,6 +288,27 @@ namespace OData2Poco.CommandLine.Test
         //}
 
 
+        [Test]
+        public void InheritanceEnabledByDefaultTest()
+        {
+            var a = new string[] {};
 
-    }//
+            var options = new Options();
+            Parser.Default.ParseArguments(a, options);
+            var command = new Command(options);
+
+            Assert.IsTrue(command.PocoSettingOptions.UseInheritance);
+        }
+        [Test]
+        public void InheritanceDisabledWithInheritSettingTest()
+        {
+            var a = new[] { "-i", "MyBaseClass" };
+
+            var options = new Options();
+            Parser.Default.ParseArguments(a, options);
+            var command = new Command(options);
+
+            Assert.IsFalse(command.PocoSettingOptions.UseInheritance);
+        }
+    }
 }//

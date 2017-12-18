@@ -26,7 +26,7 @@ namespace OData2Poco.CommandLine
                 AddNavigation = ArgOptions.Navigation,
                 AddNullableDataType = ArgOptions.AddNullableDataType,
                 AddEager = ArgOptions.Eager, //v2.1.0
-                Inherit = string.IsNullOrWhiteSpace(ArgOptions.Inherit) ? string.Empty : ArgOptions.Inherit, //v2.1.0
+                Inherit = string.IsNullOrWhiteSpace(ArgOptions.Inherit) ? null : ArgOptions.Inherit, //v2.1.0
                 NamespacePrefix = string.IsNullOrEmpty(ArgOptions.Namespace) ? string.Empty : ArgOptions.Namespace,
                 //v2.1.0
                 AddJsonAttribute = ArgOptions.AddJsonAttribute, //v2.2

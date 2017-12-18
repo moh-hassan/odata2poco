@@ -34,6 +34,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
+    </Reference>
     <Reference Include="MedallionShell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MedallionShell.1.1.0\lib\net45\MedallionShell.dll</HintPath>
       <Private>True</Private>
@@ -80,6 +83,10 @@
     <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj">
       <Project>{59c02b8c-7388-490a-801c-aea5244e3879}</Project>
       <Name>OData2Poco.CommandLine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj">
+      <Project>{bcc5139d-a1c0-46e7-aba7-72e9660607de}</Project>
+      <Name>OData2Poco</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
