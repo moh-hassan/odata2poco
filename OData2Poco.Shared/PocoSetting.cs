@@ -80,7 +80,7 @@ namespace OData2Poco
         {
             Lang= Language.CS;
             NamespacePrefix = string.Empty;
-            Inherit = string.Empty;
+            Inherit = null;
             NameCase= CaseEnum.None;
             AddJsonAttribute= false;
             
