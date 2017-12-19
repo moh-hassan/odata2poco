@@ -183,7 +183,7 @@ namespace OData2Poco.CommandLine.Test
             Assert.AreEqual(0, tuble.Item1);
             //  Console.WriteLine(tuble.Item2);
 
-            Assert.IsTrue(output.Contains("MyNamespace1.MyNamespace2.")); //-i, -v
+            Assert.IsTrue(output.Contains("MyNamespace1.MyNamespace2.")); //-m, -v
 
         }
 
