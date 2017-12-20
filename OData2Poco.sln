@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData2Poco", "OData2PocoLib\OData2Poco.csproj", "{BCC5139D-A1C0-46E7-ABA7-72E9660607DE}"
 EndProject
@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CommonTestData.cs = CommonTestData.cs
 		OData2Poco.CommandLine\licence.txt = OData2Poco.CommandLine\licence.txt
 		O2PTest.cs = O2PTest.cs
+		OData2Poco.CommandLine\ODataLogo-32.ico = OData2Poco.CommandLine\ODataLogo-32.ico
 		packages.config = packages.config
 		README.md = README.md
 		ReleaseNotes.md = ReleaseNotes.md
@@ -61,5 +62,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4} = {0D69DB09-904B-4145-A7CB-C8A448F9FDF8}
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA} = {0D69DB09-904B-4145-A7CB-C8A448F9FDF8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {77153E76-5117-4623-8854-8633BCF431BF}
 	EndGlobalSection
 EndGlobal

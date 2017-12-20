@@ -2,23 +2,24 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>OData2Poco.CommandLine</id>
-    <version>2.2.1</version>
+    <version>2.3.0</version>
     <title>OData2Poco.CommandLine</title>
     <authors>Mohamed Hassan</authors>
     <owners>Mohamed Hassan</owners>
-    <licenseUrl>http://odata2poco.codeplex.com/license</licenseUrl>
-    <projectUrl>http://odata2poco.codeplex.com</projectUrl>
-    <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&amp;DownloadId=1562224</iconUrl>
+    <licenseUrl>https://github.com/moh-hassan/odata2poco/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/moh-hassan/odata2poco</projectUrl>
+    <iconUrl>https://github.com/moh-hassan/odata2poco/blob/master/ODataLogo-32.ico </iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds. Project site: http://odata2poco.codeplex.com</description>
-    <releaseNotes>	
-		Version: 2.2.1
-		What is new:		
-		- Support Nullable Data type: DateTime (issue #3), DateTimeOffset, TimeSpan, Guid
-		 
+    <description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds. 
+    Project site: https://github.com/moh-hassan/odata2poco</description>
+    <releaseNotes>
+      Version: 2.3.0
+      What is new:
+      - adds inheritance support by default. Generated class follows inhertance hierarchy of OData feed (unless switched-off by -i option)
 
-	</releaseNotes>
-    <copyright>© 2016 Mohamed Hassan</copyright>
+
+    </releaseNotes>
+    <copyright>© 2016-2017 Mohamed Hassan</copyright>
     <tags>OData code generation</tags>
 	<dependencies/>
   </metadata>

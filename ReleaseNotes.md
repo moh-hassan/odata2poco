@@ -1,6 +1,11 @@
 
 <<<<<<< HEAD
 # OData2Poco.CommandLine (o2pgen) #
+##  Version 2.3.0 ## 
+**Release Date:**   Dec 21, 2017
+**What is news:**
+ - Add inheritance support by default.
+   Generated class follows inhertance hierarchy of OData feed (unless switched-off by -i option)
 
 ##  Version 2.2.1 ##
 **Release Date:**   
@@ -18,16 +23,12 @@
 - New: Show the option values in the console to help review the options you typed (in verbose mode).
 
 
-
-
 ##  Version 2.1.0 ##
 **Release Date:**  February 28, 2017
 **What is news:**
 - New : add option -i, --inherit   for class inheritance from  BaseClass and/or interfaces (issue #2)
 - New : add option -m, --namespace     A namespace prefix for the OData namespace  (issue #2)
 - New : add option -e, --eager         Add non virtual navigation Properties for Eager Loading (issue #2)
-
-  
 
 
 ##  Version 2.0.0 ##
