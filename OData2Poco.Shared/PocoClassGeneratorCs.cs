@@ -153,8 +153,9 @@ namespace OData2Poco
             {
                 csTemplate.PushIndent("\t").WriteLine(item).PopIndent();
             }
+            var baseClass = ent.BaseType != null && PocoSetting.UseInheritance ? ent.BaseType : PocoSetting.Inherit;
 
-            csTemplate.StartClass(ent.Name, PocoSetting.Inherit);
+            csTemplate.StartClass(ent.Name, baseClass);
             //   csTemplate.StartClass(ent.Name, PocoSetting.Inherit, partial:true); //delayed to a future release to avoid change of most test cases
             foreach (var p in ent.Properties)
             {

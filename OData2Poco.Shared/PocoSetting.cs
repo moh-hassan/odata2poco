@@ -46,7 +46,11 @@ namespace OData2Poco
         /// Base class and/or interfaces to implement
         /// </value>
         public string Inherit { get; set; }
-
+        /// <summary>
+        /// Indicates whether or not to generate classes that follow the inheritance hierarchy of the ODATA types. Default is true. Disable by setting Inherit to a non-null value.
+        /// 
+        /// </summary>
+        public bool UseInheritance => Inherit == null;
         /// <summary>
         /// Gets or sets a namespace prefix.
         /// </summary>
@@ -76,7 +80,7 @@ namespace OData2Poco
         {
             Lang= Language.CS;
             NamespacePrefix = string.Empty;
-            Inherit = string.Empty;
+            Inherit = null;
             NameCase= CaseEnum.None;
             AddJsonAttribute= false;
             

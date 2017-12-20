@@ -25,7 +25,8 @@ namespace OData2Poco.V4
     /// </summary>
     internal partial class Poco : IPocoGenerator
     {
-       
+        private readonly PocoSetting _setting;
+
         public MetaDataInfo MetaData { get; set; }
 
         public string MetaDataAsString
@@ -56,10 +57,10 @@ namespace OData2Poco.V4
         //    ServiceUrl = serviceUrl;
         //    //MetaDataVersion = Helper.GetMetadataVersion(metaData);
         //}
-        internal Poco(MetaDataInfo metaData)
+        internal Poco(MetaDataInfo metaData, PocoSetting setting)
         {
+            _setting = setting;
             MetaData = metaData;
-            
         }
         private IEnumerable<IEdmSchemaType> SchemaElements
         {
@@ -171,6 +172,17 @@ namespace OData2Poco.V4
             //v1.4
             classTemplate.EntitySetName = GetEntitySetName(ent.Name);
 
+            // Set base type if _setting.UseInheritance == true
+            if (_setting.UseInheritance && ent is IEdmEntityType)
+            {
+                var entityType = (IEdmEntityType)ent;
+                var baseEntityType = entityType.BaseEntityType();
+                if (baseEntityType != null)
+                {
+                    classTemplate.BaseType = baseEntityType.Name;
+                }
+            }
+
             //fill keys 
             var list = GetKeys(ent);
             if (list != null) classTemplate.Keys.AddRange(list);
@@ -232,6 +244,10 @@ namespace OData2Poco.V4
 
             var structuredType = ent as IEdmStructuredType;
             var properties = structuredType.Properties();
+            if (_setting.UseInheritance)
+            {
+                properties = properties.Where(x => x.DeclaringType.FullTypeName() == ent.FullTypeName());
+            }
 
             var list = properties.Select(property => new PropertyTemplate
             {

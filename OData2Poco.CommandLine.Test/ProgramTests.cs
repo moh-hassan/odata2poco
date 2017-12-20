@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
+using CommandLine;
 using Medallion.Shell;
 using NUnit.Framework;
 
@@ -15,7 +17,7 @@ namespace OData2Poco.CommandLine.Test
     {
         private const double Timeout = 3 * 60; //sec
         private const string appCommand = @"o2pgen";
-        static Func<string, Command> TestCommand = (s => Command.Run(appCommand, s.Split(' '),
+        static Func<string, Medallion.Shell.Command> TestCommand = (s => Medallion.Shell.Command.Run(appCommand, s.Split(' '),
              options => options.Timeout(TimeSpan.FromSeconds(Timeout))));
 
         /// <summary>
@@ -28,7 +30,7 @@ namespace OData2Poco.CommandLine.Test
         /// </remarks>
         private Func<string, Tuple<int, string>> RunCommand = (s =>
         {
-           var command = Command.Run(appCommand, s.Split(' '),
+           var command = Medallion.Shell.Command.Run(appCommand, s.Split(' '),
            options => options.Timeout(TimeSpan.FromSeconds(Timeout)));
 
             var outText = command.Result.StandardOutput;
@@ -73,6 +75,70 @@ namespace OData2Poco.CommandLine.Test
             Assert.IsTrue(output.Contains("virtual public Supplier Supplier {get;set;}")); //-n
             Assert.IsTrue(output.Contains("int?"));  //-b
             Assert.IsFalse(output.Contains("public class Product :")); // -i is not set
+        }
+
+        [Test]
+        public void PocoWithInheritanceTest()
+        {
+            var url = "http://services.odata.org/V4/TripPinServiceRW/" ;
+            var a = $"-r {url} -v";
+
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+
+            Assert.IsTrue(output.Contains("public class PublicTransportation : PlanItem"));
+        }
+
+        [Test(Description = "If model inheritance is used (the default) check that the propterties of a base calsss are not duplicated inderived classes")]
+        public void PropertyInheritenceTest()
+        {
+            var url = "http://services.odata.org/V4/TripPinServiceRW/";
+            var a = $"-r {url} -v";
+
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+
+            var lines = output.Split('\n');
+            var occurneces = lines.Count(l => l.Contains("public int PlanItemId"));
+
+            Assert.IsTrue(occurneces == 1); // For inheritance, check that PlanItemId property only occurs in the base class
+
+        }
+        [Test]
+        public void PocoWithBaseClassTest()
+        {
+            var url = "http://services.odata.org/V4/TripPinServiceRW/";
+            const string myBaseClass = nameof(myBaseClass);
+
+            var a = $"-r {url} -v -i {myBaseClass}";
+
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+
+            Assert.IsTrue(output.Contains($"public class PublicTransportation : {myBaseClass}"));
+
+            var lines = output.Split('\n');
+            var occurneces = lines.Count(l => l.Contains("public int PlanItemId"));
+
+            Assert.IsTrue(occurneces > 1);
+        }
+
+        [Test(Description = "If model inheritance is not used, the properties from a base class should by duplicated in the derived classes.")]
+        public void PropertyDuplicationTest()
+        {
+            var url = "http://services.odata.org/V4/TripPinServiceRW/";
+            const string myBaseClass = nameof(myBaseClass);
+
+            var a = $"-r {url} -v -i {myBaseClass}";
+
+            var tuble = RunCommand(a);
+            var output = tuble.Item2;
+
+            var lines = output.Split('\n');
+            var occurneces = lines.Count(l => l.Contains("public int PlanItemId"));
+
+            Assert.IsTrue(occurneces > 1); // If not using model inheritance, check that the PlanItemId property is duplicated in derived classes
+
         }
 
         [Test]
@@ -183,7 +249,7 @@ namespace OData2Poco.CommandLine.Test
             Assert.AreEqual(0, tuble.Item1);
             //  Console.WriteLine(tuble.Item2);
 
-            Assert.IsTrue(output.Contains("MyNamespace1.MyNamespace2.")); //-i, -v
+            Assert.IsTrue(output.Contains("MyNamespace1.MyNamespace2.")); //-m, -v
 
         }
 
@@ -287,6 +353,27 @@ namespace OData2Poco.CommandLine.Test
         //}
 
 
+        [Test]
+        public void InheritanceEnabledByDefaultTest()
+        {
+            var a = new string[] {};
 
-    }//
+            var options = new Options();
+            Parser.Default.ParseArguments(a, options);
+            var command = new Command(options);
+
+            Assert.IsTrue(command.PocoSettingOptions.UseInheritance);
+        }
+        [Test]
+        public void InheritanceDisabledWithInheritSettingTest()
+        {
+            var a = new[] { "-i", "MyBaseClass" };
+
+            var options = new Options();
+            Parser.Default.ParseArguments(a, options);
+            var command = new Command(options);
+
+            Assert.IsFalse(command.PocoSettingOptions.UseInheritance);
+        }
+    }
 }//

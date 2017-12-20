@@ -41,8 +41,10 @@ To install run the command:
    - Convert name of properties to camelCase or PasCase
    - Add nullable datatypes, e.g. int?.
    - Generate (or not) navigation properties.
+   - Generated class follows inhertance hierarchy of OData feed (unless switched-off).
    - Generated class can inherit from a common BaseClass/interface.
    - Define namespace to overwrite the namespace of the model.
+
 - Add primary key/mandatory comments to the properties of the class.   .
 - Save metadata and generated code to a user defined file name.
 - Support .NET 4.5 or higher

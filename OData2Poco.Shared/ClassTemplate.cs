@@ -8,6 +8,7 @@ namespace OData2Poco
     public partial class ClassTemplate
     {
         public string Name { get; set; }
+        public string BaseType { get; set; }
         public string Comment { get; set; }
         public string ToDebugString { get; set; }
         public List<PropertyTemplate> Properties { get; set; }
