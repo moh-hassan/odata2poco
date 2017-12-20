@@ -18,6 +18,8 @@ Chocolatey: [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-comman
 |Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
 
 ## What's news?
+- Dec 21,2017 Add inheritance support by default, v2.3.0. Thanks to merijndejonge.
+  Generated class follows inhertance hierarchy of OData feed (unless switched-off by -i option)
 Now, Odata2Poco.CommandLine is available in chocolatey Gallery.
 
 To install run the command:
