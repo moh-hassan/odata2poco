@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using CommandLine;
 using Medallion.Shell;
 using NUnit.Framework;
 
@@ -267,15 +266,13 @@ namespace OData2Poco.CommandLine.Test
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), "FileCases")]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public void FileWithSettingTest(string url, string version, int n)
         {
             var a = string.Format("-r {0} -v -k -t -q -n", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-           // Console.WriteLine(tuble.Item2);
-            
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("[Table")); //-t
             Assert.IsTrue(output.Contains("[Key]")); //-k
@@ -337,43 +334,5 @@ namespace OData2Poco.CommandLine.Test
             Assert.IsTrue(result.Item2.Contains("-r, --url"));
         }
 
-
-
-        //[Test]
-        //[TestCase(@"data\not_exist_file.xml", -1)]
-        //public void FileNotExistReadingTest(string url, int exitCode)
-        //{
-        //    //   var a = string.Format("-r {0} -d -l -v -m meta.xml -f north.cs  ", url);
-        //    var a = string.Format("-r {0} -vld -m meta.xml -f north.cs  ", url);
-        //    var tuble = RunCommand(a);
-        //    var output = tuble.Item2;
-        //    //Console.WriteLine(output);
-        //    Assert.AreEqual(exitCode, tuble.Item1);
-
-        //}
-
-
-        [Test]
-        public void InheritanceEnabledByDefaultTest()
-        {
-            var a = new string[] {};
-
-            var options = new Options();
-            Parser.Default.ParseArguments(a, options);
-            var command = new Command(options);
-
-            Assert.IsTrue(command.PocoSettingOptions.UseInheritance);
-        }
-        [Test]
-        public void InheritanceDisabledWithInheritSettingTest()
-        {
-            var a = new[] { "-i", "MyBaseClass" };
-
-            var options = new Options();
-            Parser.Default.ParseArguments(a, options);
-            var command = new Command(options);
-
-            Assert.IsFalse(command.PocoSettingOptions.UseInheritance);
-        }
     }
-}//
+}

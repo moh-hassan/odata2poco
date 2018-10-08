@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mohamed Hassan")]
 [assembly: AssemblyProduct("OData2Poco")]
-[assembly: AssemblyCopyright("Copyright © 2016 Mohamed Hassan")]
+[assembly: AssemblyCopyright("Copyright © 2016-2018 Mohamed Hassan")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
