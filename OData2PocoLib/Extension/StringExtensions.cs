@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
 
-namespace OData2Poco.Shared
+namespace OData2Poco.Extension
 {
     /* 
      Reference:  https://msdn.microsoft.com/en-us/library/x2dbyw72(v=vs.71).aspx
@@ -134,7 +130,7 @@ For example:
             var lines = text.Split(new[]{'\n','\r'}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
-                result += string.Format("{0}\n",trimmer.Replace(line.Trim(), " "));
+                result += $"{trimmer.Replace(line.Trim(), " ")}\n";
             }
            // Console.WriteLine("result:\n{0}",result);
             return result;
@@ -192,7 +188,7 @@ For example:
                 JToken.Parse(json);
                 return true;
             }
-            catch (JsonReaderException ex)
+            catch (JsonReaderException)
             {
                 return false;
             }

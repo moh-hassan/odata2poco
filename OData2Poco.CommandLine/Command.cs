@@ -2,7 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using OData2Poco.Shared;
+using OData2Poco.Api;
+using OData2Poco.Extension;
 
 namespace OData2Poco.CommandLine
 {

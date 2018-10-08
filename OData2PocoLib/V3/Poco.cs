@@ -29,27 +29,11 @@ namespace OData2Poco.V4
 
         public MetaDataInfo MetaData { get; set; }
 
-        public string MetaDataAsString
-        {
-            get { return MetaData.MetaDataAsString; }  
-             
-        }
+        public string MetaDataAsString => MetaData.MetaDataAsString;
 
-        public string MetaDataVersion
-        {
-            get
-            {
-                return MetaData.MetaDataVersion; 
-            }
-        }
+        public string MetaDataVersion => MetaData.MetaDataVersion;
 
-        public string ServiceUrl
-        {
-            get
-            {
-                return MetaData.ServiceUrl; 
-            }
-        }
+        public string ServiceUrl => MetaData.ServiceUrl;
 
         //internal Poco(string metaData, string serviceUrl)
         //{
@@ -111,8 +95,7 @@ namespace OData2Poco.V4
 
             if (type.TypeKind == EdmTypeKind.Enum)
             {
-                var enumType = type as IEdmEnumType;
-                if (enumType != null)
+                if (type is IEdmEnumType enumType)
                 {
                     var list2 = enumType.Members;
 
@@ -156,12 +139,11 @@ namespace OData2Poco.V4
             //for debuging
            // var debugString = Helper.Dump(ent);
             //v1.0.0-rc3 , enum support
-            var enumType = ent as IEdmEnumType;
             ClassTemplate classTemplate = new ClassTemplate
                {
                    Name = ent.Name,
                  //  ToDebugString = debugString,
-                   IsEnum = (enumType != null)
+                   IsEnum = (ent is IEdmEnumType enumType)
 
                };
 
@@ -173,9 +155,8 @@ namespace OData2Poco.V4
             classTemplate.EntitySetName = GetEntitySetName(ent.Name);
 
             // Set base type if _setting.UseInheritance == true
-            if (_setting.UseInheritance && ent is IEdmEntityType)
+            if (_setting.UseInheritance && ent is IEdmEntityType entityType)
             {
-                var entityType = (IEdmEntityType)ent;
                 var baseEntityType = entityType.BaseEntityType();
                 if (baseEntityType != null)
                 {
@@ -214,8 +195,7 @@ namespace OData2Poco.V4
         private List<string> GetNavigation(IEdmSchemaType ent)
         {
             var list = new List<string>();
-            var entityType = ent as IEdmEntityType;
-            if (entityType != null)
+            if (ent is IEdmEntityType entityType)
             {
                 var nav = entityType.DeclaredNavigationProperties().ToList();
                 list.AddRange(nav.Select(key => key.Name));
@@ -226,8 +206,7 @@ namespace OData2Poco.V4
         private List<string> GetKeys(IEdmSchemaType ent)
         {
             var list = new List<string>();
-            var entityType = ent as IEdmEntityType;
-            if (entityType != null)
+            if (ent is IEdmEntityType entityType)
             {
                 var keys = entityType.DeclaredKey;
                 if (keys != null)
@@ -241,8 +220,7 @@ namespace OData2Poco.V4
         {
 
             //stop here for enum
-            var enumType = ent as IEdmEnumType;
-            if (enumType != null) return null;
+            if (ent is IEdmEnumType enumType) return null;
 
             var structuredType = ent as IEdmStructuredType;
             var properties = structuredType.Properties();
@@ -277,45 +255,39 @@ namespace OData2Poco.V4
             //@@@ v1.0.0-rc2
             if (edmTypeReference.IsEnum())
             {
-                var ent = edmType as IEdmEnumType;
-                if (ent != null) return ent.Name;
+                if (edmType is IEdmEnumType ent) return ent.Name;
             }
 
             if (edmTypeReference.IsComplex())
             {
-                var edmComplexType = edmType as IEdmComplexType;
-                if (edmComplexType != null) return edmComplexType.Name;
+                if (edmType is IEdmComplexType edmComplexType) return edmComplexType.Name;
             }
 
             if (edmTypeReference.IsEntity())
             {
-                var ent = edmType as IEdmEntityType;
-                if (ent != null) return ent.Name;
+                if (edmType is IEdmEntityType ent) return ent.Name;
             }
 
             if (edmTypeReference.IsCollection())
             {
-
-                IEdmCollectionType edmCollectionType = edmType as IEdmCollectionType;
-                if (edmCollectionType != null)
+                if (edmType is IEdmCollectionType edmCollectionType)
                 {
                     IEdmTypeReference elementTypeReference = edmCollectionType.ElementType;
                     IEdmPrimitiveType primitiveElementType = elementTypeReference.Definition as IEdmPrimitiveType;
                     if (primitiveElementType == null)
                     {
-                        IEdmSchemaElement schemaElement = elementTypeReference.Definition as IEdmSchemaElement;
-                        if (schemaElement != null)
+                        if (elementTypeReference.Definition is IEdmSchemaElement schemaElement)
                         {
                             clrTypeName = schemaElement.Name;
                             //@@@ 1.0.0-rc2
                             // clrTypeName = string.Format("ICollection<{0}>", clrTypeName);
-                            clrTypeName = string.Format("List<{0}>", clrTypeName); //to support RestSharp
+                            clrTypeName = $"List<{clrTypeName}>"; //to support RestSharp
                         }
                         return clrTypeName;
                     }
 
                     clrTypeName = EdmToClr(primitiveElementType);
-                    clrTypeName = string.Format("List<{0}>", clrTypeName);
+                    clrTypeName = $"List<{clrTypeName}>";
                 }
                 return clrTypeName;
             }//IsCollection

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using OData2Poco.Extension;
 
-namespace OData2Poco.Shared
+namespace OData2Poco
 {
     /// <summary>
     /// Generate All attributes of property :KeyAttribut,Required,JsonProperty
@@ -45,7 +46,7 @@ namespace OData2Poco.Shared
 
             if (_setting.AddJsonAttribute)
             {
-                list.Add(string.Format("[JsonProperty(PropertyName = \"{0}\")]", _property.PropName));
+                list.Add($"[JsonProperty(PropertyName = \"{_property.PropName}\")]");
             }
 
             if (_setting.AddDataMemberAttribute)
@@ -80,41 +81,22 @@ namespace OData2Poco.Shared
         /// <summary>
         /// Virtual Modifier
         /// </summary>
-        public string VirtualModifier
-        {
-            get
-            {
-                return _setting.AddNavigation && !_setting.AddEager ? "virtual" : String.Empty;
-            }
-        }
+        public string VirtualModifier => _setting.AddNavigation && !_setting.AddEager ? "virtual" : String.Empty;
 
         /// <summary>
         /// NullableModifier represented by "?" added to type , e.g int?
         /// </summary>
-        public string NullableModifier
-        {
-            get
-            {
-                return _setting.AddNullableDataType && _property.IsNullable ? Helper.GetNullable(_property.PropType) : String.Empty;
-            }
-        }
+        public string NullableModifier => _setting.AddNullableDataType && _property.IsNullable ? Helper.GetNullable(_property.PropType) : String.Empty;
 
         /// <summary>
         /// The declaration of property in C# 
         /// </summary>
-        public string Declaration
-        {
-            get
-            {
-                return string.Format("{0} {1} {2} {3} {{get;set;}} {4}\n",
-                VirtualModifier, "public", _property.PropType + NullableModifier, Name, _property.PropComment);
-            }
-        }
+        public string Declaration =>
+            $"{VirtualModifier} public {_property.PropType + NullableModifier} {Name} {{get;set;}} {_property.PropComment}\n";
 
         public override string ToString()
         {
-            var text = string.Format("{0}\n{1}",
-                string.Join(Environment.NewLine,GetAllAttributes()), Declaration);
+            var text = $"{string.Join(Environment.NewLine, GetAllAttributes())}\n{Declaration}";
             return text;
         }
       

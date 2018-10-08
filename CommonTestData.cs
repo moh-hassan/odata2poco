@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-
-
- 
-public static class TestSample
+﻿public static class TestSample
 {
     public static object[] UrlCases =
         {

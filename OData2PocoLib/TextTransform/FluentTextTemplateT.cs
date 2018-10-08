@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
 using System.Text;
 
 //part of logic is derived from microsoft textTemplate
@@ -22,26 +21,20 @@ namespace OData2Poco.TextTransform
         /// </summary>
         protected StringBuilder GenerationText
         {
-            get { return _generationText ?? (_generationText = new StringBuilder()); }
-            set { _generationText = value; }
+            get => _generationText ?? (_generationText = new StringBuilder());
+            set => _generationText = value;
         }
 
         List<int> _indentLengths;
         /// <summary>
         /// A list of the lengths of each indent that was added with PushIndent
         /// </summary>
-        List<int> IndentLengths
-        {
-            get { return _indentLengths ?? (_indentLengths = new List<int>()); }
-        }
+        List<int> IndentLengths => _indentLengths ?? (_indentLengths = new List<int>());
 
         /// <summary>
         /// Gets the current indent we use when adding lines to the output
         /// </summary>
-        public string CurrentIndent
-        {
-            get { return _currentIndent; }
-        }
+        public string CurrentIndent => _currentIndent;
 
         /// <summary>
         /// Current transformation session
@@ -169,7 +162,7 @@ namespace OData2Poco.TextTransform
         public T PushIndent(string indent)
         {
             if (indent == null)
-                throw new ArgumentNullException("indent");
+                throw new ArgumentNullException(nameof(indent));
             _currentIndent = _currentIndent + indent;
             IndentLengths.Add(indent.Length);
             return (T)this;
@@ -221,7 +214,7 @@ namespace OData2Poco.TextTransform
         ///<summary>
         ///      Helper to produce culture-oriented representation of an object as a string
         ///</summary>
-        public ToStringInstanceHelper ToStringHelper { get; private set; }
+        public ToStringInstanceHelper ToStringHelper { get; }
 
 
 
@@ -237,7 +230,7 @@ namespace OData2Poco.TextTransform
             /// </summary>
             public IFormatProvider FormatProvider
             {
-                get { return _formatProvider; }
+                get => _formatProvider;
                 set
                 {
                     if (value != null)
@@ -245,25 +238,6 @@ namespace OData2Poco.TextTransform
                 }
             }
 
-            /// <summary>
-            /// This is called from the compile/run appdomain to convert objects within an expression block to a string
-            /// </summary>
-        //    public string ToStringWithCulture(object objectToConvert)
-        //    {
-        //        if (objectToConvert == null)
-        //            throw new ArgumentNullException("objectToConvert");
-        //        Type t = objectToConvert.GetType();
-        //        MethodInfo method = t.GetMethod("ToString", new[]
-        //                                                        {
-        //                                                            typeof (IFormatProvider)
-        //                                                        });
-        //        if (method == null)
-        //            return objectToConvert.ToString();
-        //        return (string)(method.Invoke(objectToConvert, new object[]
-        //        {
-        //            _formatProvider
-        //        }));
-        //    }
         }
     }
 

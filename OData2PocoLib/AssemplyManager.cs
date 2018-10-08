@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace OData2Poco.Shared
+namespace OData2Poco
 {
     /// <summary>
     /// Manage assemplies which is needed by using statement 

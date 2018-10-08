@@ -22,7 +22,7 @@ namespace OData2Poco.Extension
         {
             if (ex.InnerException != null)
             {
-                return string.Format("{0} ---> {1} ", ex.InnerException.Message, GetInnerException(ex.InnerException));//recursive
+                return $"{ex.InnerException.Message} ---> {GetInnerException(ex.InnerException)} ";//recursive
             }
             return "";
         }
@@ -34,7 +34,7 @@ namespace OData2Poco.Extension
             var msg= string.IsNullOrEmpty(s) ? ex.Message : ex.Message + "-->\n" + s;
 
             if (showTrace)
-                return string.Format("{0}\nException Details:\n {1}",msg ,ex);
+                return $"{msg}\nException Details:\n {ex}";
             return msg;
         }
         //todo: _header implementation 

@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics;
 using NUnit.Framework;
-using OData2Poco.Shared;
+using OData2Poco.Extension;
 
 /*
 The tests applied for property are:

@@ -19,7 +19,7 @@ namespace OData2Poco
             {
                 if (EntitySetName != "")
                 {
-                    list.Add( string.Format("[Table(\"{0}\")]", EntitySetName));
+                    list.Add($"[Table(\"{EntitySetName}\")]");
                   
                 }
             }

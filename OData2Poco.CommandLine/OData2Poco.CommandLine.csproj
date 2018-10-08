@@ -5,8 +5,31 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
     <AssemblyName>O2Pgen</AssemblyName>
-    <TargetName>o2pgen</TargetName>
+    <AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <Version>3.0.0</Version>
+    <Copyright>Copyright ©  Mohamed Hassan 2016</Copyright>
+    <Authors>Mohamed Hassan</Authors>
+    <Company>OData2Poco</Company>
+    <Product>O2Pgen</Product>
+    <Description>
+      o2gen is a CommandLine tool for generating c# POCO classes from OData feeds.
+      Project site: https://github.com/moh-hassan/odata2poco
+    </Description>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <PackageIconUrl>https://github.com/moh-hassan/odata2poco/blob/master/ODataLogo-32.ico?raw=true </PackageIconUrl>
+    <PackageId>OData2Poco.CommandLine</PackageId>
+    <PackageLicenseUrl>https://github.com/moh-hassan/odata2poco/blob/master/license.txt?raw=true</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
+    <PackageReleaseNotes>
+      Version: $(version)
+      What is new:
+      - Maintainance: Migrating to vs2017 and c#7
+
+    </PackageReleaseNotes>
+    <PackageTags>OData poco code-generation</PackageTags>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\Version.cs" Link="Version.cs" />
   </ItemGroup>

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>OData2Poco.CommandLine</id>
-    <version>2.3.0</version>
+    <version>3.0.0</version>
     <title>OData2Poco.CommandLine</title>
     <authors>Mohamed Hassan</authors>
     <owners>Mohamed Hassan</owners>
@@ -13,14 +13,14 @@
     <description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds. 
     Project site: https://github.com/moh-hassan/odata2poco</description>
     <releaseNotes>
-      Version: 2.3.0
+      Version: $(version)
       What is new:
-      - adds inheritance support by default. Generated class follows inhertance hierarchy of OData feed (unless switched-off by -i option)
+      - Maintainance: Migrating to vs2017 and c#7
 
 
     </releaseNotes>
-    <copyright>© 2016-2017 Mohamed Hassan</copyright>
-    <tags>OData code generation</tags>
+    <copyright>Copyright ©  Mohamed Hassan 2016</copyright>
+    <tags>OData poco code-generation</tags>
 	<dependencies/>
   </metadata>
   <files>

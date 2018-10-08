@@ -1,6 +1,4 @@
-﻿using OData2Poco.Shared;
-
-namespace OData2Poco
+﻿namespace OData2Poco
 {
     /// <summary>
     /// Setting options to control the code generation

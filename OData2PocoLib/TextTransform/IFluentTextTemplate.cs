@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace OData2Poco.TextTransform
 {
-    public interface IFluentTextTemplate<T>
+    public interface IFluentTextTemplate<out T>
     {
 
         /// <summary>

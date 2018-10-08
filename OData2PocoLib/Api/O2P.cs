@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace OData2Poco
+
+namespace OData2Poco.Api
 {
     /// <summary>
     ///     Wrapper , non Flount Interface
@@ -23,44 +24,25 @@ namespace OData2Poco
         private MetaDataInfo MetaData { get; set; }
         private Uri ServiceUri { get; set; }
 
-        public string ServiceUrl
-        {
-            get { return MetaData.ServiceUrl; }
-        }
+        public string ServiceUrl => MetaData.ServiceUrl;
 
         //   private string _xmlContent { get; set; }
         /// <summary>
         ///     metadata which is read from url /file or xml string
         /// </summary>
-        public string MetaDataAsString
-        {
-            get { return MetaData.MetaDataAsString; }
-        }
+        public string MetaDataAsString => MetaData.MetaDataAsString;
 
-        public string MetaDataVersion
-        {
-            get { return MetaData.MetaDataVersion; }
-        }
+        public string MetaDataVersion => MetaData.MetaDataVersion;
 
         public string ServiceVersion
-        {
-            get { return MetaData.ServiceVersion; }
-        } //for http media
+            //for http media
+            => MetaData.ServiceVersion;
 
-        public string SchemaNamespace
-        {
-            get { return MetaData.SchemaNamespace; }
-        }
+        public string SchemaNamespace => MetaData.SchemaNamespace;
 
-        public Dictionary<string, string> ServiceHeader
-        {
-            get { return MetaData.ServiceHeader; }
-        }
+        public Dictionary<string, string> ServiceHeader => MetaData.ServiceHeader;
 
-        public Media MediaType
-        {
-            get { return MetaData.MediaType; }
-        }
+        public Media MediaType => MetaData.MediaType;
 
         public PocoSetting Setting { get; set; }
        public Media Source { get; set; }

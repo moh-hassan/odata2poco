@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using OData2Poco.Api;
 
 //these tests are moved from OData2Poco.CommandLine.Test, modified to use O2P class
 namespace OData2Poco.Tests

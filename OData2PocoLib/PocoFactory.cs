@@ -24,7 +24,7 @@ namespace OData2Poco
                 //throw new NotImplementedException();
 
                 default:
-                    throw new NotSupportedException(string.Format("OData Version '{0}' is not supported", metaDataVersion));
+                    throw new NotSupportedException($"OData Version '{metaDataVersion}' is not supported");
                   
             }
         }

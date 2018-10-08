@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using OData2Poco.Shared;
+using OData2Poco.Extension;
 
 namespace OData2Poco
 {

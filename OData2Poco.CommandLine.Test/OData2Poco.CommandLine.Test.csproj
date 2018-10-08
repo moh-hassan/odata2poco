@@ -1,35 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
-<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-<ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
+    <Authors>Mohamed Hassan</Authors>
+    <Copyright>Copyright ©  Mohamed Hassan 2016</Copyright>
+    <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
+    <Company>OData2Poco</Company>
+    <Product>OData2Poco</Product>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\CommonTestData.cs" Link="CommonTestData.cs" />
   </ItemGroup>
-  
-  
-<ItemGroup>   
-    <PackageReference Include="MedallionShell" Version="1.5.1" />   
+
+
+  <ItemGroup>
+    <PackageReference Include="MedallionShell" Version="1.5.1" />
     <PackageReference Include="NUnit" Version="2.6.4" />
   </ItemGroup>
-  
-  
-<ItemGroup>
-  <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" />
-</ItemGroup>
-  
-  
-<ItemGroup>
-  <None Update="Data\invalidxml.xml">
-    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-  </None>
-  <None Update="Data\northwindV3.xml">
-    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-  </None>
-  <None Update="Data\northwindV4.xml">
-    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-  </None>
-</ItemGroup>
-  
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="Data\invalidxml.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\northwindV3.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\northwindV4.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

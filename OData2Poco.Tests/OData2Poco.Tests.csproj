@@ -1,24 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
-<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-<ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
+    <Authors>Mohamed Hassan</Authors>
+    <Copyright>Copyright ©  Mohamed Hassan 2016</Copyright>
+    <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
+    <Company>OData2Poco</Company>
+    <Product>OData2Poco</Product>
   </PropertyGroup>
-   <ItemGroup>   
-    <PackageReference Include="NUnit" Version="2.6.4" />  
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="2.6.4" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Folder Include="Model\" />
   </ItemGroup>
-  
+
 </Project>

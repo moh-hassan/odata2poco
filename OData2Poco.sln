@@ -24,16 +24,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Version.cs = Version.cs
 	EndProjectSection
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OData2Poco.Shared", "OData2Poco.Shared\OData2Poco.Shared.shproj", "{633D7691-30B9-488A-A987-8ACBCA8D8A4A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D69DB09-904B-4145-A7CB-C8A448F9FDF8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.Tests", "OData2Poco.Tests\OData2Poco.Tests.csproj", "{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		OData2Poco.Shared\OData2Poco.Shared.projitems*{633d7691-30b9-488a-a987-8acbca8d8a4a}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
