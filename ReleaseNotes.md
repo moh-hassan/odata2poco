@@ -1,6 +1,13 @@
 
 <<<<<<< HEAD
 # OData2Poco.CommandLine (o2pgen) #
+##  Version 3.0.0 ## 
+**Release Date:**   Oct 9, 2018
+**What is news:**
+ - Maintainance: Migrating to vs2017 and c#7
+ - New: Support colored Console
+ - New: Support NetStandard2.0,NetStandard1.1 and net45
+
 ##  Version 2.3.0 ## 
 **Release Date:**   Dec 21, 2017
 **What is news:**

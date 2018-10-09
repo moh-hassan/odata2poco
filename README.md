@@ -17,7 +17,18 @@ Chocolatey: [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-comman
 |AppVeyor                    |Windows      |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
 |Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
 
-## What's news?
+## Nightly build v3.0.0.207
+[Download V3.0.0:](https://github.com/moh-hassan/odata2poco/releases)
+
+**The new Features of V3.0.0:**
+
+ - Maintainance: Migrating to vs2017 and c#7
+ - New: Support colored Console
+ - New: Support NetStandard2.0,NetStandard1.1 and net45 class library
+
+----------
+
+## What's news v2.3.0?
 - Dec 21,2017 Add inheritance support by default, v2.3.0. Thanks to merijndejonge.
 
   Generated class follows inhertance hierarchy of OData feed (unless switched-off by -i option)

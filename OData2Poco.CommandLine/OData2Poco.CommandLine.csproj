@@ -25,7 +25,8 @@
       Version: $(version)
       What is new:
       - Maintainance: Migrating to vs2017 and c#7
-      - support colored Console
+      - New: Support colored Console
+      - New: Support NetStandard2.0,NetStandard1.1 and net45
 
     </PackageReleaseNotes>
     <PackageTags>OData poco code-generation</PackageTags>

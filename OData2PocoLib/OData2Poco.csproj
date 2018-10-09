@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard1.1;netstandard2.0;net45</TargetFrameworks>
-    <!--<TargetFramework>net45</TargetFramework>-->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -26,6 +25,8 @@
       Version: $(version)
       What is new:
       - Maintainance: Migrating to vs2017 and c#7
+      - New: Support colored Console
+      - New: Support NetStandard2.0,NetStandard1.1 and net45
 
     </PackageReleaseNotes>
     <PackageTags>OData poco code-generation</PackageTags>

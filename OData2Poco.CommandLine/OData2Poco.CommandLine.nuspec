@@ -15,7 +15,9 @@
     <releaseNotes>
       Version: $(version)
       What is new:
-      - Maintenance: Migrating to vs2017 and c#7
+      - Maintainance: Migrating to vs2017 and c#7
+      - New: Support colored Console
+      - New: Support NetStandard2.0,NetStandard1.1 and net45
 
 
     </releaseNotes>

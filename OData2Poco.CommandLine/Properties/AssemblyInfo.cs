@@ -6,11 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("OData2Poco.CommandLine")]
-[assembly: AssemblyDescription("o2gen is a CommandLine tool for generating c# POCO classes from OData feeds. Project site: https://github.com/moh-hassan/odata2poco")]
+[assembly: AssemblyDescription(@"o2gen is a CommandLine tool for generating c# POCO classes from OData feeds. 
+Project site: https://github.com/moh-hassan/odata2poco")]
 [assembly: AssemblyConfiguration("Release")]
 [assembly: AssemblyCompany("Mohamed Hassan")]
 [assembly: AssemblyProduct("O2Pgen")]
-[assembly: AssemblyCopyright("(c) 2016-2018 Mohamed Hassan, MIT License")]
+[assembly: AssemblyCopyright("Copyright (c) Mohamed Hassan 2016-2018, MIT License")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
