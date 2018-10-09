@@ -2,20 +2,31 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using CommandLine;
+using CommandLine.Text;
+using OData2Poco.Coloring;
+using OData2Poco.Exceptions;
 using OData2Poco.Extension;
 
 //todo: file source
-//(c) 2016 Mohamed Hassan
+//(c) 2016-2018 Mohamed Hassan
 // MIT License
-//project site: http://odata2poco.codeplex.com/
+//project site:https://github.com/moh-hassan/odata2poco
+
 
 namespace OData2Poco.CommandLine
 {
-    class Program
+    internal class Program
     {
         private static readonly Stopwatch Sw = new Stopwatch();
-        static void Main(string[] args)
+        // ReSharper disable once ArrangeTypeMemberModifiers
+        static readonly ConColor Logger = ConColor.Default;
+        static int _retCode = (int)ExitCodes.Success;
+        static async Task Main(string[] args)
         {
+            Trace.WriteLine("---------Application started.-------");
+            //Trace.Listeners.Clear();
+            var argument = string.Join(" ", args);
+            Trace.WriteLine($"CommandLine: {argument}");
             try
             {
                 if (!(Console.IsOutputRedirected || Console.IsErrorRedirected))
@@ -23,53 +34,90 @@ namespace OData2Poco.CommandLine
                 // Catch all unhandled exceptions in all threads.
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 Sw.Start();
-                RunOptionsAsync(args).Wait();
+                _retCode = await RunOptionsAsync(args);
                 Sw.Stop();
                 Console.WriteLine();
-                Console.WriteLine("Total processing time: {0} sec", Sw.ElapsedMilliseconds / 1000.0);
+                Logger.Sucess("Total processing time: {0} sec", Sw.ElapsedMilliseconds / 1000.0);
+                Trace.WriteLine($"Total processing time: { Sw.ElapsedMilliseconds / 1000.0} sec");
 
-                Environment.Exit(0);
-#if DEBUG
-                Console.ReadKey();
-#endif
             }
             catch (Exception ex)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                var argument = string.Join(" ", args);
-                Console.WriteLine("Error in executing the command: o2pgen {0}", argument);
+                _retCode = (int)ExitCodes.HandledException;
+                Logger.Error("Error in executing the command: o2pgen {0}", argument);
+                Logger.Error("Error Message:\n {0}", ex.FullExceptionMessage());
+                Trace.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage());
+                Trace.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage(true));
 #if DEBUG
-                Console.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage(true));
+                Logger.Error("--------------------Exception Details---------------------");
+                Logger.Error("Error Message:\n {0}", ex.FullExceptionMessage(true));
                 Console.ReadKey();
-#else
-                Console.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage());
+
 #endif
-                Console.ForegroundColor = ConsoleColor.White;
-                //Console.WriteLine("Error Details: {0}", ex);
-                Environment.Exit(-1);
             }
+            finally
+            {
+                Logger.Info($"Application Exit code: {_retCode}");
+                Trace.WriteLine($"Application Exit code: {_retCode}");
+                Environment.Exit(_retCode);
+            }
+
         }
 
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            var exception = e.ExceptionObject as Exception;
-            if (exception != null)
-                Console.WriteLine("Unhandled exception: {0}", exception.Message);
-            Environment.Exit(-99);
+            _retCode = (int)ExitCodes.UnhandledException;
+            if (e.ExceptionObject is Exception exception)
+                Console.WriteLine("Unhandled exception: \r\n{0}", exception.Message);
+            Environment.Exit(_retCode);
         }
 
 
-        static async Task RunOptionsAsync(string[] args)
+        static async Task<int> RunOptionsAsync(string[] args)
         {
-            var options = new Options();
-            if (Parser.Default.ParseArguments(args, options))
+
+
+            var parser = new Parser(config =>
             {
-                Console.WriteLine(ApplicationInfo.HeadingInfo);
-                Console.WriteLine(ApplicationInfo.Copyright);
-                Console.WriteLine(ApplicationInfo.Description);
-                await new Command(options).Execute();
-            }
+                config.HelpWriter = null;
+                config.CaseSensitive = true;
+                config.MaximumDisplayWidth = 4000;
+                config.IgnoreUnknownArguments = false;
+
+            });
+
+            //catch exception of parser before go on
+
+            var result = parser.ParseArguments<Options>(args);
+            Trace.WriteLine($"Tag: {result.Tag}");
+
+            var retCode = await result.MapResult(
+               async x =>
+                {
+                    Logger.Info(ApplicationInfo.HeadingInfo);
+                    Console.WriteLine(ApplicationInfo.Copyright);
+                    Console.WriteLine(ApplicationInfo.Description);
+                    await new Command(x).Execute().ConfigureAwait(false);
+                    return 0;
+                },
+                errs =>
+                {
+                    Trace.WriteLine("------errs, Argument Exception, Show user defined help ------");
+                    var helpText = HelpText.AutoBuild(result, h =>
+                    {
+                        h.AdditionalNewLineAfterOption = false;
+                        return HelpText.DefaultParsingErrorsHandler(result, h);
+                    }, e => e);
+                    Console.WriteLine(helpText);
+                    return Task.FromResult((int)ExitCodes.ArgumentsInvalid);
+                });
+
+            return retCode;
         }
+
     }
+
 }
+
+

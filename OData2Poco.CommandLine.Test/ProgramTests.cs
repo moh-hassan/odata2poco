@@ -286,7 +286,8 @@ namespace OData2Poco.CommandLine.Test
             var a = "";
             var tuble = RunCommand(a);
             var output = tuble.Item2;
-            Assert.AreEqual(0, tuble.Item1);
+            var expectedExitCode = (int)ExitCodes.ArgumentsInvalid;
+            Assert.AreEqual(expectedExitCode, tuble.Item1);
             //var help = File.ReadAllText("help.txt");
             Assert.IsTrue(output.Contains("-r, --url"));
         }
@@ -330,7 +331,8 @@ namespace OData2Poco.CommandLine.Test
         {
             var a = string.Format("-r {0} -z ", url); //-z invalid argument
             var result = RunCommand(a);
-            Assert.AreEqual(0, result.Item1);
+            var expectedExitCode = (int)ExitCodes.ArgumentsInvalid;
+            Assert.AreEqual(expectedExitCode, result.Item1);
             Assert.IsTrue(result.Item2.Contains("-r, --url"));
         }
 

@@ -61,7 +61,11 @@ namespace OData2Poco
 
                     }
                     Debug.WriteLine(response.ReasonPhrase);
-                    throw new WebException("Http Error " + (int)response.StatusCode + ": " + response.ReasonPhrase);
+                    // throw new WebException("Http Error " + (int)response.StatusCode + ": " + response.ReasonPhrase);
+                    throw new HttpRequestException("Http Error " + (int) response.StatusCode + ": " +
+                                                   response.ReasonPhrase);
+
+
                 }
             }
         }

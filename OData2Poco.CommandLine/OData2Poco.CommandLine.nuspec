@@ -15,7 +15,7 @@
     <releaseNotes>
       Version: $(version)
       What is new:
-      - Maintainance: Migrating to vs2017 and c#7
+      - Maintenance: Migrating to vs2017 and c#7
 
 
     </releaseNotes>

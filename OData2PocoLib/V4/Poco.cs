@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Microsoft.OData.Edm.Validation;
 #if odataV3
 using Microsoft.Data.Edm;
 using Microsoft.Data.Edm.Csdl;
@@ -29,18 +30,60 @@ namespace OData2Poco.V4
 
         public MetaDataInfo MetaData { get; set; }
 
-        public string MetaDataAsString => MetaData.MetaDataAsString;
+        public string MetaDataAsString
+        {
+            get { return MetaData.MetaDataAsString; }  
+             
+        }
 
-        public string MetaDataVersion => MetaData.MetaDataVersion;
+        public string MetaDataVersion
+        {
+            get
+            {
+                return MetaData.MetaDataVersion; 
+            }
+        }
 
-        public string ServiceUrl => MetaData.ServiceUrl;
+        public string ServiceUrl
+        {
+            get
+            {
+                return MetaData.ServiceUrl; 
+            }
+        }
 
-        //internal Poco(string metaData, string serviceUrl)
-        //{
-        //    MetaDataAsString = metaData;
-        //    ServiceUrl = serviceUrl;
-        //    //MetaDataVersion = Helper.GetMetadataVersion(metaData);
-        //}
+        //support v7+
+        private IEdmModel LoadModelFromString(string xmlString)
+        {
+            IEdmModel model2;
+            //Microsoft.OData.Edm" v7+
+            //breaking change in Odata in v7+
+            StringReader tr = new StringReader(xmlString);
+            XmlReader reader = XmlReader.Create(tr);
+
+            IEnumerable<EdmError> errors = null;
+            try
+            {
+#if EDM7
+                CsdlReader
+#else
+                EdmxReader
+#endif
+                  //.TryParse(reader, true, out model2, out _); //v7+
+                  .TryParse(reader, true, out model2, out errors);
+            }
+            finally
+            {
+                //log errors
+                ((IDisposable)reader).Dispose();
+            }
+ 
+           //  model2 = EdmxReader.Parse(XmlReader.Create(tr)); //v6.15.0
+ 
+            return model2;
+
+        }
+
         internal Poco(MetaDataInfo metaData, PocoSetting setting)
         {
             _setting = setting;
@@ -50,8 +93,8 @@ namespace OData2Poco.V4
         {
             get
             {
-                var tr = new StringReader(MetaDataAsString);
-                var model2 = EdmxReader.Parse(XmlReader.Create(tr));
+                //Console.WriteLine("IEnumerable<IEdmSchemaType> SchemaElements");
+                IEdmModel model2 = LoadModelFromString(MetaDataAsString);
                 var schemaElements = model2.SchemaElements.OfType<IEdmSchemaType>();
                 return schemaElements;
             }
@@ -61,8 +104,9 @@ namespace OData2Poco.V4
         {
             get
             {
-                var tr = new StringReader(MetaDataAsString);
-                var model2 = EdmxReader.Parse(XmlReader.Create(tr));
+                //Console.WriteLine("public IEnumerable<IEdmEntitySet> EntitySets");
+                IEdmModel model2 = LoadModelFromString(MetaDataAsString);
+
 #if odataV3
                   var entitySets = model2.EntityContainers().First().EntitySets();
 #else
@@ -95,7 +139,8 @@ namespace OData2Poco.V4
 
             if (type.TypeKind == EdmTypeKind.Enum)
             {
-                if (type is IEdmEnumType enumType)
+                var enumType = type as IEdmEnumType;
+                if (enumType != null)
                 {
                     var list2 = enumType.Members;
 
@@ -139,11 +184,12 @@ namespace OData2Poco.V4
             //for debuging
            // var debugString = Helper.Dump(ent);
             //v1.0.0-rc3 , enum support
+            var enumType = ent as IEdmEnumType;
             ClassTemplate classTemplate = new ClassTemplate
                {
                    Name = ent.Name,
                  //  ToDebugString = debugString,
-                   IsEnum = (ent is IEdmEnumType enumType)
+                   IsEnum = (enumType != null)
 
                };
 
@@ -155,8 +201,9 @@ namespace OData2Poco.V4
             classTemplate.EntitySetName = GetEntitySetName(ent.Name);
 
             // Set base type if _setting.UseInheritance == true
-            if (_setting.UseInheritance && ent is IEdmEntityType entityType)
+            if (_setting.UseInheritance && ent is IEdmEntityType)
             {
+                var entityType = (IEdmEntityType)ent;
                 var baseEntityType = entityType.BaseEntityType();
                 if (baseEntityType != null)
                 {
@@ -193,7 +240,8 @@ namespace OData2Poco.V4
         private List<string> GetNavigation(IEdmSchemaType ent)
         {
             var list = new List<string>();
-            if (ent is IEdmEntityType entityType)
+            var entityType = ent as IEdmEntityType;
+            if (entityType != null)
             {
                 var nav = entityType.DeclaredNavigationProperties().ToList();
                 list.AddRange(nav.Select(key => key.Name));
@@ -204,7 +252,8 @@ namespace OData2Poco.V4
         private List<string> GetKeys(IEdmSchemaType ent)
         {
             var list = new List<string>();
-            if (ent is IEdmEntityType entityType)
+            var entityType = ent as IEdmEntityType;
+            if (entityType != null)
             {
                 var keys = entityType.DeclaredKey;
                 if (keys != null)
@@ -218,7 +267,8 @@ namespace OData2Poco.V4
         {
 
             //stop here for enum
-            if (ent is IEdmEnumType enumType) return null;
+            var enumType = ent as IEdmEnumType;
+            if (enumType != null) return null;
 
             var structuredType = ent as IEdmStructuredType;
             var properties = structuredType.Properties();
@@ -226,13 +276,15 @@ namespace OData2Poco.V4
             {
                 properties = properties.Where(x => x.DeclaringType.FullTypeName() == ent.FullTypeName());
             }
-
+            //todo add serial for properties
+            var i = 1;
             var list = properties.Select(property => new PropertyTemplate
             {
                 //ToTrace = property.ToTraceString(),
                 IsNullable = property.Type.IsNullable,
                 PropName = property.Name,
                 PropType = GetClrTypeName(property.Type),
+                Serial = i++,
                 //ToDebugString = Helper.Dump(property)
             }).ToList();
 
@@ -252,39 +304,45 @@ namespace OData2Poco.V4
             //@@@ v1.0.0-rc2
             if (edmTypeReference.IsEnum())
             {
-                if (edmType is IEdmEnumType ent) return ent.Name;
+                var ent = edmType as IEdmEnumType;
+                if (ent != null) return ent.Name;
             }
 
             if (edmTypeReference.IsComplex())
             {
-                if (edmType is IEdmComplexType edmComplexType) return edmComplexType.Name;
+                var edmComplexType = edmType as IEdmComplexType;
+                if (edmComplexType != null) return edmComplexType.Name;
             }
 
             if (edmTypeReference.IsEntity())
             {
-                if (edmType is IEdmEntityType ent) return ent.Name;
+                var ent = edmType as IEdmEntityType;
+                if (ent != null) return ent.Name;
             }
 
             if (edmTypeReference.IsCollection())
             {
-                if (edmType is IEdmCollectionType edmCollectionType)
+
+                IEdmCollectionType edmCollectionType = edmType as IEdmCollectionType;
+                if (edmCollectionType != null)
                 {
                     IEdmTypeReference elementTypeReference = edmCollectionType.ElementType;
                     IEdmPrimitiveType primitiveElementType = elementTypeReference.Definition as IEdmPrimitiveType;
                     if (primitiveElementType == null)
                     {
-                        if (elementTypeReference.Definition is IEdmSchemaElement schemaElement)
+                        IEdmSchemaElement schemaElement = elementTypeReference.Definition as IEdmSchemaElement;
+                        if (schemaElement != null)
                         {
                             clrTypeName = schemaElement.Name;
                             //@@@ 1.0.0-rc2
                             // clrTypeName = string.Format("ICollection<{0}>", clrTypeName);
-                            clrTypeName = $"List<{clrTypeName}>"; //to support RestSharp
+                            clrTypeName = string.Format("List<{0}>", clrTypeName); //to support RestSharp
                         }
                         return clrTypeName;
                     }
 
                     clrTypeName = EdmToClr(primitiveElementType);
-                    clrTypeName = $"List<{clrTypeName}>";
+                    clrTypeName = string.Format("List<{0}>", clrTypeName);
                 }
                 return clrTypeName;
             }//IsCollection

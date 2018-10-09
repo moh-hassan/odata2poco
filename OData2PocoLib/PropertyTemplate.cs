@@ -14,6 +14,8 @@ namespace OData2Poco
         public bool IsNavigate { get; set; }
         public bool IsNullable { get; set; }
         public bool Iscomputed { get; set; }
+
+        public int Serial { get; set; }
         //public string ToTrace { get; set; }
 
       

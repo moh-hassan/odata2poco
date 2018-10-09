@@ -25,9 +25,11 @@
       Version: $(version)
       What is new:
       - Maintainance: Migrating to vs2017 and c#7
+      - support colored Console
 
     </PackageReleaseNotes>
     <PackageTags>OData poco code-generation</PackageTags>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,7 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="1.9.71" />
+    <!-- <PackageReference Include="CommandLineParser" Version="1.9.71" /> -->
+    <PackageReference Include="CommandLineParser" Version="2.3.0" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

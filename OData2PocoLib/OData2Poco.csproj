@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFrameworks>netstandard1.1;netstandard2.0;net45</TargetFrameworks>
+    <!--<TargetFramework>net45</TargetFramework>-->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -31,13 +32,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\CommonTestData.cs" Link="CommonTestData.cs" />
     <Compile Include="..\Version.cs" Link="Version.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Edm" Version="5.8.4" />
-    <PackageReference Include="Microsoft.OData.Edm" Version="6.15.0" />
+    <!--<PackageReference Include="Microsoft.OData.Edm" Version="6.15.0" />-->
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2 " />
   </ItemGroup>
 
@@ -46,7 +46,32 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net" />
+    
   </ItemGroup>
+
+  <PropertyGroup>
+    <EDM>7</EDM>
+    <!-- Microsoft.OData.Edm v7+ -->
+    <!--<DefineConstants Condition=" '$(EDM)' == '7' "> $(DefineConstants);EDM7 </DefineConstants>-->
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition=" '$(EDM)'=='7' ">
+      <PropertyGroup>
+        <DefineConstants> $(DefineConstants);EDM7 </DefineConstants>
+      </PropertyGroup>
+
+      <ItemGroup>
+        <PackageReference Include="Microsoft.OData.Edm" Version="7.4.4" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Microsoft.OData.Edm" Version="6.15.0" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 
   <!-- <Import Project="..\OData2Poco.Shared\OData2Poco.Shared.projitems" Label="Shared" Condition="Exists('..\OData2Poco.Shared\OData2Poco.Shared.projitems')" /> -->
 

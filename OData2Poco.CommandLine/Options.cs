@@ -1,37 +1,32 @@
-﻿using CommandLine;
-using CommandLine.Text;
+﻿using System.Collections.Generic;
+using CommandLine;
 
-//CommandLine is a class library developed by Authors: Giacomo Stelluti Scala, Copyright (c) 2005 - 2015 Giacomo Stelluti Scala gimmemoore under Mit License.
+//CommandLine is a class library developed by Authors: Giacomo Stelluti Scala, Copyright (c) 2005 - 2018 Giacomo Stelluti Scala gimmemoore under Mit License.
 //Project site:  https://www.nuget.org/packages/CommandLineParser
 
-//(c) 2016 Mohamed Hassan, MIT License
-////Project site: http://odata2poco.codeplex.com/
+//(c) 2016-2018 Mohamed Hassan, MIT License
+////Project site: https://github.com/moh-hassan/odata2poco
 namespace OData2Poco.CommandLine
 {
     // Define a class to receive parsed values
     class Options
     {
-        //public Options()
-        //{
-        //    // Since we create this instance the parser will not overwrite it
-        //    ConfigVerb = new ConfigSubOptions(); //{ Key = true };
-        //}
         public Options()
         {
-            Attributes =new string[]{};
-            Assemplies = new string[] { };
+            Attributes = new List<string>();
+            Generators = new List<string>();
         }
 
         [Option('r', "url", Required = true, HelpText = "URL of OData feed.")]
         public string Url { get; set; }
 
-        [Option('u', "user",  HelpText = "User name for authentication.")]
+        [Option('u', "user", HelpText = "User name for authentication.")]
         public string User { get; set; }
 
         [Option('p', "password", HelpText = "password for authentication.")]
         public string Password { get; set; }
 
-        [Option('f', "filename", DefaultValue = "poco.cs", HelpText = "filename to save generated c# code.")]
+        [Option('f', "filename", Default ="poco.cs", HelpText = "filename to save generated c# code.")]
         public string CodeFilename { get; set; }
 
         //bugfix in 2.2.0
@@ -39,36 +34,24 @@ namespace OData2Poco.CommandLine
         [Option('x', "metafile", HelpText = "Xml filename to save metadata.")]
         public string MetaFilename { get; set; }
 
-        [Option('v', "verbose", DefaultValue = false, HelpText = "Prints C# code to standard output.")]
+        [Option('v', "verbose", HelpText = "Prints C# code to standard output.")]
         public bool Verbose { get; set; }
 
-        [Option('d', "header", DefaultValue = false, HelpText = "List  http header of the service")]
+        [Option('d', "header", HelpText = "List  http header of the service")]
         public bool Header { get; set; }
 
-        [Option('l', "list", DefaultValue = false, HelpText = "List POCO classes to standard output.")]
+        [Option('l', "list",  HelpText = "List POCO classes to standard output.")]
         public bool ListPoco { get; set; }
 
-        //version 2.0
-        //PocoSetting options
-        [Option('k', "key", DefaultValue = false, HelpText = "Add Key attribute [Key]")]
-        public bool Key { get; set; }
-        [Option('t', "table", DefaultValue = false, HelpText = "Add Table attribute")]
-        public bool Table { get; set; }
-
-        [Option('q', "required", DefaultValue = false, HelpText = "Add Required attribute")]
-        public bool Required { get; set; }
-
-        [Option('n', "navigation", DefaultValue = false, HelpText = "Add navigation properties")]
+        [Option('n', "navigation", HelpText = "Add navigation properties")]
         public bool Navigation { get; set; }
-    
-        [Option('e', "eager", DefaultValue = false, HelpText = "Add non virtual navigation Properties for Eager Loading")]
+
+        [Option('e', "eager", HelpText = "Add non virtual navigation Properties for Eager Loading")]
         public bool Eager { get; set; }
 
-        [Option('b', "nullable", DefaultValue = false, HelpText = "Add nullable data types")]
+        [Option('b', "nullable",  HelpText = "Add nullable data types")]
         public bool AddNullableDataType { get; set; }
-        
-        //[VerbOption("config", HelpText = "Configure code generation.")]
-        //public ConfigSubOptions ConfigVerb { get; set; }
+      
 
         [Option('i', "inherit", HelpText = "for class inheritance from  BaseClass and/or interfaces")]
         public string Inherit { get; set; }
@@ -76,47 +59,35 @@ namespace OData2Poco.CommandLine
         [Option('m', "namespace", HelpText = "A namespace prefix for the OData namespace")]
         public string Namespace { get; set; }
 
-        //camel /pascal , at least the first three chars Caps/lower or mixed e.g PAS or pas or Pas
-        [Option('c', "case", DefaultValue = "none", HelpText = "Type pas or camel to Convert Property Name to PascalCase or CamelCase")]
+      
+        [Option('c', "case", Default = "none", HelpText = "Type pas or camel to Convert Property Name to PascalCase or CamelCase")]
         public string NameCase { get; set; }
+      
+        [Option('a', "attribute",
+        HelpText = "Attributes, Allowed values: key, req, json,tab,dm,proto,db,display")]
+        public IEnumerable<string> Attributes { get; set; }
 
-        //All attribues e.g -a key required json customAttribute
-        [OptionArray('a', "attribute",
-        HelpText = "Type all attributes separated by one or more space.Allowed are:key required json table.")]
-        public string[] Attributes { get; set; }
+        [Option('g', "generate", HelpText = "generate text document")] //todo v3.1
+        public IEnumerable<string> Generators { get; set; }
+        [Option('L', "Lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
+        public string  Lang { get; set; } //v3
 
-        [Option('j', "Json", DefaultValue = false,
-            HelpText = "Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
+        //TODO--- ---------------------------
+        //following are obsolete and will be removed in the next release
+        //obsolete use -a key
+        [Option('k', "key", HelpText = "Add Key attribute [Key]")]
+        public bool Key { get; set; }
+
+        //obsolete use -a tab
+        [Option('t', "table", HelpText = "Add Table attribute")]
+        public bool Table { get; set; }
+
+        //obsolete use -a req
+        [Option('q', "required", HelpText = "Add Required attribute")]
+        public bool Required { get; set; }
+        //obsolete use -a json
+        [Option('j', "Json", HelpText = "Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
         public bool AddJsonAttribute { get; set; }
 
-        //todo: add feature, modify pocosetting
-        //external reference assemplies needed to be defined by user in using clause statement
-      //  [OptionArray('y', "values", DefaultValue = new string[] { })]
-        public string[] Assemplies { get; set; }
-        [ParserState]
-        public IParserState LastParserState { get; set; }
-
-        [HelpOption]
-        public string GetUsage()
-        {
-
-            var help = new HelpText
-            {
-                Heading = new HeadingInfo(ApplicationInfo.HeadingInfo),
-                Copyright = new CopyrightInfo(ApplicationInfo.Author,2016),
-                AdditionalNewLineAfterOption = true,
-                AddDashesToOption = true
-            };
-            //help.AddPreOptionsLine("<<license details here.>>");
-            help.AddPreOptionsLine("Usage: o2pGen [options]  ");
-            help.AddOptions(this);
-            return help;
-        }
     }
-
-    // class ConfigSubOptions
-    //{
-    //    [Option('k', "key", Required = false, HelpText = "Add Key Attribute")]
-    //    public string  Key { get; set; }
-    //}
 }

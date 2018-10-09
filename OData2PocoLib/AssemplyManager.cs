@@ -50,7 +50,8 @@ namespace OData2Poco
         //add all assemplies for using either for attribute or datatype 
         //TODO: load entries from configuration file
         //TODO: Entries may be passed to pocosetting for external references defined by user
-        private readonly Dictionary<string, string> _assemplyDict = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+      
+        private readonly Dictionary<string, string> _assemplyDict = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase)
         {
             //assemplies for attributes
             {"Key","System.ComponentModel.DataAnnotations"},
