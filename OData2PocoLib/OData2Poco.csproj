@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
-    <!--<TargetFrameworks>netstandard2.0;net45</TargetFrameworks>-->
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <!--<TargetFramework>net45</TargetFramework>-->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -32,9 +32,6 @@
     </PackageReleaseNotes>
     <PackageTags>OData poco code-generation</PackageTags>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Api\O2P.cs.txt" />
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\Version.cs" Link="Version.cs" />
@@ -56,7 +53,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <EDM>6</EDM>
+    <EDM>7</EDM>
     <!-- Microsoft.OData.Edm v7+ -->
     <!--<DefineConstants Condition=" '$(EDM)' == '7' "> $(DefineConstants);EDM7 </DefineConstants>-->
   </PropertyGroup>

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
+using OData2Poco.CustAttributes;
 using OData2Poco.TextTransform;
 
 namespace OData2Poco
@@ -15,7 +17,13 @@ namespace OData2Poco
     {
         private static IPocoGenerator _pocoGen;
         public IDictionary<string, ClassTemplate> PocoModel { get;  set; } //= new Dictionary<string, ClassTemplate>();
-        public string PocoModelAsJson => JsonConvert.SerializeObject(PocoModel, Formatting.Indented);
+        public string PocoModelAsJson
+        {
+            get
+            {
+                return JsonConvert.SerializeObject(PocoModel, Formatting.Indented);
+            }
+        }
 
         /// <summary>
         ///     Constructor
@@ -25,6 +33,7 @@ namespace OData2Poco
         public PocoClassGeneratorCs(IPocoGenerator pocoGen, PocoSetting setting = null)
         {
             PocoSetting = setting ?? new PocoSetting();
+            AttributeFactory.Default.Init(PocoSetting);
             _pocoGen = pocoGen;
             PocoModel = new Dictionary<string, ClassTemplate>();
             Template = new FluentCsTextTemplate();
@@ -40,7 +49,7 @@ namespace OData2Poco
         }
 
         private static string CodeText { get; set; }
-        public FluentCsTextTemplate Template { get; }
+        public FluentCsTextTemplate Template { get; private set; }
         public PocoSetting PocoSetting { get; set; }
 
         /// <summary>
@@ -48,7 +57,10 @@ namespace OData2Poco
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public ClassTemplate this[string key] => PocoModel[key];
+        public ClassTemplate this[string key]
+        {
+            get { return PocoModel[key]; }
+        }
 
         //container for all classes
         public List<ClassTemplate> ClassList
@@ -131,14 +143,16 @@ namespace OData2Poco
             ////for enum
             if (ent.IsEnum)
             {
-                var elements = string.Join(", ", ent.EnumElements.ToArray());
-                var enumString = $"public enum {ent.Name} {{ {elements} }}";
+                var elements = string.Join(",\r\n ", ent.EnumElements.ToArray());
+                //var enumString = string.Format("public enum {0} {{ {1} }}", ent.Name, elements);
+                var enumString = $"\tpublic enum {ent.Name}\r\n\t {{\r\n {elements} \r\n\t}}";
                 return enumString;
             }
 
 
             //v 2.2
-            foreach (var item in ent.GetAttributes(PocoSetting))
+            //foreach (var item in ent.GetAttributes(PocoSetting))
+            foreach (var item in ent.GetAllAttributes()) //not depend on pocosetting
             {
                 csTemplate.PushIndent("\t").WriteLine(item).PopIndent();
             }
