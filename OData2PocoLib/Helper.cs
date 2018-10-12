@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Xml;
 using OData2Poco.Extension;
 
@@ -11,13 +14,6 @@ namespace OData2Poco
     /// </summary>
     public class Helper
     {
-        //for test as accepting null
-        //private TimeSpan? ts;
-        //private DateTime? dt;
-        //private DateTimeOffset? dto;
-        //private Guid? guid;
-
-
         /// <summary>
         /// Nullable DataType
         /// </summary>
@@ -40,7 +36,7 @@ namespace OData2Poco
             {"ulong" , "?"},
             {"void" , "?"},
             ////Nullable DateTime issue #3 , included in v2.3.0
-            {"DateTime","?" },   
+            {"DateTime","?" },
             {"DateTimeOffset","?" },
             {"TimeSpan","?" },
             {"Guid","?" }
@@ -121,6 +117,48 @@ namespace OData2Poco
             //Debug.WriteLine("{0}\n{1}\n",fixedStringOne,fixedStringTwo);
             bool isEqual = String.Equals(fixedStringOne, fixedStringTwo, StringComparison.OrdinalIgnoreCase);
             return isEqual;
+        }
+
+        public static string GetEmbeddedResource(string ns, string res)
+        {
+            using (var reader = new StreamReader(Assembly.GetExecutingAssembly()
+                                                     .GetManifestResourceStream($"{ns}.{res}") ?? throw new InvalidOperationException()))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+        /// <summary>
+        ///  find plugin dlls at runtime
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="foldr"></param>
+        /// <returns></returns>
+        public static List<object> LoadPlugin<T>(string foldr)
+        {
+            if (!Directory.Exists(foldr))
+                return Enumerable.Empty<object>().ToList();
+           
+            string[] dlls = Directory.GetFiles(foldr, "*.dll");
+            var list = new List<object>();
+            //loop through the found dlls and load them
+            foreach (string dll in dlls)
+            {
+                try
+                {
+                    Assembly plugin = Assembly.LoadFile(dll);
+                    //find the classes that implement the interface T and get an object of that type
+                    var instances = from t in plugin.GetTypes()
+                                    where t.GetInterfaces().Contains(typeof(T))
+                                          && t.GetConstructor(Type.EmptyTypes) != null //constructor w/o param
+                                    select Activator.CreateInstance(t);
+                    list.AddRange(instances);
+                }
+                catch 
+                {
+                    // ignored, bad plugin dll
+                }
+            }
+            return list;
         }
 
     }

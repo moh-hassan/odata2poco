@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using OData2Poco.CustAttributes;
+
 
 namespace OData2Poco
 {
@@ -14,7 +16,7 @@ namespace OData2Poco
         public List<PropertyTemplate> Properties { get; set; }
         public List<string> Keys { get; set; }
         public List<string> Navigation { get; set; }
-        // public CodeTemplat CodeTemplatType { get; set; }
+        
         //to support enum generation code
         public bool IsEnum { get; set; }
         public List<string> EnumElements { get; set; }
@@ -28,5 +30,9 @@ namespace OData2Poco
         //v1.4.0
         public string EntitySetName { get; set; }
         public bool IsComplex { get; set; }
-     }
+
+        private readonly AttributeFactory _attributeFactory = AttributeFactory.Default;
+
+        public List<string> GetAllAttributes() => _attributeFactory.GetAllAttributes(this);
+    }
 }

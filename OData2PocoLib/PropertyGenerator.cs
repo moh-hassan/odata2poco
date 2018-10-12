@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OData2Poco.CustAttributes;
 using OData2Poco.Extension;
 
 namespace OData2Poco
@@ -11,6 +12,7 @@ namespace OData2Poco
     /// </summary>
  public   class PropertyGenerator
     {
+        private AttributeFactory AttributeManager = AttributeFactory.Default;
         private readonly PropertyTemplate _property; //{ get; set; }
         private readonly PocoSetting _setting;// { get; set; }
         /// <summary>
@@ -30,30 +32,31 @@ namespace OData2Poco
         /// <returns></returns>
         public List<string> GetAllAttributes()
         {
-            var list = new List<string>();
+            //var list = new List<string>();
 
-            //required Attribute
-            if (_setting.AddRequiredAttribute)
-            {
-                // if (!Property.IsNullable) list.Add(_getAttribute("Required"));
-                if (!_property.IsNullable) list.Add("Required".ToCsAttribute());
-            }
+            ////required Attribute
+            //if (_setting.AddRequiredAttribute)
+            //{
+            //    // if (!Property.IsNullable) list.Add(_getAttribute("Required"));
+            //    if (!_property.IsNullable) list.Add("Required".ToCsAttribute());
+            //}
 
-            if (_setting.AddKeyAttribute)
-            {
-                if (_property.IsKey) list.Add("Key".ToCsAttribute());
-            }
+            //if (_setting.AddKeyAttribute)
+            //{
+            //    if (_property.IsKey) list.Add("Key".ToCsAttribute());
+            //}
 
-            if (_setting.AddJsonAttribute)
-            {
-                list.Add($"[JsonProperty(PropertyName = \"{_property.PropName}\")]");
-            }
+            //if (_setting.AddJsonAttribute)
+            //{
+            //    list.Add(string.Format("[JsonProperty(PropertyName = \"{0}\")]", _property.PropName));
+            //}
 
-            if (_setting.AddDataMemberAttribute)
-            {
-                list.Add("DataMember".ToCsAttribute());
-            }
-            return list;
+            //if (_setting.AddDataMemberAttribute)
+            //{
+            //    list.Add("DataMember".ToCsAttribute());
+            //}
+            //return list;
+            return AttributeManager.GetAllAttributes(_property);
         }
         /// <summary>
         /// Name in camlcase /pascase
@@ -81,22 +84,41 @@ namespace OData2Poco
         /// <summary>
         /// Virtual Modifier
         /// </summary>
-        public string VirtualModifier => _setting.AddNavigation && !_setting.AddEager ? "virtual" : String.Empty;
+        public string VirtualModifier
+        {
+            get
+            {
+                return _setting.AddNavigation && !_setting.AddEager ? "virtual" : String.Empty;
+            }
+        }
 
         /// <summary>
         /// NullableModifier represented by "?" added to type , e.g int?
         /// </summary>
-        public string NullableModifier => _setting.AddNullableDataType && _property.IsNullable ? Helper.GetNullable(_property.PropType) : String.Empty;
+        public string NullableModifier
+        {
+            get
+            {
+                return _setting.AddNullableDataType && _property.IsNullable ? Helper.GetNullable(_property.PropType) : String.Empty;
+            }
+        }
 
         /// <summary>
         /// The declaration of property in C# 
         /// </summary>
-        public string Declaration =>
-            $"{VirtualModifier} public {_property.PropType + NullableModifier} {Name} {{get;set;}} {_property.PropComment}\n";
+        public string Declaration
+        {
+            get
+            {
+                return string.Format("{0} {1} {2} {3} {{get;set;}} {4}\n",
+                VirtualModifier, "public", _property.PropType + NullableModifier, Name, _property.PropComment);
+            }
+        }
 
         public override string ToString()
         {
-            var text = $"{string.Join(Environment.NewLine, GetAllAttributes())}\n{Declaration}";
+            var text = string.Format("{0}\n{1}",
+                string.Join(Environment.NewLine,GetAllAttributes()), Declaration);
             return text;
         }
       

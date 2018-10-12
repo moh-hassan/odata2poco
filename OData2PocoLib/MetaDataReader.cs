@@ -113,5 +113,7 @@ namespace OData2Poco
             //Debug.WriteLine(xmlContent);
             return metaData;
         }
+
+        public MetaDataInfo MetaData { get; set; }
     }
 }

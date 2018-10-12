@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
-
 
 namespace OData2Poco.Api
 {
@@ -21,28 +21,53 @@ namespace OData2Poco.Api
             MetaData = new MetaDataInfo();
         }
 
+        public O2P(Action <PocoSetting> config)
+        {
+            Setting= new PocoSetting();
+            config(Setting);
+        }
+
         private MetaDataInfo MetaData { get; set; }
         private Uri ServiceUri { get; set; }
 
-        public string ServiceUrl => MetaData.ServiceUrl;
+        public string ServiceUrl
+        {
+            get { return MetaData.ServiceUrl; }
+        }
 
         //   private string _xmlContent { get; set; }
         /// <summary>
         ///     metadata which is read from url /file or xml string
         /// </summary>
-        public string MetaDataAsString => MetaData.MetaDataAsString;
+        public string MetaDataAsString
+        {
+            get { return MetaData.MetaDataAsString; }
+        }
 
-        public string MetaDataVersion => MetaData.MetaDataVersion;
+        public string MetaDataVersion
+        {
+            get { return MetaData.MetaDataVersion; }
+        }
 
         public string ServiceVersion
-            //for http media
-            => MetaData.ServiceVersion;
+        {
+            get { return MetaData.ServiceVersion; }
+        } //for http media
 
-        public string SchemaNamespace => MetaData.SchemaNamespace;
+        public string SchemaNamespace
+        {
+            get { return MetaData.SchemaNamespace; }
+        }
 
-        public Dictionary<string, string> ServiceHeader => MetaData.ServiceHeader;
+        public Dictionary<string, string> ServiceHeader
+        {
+            get { return MetaData.ServiceHeader; }
+        }
 
-        public Media MediaType => MetaData.MediaType;
+        public Media MediaType
+        {
+            get { return MetaData.MediaType; }
+        }
 
         public PocoSetting Setting { get; set; }
        public Media Source { get; set; }
@@ -77,6 +102,12 @@ namespace OData2Poco.Api
             Setting.AddEager = true;
         }
 
+        public async Task<MetaDataInfo> LoadMetaDataHttpAsync(Uri uri, string user = "", string password = "")
+        {
+            MetaData = await MetaDataReader.LoadMetaDataHttpAsync(uri, user, password);
+            return MetaData;
+        }
+
         public async Task<string> GenerateAsync(Uri uri, string user = "", string password = "")
         {
             //if (string.IsNullOrEmpty(uri.AbsoluteUri))
@@ -86,7 +117,7 @@ namespace OData2Poco.Api
             var gen = PocoFactory.GeneratePoco(MetaData, Setting);
             ClassList = gen.ClassList;
             CodeText = gen.ToString();
-            Debug.WriteLine(CodeText);
+            //Debug.WriteLine(CodeText);
             return CodeText;
         }
 
@@ -107,5 +138,7 @@ namespace OData2Poco.Api
             Debug.WriteLine(CodeText);
             return CodeText;
         }
+
+       
     }
 }

@@ -67,26 +67,26 @@ namespace OData2Poco.CommandLine
         HelpText = "Attributes, Allowed values: key, req, json,tab,dm,proto,db,display")]
         public IEnumerable<string> Attributes { get; set; }
 
-        [Option('g', "generate", HelpText = "generate text document")] //todo v3.1
+       // [Option('g', "generate", HelpText = "generate text document")] //todo v3.1
         public IEnumerable<string> Generators { get; set; }
-        [Option('L', "Lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
+        [Option("lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
         public string  Lang { get; set; } //v3
 
         //TODO--- ---------------------------
         //following are obsolete and will be removed in the next release
         //obsolete use -a key
-        [Option('k', "key", HelpText = "Add Key attribute [Key]")]
+        [Option('k', "key", HelpText = "Obsolete, use -a key, Add Key attribute [Key]")]
         public bool Key { get; set; }
 
         //obsolete use -a tab
-        [Option('t', "table", HelpText = "Add Table attribute")]
+        [Option('t', "table", HelpText = "Obsolete, use -a tab, Add Table attribute")]
         public bool Table { get; set; }
 
         //obsolete use -a req
-        [Option('q', "required", HelpText = "Add Required attribute")]
+        [Option('q', "required", HelpText = "Obsolete, use -a req, Add Required attribute")]
         public bool Required { get; set; }
         //obsolete use -a json
-        [Option('j', "Json", HelpText = "Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
+        [Option('j', "Json", HelpText = "Obsolete, use -a json, Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
         public bool AddJsonAttribute { get; set; }
 
     }

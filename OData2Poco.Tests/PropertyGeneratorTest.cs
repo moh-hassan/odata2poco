@@ -1,22 +1,11 @@
 ﻿//#define DEBUG
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using NUnit.Framework;
+using OData2Poco.CustAttributes;
 using OData2Poco.Extension;
-
-/*
-The tests applied for property are:
--c NameCase: camel /pascal/none
--j AddJsonAttribute: True/false
--b AddNullableDataType: True
--e Eager: False/true
-
--k Key: False/true
--n Navigation: True
--q Required: False
- * note: no need to test these services in other location. Remove it
- * */
 
 namespace OData2Poco.Tests
 {
@@ -24,6 +13,8 @@ namespace OData2Poco.Tests
     [TestFixture]
     class PropertyGeneratorTest
     {
+        private readonly AttributeFactory _attributeManager = AttributeFactory.Default;
+      
         [Test]
         public void DefaultPropertyDeclaration()
         {
@@ -34,168 +25,219 @@ namespace OData2Poco.Tests
                 IsKey = true
             };
             var pg = new PropertyGenerator(property, new PocoSetting());
-           // Debug.WriteLine(pg);
+         
             Assert.IsTrue(pg.Declaration.Contains("public int CategoryID {get;set;}"));
         }
         [Test]
         public void AllAttributesPropertyDeclaration()
         {
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddKeyAttribute = true,
+                AddRequiredAttribute = true,
+                AddJsonAttribute = true
+            };
+            _attributeManager.Init(setting);
+
             PropertyTemplate property = new PropertyTemplate
             {
                 PropName = "CategoryID",
                 PropType = "int",
                 IsKey = true
             };
-            var pg = new PropertyGenerator(property, new PocoSetting
-            {
-                AddKeyAttribute = true,
-                AddRequiredAttribute = true,
-                AddJsonAttribute = true
-            });
-            //Debug.WriteLine(pg);
 
-            Assert.IsTrue(pg.ToString().Contains("[Key]") &&
-                pg.ToString().Contains("[Required]") &&
-                pg.ToString().Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+      
+
+            // Assert 
+            Assert.IsTrue(sut.ToString().Contains("[Key]") &&
+                sut.ToString().Contains("[Required]") &&
+                sut.ToString().Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
         }
 
         [Test]
         public void CamelCasePropertyDeclaration()
         {
+
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                NameCase = CaseEnum.Camel
+            };
+            _attributeManager.Init(setting);
             var property = new PropertyTemplate
             {
                 PropName = "CategoryID",
                 PropType = "int",
                 IsKey = true
             };
-            var pg = new PropertyGenerator(property, new PocoSetting
-            {
-                NameCase = CaseEnum.Camel
-            });
-           // Debug.WriteLine(pg);
-            Assert.IsTrue(pg.Declaration.Contains("public int categoryID {get;set;}"));
+
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+          
+            // Assert 
+            Assert.IsTrue(sut.Declaration.Contains("public int categoryID {get;set;}"));
         }
         [Test]
         public void PascalCasePropertyDeclaration()
         {
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                NameCase = CaseEnum.Pas
+            };
+            _attributeManager.Init(setting);
+
             var property = new PropertyTemplate
             {
                 PropName = "Category_ID",
                 PropType = "int",
                 IsKey = true
             };
-            var pg = new PropertyGenerator(property, new PocoSetting
-            {
-                NameCase = CaseEnum.Pas
-            });
-            //Debug.WriteLine(pg);
-            Assert.IsTrue(pg.Declaration.Contains("public int CategoryID {get;set;}"));
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+           
+            // Assert 
+            Assert.IsTrue(sut.Declaration.Contains("public int CategoryID {get;set;}"));
         }
         [Test]
         public void NoneCasePropertyDeclaration()
         {
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                NameCase = CaseEnum.None
+            };
+            _attributeManager.Init(setting);
             var property = new PropertyTemplate
             {
                 PropName = "Category_ID",
                 PropType = "int",
                 IsKey = true
             };
-            var pg = new PropertyGenerator(property, new PocoSetting
-            {
-                NameCase = CaseEnum.None
-            });
-            //Debug.WriteLine(pg);
-            Assert.IsTrue(pg.Declaration.Contains("public int Category_ID {get;set;}"));
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+         
+            // Assert 
+            Assert.IsTrue(sut.Declaration.Contains("public int Category_ID {get;set;}"));
         }
         [Test]
         public void JsonAttributePropertyDeclaration()
         {
-            //public int CategoryID {get;set;} //PrimaryKey not null
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddJsonAttribute = true
+            };
+            _attributeManager.Init(setting);
             PropertyTemplate property = new PropertyTemplate
             {
                 PropName = "CategoryID",
                 PropType = "int",
                 IsKey = true
             };
-            var pg = new PropertyGenerator(property, new PocoSetting
-            {
-                AddJsonAttribute = true
-            });
-          //  Debug.WriteLine(pg);
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+            
+            // Assert 
             var expected = "[JsonProperty(PropertyName = \"CategoryID\")]";
 
-            Assert.IsTrue(pg.ToString().Contains(expected));
+            Assert.IsTrue(sut.ToString().Contains(expected));
         }
 
         [Test]
         public void JsonAttributeWithCamelCasePropertyDeclaration()
         {
-            //public int CategoryID {get;set;} //PrimaryKey not null
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddJsonAttribute = true,
+                NameCase = CaseEnum.Camel
+            };
+            _attributeManager.Init(setting);
+          
             PropertyTemplate property = new PropertyTemplate
             {
                 PropName = "CategoryID",
                 PropType = "int",
                 IsKey = true
             };
-            var pg = new PropertyGenerator(property, new PocoSetting
-            {
-                AddJsonAttribute = true,
-                NameCase = CaseEnum.Camel
-            });
-          //  Debug.WriteLine(pg);
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+            // Assert 
             var expected = "[JsonProperty(PropertyName = \"CategoryID\")] " +Environment.NewLine+
                            "public int categoryID {get;set;} ";
 
-         //   Debug.WriteLine("Expected: " + expected);
-            //Assert.IsTrue(Helper.CompareStringIgnoringSpaceCr(pg.ToString(), expected));
-            Assert.AreEqual(pg.ToString().TrimAllSpace(), expected.TrimAllSpace());
+       
+            Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
         }
         [Test]
         public void KeyAttributePropertyDeclaration()
         {
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddKeyAttribute = true
+            };
+            _attributeManager.Init(setting);
             PropertyTemplate property = new PropertyTemplate
             {
                 PropName = "CategoryID",
                 PropType = "int",
                 IsKey = true
             };
-            var pg = new PropertyGenerator(property, new PocoSetting
+            // Act 
+            var sut = new PropertyGenerator(property, new PocoSetting
             {
                 AddKeyAttribute = true
             });
-          //  Debug.WriteLine(pg);
+            // Assert 
             var expected = @"
 [Key]
 public int CategoryID {get;set;} ";
             //Assert.IsTrue(CompareStringIgnoringSpaceCr(pg.ToString(), expected));
-            Assert.AreEqual(pg.ToString().TrimAllSpace(), expected.TrimAllSpace());
+            Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
         }
 
         [Test]
         public void RequiredAttributePropertyDeclaration()
         {
-            //public int CategoryID {get;set;} //PrimaryKey not null
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddRequiredAttribute = true
+            };
+            _attributeManager.Init(setting);
+           
             PropertyTemplate property = new PropertyTemplate
             {
                 PropName = "CategoryID",
                 PropType = "int",
                 IsKey = true
             };
-            var pg = new PropertyGenerator(property, new PocoSetting
-            {
-                AddRequiredAttribute = true
-            });
-            //Debug.WriteLine(pg);
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+            // Assert 
+           
             var expected = @"
 [Required]
 public int CategoryID {get;set;} ";
             //Assert.IsTrue(Helper.CompareStringIgnoringSpaceCr(pg.ToString(), expected));
-            Assert.AreEqual(pg.ToString().TrimAllSpace(), expected.TrimAllSpace());
+            Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
         }
+
         [Test]
         //Description property is null
         public void IsNullablePropertyDeclaration()
-        {
+        { 
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddNullableDataType = true
+            };
+            _attributeManager.Init(setting);
             PropertyTemplate property = new PropertyTemplate
             {
                 IsKey = false,
@@ -203,13 +245,11 @@ public int CategoryID {get;set;} ";
                 PropName = "dummy1",
                 PropType = "int"
             };
-
-            PropertyGenerator pg = new PropertyGenerator(property, new PocoSetting
-            {
-                AddNullableDataType = true
-            });
-            //Debug.WriteLine(pg);
-            Assert.IsTrue(pg.Declaration.Contains("public int? dummy1 {get;set;}"));
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+            // Assert 
+           
+            Assert.IsTrue(sut.Declaration.Contains("public int? dummy1 {get;set;}"));
         }
 
 
@@ -217,7 +257,13 @@ public int CategoryID {get;set;} ";
         //products
         public void EagerVirtualPropertyDeclaration()
         {
-
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddEager = true,
+                AddNavigation = true
+            };
+            _attributeManager.Init(setting);
             PropertyTemplate property = new PropertyTemplate
             {
                 PropName = "Products",
@@ -225,19 +271,22 @@ public int CategoryID {get;set;} ";
                 PropComment = "// not null",
                 IsNavigate = true
             };
-
-            PropertyGenerator pg = new PropertyGenerator(property, new PocoSetting
-            {
-                AddEager = true,
-                AddNavigation = true
-            });
-         //   Debug.WriteLine(pg);
-            Assert.IsTrue(pg.Declaration.Contains("public List<Product> Products {get;set;}"));
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+            // Assert 
+            Assert.IsTrue(sut.Declaration.Contains("public List<Product> Products {get;set;}"));
         }
 
         [Test]
         public void LazyirtualPropertyDeclaration()
-        {
+        { 
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddEager = false,
+                AddNavigation = true
+            };
+            _attributeManager.Init(setting);
             var property = new PropertyTemplate
             {
                 PropName = "Products",
@@ -245,16 +294,46 @@ public int CategoryID {get;set;} ";
                 PropComment = "// not null",
                 IsNavigate = true
             };
-            PropertyGenerator pg = new PropertyGenerator(property, new PocoSetting
-            {
-                AddEager = false,
-                AddNavigation = true
-            });
-         //   Debug.WriteLine(pg);
-            Assert.IsTrue(pg.Declaration.Contains("virtual public List<Product> Products {get;set;}"));
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+            // Assert 
+            Assert.IsTrue(sut.Declaration.Contains("virtual public List<Product> Products {get;set;}"));
         }
 
-       
+        [Test]
+        [TestCase("dm", "[DataMember]")]
+        [TestCase("proto", "[ProtoMember(1)]")]
+        [TestCase("key", "[Key]")]
+        [TestCase("req", "[Required]")]
+        //[TestCase("tab", "")]
+        //[TestCase("notExist", "")]
+        [TestCase("[Non_named]", "[Non_named]")]
+        [TestCase("display", "[Display(Name = \"Product Id\")]")]
+        [TestCase("db", "[Key]")]
+        public void test1(string att,string expected)
+        {
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                Attributes = new List<string> {att } 
+            };
+            _attributeManager.Init(setting);
+
+            var property = new PropertyTemplate
+            {
+                PropName = "ProductId",
+                PropType = "string",
+                Serial = 1,
+                IsKey = true,
+              
+            };
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+            // Assert 
+             Assert.IsTrue(sut.ToString().Contains(expected));
+          
+            Console.WriteLine(sut);
+        }
 
     }
 }

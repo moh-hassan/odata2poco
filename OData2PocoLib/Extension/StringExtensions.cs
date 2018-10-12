@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Newtonsoft.Json;
@@ -6,47 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace OData2Poco.Extension
 {
-    /* 
-     Reference:  https://msdn.microsoft.com/en-us/library/x2dbyw72(v=vs.71).aspx
-Introduction
-=============  
- Capitalization Styles
-======================     
- Use the following three conventions for capitalizing identifiers.
-
-Pascal case
-============
-The first letter in the identifier and the first letter of each subsequent concatenated word are capitalized. 
-You can use Pascal case for identifiers of three or more characters. For example:
-BackColor, TypeName , RedValue
-
-Camel case
-===========
-The first letter of an identifier is lowercase and the first letter of each subsequent concatenated word is capitalized. For example:
-backColor , typeName , redValue
     
-Uppercase
-==========
-All letters in the identifier are capitalized. Use this convention only for identifiers that consist of two or fewer letters. For example:
-
-System.IO
-System.Web.UI
-
-     * also:
-     * Pascal case: https://en.wikipedia.org/wiki/PascalCase
-     * camel case:  https://en.wikipedia.org/wiki/Camel_case
-     * 
-     * 
-     * note:  Snake_case in which the words are always combined with an underscore character (_).
-
-For example:
-
-    back_color
-    time_utc
-    first_name
-    computer_ram_size
-
-*/
     /// <summary>
     /// Utility for CamelCase/PascalCase Conversion
     /// </summary>
@@ -130,7 +92,7 @@ For example:
             var lines = text.Split(new[]{'\n','\r'}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
-                result += $"{trimmer.Replace(line.Trim(), " ")}\n";
+                result += string.Format("{0}\n",trimmer.Replace(line.Trim(), " "));
             }
            // Console.WriteLine("result:\n{0}",result);
             return result;
@@ -205,6 +167,37 @@ For example:
             var deserializedObject = JsonConvert.DeserializeObject<T>(json);
             return deserializedObject;
 
+        }
+
+        public static string Quote(this string text, char c = '"') => $"{c}{text}{c}";
+
+        public static string UnQuote(this string text)
+        {
+            return text.Trim('\'').Trim('"');
+        }
+        public static string ToTitle(this string text)
+        {
+            if (text.Length <= 2) return text;
+            text = text.ToPascalCase();
+            StringBuilder builder = new StringBuilder();
+            foreach (char c in text)
+            {
+                if (Char.IsUpper(c) && builder.Length > 0) builder.Append(' ');
+                builder.Append(c);
+            }
+            return builder.ToString();
+        }
+
+        public static string ToSnakeCase(this string str)
+        {
+            var text = string.Concat(str.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString())).ToLower();
+            text = text.Replace("__", "_");
+            return text;
+        }
+
+        public static string Dump(this object o)
+        {
+            return ToJson(o);
         }
     }
 }

@@ -23,10 +23,9 @@ namespace OData2Poco.CommandLine
         static int _retCode = (int)ExitCodes.Success;
         static async Task Main(string[] args)
         {
-            Trace.WriteLine("---------Application started.-------");
-            //Trace.Listeners.Clear();
+         
+           
             var argument = string.Join(" ", args);
-            Trace.WriteLine($"CommandLine: {argument}");
             try
             {
                 if (!(Console.IsOutputRedirected || Console.IsErrorRedirected))
@@ -38,7 +37,6 @@ namespace OData2Poco.CommandLine
                 Sw.Stop();
                 Console.WriteLine();
                 Logger.Sucess("Total processing time: {0} sec", Sw.ElapsedMilliseconds / 1000.0);
-                Trace.WriteLine($"Total processing time: { Sw.ElapsedMilliseconds / 1000.0} sec");
 
             }
             catch (Exception ex)
@@ -46,8 +44,7 @@ namespace OData2Poco.CommandLine
                 _retCode = (int)ExitCodes.HandledException;
                 Logger.Error("Error in executing the command: o2pgen {0}", argument);
                 Logger.Error("Error Message:\n {0}", ex.FullExceptionMessage());
-                Trace.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage());
-                Trace.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage(true));
+             
 #if DEBUG
                 Logger.Error("--------------------Exception Details---------------------");
                 Logger.Error("Error Message:\n {0}", ex.FullExceptionMessage(true));
@@ -58,7 +55,6 @@ namespace OData2Poco.CommandLine
             finally
             {
                 Logger.Info($"Application Exit code: {_retCode}");
-                Trace.WriteLine($"Application Exit code: {_retCode}");
                 Environment.Exit(_retCode);
             }
 
@@ -90,7 +86,6 @@ namespace OData2Poco.CommandLine
             //catch exception of parser before go on
 
             var result = parser.ParseArguments<Options>(args);
-            Trace.WriteLine($"Tag: {result.Tag}");
 
             var retCode = await result.MapResult(
                async x =>
@@ -103,7 +98,7 @@ namespace OData2Poco.CommandLine
                 },
                 errs =>
                 {
-                    Trace.WriteLine("------errs, Argument Exception, Show user defined help ------");
+                   
                     var helpText = HelpText.AutoBuild(result, h =>
                     {
                         h.AdditionalNewLineAfterOption = false;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OData2Poco.Api;
 
 //these tests are moved from OData2Poco.CommandLine.Test, modified to use O2P class
@@ -14,7 +9,7 @@ namespace OData2Poco.Tests
         [Test]
         public void InheritanceEnabledByDefaultTest()
         {
-            var o2p= new O2P();
+            var o2p =  new O2P();
             Assert.IsTrue(o2p.Setting.UseInheritance);
         }
         [Test]
@@ -25,7 +20,7 @@ namespace OData2Poco.Tests
             {
                 Inherit = "MyBaseClass",
             };
-            var o2p = new O2P(setting);
+            var o2p =  new O2P(setting);
             Assert.IsFalse(o2p.Setting.UseInheritance);
         }
     }

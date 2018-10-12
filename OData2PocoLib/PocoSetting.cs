@@ -1,4 +1,7 @@
-﻿namespace OData2Poco
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace OData2Poco
 {
     /// <summary>
     /// Setting options to control the code generation
@@ -48,7 +51,7 @@
         /// Indicates whether or not to generate classes that follow the inheritance hierarchy of the ODATA types. Default is true. Disable by setting Inherit to a non-null value.
         /// 
         /// </summary>
-        public bool UseInheritance => Inherit == null;
+        public bool UseInheritance => string.IsNullOrEmpty(Inherit);
         /// <summary>
         /// Gets or sets a namespace prefix.
         /// </summary>
@@ -71,6 +74,9 @@
         ///example:     [JsonProperty(PropertyName = "email")]
         /// </summary>
         public bool AddJsonAttribute { get; set; }
+
+        public List<string> Attributes { get; set; }
+
         /// <summary>
         /// Initialization
         /// </summary>
@@ -78,10 +84,12 @@
         {
             Lang= Language.CS;
             NamespacePrefix = string.Empty;
-            Inherit = null;
-            NameCase= CaseEnum.None;
+           Inherit = null;
+            NameCase = CaseEnum.None;
             AddJsonAttribute= false;
-            
+            Attributes = Enumerable.Empty<string>().ToList();
+
+
         }
        
     }
