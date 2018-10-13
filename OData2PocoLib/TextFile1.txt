@@ -1,5 +1,0 @@
-﻿To build OData2Poco from source
-in the Package Manager Console , run the following commands
-
-install-package Microsoft.Data.Edm  -version 5.7.0
-install-package Microsoft.OData.Edm  -version 6.15.0

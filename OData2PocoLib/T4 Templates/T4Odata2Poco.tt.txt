@@ -28,6 +28,6 @@ notes:for T4 code generation , rename this file as your_file_name.tt and set pro
 	if (string.IsNullOrEmpty(user))   o2p = new O2P(url);
 	else o2p = new O2P(url,user,password);
 	 
-    var code = o2p.Generate();
+    var code = o2p.GenerateAsync().Result;
 #>
 <#=code#>  

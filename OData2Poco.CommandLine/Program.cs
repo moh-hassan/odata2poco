@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using CommandLine;
 using CommandLine.Text;
 using OData2Poco.Coloring;
-using OData2Poco.Exceptions;
 using OData2Poco.Extension;
 
 //todo: file source
@@ -18,7 +17,6 @@ namespace OData2Poco.CommandLine
     internal class Program
     {
         private static readonly Stopwatch Sw = new Stopwatch();
-        // ReSharper disable once ArrangeTypeMemberModifiers
         static readonly ConColor Logger = ConColor.Default;
         static int _retCode = (int)ExitCodes.Success;
         static async Task Main(string[] args)

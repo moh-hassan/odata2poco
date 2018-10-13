@@ -14,9 +14,7 @@ using Microsoft.Data.Edm.Csdl;
 using Microsoft.OData.Edm;
 using Microsoft.OData.Edm.Validation;
 using Microsoft.OData.Edm.Csdl;
-using Microsoft.OData.Edm.Vocabularies;
 
-//for enum in Odata.Edm v6.x
 #if !EDM7
 using Microsoft.OData.Edm.Library.Values;
 #endif
@@ -62,7 +60,7 @@ namespace OData2Poco.V4
             var tr = new StringReader(xmlString);
             var reader = XmlReader.Create(tr);
 
-            IEnumerable<EdmError> errors = null;
+            //IEnumerable<EdmError> errors = null;
             try
             {
 #if EDM7
@@ -70,16 +68,15 @@ namespace OData2Poco.V4
 #else
                 EdmxReader
 #endif
-                    .TryParse(reader, true, out model2, out _); //v7+ , IgnoreUnexpectedElementsAndAttributes
-                                                                // .TryParse(reader, true, out model2, out errors);
+                  .TryParse(reader, true, out model2, out _); // IgnoreUnexpectedElementsAndAttributes
+                                                              //  .TryParse(reader, true, out model2, out errors);
             }
             finally
             {
-                //log errors
+
                 ((IDisposable)reader).Dispose();
             }
 
-            //  model2 = EdmxReader.Parse(XmlReader.Create(tr)); //v6.15.0
 
             return model2;
         }
@@ -123,14 +120,14 @@ namespace OData2Poco.V4
                         var enumElement = $"\t\t{item.Name}={enumValue}";
 #else
 #if EDM7
-                         var  enumElement = $"\t\t{item.Name}={item.Value.Value}";
+                        var enumElement = $"\t\t{item.Name}={item.Value.Value}";
 #else
                         var enumValue = ((EdmIntegerConstant)item.Value).Value;
-                        var enumElement = $"\t\t{item.Name}={enumValue}";
+                       var  enumElement = $"\t\t{item.Name}={enumValue}";
 #endif
 #endif
                         //enumList.Add(item.Name); // v2.3.0
-                        enumList.Add(enumElement); //issue #7 complete enum defination
+                        enumList.Add(enumElement); //issue #7 complete enum name /value
                     }
                 }
 
@@ -168,21 +165,15 @@ namespace OData2Poco.V4
         private ClassTemplate GeneratePocoClass(IEdmSchemaType ent)
         {
             if (ent == null) return null;
-            //for debuging
-            // var debugString = Helper.Dump(ent);
-            //v1.0.0-rc3 , enum support
             var classTemplate = new ClassTemplate
             {
                 Name = ent.Name,
-                //  ToDebugString = debugString,
-                IsEnum = ent is IEdmEnumType enumType
+                IsEnum = ent is IEdmEnumType
             };
 
             //for enum type , stop here , no more information needed
             if (classTemplate.IsEnum) return classTemplate;
 
-            //fill setname
-            //v1.4
             classTemplate.EntitySetName = GetEntitySetName(ent.Name);
 
             // Set base type if _setting.UseInheritance == true
@@ -205,7 +196,6 @@ namespace OData2Poco.V4
             //set the key ,comment
             foreach (var property in entityProperties)
             {
-                //@@@ v1.0.0-rc3  
                 if (classTemplate.Navigation.Exists(x => x == property.PropName)) property.IsNavigate = true;
 
                 if (classTemplate.Keys.Exists(x => x == property.PropName)) property.IsKey = true;
@@ -284,7 +274,7 @@ namespace OData2Poco.V4
 
             if (edmTypeReference.IsPrimitive()) return EdmToClr(edmType as IEdmPrimitiveType);
 
-            //@@@ v1.0.0-rc2
+
             if (edmTypeReference.IsEnum())
             {
                 if (edmType is IEdmEnumType ent) return ent.Name;
@@ -311,9 +301,7 @@ namespace OData2Poco.V4
                         if (elementTypeReference.Definition is IEdmSchemaElement schemaElement)
                         {
                             clrTypeName = schemaElement.Name;
-                            //@@@ 1.0.0-rc2
-                            // clrTypeName = string.Format("ICollection<{0}>", clrTypeName);
-                            clrTypeName = $"List<{clrTypeName}>"; //to support RestSharp
+                            clrTypeName = $"List<{clrTypeName}>";
                         }
 
                         return clrTypeName;
@@ -324,7 +312,7 @@ namespace OData2Poco.V4
                 }
 
                 return clrTypeName;
-            } //IsCollection
+            }
 
             return clrTypeName;
         }

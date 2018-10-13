@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using OData2Poco.CustAttributes;
@@ -19,8 +18,6 @@ namespace OData2Poco.Tests
 
         #region Property Attributes
 
-        
-
       //attribute key   
         [Test]
         public void PropertyTemplate_with_key_true_Test()
@@ -33,7 +30,7 @@ namespace OData2Poco.Tests
                 IsKey = true,
                 Serial = 1,
             };
-            AttributeFactory.Default.Init();
+          
             //Act
             var sut = AttributeFactory.Default.GetAttributes(p, "key");
             var att = string.Join(" ", sut);
@@ -52,7 +49,7 @@ namespace OData2Poco.Tests
                 IsKey = false,
                 Serial = 1,
             };
-            AttributeFactory.Default.Init();
+         
             //Act
             var sut = AttributeFactory.Default.GetAttributes(p, "key");
             var att = string.Join(" ", sut);
@@ -73,7 +70,7 @@ namespace OData2Poco.Tests
                 IsNullable = false,
                 Serial = 1,
             };
-            AttributeFactory.Default.Init();
+         
             //Act
             var sut = AttributeFactory.Default.GetAttributes(p, "req");
             var att = string.Join(" ", sut);
@@ -92,7 +89,7 @@ namespace OData2Poco.Tests
                IsNullable = true,
                 Serial = 1,
             };
-            AttributeFactory.Default.Init();
+       
             //Act
             var sut = AttributeFactory.Default.GetAttributes(p, "req");
             var att = string.Join(" ", sut);
@@ -111,7 +108,7 @@ namespace OData2Poco.Tests
                 //IsNullable = true,
                 //Serial = 1,
             };
-            AttributeFactory.Default.Init();
+          
             //Act
             var sut = AttributeFactory.Default.GetAttributes(p, "json");
             var att = string.Join(" ", sut);
@@ -130,7 +127,7 @@ namespace OData2Poco.Tests
                 //IsNullable = true,
                 //Serial = 1,
             };
-            AttributeFactory.Default.Init();
+        
             //Act
             var sut = AttributeFactory.Default.GetAttributes(p, "dm");
             var att = string.Join(" ", sut);
@@ -149,7 +146,7 @@ namespace OData2Poco.Tests
                 //IsNullable = true,
                 Serial = 3,
             };
-            AttributeFactory.Default.Init();
+         
             //Act
             var sut = AttributeFactory.Default.GetAttributes(p, "proto");
             var att = string.Join(" ", sut);
@@ -168,7 +165,7 @@ namespace OData2Poco.Tests
                 //IsNullable = true,
                 Serial = 3,
             };
-            AttributeFactory.Default.Init();
+      
             //Act
             var sut = AttributeFactory.Default.GetAttributes(p, "display");
             var att = string.Join(" ", sut);
@@ -187,7 +184,7 @@ namespace OData2Poco.Tests
                 //IsNullable = false, //IsNullable is false by default
               IsKey = true,
             };
-            AttributeFactory.Default.Init();
+       
             //Act
             var sut = AttributeFactory.Default.GetAttributes(p, "db");
             var att = string.Join(" ", sut);
@@ -206,13 +203,36 @@ namespace OData2Poco.Tests
                 //IsNullable = false, //IsNullable is false by default
                 IsKey = true,
             };
-            AttributeFactory.Default.Init();
+         
             //Act
             var sut = AttributeFactory.Default.GetAttributes(p, "tab");
             var att = string.Join(" ", sut);
             //Assert
             Assert.IsTrue(att.Length == 0);
         }
+
+  
+        [Test]
+        public void PropertyTemplate_with_setting_key_Test()
+        {
+            // Arrange 
+            PropertyTemplate p = new PropertyTemplate
+            {
+                PropName = "FirstName",
+                PropType = "string",
+                IsKey = true,
+            };
+
+            //Act
+            var sut = AttributeFactory.Default
+                .Init()
+                .GetAllAttributes(p);
+            var att = string.Join(" ", sut);
+            //Assert
+            Assert.IsTrue(att.Length == 0);
+        }
+
+
         #endregion
 
         [Test]
@@ -224,7 +244,7 @@ namespace OData2Poco.Tests
         [TestCase("tab", "")]
         [TestCase("db", "[Key] [Required]")]
         [TestCase("proto", "[ProtoMember(1)]")]
-        public void PropertyTemplateAttributeTest(string name, string value)
+        public void PropertyTemplate_with_seeting_Attribute_Test(string name, string expected)
         {
             // Arrange 
             PropertyTemplate p = new PropertyTemplate
@@ -234,13 +254,19 @@ namespace OData2Poco.Tests
                 IsKey = true,
                 Serial = 1,
             };
-            AttributeFactory.Default.Init();
+      
             //Act
-            var sut = AttributeFactory.Default.GetAttributes(p, name);
+            var setting = new PocoSetting
+            {
+                Attributes = new List<string> { name }
+            };
+        
+            var sut = AttributeFactory.Default
+                .Init(setting)
+                .GetAllAttributes(p);
             var att = string.Join(" ", sut);
             //Assert
-            //Console.WriteLine("{0} = {1}",name, string.Join(" ", sut));
-            Assert.AreEqual(value, att);
+            Assert.AreEqual(expected, att);
         }
 
         [Test]
@@ -252,7 +278,7 @@ namespace OData2Poco.Tests
         [TestCase("tab", "[Table(\"productDetail\")]")]
         [TestCase("db", "[Table(\"productDetail\")]")]
         [TestCase("proto", "[ProtoContract]")]
-        public void ClasTemplateAttributeTest(string name, string value)
+        public void ClasTemplatewith_seeting_Attribute_Test(string name, string value)
         {
             // Arrange 
             var p = new ClassTemplate()
@@ -260,10 +286,15 @@ namespace OData2Poco.Tests
                 Name = "ProductDetail",
                 EntitySetName = "productDetail"
             };
-            AttributeFactory.Default.Init();
+
             //Act
-         
-            var sut = AttributeFactory.Default.GetAttributes(p, name);
+            var setting = new PocoSetting
+            {
+                Attributes = new List<string> { name }
+            };
+            var sut = AttributeFactory.Default
+                .Init(setting)
+                .GetAllAttributes(p);
             var att = string.Join(" ", sut);
             //Assert
             Assert.AreEqual(value, att);
@@ -271,17 +302,12 @@ namespace OData2Poco.Tests
 
         private bool ListCheck<T>(IEnumerable<T> l1, IEnumerable<T> l2)
         {
-            // TODO: Null parm checks
             if (l1.Intersect(l2).Any())
             {
-                Console.WriteLine("matched");
                 return true;
             }
-            else
-            {
-                Console.WriteLine("not matched");
-                return false;
-            }
+
+            return false;
         }
         [Test]
         public void PropertyTemplate_All_Attributes_Test()
@@ -297,7 +323,7 @@ namespace OData2Poco.Tests
 
 
             var atts = AttributeFactory.Default.GetAttributes(p, list);
-            atts.ForEach(x => Console.WriteLine(x));
+           
             var match = ListCheck(atts, new List<string>
             {
                 "[ProtoMember(1)]",
@@ -321,9 +347,8 @@ namespace OData2Poco.Tests
                 EntitySetName = "productDetail"
             };
 
-            //var pa = new PocoAttributesList();
+          
             var atts = AttributeFactory.Default.GetAttributes(p, list );
-            Console.WriteLine("----------");
             atts.ForEach(x => Console.WriteLine(x));
             var match = ListCheck(atts, new List<string>
             {
@@ -345,7 +370,7 @@ namespace OData2Poco.Tests
                 IsKey = true,
                 Serial = 1,
             };
-            //AttributeManager.Default.Init(list.ToList());
+           
             var setting = new PocoSetting()
             {
                 Attributes = new List<string>(list),

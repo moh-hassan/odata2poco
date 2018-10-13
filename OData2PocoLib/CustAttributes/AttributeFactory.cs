@@ -8,12 +8,11 @@ using System.Linq;
 
 namespace OData2Poco.CustAttributes
 {
-    //todo: support alias names, e.g dm== datamember, disp==displayname
+    
     public class AttributeFactory
     {
-        public  List<string> _attributes;
-         //readonly ConColor _console = ConColor.Default;
-        public readonly PocoAttributesList _pocoAttributesList;
+        private List<string> _attributes;
+        private readonly PocoAttributesList _pocoAttributesList;
         private static readonly Lazy<AttributeFactory> Lazy =
             new Lazy<AttributeFactory>(() => new AttributeFactory());
 
@@ -26,7 +25,7 @@ namespace OData2Poco.CustAttributes
             //InitAttributes(new List<string>());
         }
         /// <summary>
-        /// 
+        /// Initialize factory with setting.Attributes
         /// </summary>
         /// <param name="setting"></param>
         /// <returns></returns>
@@ -49,19 +48,12 @@ namespace OData2Poco.CustAttributes
             //    case "json":
             if (setting.AddJsonAttribute && !list.Contains("json"))
                 list.Add("json");
-        
-            InitAttributes(list);
+
+            // InitAttributes(list);
+            _attributes = new List<string>(setting.Attributes);//add attributes of commandline options
             return this;
         }
-
-        private  void InitAttributes(List<string> attList)
-        {
-
-            _attributes = new List<string>(attList);//add attributes of commandline options
-            var list = _attributes.Where(x => !x.StartsWith("["));
-           
-
-        }
+      
         private  INamedAttribute GetAttributeObject(string attName) => _pocoAttributesList[attName];
 
 

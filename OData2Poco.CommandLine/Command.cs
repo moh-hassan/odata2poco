@@ -21,7 +21,6 @@ namespace OData2Poco.CommandLine
         public Command(Options options)
         {
             ArgOptions = options;
-            // O2PGen = O2P.Default.Init(config =>
             O2PGen = new O2P(config =>
             {
                 config.AddNavigation = options.Navigation;
@@ -56,7 +55,7 @@ namespace OData2Poco.CommandLine
             ShowHeaderCommand();
             ListPocoCommand();
             VerboseCommand();
-          //  GenerateDocCommand(); //todo in v3.1
+        
         }
 
 
@@ -177,7 +176,7 @@ namespace OData2Poco.CommandLine
                     }
                     else
                     {
-                        _logger.Warning("Vb Service Converter isn't available. Only CS code can be generated");
+                        _logger.Warning("Vb Service Converter isn't available.");
                     }
             }
 
@@ -193,20 +192,6 @@ namespace OData2Poco.CommandLine
             var metaData = O2PGen.MetaDataAsString.FormatXml();
             SaveToFile(ArgOptions.MetaFilename, metaData, " Metadata is empty");
         }
-
-        //todo planned in v3.1
-        //private void GenerateDocCommand()
-        //{
-        //    _logger.Info("generating command");
-        //    var generators = ArgOptions.Generators.ToList();
-        //    foreach (var name in generators)
-        //    {
-        //        Console.WriteLine(name);
-        //        var obj = GeneratorManager.Default.GetGeneratorObject(name);
-        //        if (obj != null)
-        //            obj.Generate();
-        //    }
-        //}
 
         #endregion
     }
