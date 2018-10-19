@@ -104,15 +104,15 @@ namespace OData2Poco.V4
             return "";
         }
 
-        private List<string> GetEnumElements(IEdmSchemaType type)
+        private List<string> GetEnumElements(IEdmSchemaType type,out bool isFlags)
         {
             var enumList = new List<string>();
-
+            isFlags = false;
             if (type.TypeKind == EdmTypeKind.Enum)
                 if (type is IEdmEnumType enumType)
                 {
                     var list2 = enumType.Members;
-
+                    isFlags = enumType.IsFlags;
                     foreach (var item in list2)
                     {
 #if odataV3
@@ -154,7 +154,11 @@ namespace OData2Poco.V4
             foreach (var type in schemaElements)
             {
                 var ct = GeneratePocoClass(type);
-                if (ct.IsEnum) ct.EnumElements = GetEnumElements(type); //fill enum elements for enum type
+                if (ct.IsEnum)
+                {
+                    ct.EnumElements = GetEnumElements(type,out var isFlags); //fill enum elements for enumtype
+                    ct.IsFlags = isFlags;
+                }
                 list.Add(ct);
             }
 

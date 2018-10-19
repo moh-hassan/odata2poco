@@ -19,6 +19,7 @@ namespace OData2Poco
         
         //to support enum generation code
         public bool IsEnum { get; set; }
+        public bool IsFlags { get; set; } //v3, Add [FlagsAttribute] to enum
         public List<string> EnumElements { get; set; }
         public ClassTemplate()
         {

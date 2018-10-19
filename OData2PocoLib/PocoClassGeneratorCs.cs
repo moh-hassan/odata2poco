@@ -33,7 +33,8 @@ namespace OData2Poco
         public PocoClassGeneratorCs(IPocoGenerator pocoGen, PocoSetting setting = null)
         {
             PocoSetting = setting ?? new PocoSetting();
-            AttributeFactory.Default.Init(PocoSetting);
+            //initialize AttributeFactory to use pocosetting.Attributes
+            AttributeFactory.Default.Init(PocoSetting); 
             _pocoGen = pocoGen;
             PocoModel = new Dictionary<string, ClassTemplate>();
             Template = new FluentCsTextTemplate();
@@ -43,8 +44,7 @@ namespace OData2Poco
                 {
                     PocoModel[item.Name] = item;
                 }
-
-            //Console.WriteLine("PocoClassGeneratorCs constructor key: {0}", PocoSetting.AddKeyAttribute);
+            
             CodeText = null;
         }
 
@@ -145,7 +145,8 @@ namespace OData2Poco
             {
                 var elements = string.Join(",\r\n ", ent.EnumElements.ToArray());
                 //var enumString = string.Format("public enum {0} {{ {1} }}", ent.Name, elements);
-                var enumString = $"\tpublic enum {ent.Name}\r\n\t {{\r\n {elements} \r\n\t}}";
+                var flagAttribute = ent.IsFlags ? "[Flags] " : "";
+                var enumString = $"\t{flagAttribute}public enum {ent.Name}\r\n\t {{\r\n {elements} \r\n\t}}";
                 return enumString;
             }
 
