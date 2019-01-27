@@ -2,11 +2,15 @@
 <<<<<<< HEAD
 # OData2Poco.CommandLine (o2pgen) #
 ##  Version 3.0.0 ## 
-**Release Date:**   Oct 9, 2018
+**Release Date:**   Jan 30, 2019
 **What is news:**
- - Maintainance: Migrating to vs2017 and c#7
- - New: Support colored Console
- - New: Support NetStandard2.0,NetStandard1.1 and net45
+  - New: Support NetStandard2.0 and net45
+  - New: .Net Core Global tool  dotnet-o2pgen
+ - New: Support Colored Console.
+ - New: Add attributes Datamaember (dm) ,Db to add Key/Table/Required attributes,Display attribute  and proto attribute to suport Proto Buffer
+ - obsolete: Removing the opptions -k -json -table -required and replaced by one option -a to generate attributes
+  - Maintainance: Migrating to vs2017,  the new SDK project style and c#7+.
+  - Refactoring attributes to add plugin attributes based on standard interface.
 
 ##  Version 2.3.0 ## 
 **Release Date:**   Dec 21, 2017

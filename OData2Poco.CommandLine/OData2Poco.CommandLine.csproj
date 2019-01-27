@@ -1,49 +1,57 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.0;net45</TargetFrameworks>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp2.0;net45</TargetFrameworks>
+    <TargetFrameworks Condition="$(TargetId) == 'netcore'">netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks Condition="$(TargetId) == 'net45'">net45</TargetFrameworks>
+   
+   
     <AssemblyName>O2Pgen</AssemblyName>
     <AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <Version>3.0.0</Version>
-    <Copyright>Copyright ©  Mohamed Hassan 2016</Copyright>
     <Authors>Mohamed Hassan</Authors>
-    <Company>OData2Poco</Company>
+    
     <Product>O2Pgen</Product>
-    <Description>
-      o2gen is a CommandLine tool for generating c# POCO classes from OData feeds.
-      Project site: https://github.com/moh-hassan/odata2poco
+    <Description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds.
     </Description>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <PackageIconUrl>https://github.com/moh-hassan/odata2poco/blob/master/ODataLogo-32.ico?raw=true </PackageIconUrl>
-    <PackageId>OData2Poco.CommandLine</PackageId>
-    <PackageLicenseUrl>https://github.com/moh-hassan/odata2poco/blob/master/license.txt?raw=true</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
-    <PackageReleaseNotes>
-      Version: $(version)
-      What is new:
-      - Maintainance: Migrating to vs2017 and c#7
-      - New: Support colored Console
-      - New: Support NetStandard2.0,NetStandard1.1 and net45
-
-    </PackageReleaseNotes>
-    <PackageTags>OData poco code-generation</PackageTags>
-    <LangVersion>7.3</LangVersion>
+    <!--<OutputPath>bin\$(Configuration)\</OutputPath>-->
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="..\Version.cs" Link="Version.cs" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- <PackageReference Include="CommandLineParser" Version="1.9.71" /> -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <!--<ItemGroup Condition="'$(TargetFramework.StartWith ('net45')'">-->
     <PackageReference Include="CommandLineParser" Version="2.3.0" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+    <PackageReference Include="CommandLineParser" Version="2.4.3" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+    <PackageReference Include="CommandLineParser" Version="2.4.3" />
+  </ItemGroup>
+
+  <Choose>
+    <When Condition="$(TargetId) == 'netcore'">
+      <PropertyGroup>
+        <PackAsTool>True</PackAsTool>
+        <PackageId>OData2Poco.dotnet.o2pgen</PackageId>
+        <ToolCommandName>dotnet-o2pgen</ToolCommandName>
+        <PackAsToolShimRuntimeIdentifiers>win-x64;win-x86</PackAsToolShimRuntimeIdentifiers>
+        <PackageTags>dotnet;dotnet-o2pgen</PackageTags>
+      </PropertyGroup>
+    </When>
+    <When Condition="$(TargetId) == 'net45'">
+      <PropertyGroup>
+        <PackageId>OData2Poco.CommandLine</PackageId>
+      </PropertyGroup>
+      <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
+        <DefineConstants>NET45;NETFULL</DefineConstants>
+      </PropertyGroup>
+    </When>
+  </Choose>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>

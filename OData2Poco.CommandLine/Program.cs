@@ -14,15 +14,15 @@ using OData2Poco.Extension;
 
 namespace OData2Poco.CommandLine
 {
-    internal class Program
+    public class Program
     {
         private static readonly Stopwatch Sw = new Stopwatch();
         static readonly ConColor Logger = ConColor.Default;
-        static int _retCode = (int)ExitCodes.Success;
+        public static int _retCode = (int)ExitCodes.Success;
         static async Task Main(string[] args)
         {
-         
-           
+
+
             var argument = string.Join(" ", args);
             try
             {
@@ -42,7 +42,7 @@ namespace OData2Poco.CommandLine
                 _retCode = (int)ExitCodes.HandledException;
                 Logger.Error("Error in executing the command: o2pgen {0}", argument);
                 Logger.Error("Error Message:\n {0}", ex.FullExceptionMessage());
-             
+
 #if DEBUG
                 Logger.Error("--------------------Exception Details---------------------");
                 Logger.Error("Error Message:\n {0}", ex.FullExceptionMessage(true));
@@ -96,7 +96,7 @@ namespace OData2Poco.CommandLine
                 },
                 errs =>
                 {
-                   
+
                     var helpText = HelpText.AutoBuild(result, h =>
                     {
                         h.AdditionalNewLineAfterOption = false;

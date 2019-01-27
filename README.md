@@ -2,14 +2,15 @@
 **OData2Poco** is a code generation tool for generating plain-old CLR objects (POCO) from OData feeds. 
 POCO classes can be used in a typed RESTful client OData services and code generation can be controlled by setting many options.
 
-OData2Poco is available in two flavers:
+OData2Poco is available in three flavers:
 
-A CLI tool: OData2Poco.CommandLine (a.k.a o2pgen).
+- A Console tool: OData2Poco.CommandLine (a.k.a o2pgen).
+- A .Net Core Global tool  **dotnet-o2pgen** support netcoreapp2.1.
+- A class library: with T4 template.
 
-A class library: with T4 template.
-  
-Nuget: [![NuGet](https://img.shields.io/nuget/v/OData2Poco.svg)](https://www.nuget.org/packages/OData2Poco.CommandLine)
-Chocolatey: [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg)](https://chocolatey.org/packages/odata2poco-commandline)
+[![NuGet Version](https://img.shields.io/nuget/v/OData2Poco.svg?label=Nuget%20Version)](https://www.nuget.org/packages/OData2Poco.CommandLine)
+[![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg?label=Chocolatey%20Version)](https://chocolatey.org/packages/odata2poco-commandline)
+[![Global Tool NuGet Version](https://img.shields.io/nuget/v/OData2Poco.svg?label=Global%20Tool%20Version)](https://www.nuget.org/packages/OData2Poco.CommandLine)
 
 ## Continuous integration
 |Build server                |Platform     |Build status                                                |
@@ -17,27 +18,29 @@ Chocolatey: [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-comman
 |AppVeyor                    |Windows      |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
 |Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
 
-## Nightly build v3.0.0.207
+## Nightly build v3.0.0-Rc1
 [Download V3.0.0:](https://github.com/moh-hassan/odata2poco/releases)
 
-**The new Features of V3.0.0:**
+# **The new Features in V3.0.0:** #
 
- - Maintainance: Migrating to vs2017 and c#7
- - New: Support colored Console
- - New: Support NetStandard2.0,NetStandard1.1 and net45 class library
+-  New: Support NetStandard2.0 and net45
+-  New: .Net Core Global tool  **dotnet-o2pgen** support netcoreapp2.1
+-  New: Support Colored Console.
+-  New: Add attributes 
+  -  dm DataMember / DataContract
+  -  db to add Key/Table/Required attributes.
+  -  display attribute
+  -  proto attribute to suport Proto Buffer
+-  Obsolete: Removing these options:
+   - -k and replaced by the option -a key 
+   - -json and replaced by -a json
+   - -table and replaced by -a tab
+   - -required and replaced by -a req
+   - Adding more than attribute in one option: -a key json req
+-   Re-factoring Attributes to be added as a plugin based on standard interface.
+-   Maintenance: Migrating to vs2017,  the new SDK project style and c#7+.
 
 ----------
-
-## What's news v2.3.0?
-- Dec 21,2017 Add inheritance support by default, v2.3.0. Thanks to merijndejonge.
-
-  Generated class follows inhertance hierarchy of OData feed (unless switched-off by -i option)
-
-Now, Odata2Poco.CommandLine is available in chocolatey Gallery.
-
-To install run the command:
-
-         choco install odata2poco-commandline 
 
 
 **Features of OData2Poco**

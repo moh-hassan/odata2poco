@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using CommandLine;
 
-//CommandLine is a class library developed by Authors: Giacomo Stelluti Scala, Copyright (c) 2005 - 2018 Giacomo Stelluti Scala gimmemoore under Mit License.
-//Project site:  https://www.nuget.org/packages/CommandLineParser
-
 //(c) 2016-2018 Mohamed Hassan, MIT License
 ////Project site: https://github.com/moh-hassan/odata2poco
 namespace OData2Poco.CommandLine
@@ -69,24 +66,24 @@ namespace OData2Poco.CommandLine
 
        // [Option('g', "generate", HelpText = "generate text document")] //todo v3.1
         public IEnumerable<string> Generators { get; set; }
-        [Option("lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
+        [Option("lang", Default = "cs", Hidden = true, HelpText = "Type cs for CSharp, vb for VB.NET")]
         public string  Lang { get; set; } //v3
 
         //TODO--- ---------------------------
         //following are obsolete and will be removed in the next release
         //obsolete use -a key
-        [Option('k', "key", HelpText = "Obsolete, use -a key, Add Key attribute [Key]")]
+        [Option('k', "key",Hidden = true,HelpText = "Obsolete, use -a key, Add Key attribute [Key]")]
         public bool Key { get; set; }
 
         //obsolete use -a tab
-        [Option('t', "table", HelpText = "Obsolete, use -a tab, Add Table attribute")]
+        [Option('t', "table", Hidden = true, HelpText = "Obsolete, use -a tab, Add Table attribute")]
         public bool Table { get; set; }
 
         //obsolete use -a req
-        [Option('q', "required", HelpText = "Obsolete, use -a req, Add Required attribute")]
+        [Option('q', "required", Hidden = true, HelpText = "Obsolete, use -a req, Add Required attribute")]
         public bool Required { get; set; }
         //obsolete use -a json
-        [Option('j', "Json", HelpText = "Obsolete, use -a json, Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
+        [Option('j', "Json", Hidden = true, HelpText = "Obsolete, use -a json, Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
         public bool AddJsonAttribute { get; set; }
 
     }

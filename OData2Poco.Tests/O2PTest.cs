@@ -12,7 +12,13 @@ namespace OData2Poco.Tests
     {
         const string UrlV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
         const string UrlV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
-      
+
+        
+        [OneTimeSetUp]
+        public void Init()
+        {
+            Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
+        }
 
         [Test]
         [TestCase(UrlV4)]

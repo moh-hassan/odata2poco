@@ -1,24 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
+    <TargetFramework>net452</TargetFramework>
+    <!--<TargetFrameworks>netcoreapp2.0;net45</TargetFrameworks>-->
+   <!--<GenerateAssemblyInfo>false</GenerateAssemblyInfo>-->
     <Authors>Mohamed Hassan</Authors>
-    <Copyright>Copyright ©  Mohamed Hassan 2016</Copyright>
     <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
-    <Company>OData2Poco</Company>
     <Product>OData2Poco</Product>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\CommonTestData.cs" Link="CommonTestData.cs" />
   </ItemGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
+    <DefineConstants>NET45;NETFULL</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MedallionShell" Version="1.5.1" />
-    <PackageReference Include="NUnit" Version="2.6.4" />
   </ItemGroup>
 
+  <!--<ItemGroup>
+    <PackageReference Include="nunit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>-->
 
   <ItemGroup>
     <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" />
@@ -36,5 +42,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net452'">
+    <DefineConstants>NET45;NETFULL</DefineConstants>
+  </PropertyGroup>
 
 </Project>

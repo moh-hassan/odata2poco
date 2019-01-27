@@ -11,15 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.CommandLine.Test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5CE1A01D-B4EE-45F0-9E97-2DA9AA53FA13}"
 	ProjectSection(SolutionItems) = preProject
-		.travis.yml = .travis.yml
-		appveyor.yml = appveyor.yml
-		CommonTestData.cs = CommonTestData.cs
+		Directory.Build.props = Directory.Build.props
 		OData2Poco.CommandLine\licence.txt = OData2Poco.CommandLine\licence.txt
-		O2PTest.cs = O2PTest.cs
-		ODataLogo-32.ico = ODataLogo-32.ico
 		README.md = README.md
 		ReleaseNotes.md = ReleaseNotes.md
-		Version.cs = Version.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D69DB09-904B-4145-A7CB-C8A448F9FDF8}"

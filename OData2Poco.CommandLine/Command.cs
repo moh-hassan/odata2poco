@@ -51,15 +51,31 @@ namespace OData2Poco.CommandLine
 
             //show result
             await GenerateCodeCommandAsync();
+            ServiceInfo();
+            _logger.Confirm("CSharp code  is generated Successfully.");
             SaveMetaDataCommand();
             ShowHeaderCommand();
             ListPocoCommand();
             VerboseCommand();
-        
+
+        }
+        public void ServiceInfo()
+        {
+            _logger.Normal($"{new string('-', 15)}Service Information {new string('-', 15)}");
+            _logger.Info($"OData Service Url: {ArgOptions.Url} ");
+            _logger.Info($"OData Service Version: {O2PGen.MetaDataVersion} ");
+            _logger.Info($"Number of Entities: {O2PGen.ClassList.Count}");
+            _logger.Normal(new string('-', 50));
+            _logger.Sucess("Sucess creation of the Poco Model");
         }
 
-
         public void ShowOptions()
+        {
+            CommandLineUtility.ShowOptions(ArgOptions);
+        }
+
+        //obsolete
+        public void ShowOptions0()
         {
             if (!ArgOptions.Verbose) return;
             Console.WriteLine("************* CommandLine options***********");

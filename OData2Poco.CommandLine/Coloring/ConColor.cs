@@ -73,6 +73,11 @@ namespace OData2Poco.Coloring
         {
             WriteLine(ConsoleColor.White,ConsoleColor.Blue, format, arg);
         }
+        public void Normal(string format, params object[] arg)
+        {
+
+            WriteLine(ConsoleColor.Gray, ConsoleColor.Black, format, arg);
+        }
     }
 }
 

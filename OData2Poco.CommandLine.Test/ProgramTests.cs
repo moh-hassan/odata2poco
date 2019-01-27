@@ -1,11 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Medallion.Shell;
 using NUnit.Framework;
+using OData2Poco.Extension;
 
 namespace OData2Poco.CommandLine.Test
 {
+    public enum ExitCodes
+    {
+        Success = 0,
+        ArgumentsInvalid = -1,
+        HandledException = -2,
+        UnhandledException = -99,
+    }
+
     /*
      * Note for text contain check for properties of class
      * all properties are declared with one and only one space between words
@@ -14,10 +24,31 @@ namespace OData2Poco.CommandLine.Test
     [TestFixture]
     public class ProgramTests
     {
+        private static string WorkingDirectory = ".";
         private const double Timeout = 3 * 60; //sec
+                                               //const string folder = @"F:\odata2poco-dotnet\dotnet-o2pgen-v0-3-1-2019\dotnet-o2pgen\OData2Poco.CommandLine\bin\Debug\netcoreapp2.1\";
+                                               // private const string appCommand = "\"dotnet o2pgen.dll\"";
+                                               //private static string appCommand = $"dotnet {folder}O2Pgen.dll";
+                                               //#if NETFULL
         private const string appCommand = @"o2pgen";
-        static Func<string, Medallion.Shell.Command> TestCommand = (s => Medallion.Shell.Command.Run(appCommand, s.Split(' '),
-             options => options.Timeout(TimeSpan.FromSeconds(Timeout))));
+        //#else
+        //        private const string appCommand = @"dotnet-o2pgen";
+        //#endif
+        [OneTimeSetUp]
+        public void SetupOneTime()
+        {
+            Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
+            Console.WriteLine($"TestBase.Init: Environment.CurrentDirectory: {Environment.CurrentDirectory}");
+            WorkingDirectory = Environment.CurrentDirectory;
+        }
+
+        private static Func<string, Medallion.Shell.Command> TestCommand = (s =>
+        {
+            string[] args = s.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            Console.WriteLine(args.Dump());
+            return Medallion.Shell.Command.Run(appCommand, args,
+                options => options.Timeout(TimeSpan.FromSeconds(Timeout)));
+        });
 
         /// <summary>
         /// exitcode = tuble.item1  , output= tuble.item2
@@ -29,10 +60,22 @@ namespace OData2Poco.CommandLine.Test
         /// </remarks>
         private Func<string, Tuple<int, string>> RunCommand = (s =>
         {
-           var command = Medallion.Shell.Command.Run(appCommand, s.Split(' '),
-           options => options.Timeout(TimeSpan.FromSeconds(Timeout)));
+            Console.WriteLine($"WorkingDirectory: {WorkingDirectory}");
+
+            string[] args = s.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //Console.WriteLine(appCommand);
+
+            var command = Medallion.Shell.Command.Run(appCommand, args,
+            options =>
+            {
+                options.Timeout(TimeSpan.FromSeconds(Timeout));
+                options.WorkingDirectory(WorkingDirectory);
+
+            });
 
             var outText = command.Result.StandardOutput;
+            //Console.WriteLine(outText);
             var errText = command.Result.StandardError;
             var exitCode = command.Result.ExitCode;
             Tuple<int, string> tuple = new Tuple<int, string>(exitCode, outText + "\n" + errText);
@@ -63,8 +106,8 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-          //  Console.WriteLine(tuble.Item2);
-            
+            //  Console.WriteLine(tuble.Item2);
+
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("[Table(\"Products\")]")); //-t
             Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //-t
@@ -79,7 +122,7 @@ namespace OData2Poco.CommandLine.Test
         [Test]
         public void PocoWithInheritanceTest()
         {
-            var url = "http://services.odata.org/V4/TripPinServiceRW/" ;
+            var url = "http://services.odata.org/V4/TripPinServiceRW/";
             var a = $"-r {url} -v";
 
             var tuble = RunCommand(a);
@@ -148,12 +191,12 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-           // Console.WriteLine(tuble.Item2);
+            // Console.WriteLine(tuble.Item2);
 
             Assert.IsTrue(output.Contains("public class Product"));
             Assert.IsTrue(output.Contains("virtual public Supplier Supplier {get;set;}")); //-n
             Assert.IsTrue(output.Contains("int?"));  //-b
-         
+
         }
 
         [Test]
@@ -181,13 +224,13 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             //Assert.AreEqual(0, tuble.Item1);
-          //  Console.WriteLine(tuble.Item2);
+            //  Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("public class Category"));
-            Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryName\")]"),"itshould be CategoryName");
+            Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryName\")]"), "itshould be CategoryName");
             Assert.IsTrue(output.Contains("categoryName"));
             Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
             Assert.IsTrue(output.Contains("category"));
-         
+
 
         }
 
@@ -207,8 +250,8 @@ namespace OData2Poco.CommandLine.Test
             Assert.IsTrue(output.Contains("CategoryName"));
 
         }
-       
-       
+
+
         [Test]
         [TestCaseSource(typeof(TestSample), "UrlCases")]
         public void PocoSettingEagerTest(string url, string version, int n)
@@ -217,23 +260,23 @@ namespace OData2Poco.CommandLine.Test
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-          //  Console.WriteLine(tuble.Item2);
-            
+            //  Console.WriteLine(tuble.Item2);
+
             Assert.IsTrue(output.Contains("public class Product")); //-v
             Assert.IsTrue(output.Contains("public Supplier Supplier {get;set;}")); //-e
-        
+
         }
 
         [Test]
         [TestCaseSource(typeof(TestSample), "UrlCases")]
         public void PocoSettingInheritTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0} -v -i {1}", url,"MyBaseClass,MyInterface");
+            var a = string.Format("-r {0} -v -i {1}", url, "MyBaseClass,MyInterface");
             var tuble = RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
             //  Console.WriteLine(tuble.Item2);
-           
+
             Assert.IsTrue(output.Contains("public class Product : MyBaseClass,MyInterface")); //-i, -v
 
         }
@@ -259,7 +302,7 @@ namespace OData2Poco.CommandLine.Test
             var a = string.Format("-r {0} -v ", url);
             var tuble = RunCommand(a);
             var output = tuble.Item2;
-           
+
             Assert.AreEqual(0, tuble.Item1);
             //Console.WriteLine(tuble.Item2);
             Assert.IsTrue(output.Contains("public class Product"));
