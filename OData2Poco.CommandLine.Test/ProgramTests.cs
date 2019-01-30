@@ -32,6 +32,7 @@ namespace OData2Poco.CommandLine.Test
 
         private async Task<Tuple<int, string>> RunCommand(string s)
         {
+            Program.Logger.Silent = true;
             string[] args = s.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var retcode = await Program.RunOptionsAsync(args);
             string help1 = Program.Logger.Output.ToString();
@@ -99,7 +100,7 @@ namespace OData2Poco.CommandLine.Test
 
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
-            Console.WriteLine(output);
+          
             var lines = output.Split('\n');
             var occurneces = lines.Count(l => l.Contains("public int PlanItemId"));
 
@@ -216,8 +217,7 @@ namespace OData2Poco.CommandLine.Test
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            //  Console.WriteLine(tuble.Item2);
-
+            //Assert
             Assert.IsTrue(output.Contains("public class Product")); //-v
             Assert.IsTrue(output.Contains("public Supplier Supplier {get;set;}")); //-e
 
@@ -231,9 +231,7 @@ namespace OData2Poco.CommandLine.Test
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            //  Console.WriteLine(tuble.Item2);
-
-            Assert.IsTrue(output.Contains("public class Product : MyBaseClass,MyInterface")); //-i, -v
+          Assert.IsTrue(output.Contains("public class Product : MyBaseClass,MyInterface")); //-i, -v
 
         }
 
@@ -245,9 +243,7 @@ namespace OData2Poco.CommandLine.Test
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-            //  Console.WriteLine(tuble.Item2);
-
-            Assert.IsTrue(output.Contains("MyNamespace1.MyNamespace2.")); //-m, -v
+           Assert.IsTrue(output.Contains("MyNamespace1.MyNamespace2.")); //-m, -v
 
         }
 
@@ -260,7 +256,7 @@ namespace OData2Poco.CommandLine.Test
             var output = tuble.Item2;
 
             Assert.AreEqual(0, tuble.Item1);
-            //Console.WriteLine(tuble.Item2);
+           
             Assert.IsTrue(output.Contains("public class Product"));
         }
 
@@ -268,7 +264,7 @@ namespace OData2Poco.CommandLine.Test
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public async Task FileWithSettingTest(string url, string version, int n)
         {
-            //var a = $"-r {url} -v -k -t -q -n";
+           
             var a = $"-r {url} -v -a key tab req -n";
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
@@ -293,7 +289,7 @@ namespace OData2Poco.CommandLine.Test
             var a = $"-r {url} -v -f {fname}";
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
-            //Console.WriteLine(output);
+           
             Assert.AreEqual(0, tuble.Item1);
             Assert.IsTrue(output.Contains("public class Product")); //-v
 

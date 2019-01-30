@@ -60,8 +60,7 @@ namespace OData2Poco.Extension
         public static CaseEnum ToCaseEnum(this string  name )
         {
             var nameCase = name.ToLower().Substring(0, 3);
-            //Console.WriteLine("nnnnnnnnnn {0}",nameCase);
-            switch (nameCase)
+          switch (nameCase)
             {
                 case "pas": return CaseEnum.Pas;
                 case "cam": return CaseEnum.Camel;
@@ -77,15 +76,12 @@ namespace OData2Poco.Extension
         /// <returns></returns>
         public static string TrimAllSpace(this string text,bool keepCrLf=false)
         {
-            //var pattern = @"\s+"; //@"[^\S\r\n]+";
-          //  Console.WriteLine("original:\n{0}",text);
+          
             var result = "";
             Regex trimmer = new Regex(@"\s+");
             if (!keepCrLf)
             {
-                //Regex trimmer = new Regex(@"\s+");
                  result = trimmer.Replace(text.Trim(), " ");
-                 //Console.WriteLine("result:\n{0}",result);
                 return result;
             }
             
@@ -94,12 +90,8 @@ namespace OData2Poco.Extension
             {
                 result += string.Format("{0}\n",trimmer.Replace(line.Trim(), " "));
             }
-           // Console.WriteLine("result:\n{0}",result);
+       
             return result;
-             
-            //Console.WriteLine(text);
-            //Console.WriteLine(result);
-            
         }
         /// <summary>
         /// Convert name string to C# Attribute
@@ -110,8 +102,7 @@ namespace OData2Poco.Extension
         {
             return "[" +text + "]";
         }
-        //TODO Attribute may have args e.g [JsonProperty ]
-        // string.Format("[JsonProperty(PropertyName = \"{0}\")]", Property.PropName);
+     
         public static string NewLine(this string text)
         {
             return text + Environment.NewLine;
@@ -134,8 +125,7 @@ namespace OData2Poco.Extension
         public static string ToJson(this object data)
         {
             var json = JsonConvert.SerializeObject(data, Formatting.Indented);
-            //Console.WriteLine("-----{0}",json);
-            return json;
+         return json;
         }
 
         /// <summary>
@@ -198,6 +188,25 @@ namespace OData2Poco.Extension
         public static string Dump(this object o)
         {
             return ToJson(o);
+        }
+        public static string GetRegexPattern(this string text, string escapeChar = "()[]?")
+        {
+            var pattern = Regex.Replace(text.Trim(), @"\s+", @"\s*");
+            if (!string.IsNullOrEmpty(escapeChar))
+            {
+                char[] chars = escapeChar.ToCharArray();
+                foreach (char c in chars)
+                {
+                    pattern = pattern.Replace(c.ToString(), $"\\{c}");
+                }
+            }
+
+            return pattern;
+        }
+
+        public static string RemoveEmptyLines(this string input)
+        {
+            return Regex.Replace(input, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);
         }
     }
 }

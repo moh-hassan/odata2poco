@@ -11,14 +11,13 @@ namespace OData2Poco.CustAttributes
     public class PocoAttributesList : IEnumerable<INamedAttribute>
     {
         readonly List<INamedAttribute> _namedAttributes; //= new List<ICustomeAttribute>();
-          //ConColor _console = ConColor.Default;
-        public INamedAttribute this[string index] => GetAttributeObject(index);
+       public INamedAttribute this[string index] => GetAttributeObject(index);
 
         public PocoAttributesList()
         {
             _namedAttributes = new List<INamedAttribute>();
             FillNamedAttributes();
-            LoadPluginAttributes();
+            //LoadPluginAttributes();
 
         }
         public IEnumerator<INamedAttribute> GetEnumerator()
@@ -57,7 +56,7 @@ namespace OData2Poco.CustAttributes
         public void LoadPluginAttributes()
         {
          
-            string foldr = "plugin"; //ApplicationParameters.PluginLocation;
+            string foldr = "plugin"; 
             foldr=Path.GetFullPath(foldr);
             if (!Directory.Exists(foldr)) return;
           
@@ -68,10 +67,7 @@ namespace OData2Poco.CustAttributes
             if (pluginList.Any())
             {
                
-                //pluginList.ForEach(x =>
-                //{
-                //    Trace.WriteLine($"plugin: found Attribute: '{x.Name}'");
-                //});
+                
                 _namedAttributes.AddRange(pluginList);
             }
 

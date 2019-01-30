@@ -13,6 +13,7 @@ namespace OData2Poco.CommandLine.InfraStructure.Logging
         public ConsoleColor ErrorColor = ConsoleColor.Red;
         public ConsoleColor SucessColor = ConsoleColor.Green;
         public StringBuilder Output { get; set; }
+        public bool Silent { get; set; }
         private ColoredConsole()
         {
             Output = new StringBuilder();
@@ -26,14 +27,15 @@ namespace OData2Poco.CommandLine.InfraStructure.Logging
         {
             action(this);
         }
-       
+
 
         public void Log(ConsoleColor foreColor, string msg)
         {
+
             lock (_colorLock)
             {
                 Console.ForegroundColor = foreColor; //ConsoleColor.Yellow;
-                Console.WriteLine(msg);
+                if (!Silent) Console.WriteLine(msg);
                 Console.ResetColor();
                 Output.AppendLine(msg);
             }
@@ -41,11 +43,12 @@ namespace OData2Poco.CommandLine.InfraStructure.Logging
 
         public void Log(ConsoleColor foreColor, ConsoleColor backColor, string msg)
         {
+
             lock (_colorLock)
             {
                 Console.BackgroundColor = backColor;
                 Console.ForegroundColor = foreColor; //ConsoleColor.Yellow;
-                Console.WriteLine(msg);
+                if (!Silent) Console.WriteLine(msg);
                 Console.ResetColor();
                 Output.AppendLine(msg);
             }
@@ -103,13 +106,3 @@ namespace OData2Poco.CommandLine.InfraStructure.Logging
     }
 }
 
-/*
- *  // We want to save the current console color and background color so we can restore it later
-            ConsoleColor oldColor = Console.ForegroundColor;
-            ConsoleColor oldBackgroundColor = Console.BackgroundColor;    
-            .....
-
-    // Restore the old foreground color and background color
-            Console.ForegroundColor = oldColor;
-            Console.BackgroundColor = oldBackgroundColor;
-    */

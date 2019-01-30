@@ -4,18 +4,14 @@
     <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;net45</TargetFrameworks>
     <TargetFrameworks Condition="$(TargetId) == 'netcore'">netcoreapp2.1</TargetFrameworks>
     <TargetFrameworks Condition="$(TargetId) == 'net45'">net45</TargetFrameworks>
-   
-   
     <AssemblyName>O2Pgen</AssemblyName>
-    <AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
-    <!--<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>-->
     <Authors>Mohamed Hassan</Authors>
-    
     <Product>O2Pgen</Product>
-    <Description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds.
+    <Description>
+      o2gen is a CommandLine tool for generating c# POCO classes from OData feeds.
     </Description>
-   
   </PropertyGroup>
+
 
   <ItemGroup>
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
@@ -33,26 +29,31 @@
     <PackageReference Include="CommandLineParser" Version="2.4.3" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
     <DefineConstants>NET45;NETFULL</DefineConstants>
   </PropertyGroup>
 
   <Choose>
-    <When Condition="$(TargetId) == 'netcore'">
+    <!--<When Condition="$(TargetId) == 'net45'">-->
+    <When Condition="'$(TargetFramework)' == 'net45'">
+      <PropertyGroup>
+        <PackageId>OData2Poco.CommandLine</PackageId>
+        <AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
+        <PackageTags>odata;charp;vb.net;o2pgen;meta-xml;web-api</PackageTags>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <!--<When Condition="$(TargetId) == 'netcore'">-->
       <PropertyGroup>
         <PackAsTool>True</PackAsTool>
         <PackageId>OData2Poco.dotnet.o2pgen</PackageId>
+        <AssemblyTitle>OData2Poco.dotnet.o2pgen</AssemblyTitle>
         <ToolCommandName>dotnet-o2pgen</ToolCommandName>
         <!--<PackAsToolShimRuntimeIdentifiers>win-x64;win-x86</PackAsToolShimRuntimeIdentifiers>-->
-        <PackageTags>dotnet;dotnet-o2pgen</PackageTags>
+        <PackageTags>odata;charp;c#;vb.net;web-api;netcore;dotnet;dotnet-o2pgen;meta-xml</PackageTags>
       </PropertyGroup>
-    </When>
-    <When Condition="$(TargetId) == 'net45'">
-      <PropertyGroup>
-        <PackageId>OData2Poco.CommandLine</PackageId>
-      </PropertyGroup>
-     
-    </When>
+      <!--</When>-->
+    </Otherwise>
   </Choose>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

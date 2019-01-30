@@ -6,6 +6,7 @@ namespace OData2Poco.CommandLine.InfraStructure.Logging
     public interface ILog
     {
         StringBuilder Output { get; set; }
+        bool Silent  { get; set; }
         void Debug(string msg);
         void Warn(string msg);
         void Warn(Func<string> message);
@@ -17,6 +18,7 @@ namespace OData2Poco.CommandLine.InfraStructure.Logging
         void Fatal(string msg);
         void Sucess(string msg);
         void Confirm(string msg);
+        void Normal(string msg);
         void Clear();
 
     }

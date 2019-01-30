@@ -6,7 +6,7 @@ OData2Poco is available in three flavers:
 
 - A Console tool: OData2Poco.CommandLine (a.k.a o2pgen).
 - A .Net Core Global tool  **dotnet-o2pgen** support netcoreapp2.1.
-- A class library: with T4 template.
+- A class library: support net45/netstandard2.0.
 
 [![NuGet Version](https://img.shields.io/nuget/v/OData2Poco.svg?label=Nuget%20Version)](https://www.nuget.org/packages/OData2Poco.CommandLine)
 [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg?label=Chocolatey%20Version)](https://chocolatey.org/packages/odata2poco-commandline)
@@ -91,35 +91,22 @@ From [Nuget Gallery](https://www.nuget.org/packages/OData2Poco/)
 ![enter image description here](http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&DownloadId=1562964)
 
 
-## .NET Requirements
-
-OData2Poco requires .Net 4.5 or higher.  
-
-**Dependency of Odata2Poco Class Library**
-
-Microsoft.Data.Edm  version="5.7.0"  or higher
-
-Microsoft.OData.Edm  version="6.15.0" or higher 
-
-**Note:** The generated POCO classes code need not these EDM dependency libraries when POCO is used in your project.
 
 **Release Notes**
+https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md
 
-- v 2.2.1 March 21, 2017 (last release)
-- v 2.2.0 March 11, 2017
-- v 2.1.0 February 28, 2017
-- v 2.0.0 June 27, 2016
-- v 1.3.0 April 10, 2016
-
-**Latest Changes**
-
-v2.2.1: Support Nullable Data type: DateTime (issue #3), DateTimeOffset, TimeSpan, Guid.
-
-[All Changes](ReleaseNotes.md)
 
  **Try it:**
- 
+ dotnet Global Tool: 
+ Install from nuget gallary
+       dotnet o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/
+	   For help type: dotnet o2pgen --help
+
+Consol net45 tool
        o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/
+ 
+ Note: The same options are available for dotnet Global tool or Console tool
+
  **How to use**
 
 Read the documentation:[Wiki](https://github.com/moh-hassan/odata2poco/wiki)

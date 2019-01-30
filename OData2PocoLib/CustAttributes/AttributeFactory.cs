@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
-
-//using JetBrains.Annotations;
 
 namespace OData2Poco.CustAttributes
 {
@@ -22,7 +18,7 @@ namespace OData2Poco.CustAttributes
         {
             _pocoAttributesList = new PocoAttributesList();
             _attributes = new List<string>();
-            //InitAttributes(new List<string>());
+         
         }
         /// <summary>
         /// Initialize factory with setting.Attributes
@@ -48,8 +44,7 @@ namespace OData2Poco.CustAttributes
             //    case "json":
             if (setting.AddJsonAttribute && !list.Contains("json"))
                 list.Add("json");
-
-            // InitAttributes(list);
+            
             _attributes = new List<string>(setting.Attributes);//add attributes of commandline options
             return this;
         }

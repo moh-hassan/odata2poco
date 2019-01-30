@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CommandLine;
+using CommandLine.Text;
 using OData2Poco.CommandLine.InfraStructure.Logging;
 
 //(c) 2016-2018 Mohamed Hassan, MIT License
@@ -90,9 +91,31 @@ namespace OData2Poco.CommandLine
         [Option('j', "Json", Hidden = true, HelpText = "Obsolete, use -a json, Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
         public bool AddJsonAttribute { get; set; }
         public List<string> Errors = new List<string>();
+        #region usage
+#if NETFULL
+        [Usage(ApplicationAlias = "o2pgen")]
+#else
+        [Usage(ApplicationAlias = "dotnet o2pgen")]
+#endif
+        public static IEnumerable<Example> Examples
+        {
+            get
+            {
+                yield return new Example("Default setting",
+                    new Options { Url = "http://services.odata.org/V4/OData/OData.svc" });
+                yield return new Example("Add json, key Attributes with camel case and nullable types", new Options
+                {
+                    Url = "http://services.odata.org/V4/OData/OData.svc",
+                    Attributes = new List<string> { "json", "key" },
+                    NameCase = "camel",
+                    AddNullableDataType = true
+                });
+            }
+        }
+        #endregion
         public int Validate()
         {
-            
+
             //validating Lang
             switch (Lang)
             {
@@ -127,11 +150,11 @@ namespace OData2Poco.CommandLine
                 if (!Regex.IsMatch(attribute.Trim().ToLower(), "key|req|tab|table|json|db|proto|dm|display", RegexOptions.IgnoreCase))
                 {
                     Errors.Add($"Attribute '{attribute}' isn't valid. It will be  droped.");//warning
-                    
+
                 }
             }
-            
-           
+
+
             return 0;
         }
 

@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using OData2Poco.CustAttributes;
@@ -349,7 +347,7 @@ namespace OData2Poco.Tests
 
           
             var atts = AttributeFactory.Default.GetAttributes(p, list );
-            atts.ForEach(x => Console.WriteLine(x));
+          
             var match = ListCheck(atts, new List<string>
             {
                 "[DataContract]",
@@ -379,7 +377,7 @@ namespace OData2Poco.Tests
             var atts = AttributeFactory.Default
                 .Init(setting)
                 .GetAllAttributes(p);
-            atts.ForEach(x => Console.WriteLine(x));
+          
             var match = ListCheck(atts, new List<string>
             {
                 "[ProtoMember(1)]",
@@ -412,7 +410,7 @@ namespace OData2Poco.Tests
             var atts = AttributeFactory.Default
                 .Init(setting)
                 .GetAllAttributes(p);
-            atts.ForEach(x => Console.WriteLine(x));
+          
             var match = ListCheck(atts, new List<string>
             {
                 "[DataContract]",

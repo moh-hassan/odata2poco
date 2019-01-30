@@ -77,9 +77,6 @@ namespace OData2Poco
         {
             Template.WriteLine(GetHeader()); //header of the file (using xxx;....)
 
-            //var json = JsonConvert.SerializeObject(_classDictionary, Formatting.Indented); //data for test cases
-            //File.WriteAllText("northmodel.json",json);
-
             foreach (var item in PocoModel)
             {
                 Template.WriteLine(ClassToString(item.Value)); //c# code of the class
@@ -114,8 +111,7 @@ namespace OData2Poco
             h.WriteLine(comment, _pocoGen.MetaData.ServiceUrl, _pocoGen.MetaData.MetaDataVersion,
                 DateTimeOffset.Now.ToString("s"))
                 .StartNamespace(namespc);
-            //.UsingNamespace("System")
-            //.UsingNamespace("System.Collections.Generic");
+           
 
             var assemplyManager = new AssemplyManager(PocoSetting, PocoModel);
             var asemplyList = assemplyManager.AssemplyReference;
@@ -165,12 +161,7 @@ namespace OData2Poco
             {
                 var pp = new PropertyGenerator(p, PocoSetting);
 
-                //@@@ v1.0.0-rc3
-                // navigation properties
-                //v1.4 skip
-                //if (p.IsNavigate) continue;
-
-                //v1.5
+               
                 if (p.IsNavigate)
                 {
                     //Console.WriteLine("navigation entity {0}  prop: {1}",ent.Name, p.PropName);

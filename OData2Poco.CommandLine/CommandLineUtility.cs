@@ -7,14 +7,7 @@ namespace OData2Poco.CommandLine
 {
   internal  class CommandLineUtility
     {
-        public static void ShowOptions(Options option)
-        {
-            //format option as: -n Navigation= True
-            Console.WriteLine("************* CommandLine options***********");
-            var list = GetOptions( option);
-            list.ForEach(Console.WriteLine);
-            Console.WriteLine("********************************************");
-        }
+       
 
         public static List<string> GetOptions(Options option)
         {
@@ -45,8 +38,11 @@ namespace OData2Poco.CommandLine
                 var att = (OptionAttribute)p1.attrs?.FirstOrDefault();
                 if (att == null) continue;
                 var shortName = att.ShortName == null ? $"--{att.LongName}" : $"-{att.ShortName}";
-                var text = $"{shortName} {p1.p.Name}= {val} ";
-                list.Add(text);
+                if (!string.IsNullOrEmpty(val.ToString()))
+                {
+                    var text = $"{shortName} {p1.p.Name}= {val} ";
+                    list.Add(text);
+                }
             }
             return list;
         }

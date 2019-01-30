@@ -184,7 +184,7 @@ namespace OData2Poco.TextTransform
                     _currentIndent = _currentIndent.Remove(_currentIndent.Length - indentLength);
                 }
             }
-            // return returnValue;
+        
             PopIndentText = returnValue;
             return (T)this;
         }

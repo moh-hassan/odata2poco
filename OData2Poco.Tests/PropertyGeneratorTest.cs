@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using NUnit.Framework;
 using OData2Poco.CustAttributes;
 using OData2Poco.Extension;
@@ -197,7 +196,7 @@ namespace OData2Poco.Tests
             var expected = @"
 [Key]
 public int CategoryID {get;set;} ";
-            //Assert.IsTrue(CompareStringIgnoringSpaceCr(pg.ToString(), expected));
+        
             Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
         }
 
@@ -224,7 +223,7 @@ public int CategoryID {get;set;} ";
             var expected = @"
 [Required]
 public int CategoryID {get;set;} ";
-            //Assert.IsTrue(Helper.CompareStringIgnoringSpaceCr(pg.ToString(), expected));
+           
             Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
         }
 
@@ -332,7 +331,7 @@ public int CategoryID {get;set;} ";
             // Assert 
              Assert.IsTrue(sut.ToString().Contains(expected));
           
-            Console.WriteLine(sut);
+           
         }
 
     }

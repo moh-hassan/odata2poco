@@ -32,30 +32,7 @@ namespace OData2Poco
         /// <returns></returns>
         public List<string> GetAllAttributes()
         {
-            //var list = new List<string>();
-
-            ////required Attribute
-            //if (_setting.AddRequiredAttribute)
-            //{
-            //    // if (!Property.IsNullable) list.Add(_getAttribute("Required"));
-            //    if (!_property.IsNullable) list.Add("Required".ToCsAttribute());
-            //}
-
-            //if (_setting.AddKeyAttribute)
-            //{
-            //    if (_property.IsKey) list.Add("Key".ToCsAttribute());
-            //}
-
-            //if (_setting.AddJsonAttribute)
-            //{
-            //    list.Add(string.Format("[JsonProperty(PropertyName = \"{0}\")]", _property.PropName));
-            //}
-
-            //if (_setting.AddDataMemberAttribute)
-            //{
-            //    list.Add("DataMember".ToCsAttribute());
-            //}
-            //return list;
+           
             return AttributeManager.GetAllAttributes(_property);
         }
         /// <summary>

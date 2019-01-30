@@ -25,8 +25,8 @@ namespace OData2Poco.CommandLine
 
         public CsCommand(Options options, IPocoFileSystem fileSystem)
         {
-            if (fileSystem==null)
-                _fileSystem= new NullFileSystem();
+            if (fileSystem == null)
+                _fileSystem = new NullFileSystem();
             else
             {
                 _fileSystem = fileSystem;
@@ -89,7 +89,14 @@ namespace OData2Poco.CommandLine
             ShowErrors();
 
         }
-
+        public void ShowOptions(Options option)
+        {
+            //format option as: -n Navigation= True
+            _logger.Normal("************* CommandLine options***********");
+            var list = CommandLineUtility.GetOptions(option);
+            list.ForEach(x => _logger.Normal(x));
+            _logger.Normal("********************************************");
+        }
         public void ShowErrors()
         {
             if (Errors.Count == 0) return;
@@ -106,56 +113,18 @@ namespace OData2Poco.CommandLine
             _logger.Info($"OData Service Version: {O2PGen.MetaDataVersion} ");
             _logger.Info($"Number of Entities: {O2PGen.ClassList.Count}");
             _logger.Normal(new string('-', 50));
-            _logger.Sucess("Sucess creation of the Poco Model");
+            _logger.Sucess("Success creation of the Poco Model");
         }
 
         public void ShowOptions()
         {
-            CommandLineUtility.ShowOptions(ArgOptions);
+            ShowOptions(ArgOptions);
         }
-
-        //obsolete
-        public void ShowOptions0()
-        {
-            if (!ArgOptions.Verbose) return;
-            Console.WriteLine("************* CommandLine options***********");
-            Console.WriteLine("-r Url: {0}", ArgOptions.Url);
-            Console.WriteLine("-u User: {0}", ArgOptions.User);
-            Console.WriteLine("-m Namespace: {0}", ArgOptions.Namespace);
-            Console.WriteLine("-c NameCase: {0}", ArgOptions.NameCase);
-            Console.WriteLine("-j AddJsonAttribute: {0}", ArgOptions.AddJsonAttribute);
-            Console.WriteLine("-b AddNullableDataType: {0}", ArgOptions.AddNullableDataType);
-            Console.WriteLine("-e Eager: {0}", ArgOptions.Eager);
-            Console.WriteLine("-i Inherit: {0}", ArgOptions.Inherit);
-            Console.WriteLine("-k Key: {0}", ArgOptions.Key);
-            Console.WriteLine("-n Navigation: {0}", ArgOptions.Navigation);
-            Console.WriteLine("-q Required: {0}", ArgOptions.Required);
-            Console.WriteLine("-t Table: {0}", ArgOptions.Table);
-            Console.WriteLine("-d Header: {0}", ArgOptions.Header);
-            Console.WriteLine("-l ListPoco: {0}", ArgOptions.ListPoco);
-            Console.WriteLine("-x MetaFilename: {0}", ArgOptions.MetaFilename);
-            Console.WriteLine("-f CodeFilename: {0}", ArgOptions.CodeFilename);
-            Console.WriteLine("-a Attributes: {0}", string.Join(", ", ArgOptions.Attributes));
-            Console.WriteLine("-L Language: {0}", ArgOptions.Lang);
-            Console.WriteLine("********************************************");
-        }
-
 
 
         #region Utility
 
-        //utility functions
-        //private void SaveToFile(string fileName, string text, string errorMsg)
-        //{
-        //    if (string.IsNullOrEmpty(text))
-        //        throw new Exception(errorMsg);
-        //    var file = new FileInfo(fileName);
-        //    //file.Directory.Create(); // If the directory already exists, this method does nothing.
-        //    File.WriteAllText(file.FullName, text);
-        //    File.WriteAllText(fileName, text);
-        //    var length = new FileInfo(fileName).Length;
-        //    if (length == 0) throw new Exception(fileName + " is empty");
-        //}
+
 
         private void SaveToFile(string fileName, string text)
         {
@@ -164,23 +133,23 @@ namespace OData2Poco.CommandLine
 
         #endregion
 
-            #region commands
+        #region commands
 
-            private void ListPocoCommand()
+        private void ListPocoCommand()
         {
             //---------list -l 
             if (!ArgOptions.ListPoco) return;
 
             Console.WriteLine();
-            Console.WriteLine("POCO classes (count: {0})", O2PGen.ClassList.Count);
-            Console.WriteLine(new string('=', 20));
+            _logger.Info($"POCO classes (count: {O2PGen.ClassList.Count}");
+            _logger.Normal(new string('=', 20));
             var items = O2PGen.ClassList.OrderBy(m => m.Name).ToList();
             items.ForEach(m =>
             {
                 var index = items.IndexOf(m);
                 var remoteUrl = string.IsNullOrEmpty(m.EntitySetName) ? "" : ArgOptions.Url + @"/" + m.EntitySetName;
                 //v1.5
-                Console.WriteLine("{0}: {1} {2}", index + 1, m.Name, remoteUrl);
+                _logger.Normal($"{index + 1}: {m.Name} {remoteUrl}");
             });
         }
 
@@ -190,7 +159,6 @@ namespace OData2Poco.CommandLine
             if (!ArgOptions.Verbose) return;
 
             Console.WriteLine();
-            //Console.WriteLine(Code);
             if (!string.IsNullOrEmpty(Code))
             {
                 _logger.Normal("---------------Code Generated--------------------------------");
@@ -203,11 +171,10 @@ namespace OData2Poco.CommandLine
             //------------ header -h for http media only not file--------------------
             if (ArgOptions.Header && ArgOptions.Url.StartsWith("http"))
             {
-                //   MetaDataInfo meta = o2p;
                 Console.WriteLine();
-                Console.WriteLine("HTTP Header");
-                Console.WriteLine(new string('=', 15));
-                O2PGen.ServiceHeader.ToList().ForEach(m => { Console.WriteLine(" {0}: {1}", m.Key, m.Value); });
+                _logger.Normal("HTTP Header");
+                _logger.Normal(new string('=', 15));
+                O2PGen.ServiceHeader.ToList().ForEach(m => { _logger.Normal($" {m.Key}: {m.Value}"); });
             }
         }
 
@@ -238,7 +205,7 @@ namespace OData2Poco.CommandLine
                 if (!string.IsNullOrEmpty(Code))
                 {
                     var filename = Path.ChangeExtension(ArgOptions.CodeFilename, ".vb");
-                    Console.WriteLine("Saving generated VB.NET code to file : " + ArgOptions.CodeFilename);
+                    _logger.Normal("Saving generated VB.NET code to file : " + ArgOptions.CodeFilename);
                     SaveToFile(filename, Code);
                     _logger.Confirm("VB.NET code  is generated Successfully.");
                 }
@@ -260,8 +227,8 @@ namespace OData2Poco.CommandLine
             //---------metafile -m
             if (string.IsNullOrEmpty(ArgOptions.MetaFilename)) return;
 
-            Console.WriteLine();
-            Console.WriteLine("Saving Metadata to file : {0}", ArgOptions.MetaFilename);
+            _logger.Normal("");
+            _logger.Info($"Saving Metadata to file : {ArgOptions.MetaFilename}");
             var metaData = O2PGen.MetaDataAsString.FormatXml();
             SaveToFile(ArgOptions.MetaFilename, metaData);
         }

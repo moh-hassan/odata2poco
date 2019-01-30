@@ -35,7 +35,6 @@
 
         public FluentCsTextTemplate WriteLineComment(string str)
         {
-            // WriteLine("//" + str);
             WriteComment(str);
             NewLine();
             return this;
@@ -60,8 +59,7 @@
         {
             if (isVirtual) Write("virtual ");
             Write("{0} ", visiblity);
-            //if (!string.IsNullOrEmpty(att))
-            //    return WriteLine("{0}\n {1} {2} {3} {{get;set;}}",att, visible, typeName, name);
+           
             Write("{0}{1} {2}  {{get;set;}} ", typeName, isNullable?"?":"" ,name );
             if (!string.IsNullOrEmpty(comment)) WriteComment(comment);
             NewLine();

@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!--<GenerateAssemblyInfo>false</GenerateAssemblyInfo>-->
     <RootNamespace>OData2Poco</RootNamespace>
+    <AssemblyName>OData2Poco</AssemblyName>
     <Authors>Mohamed Hassan</Authors>
     <AssemblyTitle>OData2Poco</AssemblyTitle>
     <Product>OData2Poco</Product>
