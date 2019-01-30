@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;net45</TargetFrameworks>
     <TargetFrameworks Condition="$(TargetId) == 'netcore'">netcoreapp2.1</TargetFrameworks>
     <TargetFrameworks Condition="$(TargetId) == 'net45'">net45</TargetFrameworks>
    
    
     <AssemblyName>O2Pgen</AssemblyName>
     <AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <!--<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>-->
     <Authors>Mohamed Hassan</Authors>
     
     <Product>O2Pgen</Product>
     <Description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds.
     </Description>
-    <!--<OutputPath>bin\$(Configuration)\</OutputPath>-->
+   
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,13 +33,17 @@
     <PackageReference Include="CommandLineParser" Version="2.4.3" />
   </ItemGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
+    <DefineConstants>NET45;NETFULL</DefineConstants>
+  </PropertyGroup>
+
   <Choose>
     <When Condition="$(TargetId) == 'netcore'">
       <PropertyGroup>
         <PackAsTool>True</PackAsTool>
         <PackageId>OData2Poco.dotnet.o2pgen</PackageId>
         <ToolCommandName>dotnet-o2pgen</ToolCommandName>
-        <PackAsToolShimRuntimeIdentifiers>win-x64;win-x86</PackAsToolShimRuntimeIdentifiers>
+        <!--<PackAsToolShimRuntimeIdentifiers>win-x64;win-x86</PackAsToolShimRuntimeIdentifiers>-->
         <PackageTags>dotnet;dotnet-o2pgen</PackageTags>
       </PropertyGroup>
     </When>
@@ -47,9 +51,7 @@
       <PropertyGroup>
         <PackageId>OData2Poco.CommandLine</PackageId>
       </PropertyGroup>
-      <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
-        <DefineConstants>NET45;NETFULL</DefineConstants>
-      </PropertyGroup>
+     
     </When>
   </Choose>
 
@@ -60,4 +62,9 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
 
+  <!-- Need to conditionally bring in references for the .NET Framework 4.5 target -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Threading.Tasks" />
+  </ItemGroup>
 </Project>

@@ -81,9 +81,16 @@ namespace OData2Poco
         {
             //Add required namespace for attributes
             if (_pocoSetting.AddKeyAttribute) AddAssemplyByKey("key");
+            if (_pocoSetting.Attributes.Contains("key")) AddAssemplyByKey("key");
+
             if (_pocoSetting.AddRequiredAttribute) AddAssemplyByKey("required");
+            if (_pocoSetting.Attributes.Contains("req")) AddAssemplyByKey("required");
+
             if (_pocoSetting.AddTableAttribute) AddAssemplyByKey("table");
+            if (_pocoSetting.Attributes.Contains("tab")) AddAssemplyByKey("table");
+
             if (_pocoSetting.AddJsonAttribute) AddAssemplyByKey("json");
+            if (_pocoSetting.Attributes.Contains("json")) AddAssemplyByKey("json");
             AddAssempliesOfDataType();//add assemplies of datatype
         }
 

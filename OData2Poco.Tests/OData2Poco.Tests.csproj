@@ -16,22 +16,7 @@
     <EmbeddedResource Remove="Model\**" />
     <None Remove="Model\**" />
   </ItemGroup>
-
-  <!--<ItemGroup>
-    <PackageReference Include="NUnit" Version="2.6.4" />
-  </ItemGroup>-->
-  <!--<ItemGroup >
-    <PackageReference Include="nunit" Version="3.11.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-  </ItemGroup>-->
-
-  <!--<ItemGroup Condition="'$(TargetFramework)' == 'net452'">
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>-->
-
+  
   <ItemGroup>
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
   </ItemGroup>

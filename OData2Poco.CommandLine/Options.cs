@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using CommandLine;
+using OData2Poco.CommandLine.InfraStructure.Logging;
 
 //(c) 2016-2018 Mohamed Hassan, MIT License
 ////Project site: https://github.com/moh-hassan/odata2poco
@@ -23,11 +28,10 @@ namespace OData2Poco.CommandLine
         [Option('p', "password", HelpText = "password for authentication.")]
         public string Password { get; set; }
 
-        [Option('f', "filename", Default ="poco.cs", HelpText = "filename to save generated c# code.")]
+        [Option('f', "filename", Default = "poco.cs", HelpText = "filename to save generated c# code.")]
         public string CodeFilename { get; set; }
 
-        //bugfix in 2.2.0
-        //change m to x , to be different than namespace
+
         [Option('x', "metafile", HelpText = "Xml filename to save metadata.")]
         public string MetaFilename { get; set; }
 
@@ -37,7 +41,7 @@ namespace OData2Poco.CommandLine
         [Option('d', "header", HelpText = "List  http header of the service")]
         public bool Header { get; set; }
 
-        [Option('l', "list",  HelpText = "List POCO classes to standard output.")]
+        [Option('l', "list", HelpText = "List POCO classes to standard output.")]
         public bool ListPoco { get; set; }
 
         [Option('n', "navigation", HelpText = "Add navigation properties")]
@@ -46,9 +50,9 @@ namespace OData2Poco.CommandLine
         [Option('e', "eager", HelpText = "Add non virtual navigation Properties for Eager Loading")]
         public bool Eager { get; set; }
 
-        [Option('b', "nullable",  HelpText = "Add nullable data types")]
+        [Option('b', "nullable", HelpText = "Add nullable data types")]
         public bool AddNullableDataType { get; set; }
-      
+
 
         [Option('i', "inherit", HelpText = "for class inheritance from  BaseClass and/or interfaces")]
         public string Inherit { get; set; }
@@ -56,23 +60,23 @@ namespace OData2Poco.CommandLine
         [Option('m', "namespace", HelpText = "A namespace prefix for the OData namespace")]
         public string Namespace { get; set; }
 
-      
+
         [Option('c', "case", Default = "none", HelpText = "Type pas or camel to Convert Property Name to PascalCase or CamelCase")]
         public string NameCase { get; set; }
-      
+
         [Option('a', "attribute",
         HelpText = "Attributes, Allowed values: key, req, json,tab,dm,proto,db,display")]
         public IEnumerable<string> Attributes { get; set; }
 
-       // [Option('g', "generate", HelpText = "generate text document")] //todo v3.1
+
         public IEnumerable<string> Generators { get; set; }
-        [Option("lang", Default = "cs", Hidden = true, HelpText = "Type cs for CSharp, vb for VB.NET")]
-        public string  Lang { get; set; } //v3
+        [Option("lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
+        public string Lang { get; set; } //v3
 
         //TODO--- ---------------------------
         //following are obsolete and will be removed in the next release
         //obsolete use -a key
-        [Option('k', "key",Hidden = true,HelpText = "Obsolete, use -a key, Add Key attribute [Key]")]
+        [Option('k', "key", Hidden = true, HelpText = "Obsolete, use -a key, Add Key attribute [Key]")]
         public bool Key { get; set; }
 
         //obsolete use -a tab
@@ -85,6 +89,51 @@ namespace OData2Poco.CommandLine
         //obsolete use -a json
         [Option('j', "Json", Hidden = true, HelpText = "Obsolete, use -a json, Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
         public bool AddJsonAttribute { get; set; }
+        public List<string> Errors = new List<string>();
+        public int Validate()
+        {
+            
+            //validating Lang
+            switch (Lang)
+            {
+                case "vb":
+                    CodeFilename = Path.ChangeExtension(CodeFilename, ".vb");
+                    break;
+                case "cs":
+                    CodeFilename = Path.ChangeExtension(CodeFilename, ".cs");
+                    break;
+                default:
+                    Errors.Add($"Invalid Language Option '{Lang}'. It's set to 'cs'.");
+                    CodeFilename = Path.ChangeExtension(CodeFilename, ".cs");
+                    break;
+                    //return -1;
+            }
+            //validate NameCase
+            if (string.IsNullOrEmpty(NameCase))
+            {
+                Errors.Add($"NameCase '{NameCase}' is empty. It is set to 'pas'.");//warning
+                NameCase = "pas";
+            }
+            if (!Regex.IsMatch(NameCase.ToLower(), "cam|camel|none|pas", RegexOptions.IgnoreCase))
+            {
+                Errors.Add($"NameCase '{NameCase}' isn't valid. It is set to 'pas'.");//warning
+                NameCase = "pas";
+            }
+
+            //validate Attributes
+            foreach (var attribute in Attributes.ToList())
+            {
+                if (attribute.Trim().StartsWith("[")) continue;
+                if (!Regex.IsMatch(attribute.Trim().ToLower(), "key|req|tab|table|json|db|proto|dm|display", RegexOptions.IgnoreCase))
+                {
+                    Errors.Add($"Attribute '{attribute}' isn't valid. It will be  droped.");//warning
+                    
+                }
+            }
+            
+           
+            return 0;
+        }
 
     }
 }

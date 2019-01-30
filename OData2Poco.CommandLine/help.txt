@@ -1,0 +1,27 @@
+﻿OData2Poco 3.0.0
+Copyright c 2016-2018, Mohamed Hassan
+-a, --attribute     Attributes, Allowed values: key, req, json,tab,dm,proto,db,display
+-b, --nullable      Add nullable data types
+-c, --case          (Default: none) Type pas or camel to Convert Property Name to PascalCase or CamelCase
+-d, --header        List  http header of the service
+-e, --eager         Add non virtual navigation Properties for Eager Loading
+-f, --filename      (Default: poco.cs) filename to save generated c# code.
+
+-i, --inherit       for class inheritance from  BaseClass and/or interfaces
+
+-l, --list          List POCO classes to standard output.
+-m, --namespace     A namespace prefix for the OData namespace
+-n, --navigation    Add navigation properties
+
+-p, --password      password for authentication.
+
+-r, --url           Required. URL of OData feed.
+
+-u, --user          User name for authentication.
+-v, --verbose       Prints C# code to standard output.
+
+-x, --metafile      Xml filename to save metadata.
+ 
+  --lang              (Default: cs) Type cs for CSharp, vb for VB.NET
+  --help              Display this help screen.
+  --version           Display version information.

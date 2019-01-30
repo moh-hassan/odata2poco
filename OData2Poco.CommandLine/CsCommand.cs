@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using OData2Poco.Api;
-using OData2Poco.Coloring;
+using OData2Poco.CommandLine.InfraStructure.FileSystem;
+using OData2Poco.CommandLine.InfraStructure.Logging;
 using OData2Poco.Extension;
 
 namespace OData2Poco.CommandLine
@@ -11,53 +13,91 @@ namespace OData2Poco.CommandLine
     /// <summary>
     ///     Command Pattern to manage all options of commandline
     /// </summary>
-    internal class Command : ICommand
+    internal class CsCommand : IPocoCommand
     {
         public readonly Options ArgOptions;
         public PocoSetting PocoSettingOptions;
         public string Code { get; private set; }
-        private readonly ConColor _logger = ConColor.Default;
+        private readonly ColoredConsole _logger = ColoredConsole.Default;
         public O2P O2PGen { get; set; }
-        public Command(Options options)
+        public List<string> Errors; //model generation errors
+        private IPocoFileSystem _fileSystem;
+
+        public CsCommand(Options options, IPocoFileSystem fileSystem)
         {
+            if (fileSystem==null)
+                _fileSystem= new NullFileSystem();
+            else
+            {
+                _fileSystem = fileSystem;
+            }
+
+            Errors = new List<string>();
+
             ArgOptions = options;
             O2PGen = new O2P(config =>
             {
                 config.AddNavigation = options.Navigation;
                 config.AddNullableDataType = options.AddNullableDataType;
-                config.AddEager = options.Eager; //v2.1.0
-                config.Inherit = string.IsNullOrWhiteSpace(options.Inherit) ? null : options.Inherit; //v2.1.0
-                config.NamespacePrefix = string.IsNullOrEmpty(options.Namespace) ? string.Empty : options.Namespace; //v2.1.0
-                config.NameCase = options.NameCase.ToCaseEnum(); //v2.2,
+                config.AddEager = options.Eager;
+                config.Inherit = string.IsNullOrWhiteSpace(options.Inherit) ? null : options.Inherit;
+                config.NamespacePrefix = string.IsNullOrEmpty(options.Namespace) ? string.Empty : options.Namespace;
+                config.NameCase = options.NameCase.ToCaseEnum();
                 config.Attributes = options.Attributes?.ToList();
-              //  config.Generators = options.Generators?.ToList(); //todo v3.1
 
                 config.AddKeyAttribute = options.Key;
                 config.AddTableAttribute = options.Table;
                 config.AddRequiredAttribute = options.Required;
-                config.AddJsonAttribute = options.AddJsonAttribute; //v2.2
-               
+                config.AddJsonAttribute = options.AddJsonAttribute;
+
             });
             PocoSettingOptions = O2PGen.Setting;
         }
 
-        
+
 
         public async Task Execute()
         {
+
             ShowOptions();
             Console.WriteLine();
-            _logger.Info("Start processing url: " + ArgOptions.Url);
+            if (ArgOptions.Validate() < 0)
+            {
+                ArgOptions.Errors.ForEach(x =>
+                {
+                    _logger.Error(x);
+                });
+                return;
+            }
 
+            //show warning
+            ArgOptions.Errors.ForEach(x =>
+                {
+                    _logger.Warn(x);
+                });
+
+
+            _logger.Info("Start processing url: " + ArgOptions.Url);
             //show result
             await GenerateCodeCommandAsync();
             ServiceInfo();
-            _logger.Confirm("CSharp code  is generated Successfully.");
+
             SaveMetaDataCommand();
             ShowHeaderCommand();
             ListPocoCommand();
             VerboseCommand();
+            ShowErrors();
 
+        }
+
+        public void ShowErrors()
+        {
+            if (Errors.Count == 0) return;
+            _logger.Error("--------- Errors--------");
+            Errors.ForEach(x =>
+            {
+                _logger.Error(x);
+            });
         }
         public void ServiceInfo()
         {
@@ -105,23 +145,28 @@ namespace OData2Poco.CommandLine
         #region Utility
 
         //utility functions
-        private void SaveToFile(string fileName, string text, string errorMsg)
+        //private void SaveToFile(string fileName, string text, string errorMsg)
+        //{
+        //    if (string.IsNullOrEmpty(text))
+        //        throw new Exception(errorMsg);
+        //    var file = new FileInfo(fileName);
+        //    //file.Directory.Create(); // If the directory already exists, this method does nothing.
+        //    File.WriteAllText(file.FullName, text);
+        //    File.WriteAllText(fileName, text);
+        //    var length = new FileInfo(fileName).Length;
+        //    if (length == 0) throw new Exception(fileName + " is empty");
+        //}
+
+        private void SaveToFile(string fileName, string text)
         {
-            if (string.IsNullOrEmpty(text))
-                throw new Exception(errorMsg);
-            var file = new FileInfo(fileName);
-            //file.Directory.Create(); // If the directory already exists, this method does nothing.
-            File.WriteAllText(file.FullName, text);
-            File.WriteAllText(fileName, text);
-            var length = new FileInfo(fileName).Length;
-            if (length == 0) throw new Exception(fileName + " is empty");
+            _fileSystem.SaveToFile(fileName, text);
         }
 
         #endregion
 
-        #region commands
+            #region commands
 
-        private void ListPocoCommand()
+            private void ListPocoCommand()
         {
             //---------list -l 
             if (!ArgOptions.ListPoco) return;
@@ -145,7 +190,12 @@ namespace OData2Poco.CommandLine
             if (!ArgOptions.Verbose) return;
 
             Console.WriteLine();
-            Console.WriteLine(Code);
+            //Console.WriteLine(Code);
+            if (!string.IsNullOrEmpty(Code))
+            {
+                _logger.Normal("---------------Code Generated--------------------------------");
+                _logger.Normal(Code);
+            }
         }
 
         private void ShowHeaderCommand()
@@ -173,27 +223,34 @@ namespace OData2Poco.CommandLine
                 var xml = File.ReadAllText(ArgOptions.Url);
                 Code = O2PGen.Generate(xml);
             }
-          
+
 
             if (ArgOptions.Lang == "cs")
             {
                 _logger.Info("Saving generated CSharp code to file : " + ArgOptions.CodeFilename);
-                SaveToFile(ArgOptions.CodeFilename, Code, " c# code is empty");
+                SaveToFile(ArgOptions.CodeFilename, Code);
+                _logger.Confirm("CSharp code  is generated Successfully.");
+            }
+            else if (ArgOptions.Lang == "vb")
+            {
+                //vb.net
+                Code = await VbCodeConvertor.CodeConvert(Code); //convert to vb.net
+                if (!string.IsNullOrEmpty(Code))
+                {
+                    var filename = Path.ChangeExtension(ArgOptions.CodeFilename, ".vb");
+                    Console.WriteLine("Saving generated VB.NET code to file : " + ArgOptions.CodeFilename);
+                    SaveToFile(filename, Code);
+                    _logger.Confirm("VB.NET code  is generated Successfully.");
+                }
+                else
+                {
+                    _logger.Warn("Vb Service Converter isn't available.");
+                }
             }
             else
             {
-                //vb.net
-                    Code = VbCodeConvertor.CodeConvert(Code); //convert to vb.net
-                    if (!string.IsNullOrEmpty(Code))
-                    {
-                        var filename = Path.ChangeExtension(ArgOptions.CodeFilename, ".vb");
-                        Console.WriteLine("Saving generated VB.NET code to file : " + ArgOptions.CodeFilename);
-                        SaveToFile(filename, Code, " VB.NET code is empty");
-                    }
-                    else
-                    {
-                        _logger.Warning("Vb Service Converter isn't available.");
-                    }
+                _logger.Warn($"Lang option: '{ArgOptions.Lang}' isn't valid. Only cs or vb are accepted \r\n No code is generated");
+                Code = "";
             }
 
         }
@@ -206,17 +263,9 @@ namespace OData2Poco.CommandLine
             Console.WriteLine();
             Console.WriteLine("Saving Metadata to file : {0}", ArgOptions.MetaFilename);
             var metaData = O2PGen.MetaDataAsString.FormatXml();
-            SaveToFile(ArgOptions.MetaFilename, metaData, " Metadata is empty");
+            SaveToFile(ArgOptions.MetaFilename, metaData);
         }
 
         #endregion
-    }
-
-    internal static class VbCodeConvertor
-    {
-        public static string CodeConvert(string code)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

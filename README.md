@@ -25,6 +25,7 @@ OData2Poco is available in three flavers:
 
 -  New: Support NetStandard2.0 and net45
 -  New: .Net Core Global tool  **dotnet-o2pgen** support netcoreapp2.1
+-  New: Generating VB.Net code
 -  New: Support Colored Console.
 -  New: Add attributes 
   -  dm DataMember / DataContract
@@ -32,11 +33,12 @@ OData2Poco is available in three flavers:
   -  display attribute
   -  proto attribute to suport Proto Buffer
 -  Obsolete: Removing these options:
-   - -k and replaced by the option -a key 
-   - -json and replaced by -a json
-   - -table and replaced by -a tab
-   - -required and replaced by -a req
-   - Adding more than attribute in one option: -a key json req
+   - option -k is replaced by the option -a key 
+   - option -json is replaced by -a json
+   - option -table is replaced by -a tab
+   - option -required is replaced by -a req
+- New: More than one attribute can be passed in one option: -a key json req
+- Updata to Odata version 7+
 -   Re-factoring Attributes to be added as a plugin based on standard interface.
 -   Maintenance: Migrating to vs2017,  the new SDK project style and c#7+.
 

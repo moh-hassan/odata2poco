@@ -1,30 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
-    <!--<TargetFrameworks>netcoreapp2.0;net45</TargetFrameworks>-->
-   <!--<GenerateAssemblyInfo>false</GenerateAssemblyInfo>-->
+    <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;net452</TargetFrameworks>
+
     <Authors>Mohamed Hassan</Authors>
     <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
     <Product>OData2Poco</Product>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="ProgramTests.NetCore.cs.txt" />
+  </ItemGroup>
+  
+
+
+  <ItemGroup>
     <Compile Include="..\CommonTestData.cs" Link="CommonTestData.cs" />
+    <Content Include="ProgramTests.NetCore.cs.txt" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net452'">
     <DefineConstants>NET45;NETFULL</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MedallionShell" Version="1.5.1" />
-  </ItemGroup>
-
-  <!--<ItemGroup>
-    <PackageReference Include="nunit" Version="3.11.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-  </ItemGroup>-->
+ 
 
   <ItemGroup>
     <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" />
@@ -43,8 +41,6 @@
     </None>
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net452'">
-    <DefineConstants>NET45;NETFULL</DefineConstants>
-  </PropertyGroup>
 
+  
 </Project>
