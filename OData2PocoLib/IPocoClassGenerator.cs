@@ -1,28 +1,18 @@
-﻿#if x
-using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OData2Poco
 {
-    interface IPocoClassGenerator : IEnumerable<string>
+    public interface IPocoClassGenerator
     {
-        List<ClassTemplate> ClassList { get;  }
-        // Indexer declaration:
-        ClassTemplate this[string index]
-        {
-            get;
-            //set;
-        }
         PocoSetting PocoSetting { get; set; }
-        //string GeneratePoco();
-        //string ClassToString(ClassTemplate ent, bool includeNamespace = false);
-        //List<ClassTemplate> GetClassTemplateList();
-
-
+        ClassTemplate this[string index] { get; }
+        List<ClassTemplate> ClassList { get; } //
+        string GeneratePoco();
+        //v2.2 to support exporting model as json
+        IDictionary<string, ClassTemplate> PocoModel { get;  }
+        string PocoModelAsJson { get; }
     }
 }
 
-#endif
+

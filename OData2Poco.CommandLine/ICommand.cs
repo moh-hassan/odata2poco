@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OData2Poco.CommandLine
 {
-    interface ICommand
+    interface IPocoCommand
     {
         Task Execute();
     }

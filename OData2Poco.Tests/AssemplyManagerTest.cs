@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using NUnit.Framework;
-using OData2Poco.Shared;
 
 namespace OData2Poco.Tests
 {

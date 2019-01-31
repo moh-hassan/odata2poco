@@ -7,7 +7,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using OData2Poco.Shared;
+using OData2Poco.Extensions;
 
 namespace OData2Poco.Tests
 {

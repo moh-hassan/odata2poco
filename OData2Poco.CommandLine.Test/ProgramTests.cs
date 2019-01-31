@@ -1,282 +1,286 @@
-﻿using System;
-using System.Diagnostics;
+﻿
+using System;
 using System.Linq;
-using CommandLine;
-using Medallion.Shell;
+using System.Threading.Tasks;
 using NUnit.Framework;
+
 
 namespace OData2Poco.CommandLine.Test
 {
-    /*
-     * Note for text contain check for properties of class
-     * all properties are declared with one and only one space between words
-     * example virtual public Supplier Supplier {get;set;}  //only one space bet all words
-     * */
+   
     [TestFixture]
-    public class ProgramTests
+    public class ProgramTests : BaseTest
     {
-        private const double Timeout = 3 * 60; //sec
-        private const string appCommand = @"o2pgen";
-        static Func<string, Medallion.Shell.Command> TestCommand = (s => Medallion.Shell.Command.Run(appCommand, s.Split(' '),
-             options => options.Timeout(TimeSpan.FromSeconds(Timeout))));
+        
+        private readonly ArgumentParser _argumentParser;
 
-        /// <summary>
-        /// exitcode = tuble.item1  , output= tuble.item2
-        /// </summary>
-        /// <remarks>
-        /// Command is split  simply using space as a delimiter so does not cope 
-        /// with spaces within quoted parameter values nor quotes themselves. Works well
-        /// enough for unit tests.
-        /// </remarks>
-        private Func<string, Tuple<int, string>> RunCommand = (s =>
+        public ProgramTests()
         {
-           var command = Medallion.Shell.Command.Run(appCommand, s.Split(' '),
-           options => options.Timeout(TimeSpan.FromSeconds(Timeout)));
+            _argumentParser = new ArgumentParser();
 
-            var outText = command.Result.StandardOutput;
-            var errText = command.Result.StandardError;
-            var exitCode = command.Result.ExitCode;
-            Tuple<int, string> tuple = new Tuple<int, string>(exitCode, outText + "\n" + errText);
-            //Console.WriteLine(tuple.Item2);
+        }
+        [OneTimeSetUp]
+        public void SetupOneTime()
+        {
+            //WorkingDirectory
+            Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
+        }
+
+        private async Task<Tuple<int, string>> RunCommand(string s)
+        {
+            ArgumentParser.Logger.Silent = true;
+            ArgumentParser.Logger.Clear();
+
+            string[] args = s.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var retcode = await _argumentParser.RunOptionsAsync(args);
+            string outText = ArgumentParser.OutPut;
+            var exitCode = retcode;
+            Tuple<int, string> tuple = new Tuple<int, string>(exitCode, outText );
             return tuple;
-        });
-
-        [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void DefaultSettingTest(string url, string version, int n)
-        {
-            var a = string.Format("-r {0} -v ", url);
-            var tuble = RunCommand(a);
-            var output = tuble.Item2;
-            //Console.WriteLine(output);
-            Assert.AreEqual(0, tuble.Item1);
-            //Console.WriteLine(tuble.Item2);
-            Assert.IsTrue(output.Contains("public class Product"));
-            Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations")); //-k not set
-            Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //-t not set
         }
 
+        
         [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void PocoSettingTest(string url, string version, int n)
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task DefaultSettingTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0} -v -k -t -q -n -b", url);
-            var tuble = RunCommand(a);
-            var output = tuble.Item2;
-            Assert.AreEqual(0, tuble.Item1);
-          //  Console.WriteLine(tuble.Item2);
-            
-            Assert.IsTrue(output.Contains("public class Product"));
-            Assert.IsTrue(output.Contains("[Table(\"Products\")]")); //-t
-            Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //-t
-            Assert.IsTrue(output.Contains("[Key]")); //-k
-            Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations")); //-k
-            Assert.IsTrue(output.Contains("[Required]"));  //-q
-            Assert.IsTrue(output.Contains("virtual public Supplier Supplier {get;set;}")); //-n
-            Assert.IsTrue(output.Contains("int?"));  //-b
-            Assert.IsFalse(output.Contains("public class Product :")); // -i is not set
-        }
-
-        [Test]
-        public void PocoWithInheritanceTest()
-        {
-            var url = "http://services.odata.org/V4/TripPinServiceRW/" ;
+            //Arrange
             var a = $"-r {url} -v";
-
-            var tuble = RunCommand(a);
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
+            //Assert
+            Assert.AreEqual(0, tuble.Item1);
+            Assert.IsTrue(output.Contains("public partial class Product"));
+            Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations")); //-a key /or -k not set
+            Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //a- tab / or -t not set
+        }
 
-            Assert.IsTrue(output.Contains("public class PublicTransportation : PlanItem"));
+        [Test]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task PocoSettingTest(string url, string version, int n)
+        {
+            //Arrange
+            var a = $"-r {url} -v -a key tab req -n -b";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+          
+            //Assert
+            Assert.AreEqual(0, tuble.Item1);
+
+            Assert.IsTrue(output.Contains("public partial class Product"));
+            Assert.IsTrue(output.Contains("[Table(\"Products\")]")); //-a tab/ -t
+            Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //-a tab  
+            Assert.IsTrue(output.Contains("[Key]")); //-k
+            Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations")); //-a key  
+            Assert.IsTrue(output.Contains("[Required]"));  //-q
+            Assert.IsTrue(output.Contains("public virtual Supplier Supplier {get;set;}")); //-n
+            Assert.IsTrue(output.Contains("int?"));  //-b
+            Assert.IsFalse(output.Contains("public partial class Product :")); // -i is not set
+        }
+
+       
+        [Test]
+        public async Task PocoWithInheritanceTest()
+        {
+            //Arrange
+            var url = TestSample.UrlTripPinService; 
+            var a = $"-r {url} -v";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            Assert.IsTrue(output.Contains("public partial class PublicTransportation : PlanItem"));
         }
 
         [Test(Description = "If model inheritance is used (the default) check that the propterties of a base calsss are not duplicated inderived classes")]
-        public void PropertyInheritenceTest()
+        public async Task PropertyInheritenceTest()
         {
-            var url = "http://services.odata.org/V4/TripPinServiceRW/";
+            //Arrange
+            var url = TestSample.UrlTripPinService; 
             var a = $"-r {url} -v";
-
-            var tuble = RunCommand(a);
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
 
             var lines = output.Split('\n');
             var occurneces = lines.Count(l => l.Contains("public int PlanItemId"));
-
-            Assert.IsTrue(occurneces == 1); // For inheritance, check that PlanItemId property only occurs in the base class
+            //Assert
+            // Assert.IsTrue(occurneces == 1); // For inheritance, check that PlanItemId property only occurs in the base class
+            Assert.That(occurneces, Is.EqualTo(1));
 
         }
         [Test]
-        public void PocoWithBaseClassTest()
+        public async Task PocoWithBaseClassTest()
         {
-            var url = "http://services.odata.org/V4/TripPinServiceRW/";
+            //Arrange
+            var url = TestSample.UrlTripPinService; 
             const string myBaseClass = nameof(myBaseClass);
 
             var a = $"-r {url} -v -i {myBaseClass}";
-
-            var tuble = RunCommand(a);
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
 
-            Assert.IsTrue(output.Contains($"public class PublicTransportation : {myBaseClass}"));
+            Assert.IsTrue(output.Contains($"public partial class PublicTransportation : {myBaseClass}"));
 
             var lines = output.Split('\n');
             var occurneces = lines.Count(l => l.Contains("public int PlanItemId"));
-
+            //Assert
             Assert.IsTrue(occurneces > 1);
         }
 
         [Test(Description = "If model inheritance is not used, the properties from a base class should by duplicated in the derived classes.")]
-        public void PropertyDuplicationTest()
+        public async Task PropertyDuplicationTest()
         {
-            var url = "http://services.odata.org/V4/TripPinServiceRW/";
+            //Arrange
+            var url = TestSample.UrlTripPinService; 
             const string myBaseClass = nameof(myBaseClass);
 
             var a = $"-r {url} -v -i {myBaseClass}";
-
-            var tuble = RunCommand(a);
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
-
             var lines = output.Split('\n');
             var occurneces = lines.Count(l => l.Contains("public int PlanItemId"));
-
+            //Assert
             Assert.IsTrue(occurneces > 1); // If not using model inheritance, check that the PlanItemId property is duplicated in derived classes
 
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void NullableDatatypeTest(string url, string version, int n)
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task NullableDatatypeTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0} -v  -n -b", url); //navigation propertis with complex data type
-            var tuble = RunCommand(a);
+            //Arrange
+            var a = $"-r {url} -v  -n -b"; //navigation propertis with complex data type
+            //Act
+            var tuble = await RunCommand(a);
+            //Assert
             var output = tuble.Item2;
+            //Assert
             Assert.AreEqual(0, tuble.Item1);
-           // Console.WriteLine(tuble.Item2);
-
-            Assert.IsTrue(output.Contains("public class Product"));
-            Assert.IsTrue(output.Contains("virtual public Supplier Supplier {get;set;}")); //-n
+            Assert.IsTrue(output.Contains("public partial class Product"));
+            Assert.IsTrue(output.Contains("public virtual Supplier Supplier {get;set;}")); //-n
             Assert.IsTrue(output.Contains("int?"));  //-b
-         
+
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void PocoSettingWithJsonAttributeTest(string url, string version, int n)
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task PocoSettingWithJsonAttributeTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0}  -j -v", url);
-            var tuble = RunCommand(a);
+            //Arrange
+            var a = $"-r {url}  -j -v";
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
-            //Console.WriteLine(tuble.Item2);
+          
+            //Assert
             Assert.AreEqual(0, tuble.Item1); //exit code
-            Assert.IsTrue(output.Contains("public class Category"));
+            Assert.IsTrue(output.Contains("public partial class Category"));
             Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
             Assert.IsTrue(output.Contains("Category"));
             Assert.IsTrue(output.Contains(" [JsonProperty(PropertyName = \"CategoryName\")]"));
             Assert.IsTrue(output.Contains("CategoryName"));
-
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void PocoSettingWithJsonAttributeAndCamelCaseTest(string url, string version, int n)
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
+        public async Task PocoSettingWithJsonAttributeAndCamelCaseTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0}  -j -c cam -v", url);
-            var tuble = RunCommand(a);
+            //Arrange
+            var a = $"-r {url}  -j -c cam -v";
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
-            //Assert.AreEqual(0, tuble.Item1);
-          //  Console.WriteLine(tuble.Item2);
-            Assert.IsTrue(output.Contains("public class Category"));
-            Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryName\")]"),"itshould be CategoryName");
+            //Assert
+            Assert.IsTrue(output.Contains("public partial class Category"));
+            Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryName\")]"), "itshould be CategoryName");
             Assert.IsTrue(output.Contains("categoryName"));
             Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
             Assert.IsTrue(output.Contains("category"));
-         
-
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void PocoSettingWithJsonAttributePasCaseTest(string url, string version, int n)
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
+        public async Task PocoSettingWithJsonAttributePasCaseTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0}  -jc PAS -v", url);
-            var tuble = RunCommand(a);
+            //Arrange
+            var a = $"-r {url}  -jc PAS -v";
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
+            //Assert
             Assert.AreEqual(0, tuble.Item1);
-            //Console.WriteLine(tuble.Item2);
-
             Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
             Assert.IsTrue(output.Contains("Category"));
             Assert.IsTrue(output.Contains(" [JsonProperty(PropertyName = \"CategoryName\")]"));
             Assert.IsTrue(output.Contains("CategoryName"));
 
         }
-       
-       
+
+
         [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void PocoSettingEagerTest(string url, string version, int n)
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task PocoSettingEagerTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0} -v -e", url);
-            var tuble = RunCommand(a);
+            //Arrange
+            var a = $"-r {url} -v -e";
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
             Assert.AreEqual(0, tuble.Item1);
-          //  Console.WriteLine(tuble.Item2);
-            
-            Assert.IsTrue(output.Contains("public class Product")); //-v
+            //Assert
+            Assert.IsTrue(output.Contains("public partial class Product")); //-v
             Assert.IsTrue(output.Contains("public Supplier Supplier {get;set;}")); //-e
-        
-        }
-
-        [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void PocoSettingInheritTest(string url, string version, int n)
-        {
-            var a = string.Format("-r {0} -v -i {1}", url,"MyBaseClass,MyInterface");
-            var tuble = RunCommand(a);
-            var output = tuble.Item2;
-            Assert.AreEqual(0, tuble.Item1);
-            //  Console.WriteLine(tuble.Item2);
-           
-            Assert.IsTrue(output.Contains("public class Product : MyBaseClass,MyInterface")); //-i, -v
 
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void PocoSettingNamespaceTest(string url, string version, int n)
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task PocoSettingInheritTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0} -v -m {1}", url, "MyNamespace1.MyNamespace2");
-            var tuble = RunCommand(a);
+            //Arrange
+            var a = string.Format("-r {0} -v -i {1}", url, "MyBaseClass,MyInterface");
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
+            //Assert
             Assert.AreEqual(0, tuble.Item1);
-            //  Console.WriteLine(tuble.Item2);
+            Assert.IsTrue(output.Contains("public partial class Product : MyBaseClass,MyInterface")); //-i, -v
 
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task PocoSettingNamespaceTest(string url, string version, int n)
+        {
+            var a = $"-r {url} -v -m {"MyNamespace1.MyNamespace2"}";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            Assert.AreEqual(0, tuble.Item1);
             Assert.IsTrue(output.Contains("MyNamespace1.MyNamespace2.")); //-m, -v
 
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void FileDefaultSettingTest(string url, string version, int n)
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task FileWithSettingTest(string url, string version, int n)
         {
-            var a = string.Format("-r {0} -v ", url);
-            var tuble = RunCommand(a);
+            //Arrange
+            var a = $"-r {url} -v -a key tab req -n";
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
-           
+            //Assert
             Assert.AreEqual(0, tuble.Item1);
-            //Console.WriteLine(tuble.Item2);
-            Assert.IsTrue(output.Contains("public class Product"));
-        }
-
-        [Test]
-        [TestCaseSource(typeof(TestSample), "FileCases")]
-        public void FileWithSettingTest(string url, string version, int n)
-        {
-            var a = string.Format("-r {0} -v -k -t -q -n", url);
-            var tuble = RunCommand(a);
-            var output = tuble.Item2;
-            Assert.AreEqual(0, tuble.Item1);
-           // Console.WriteLine(tuble.Item2);
-            
-            Assert.IsTrue(output.Contains("public class Product"));
+            Assert.IsTrue(output.Contains("public partial class Product"));
             Assert.IsTrue(output.Contains("[Table")); //-t
             Assert.IsTrue(output.Contains("[Key]")); //-k
             Assert.IsTrue(output.Contains("[Required]"));  //-q
@@ -284,96 +288,72 @@ namespace OData2Poco.CommandLine.Test
         }
 
         [Test]
-        public void ShowHelpIfNoArgumentsTest()
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task FolderMaybeNotExistTest(string url, string version, int n)
         {
-            var a = "";
-            var tuble = RunCommand(a);
-            var output = tuble.Item2;
-            Assert.AreEqual(0, tuble.Item1);
-            //var help = File.ReadAllText("help.txt");
-            Assert.IsTrue(output.Contains("-r, --url"));
-        }
-
-
-
-
-        [Test]
-        [TestCaseSource(typeof(TestSample), "FileCases")]
-        public void FolderMaybeNotExistTest(string url, string version, int n)
-        {
+            //Arrange
             var fname = @"xyz.cs";
-            var a = string.Format("-r {0} -v -f {1}", url, fname);
-            var tuble = RunCommand(a);
+            var a = $"-r {url} -v -f {fname}";
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
-            //Console.WriteLine(output);
+            //Assert
             Assert.AreEqual(0, tuble.Item1);
-            Assert.IsTrue(output.Contains("public class Product")); //-v
+            Assert.IsTrue(output.Contains("public partial class Product")); //-v
 
         }
-
-
         [Test]
-        [TestCase(@"http://invalid-url.com")]
-        [TestCase(@"http://www.google.com")] //not odata service
-        public void InvalidUrlTest(string url)
+        public async Task Enum_issue_7_test()
         {
-            var a = String.Format("-r {0} -vdl", url);
-            var tuble = RunCommand(a);
+            //Arrange
+            var url = TestSample.TripPin4Flag;
+             
+
+            var a = $"-r {url} -v";
+            //Act
+            var tuble = await RunCommand(a);
             var output = tuble.Item2;
-            //Console.WriteLine(output);
-            Assert.AreNotEqual(0, tuble.Item1);
-            Assert.IsTrue(output.Contains("Error in executing the command"));
+        
+            var expected = @"
+public enum Feature
+	 {
+ 		Feature1=0,
+ 		Feature2=1,
+ 		Feature3=2,
+ 		Feature4=3 
+	}
+";
+            //Assert
+            Assert.That(output, Does.Match(expected.GetRegexPattern()));
+          
 
-        }
-
-
-        [Test]
-        [TestCaseSource(typeof(TestSample), "UrlCases")]
-        public void InValidArgumentTest(string url, string version, int n)
-        {
-            var a = string.Format("-r {0} -z ", url); //-z invalid argument
-            var result = RunCommand(a);
-            Assert.AreEqual(0, result.Item1);
-            Assert.IsTrue(result.Item2.Contains("-r, --url"));
-        }
-
-
-
-        //[Test]
-        //[TestCase(@"data\not_exist_file.xml", -1)]
-        //public void FileNotExistReadingTest(string url, int exitCode)
-        //{
-        //    //   var a = string.Format("-r {0} -d -l -v -m meta.xml -f north.cs  ", url);
-        //    var a = string.Format("-r {0} -vld -m meta.xml -f north.cs  ", url);
-        //    var tuble = RunCommand(a);
-        //    var output = tuble.Item2;
-        //    //Console.WriteLine(output);
-        //    Assert.AreEqual(exitCode, tuble.Item1);
-
-        //}
-
-
-        [Test]
-        public void InheritanceEnabledByDefaultTest()
-        {
-            var a = new string[] {};
-
-            var options = new Options();
-            Parser.Default.ParseArguments(a, options);
-            var command = new Command(options);
-
-            Assert.IsTrue(command.PocoSettingOptions.UseInheritance);
         }
         [Test]
-        public void InheritanceDisabledWithInheritSettingTest()
+        public async Task Enum_issue_7_flag_support_test()
         {
-            var a = new[] { "-i", "MyBaseClass" };
+            //Arrange
+            var url = TestSample.TripPin4Flag;
 
-            var options = new Options();
-            Parser.Default.ParseArguments(a, options);
-            var command = new Command(options);
 
-            Assert.IsFalse(command.PocoSettingOptions.UseInheritance);
+            var a = $"-r {url} -v";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            var expected = @"
+[Flags] public enum PersonGender
+         {
+                Male=0,
+                Female=1,
+                Unknow=2
         }
+"; 
+            //Assert
+            Assert.That(output, Does.Match(expected.GetRegexPattern()));
+           
+
+        }
+
     }
-}//
+
+}
+

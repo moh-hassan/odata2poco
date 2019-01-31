@@ -1,0 +1,33 @@
+﻿<#
+/*
+T4Odata2Poco is part of the Odata2Poco project
+Maintained by Mohamed hassan 
+moh.hassan20@gmail.com
+The MIT License (MIT) (http://odata2poco.codeplex.com/license)
+Copyright (c) 2016 Mohamed Hassan
+
+notes:for T4 code generation , rename this file as your_file_name.tt and set property Custom Tool=TextTemplatingFileGenerator
+*/
+#>
+<#@ template language="C#" debug="false" hostspecific="true" #>
+<#@ output extension=".cs" #>
+<# /* Load the current project's DLL to make sure the OData2Poco can find things */ #>
+<#@ assembly name= "$(projectDir)bin\debug\OData2Poco.dll" #> 
+<#@ import namespace="OData2Poco" #>
+ 
+ <#	
+
+//*****************************  Settings **************************************
+  string url = "http://services.odata.org/V4/OData/OData.svc"; //test case
+
+ //string url = "" ; //Enter  url here
+ string user="" ; //enter user name for basic authentication 
+ string password="";//enter password  for basic authentication 
+//*****************************************************************************
+	O2P o2p ;
+	if (string.IsNullOrEmpty(user))   o2p = new O2P(url);
+	else o2p = new O2P(url,user,password);
+	 
+    var code = o2p.GenerateAsync().Result;
+#>
+<#=code#>  
