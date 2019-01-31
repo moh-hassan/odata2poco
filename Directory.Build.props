@@ -1,0 +1,45 @@
+<Project>
+  <PropertyGroup>
+    <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
+    <!--<GenerateAssemblyInfo>false</GenerateAssemblyInfo>-->
+    <LangVersion>7.3</LangVersion>
+    <Authors>Mohamed Hassan</Authors>
+    <Copyright>Copyright © 2016-2018, Mohamed Hassan </Copyright>
+    <Product>OData2Poco</Product>
+    <!--<PackageLicenseUrl>https://github.com/moh-hassan/odata2poco/blob/master/license.txt?raw=true</PackageLicenseUrl>-->
+    <PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/moh-hassan/odata2poco/blob/master/ODataLogo-32.ico?raw=true </PackageIconUrl>
+    <RepositoryUrl>https://github.com/moh-hassan/odata2poco</RepositoryUrl>
+    <PackageTags>OData poco code-generation</PackageTags>
+    <Description>OData2Poco is a tool to generate  plain-old CLR objects (POCO) from OData feeds V1-V4 OData protocol.The generation is based on the XML metadata of the service stored on the  server. POCO classes can be used in typed RESTful client OData services.</Description>
+    <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
+    <Company>OData2Poco</Company>
+    <PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
+    <PackageTags>OData poco code-generation</PackageTags>
+    <!-- Disable warnings from XML documentation.-->
+    <NoWarn>$(NoWarn);1570;1572;1573;1587</NoWarn>
+    
+  </PropertyGroup>
+
+  <!-- version -->
+  <PropertyGroup>
+    <Version>3.0.3</Version>
+    <AssemblyVersion>3.0.3.0</AssemblyVersion>
+  </PropertyGroup>
+
+
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+      <PackageReference Include="nunit" Version="3.11.0" />
+      <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(SolutionDir)LICENSE.txt" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+</Project>

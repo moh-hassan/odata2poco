@@ -1,75 +1,82 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using CommandLine;
+using OData2Poco.CommandLine.InfraStructure.FileSystem;
+using OData2Poco.CommandLine.InfraStructure.Logging;
 using OData2Poco.Extension;
 
 //todo: file source
-//(c) 2016 Mohamed Hassan
+//(c) 2016-2018 Mohamed Hassan
 // MIT License
-//project site: http://odata2poco.codeplex.com/
+//project site:https://github.com/moh-hassan/odata2poco
+
 
 namespace OData2Poco.CommandLine
 {
-    class Program
+    public class Program
     {
         private static readonly Stopwatch Sw = new Stopwatch();
-        static void Main(string[] args)
+        public static ColoredConsole Logger = ColoredConsole.Default;
+        public static int RetCode = (int)ExitCodes.Success;
+        public static IPocoFileSystem _pocoFileSystem;
+
+        static async Task Main(string[] args)
         {
+            var argument = string.Join(" ", args);
             try
             {
+                _pocoFileSystem = new PocoFileSystem();
                 if (!(Console.IsOutputRedirected || Console.IsErrorRedirected))
                     Console.BufferHeight = Int16.MaxValue - 1;
+
                 // Catch all unhandled exceptions in all threads.
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 Sw.Start();
-                RunOptionsAsync(args).Wait();
+                RetCode = await RunOptionsAsync(args);
                 Sw.Stop();
                 Console.WriteLine();
-                Console.WriteLine("Total processing time: {0} sec", Sw.ElapsedMilliseconds / 1000.0);
+                if (!ArgumentParser.ShowVersionOrHelp)
+                    Logger.Sucess($"Total processing time: {Sw.ElapsedMilliseconds / 1000.0} sec");
 
-                Environment.Exit(0);
-#if DEBUG
-                Console.ReadKey();
-#endif
             }
             catch (Exception ex)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                var argument = string.Join(" ", args);
-                Console.WriteLine("Error in executing the command: o2pgen {0}", argument);
+                RetCode = (int)ExitCodes.HandledException;
+                Logger.Error($"Error in executing the command: o2pgen {argument}");
+                Logger.Error($"Error Message:\n {ex.FullExceptionMessage()}");
+
 #if DEBUG
-                Console.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage(true));
+                Logger.Error("--------------------Exception Details---------------------");
+                Logger.Error($"Error Message:\n {ex.FullExceptionMessage(true)}");
                 Console.ReadKey();
-#else
-                Console.WriteLine("Error Message:\n {0}", ex.FullExceptionMessage());
+
 #endif
-                Console.ForegroundColor = ConsoleColor.White;
-                //Console.WriteLine("Error Details: {0}", ex);
-                Environment.Exit(-1);
             }
+            finally
+            {
+                if (!ArgumentParser.ShowVersionOrHelp)
+                    Logger.Info($"Application Exit code: {RetCode}");
+                Environment.Exit(RetCode);
+            }
+
         }
 
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            var exception = e.ExceptionObject as Exception;
-            if (exception != null)
-                Console.WriteLine("Unhandled exception: {0}", exception.Message);
-            Environment.Exit(-99);
+            RetCode = (int)ExitCodes.UnhandledException;
+            if (e.ExceptionObject is Exception exception)
+                Console.WriteLine("Unhandled exception: \r\n{0}", exception.Message);
+            Environment.Exit(RetCode);
         }
 
-
-        static async Task RunOptionsAsync(string[] args)
+        internal static async Task<int> RunOptionsAsync(string[] args)
         {
-            var options = new Options();
-            if (Parser.Default.ParseArguments(args, options))
-            {
-                Console.WriteLine(ApplicationInfo.HeadingInfo);
-                Console.WriteLine(ApplicationInfo.Copyright);
-                Console.WriteLine(ApplicationInfo.Description);
-                await new Command(options).Execute();
-            }
+            var argumentParser = new ArgumentParser(Logger);
+            return await argumentParser.RunOptionsAsync(args);
         }
     }
+
 }
+
+

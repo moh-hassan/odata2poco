@@ -2,31 +2,56 @@
 **OData2Poco** is a code generation tool for generating plain-old CLR objects (POCO) from OData feeds. 
 POCO classes can be used in a typed RESTful client OData services and code generation can be controlled by setting many options.
 
-OData2Poco is available in two flavers:
+OData2Poco is available in three flavers:
 
-A CLI tool: OData2Poco.CommandLine (a.k.a o2pgen).
+- A Console tool: OData2Poco.CommandLine (a.k.a o2pgen).
+- A .Net Core Global tool  **dotnet-o2pgen** support netcoreapp2.1.
+- A class library: support net45/netstandard2.0.
 
-A class library: with T4 template.
-  
-Nuget: [![NuGet](https://img.shields.io/nuget/v/OData2Poco.svg)](https://www.nuget.org/packages/OData2Poco.CommandLine)
-Chocolatey: [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg)](https://chocolatey.org/packages/odata2poco-commandline)
+[![NuGet Version](https://img.shields.io/nuget/v/OData2Poco.svg?label=Nuget%20Version)](https://www.nuget.org/packages/OData2Poco.CommandLine)
+[![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg?label=Chocolatey%20Version)](https://chocolatey.org/packages/odata2poco-commandline)
+[![Global Tool NuGet Version](https://img.shields.io/nuget/v/OData2Poco.dotnet.o2pgen.svg?label=dotnet%20Global%20Tool&style=flat)](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen)
 
 ## Continuous integration
 |Build server                |Platform     |Build status                                                |
 |----------------------------|-------------|------------------------------------------------------------|
 |AppVeyor                    |Windows      |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
 |Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
+## What is News
+dotnet Global tool (OData2Poco.dotnet.o2pgen V3.0.3) is published on 1 Feb, 2019
+You can install by runing the command:
 
-## What's news?
-- Dec 21,2017 Add inheritance support by default, v2.3.0. Thanks to merijndejonge.
+        dotnet tool install --global OData2Poco.dotnet.o2pgen --version 3.0.3 
+You can run :
+       dotnet o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc  -v
+You have the same options of the console tool: o2pgen
 
-  Generated class follows inhertance hierarchy of OData feed (unless switched-off by -i option)
+Now dotnet-o2pgen support VB.NET.
+You can generate code in vb.net
 
-Now, Odata2Poco.CommandLine is available in chocolatey Gallery.
 
-To install run the command:
+# **The new Features in V3.0.3:** #
 
-         choco install odata2poco-commandline 
+-  New: Support NetStandard2.0 and net45
+-  New: .Net Core Global tool  **dotnet-o2pgen** support netcoreapp2.1
+-  New: Generating VB.Net code
+-  New: Support Colored Console.
+-  New: Add attributes 
+  -  dm DataMember / DataContract
+  -  db to add Key/Table/Required attributes.
+  -  display attribute
+  -  proto attribute to suport Proto Buffer
+-  Obsolete: Removing these options:
+   - option -k is replaced by the option -a key 
+   - option -json is replaced by -a json
+   - option -table is replaced by -a tab
+   - option -required is replaced by -a req
+- New: More than one attribute can be passed in one option: -a key json req
+- Updata to Odata version 7+
+-   Re-factoring Attributes to be added as a plugin based on standard interface.
+-   Maintenance: Migrating to vs2017,  the new SDK project style and c#7+.
+
+----------
 
 
 **Features of OData2Poco**
@@ -75,35 +100,22 @@ From [Nuget Gallery](https://www.nuget.org/packages/OData2Poco/)
 ![enter image description here](http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&DownloadId=1562964)
 
 
-## .NET Requirements
-
-OData2Poco requires .Net 4.5 or higher.  
-
-**Dependency of Odata2Poco Class Library**
-
-Microsoft.Data.Edm  version="5.7.0"  or higher
-
-Microsoft.OData.Edm  version="6.15.0" or higher 
-
-**Note:** The generated POCO classes code need not these EDM dependency libraries when POCO is used in your project.
 
 **Release Notes**
+https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md
 
-- v 2.2.1 March 21, 2017 (last release)
-- v 2.2.0 March 11, 2017
-- v 2.1.0 February 28, 2017
-- v 2.0.0 June 27, 2016
-- v 1.3.0 April 10, 2016
-
-**Latest Changes**
-
-v2.2.1: Support Nullable Data type: DateTime (issue #3), DateTimeOffset, TimeSpan, Guid.
-
-[All Changes](ReleaseNotes.md)
 
  **Try it:**
- 
+ dotnet Global Tool: 
+ Install from nuget gallary
+       dotnet o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/
+	   For help type: dotnet o2pgen --help
+
+Consol net45 tool
        o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/
+ 
+ Note: The same options are available for dotnet Global tool or Console tool
+
  **How to use**
 
 Read the documentation:[Wiki](https://github.com/moh-hassan/odata2poco/wiki)

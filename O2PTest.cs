@@ -2,17 +2,12 @@
 //#define local
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OData2Poco.Extension;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NorthwindModel;
+using OData2Poco.Shared.CustAttributes;
 
 namespace OData2Poco.Tests
 {
@@ -20,16 +15,17 @@ namespace OData2Poco.Tests
     [TestFixture]
     class O2PTest
     {
-       
+        private readonly AttributeFactory _attributeFactory = AttributeFactory.Default;
 
         [Test]
         [TestCaseSource(typeof(TestSample), "UrlCases")]
         public async void GenerateFromHttpDefaultSettingTest(string url, string version, int n)
         {
+
             //var url = "http://services.odata.org/V4/OData/OData.svc";
-            O2P o2p = new O2P();
+            O2P o2p = O2P.Default;
             var code = await o2p.GenerateAsync(new Uri(url));
-            Debug.WriteLine(code);
+            //Debug.WriteLine(code);
            
             Assert.AreEqual(o2p.MetaDataVersion, version);
             Assert.AreEqual(o2p.ClassList.Count, n);
@@ -42,18 +38,30 @@ namespace OData2Poco.Tests
         [TestCaseSource(typeof(TestSample), "UrlCases")]
         public async void GenerateFromHttpWithSettingTest(string url, string version, int n)
         {
-             PocoSetting setting = new PocoSetting
-            {
-                AddNullableDataType = true,
-                AddKeyAttribute = true,
-                AddTableAttribute = true,
-                AddRequiredAttribute = true,
-                AddNavigation = true
-            };
+            // PocoSetting setting = new PocoSetting
+            //{
+            //    AddNullableDataType = true,
+            //    AddKeyAttribute = true,
+            //    AddTableAttribute = true,
+            //    AddRequiredAttribute = true,
+            //    AddNavigation = true
+            //};
+            //_attributeManager.Init(setting);
+            //var url = "http://services.odata.org/V4/OData/OData.svc";
+            //O2P o2p = O2P.Default;
+            // o2p.Init( setting);
 
-             //var url = "http://services.odata.org/V4/OData/OData.svc";
-             O2P o2p = new O2P( setting);
-             var code = await o2p.GenerateAsync(new Uri(url));
+            O2P o2p = O2P.Default.Init(x=>
+            {
+                x.AddNullableDataType = true;
+                x.AddKeyAttribute = true;
+                x.AddTableAttribute = true;
+                x.AddRequiredAttribute = true;
+                x.AddNavigation = true;
+                _attributeFactory.Init(x);
+            });
+
+            var code = await o2p.GenerateAsync(new Uri(url));
              Debug.WriteLine(code);
 
              Assert.AreEqual(o2p.MetaDataVersion, version);
@@ -74,13 +82,15 @@ namespace OData2Poco.Tests
         [TestCaseSource(typeof(TestSample), "UrlCases")]
         public async void GenerateFromHttpWithSettingEagerTest(string url, string version, int n)
         {
-            PocoSetting setting = new PocoSetting
-            {
-                AddEager = true
-            };
+            //PocoSetting setting = new PocoSetting
+            //{
+            //    AddEager = true
+            //};
 
             //var url = "http://services.odata.org/V4/OData/OData.svc";
-            O2P o2p = new O2P(setting);
+            //  O2P o2p = O2P.Default;
+            //  o2p.Init(setting);
+            O2P o2p = O2P.Default.Init(config => { config.AddEager = true; });
             var code = await o2p.GenerateAsync(new Uri(url));
             Debug.WriteLine(code);
 
@@ -102,9 +112,10 @@ namespace OData2Poco.Tests
             };
 
             //var url = "http://services.odata.org/V4/OData/OData.svc";
-            O2P o2p = new O2P(setting);
+            O2P o2p = O2P.Default;
+            o2p.Init(setting);
             var code = await o2p.GenerateAsync(new Uri(url));
-            Debug.WriteLine(code);
+            //Debug.WriteLine(code);
 
             Assert.AreEqual(o2p.MetaDataVersion, version);
             Assert.AreEqual(o2p.ClassList.Count, n);
@@ -124,7 +135,8 @@ namespace OData2Poco.Tests
             };
 
             //var url = "http://services.odata.org/V4/OData/OData.svc";
-            O2P o2p = new O2P(setting);
+            O2P o2p = O2P.Default;
+            o2p.Init(setting);
             var code = await o2p.GenerateAsync(new Uri(url));
             Debug.WriteLine(code);
 
@@ -148,7 +160,8 @@ namespace OData2Poco.Tests
             };
 
             //var url = "http://services.odata.org/V4/OData/OData.svc";
-            O2P o2p = new O2P(setting);
+            O2P o2p = O2P.Default;
+            o2p.Init(setting);
             var code = await o2p.GenerateAsync(new Uri(url));
             Debug.WriteLine(code);
 
@@ -164,7 +177,7 @@ namespace OData2Poco.Tests
         public  void GenerateFromXmlDefaultSettingTest(string fname, string version, int n)
         {
             var xml = File.ReadAllText(fname);
-            O2P o2p = new O2P();
+            O2P o2p = O2P.Default;
             var code = o2p.Generate(xml);
             Debug.WriteLine(code);
             Assert.AreEqual(o2p.MetaDataVersion, version);
@@ -178,7 +191,7 @@ namespace OData2Poco.Tests
         public void GenerateFromXmlWithSettingTest(string fname, string version, int n)
         {
             var xml = File.ReadAllText(fname);
-            O2P o2p = new O2P();
+            O2P o2p = O2P.Default;
             var code = o2p.Generate(xml);
             Debug.WriteLine(code);
             Assert.AreEqual(o2p.MetaDataVersion, version);
@@ -193,7 +206,9 @@ namespace OData2Poco.Tests
 
         public async Task<string> BaseTest(string url, string version, int n, PocoSetting setting )
         {
-            O2P o2P = new O2P(setting);
+            O2P o2P = O2P.Default;
+            o2P.Init(setting);
+
 
             var code = await o2P.GenerateAsync(new Uri(url) );
         //    var metaString = await o2P.SaveMetaDataTo("north.xml");
@@ -228,7 +243,7 @@ namespace OData2Poco.Tests
         //System.Net.WebException : The remote server returned an error: (404) Not Found.
         public async void GeneratePocoInvalidODataOrUrlTest(string url)
         {
-            var o2P = new O2P();
+            var o2P = O2P.Default;
             var code = "";
             var metaString = "";
 
@@ -254,7 +269,7 @@ namespace OData2Poco.Tests
         {
 
             // <System.Exception> (Metadata is not available)
-            var o2P = new O2P();
+            var o2P = O2P.Default;
             var code = "";
             var metaString = "";
             Assert.Throws<ArgumentNullException>(() =>
@@ -271,13 +286,27 @@ namespace OData2Poco.Tests
         public void GeneratePocoFromNullUrlTest()
         {
             var url = "";
-            var o2P = new O2P();
-           
+            var o2P = O2P.Default;
+
             Assert.Throws<UriFormatException>(async () =>
             {
                var code = await o2P.GenerateAsync(new Uri(url));
             });
 
+        }
+
+        [Test]
+        public void InheritanceEnabledByDefaultTest2()
+        {
+            var o2p = O2P.Default;
+            Assert.IsTrue(o2p.Setting.UseInheritance);
+
+        }
+        [Test]
+        public void InheritanceDisabledWithInheritSettingTest()
+        {
+            var o2p = O2P.Default.Init(x => x.Inherit = "MyBaseClass");
+            Assert.IsFalse(o2p.Setting.UseInheritance);
         }
 
         //[Test]
