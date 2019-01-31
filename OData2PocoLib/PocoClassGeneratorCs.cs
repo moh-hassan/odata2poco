@@ -80,7 +80,6 @@ namespace OData2Poco
             foreach (var item in PocoModel)
             {
                 Template.WriteLine(ClassToString(item.Value)); //c# code of the class
-                //Console.WriteLine(ClassToString(item.Value));
             }
             Template.EndNamespace();
             return Template.ToString();
@@ -140,23 +139,21 @@ namespace OData2Poco
             if (ent.IsEnum)
             {
                 var elements = string.Join(",\r\n ", ent.EnumElements.ToArray());
-                //var enumString = string.Format("public enum {0} {{ {1} }}", ent.Name, elements);
                 var flagAttribute = ent.IsFlags ? "[Flags] " : "";
                 var enumString = $"\t{flagAttribute}public enum {ent.Name}\r\n\t {{\r\n {elements} \r\n\t}}";
                 return enumString;
             }
 
 
-            //v 2.2
-            //foreach (var item in ent.GetAttributes(PocoSetting))
+            
             foreach (var item in ent.GetAllAttributes()) //not depend on pocosetting
             {
                 csTemplate.PushIndent("\t").WriteLine(item).PopIndent();
             }
             var baseClass = ent.BaseType != null && PocoSetting.UseInheritance ? ent.BaseType : PocoSetting.Inherit;
 
-            csTemplate.StartClass(ent.Name, baseClass);
-            //   csTemplate.StartClass(ent.Name, PocoSetting.Inherit, partial:true); //delayed to a future release to avoid change of most test cases
+            csTemplate.StartClass(ent.Name, baseClass,partial:true);
+            
             foreach (var p in ent.Properties)
             {
                 var pp = new PropertyGenerator(p, PocoSetting);
@@ -164,7 +161,6 @@ namespace OData2Poco
                
                 if (p.IsNavigate)
                 {
-                    //Console.WriteLine("navigation entity {0}  prop: {1}",ent.Name, p.PropName);
                     if (!PocoSetting.AddNavigation && !PocoSetting.AddEager) continue;
                 }
 
@@ -174,7 +170,6 @@ namespace OData2Poco
                     csTemplate.WriteLine(item);
                 }
                 csTemplate.WriteLine(pp.Declaration);
-                //Console.WriteLine(pp.ToString());
             }
             csTemplate.EndClass();
             if (includeNamespace) csTemplate.EndNamespace(); //"}" for namespace

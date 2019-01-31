@@ -21,30 +21,29 @@ namespace OData2Poco.Tests
         }
 
         [Test]
-        [TestCase(UrlV4)]
-        [TestCase(UrlV3)]
-      
-        public async Task GenerateDefaultFromHttpTest(string url)
+        //[TestCase(UrlV4)]
+        //[TestCase(UrlV3)]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
+        public async Task GenerateDefaultFromHttpTest(string url, string version, int n)
         {
            
             var o2p = new O2P();
             var code = await o2p.GenerateAsync(new Uri(url));
-            Assert.IsTrue(code.Contains("public class Product"));
+            Assert.IsTrue(code.Contains("public partial class Product"));
         }
 
         [Test]
-        [TestCase(@"data\northwindV4.xml")]
-        [TestCase(@"data\northwindV3.xml")]
-        public   void  GenerateDefaultFromXmlFilesTest(string file)
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public void GenerateDefaultFromXmlFilesTest(string file, string version, int n)
         {
             // var o2p = new O2P()
             var o2p = new O2P();
             var xml = File.ReadAllText(file);
-            var code =   o2p.Generate(xml);
+            var code = o2p.Generate(xml);
 
-            Assert.IsTrue(code.Contains("public class Product"));
+            Assert.IsTrue(code.Contains("public partial class Product"));
         }
 
-    
+
     }
 }

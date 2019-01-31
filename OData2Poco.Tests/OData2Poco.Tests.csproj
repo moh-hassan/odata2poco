@@ -16,6 +16,10 @@
     <EmbeddedResource Remove="Model\**" />
     <None Remove="Model\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Fake\CommonTestData.cs" Link="CommonTestData.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
@@ -38,6 +42,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Data\trippinV4.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\trippinV4Flags.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

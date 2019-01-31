@@ -10,16 +10,14 @@
   <ItemGroup>
     <None Remove="ProgramTests.NetCore.cs.txt" />
   </ItemGroup>
-  
-
-
-  <ItemGroup>
-    <Compile Include="..\CommonTestData.cs" Link="CommonTestData.cs" />
-  </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net452'">
     <DefineConstants>NET45;NETFULL</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Fake\CommonTestData.cs" Link="CommonTestData.cs" />
+  </ItemGroup>
 
  
 

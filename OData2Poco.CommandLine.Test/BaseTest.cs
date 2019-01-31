@@ -10,17 +10,19 @@ namespace OData2Poco.CommandLine.Test
         public BaseTest()
         {
             //in case multi target project,use #if because no appdomain in netcore
-#if NETFULL
+#if !NETCOREAPP
             /* Preparing test start */
             Assembly assembly = Assembly.GetCallingAssembly();
 
             AppDomainManager manager = new AppDomainManager();
-            FieldInfo entryAssemblyfield = manager.GetType().GetField("m_entryAssembly", BindingFlags.Instance | BindingFlags.NonPublic);
-            entryAssemblyfield.SetValue(manager, assembly);
+            FieldInfo entryAssemblyfield = manager.GetType()
+                .GetField("m_entryAssembly", BindingFlags.Instance | BindingFlags.NonPublic);
+            entryAssemblyfield?.SetValue(manager, assembly);
 
             AppDomain domain = AppDomain.CurrentDomain;
-            FieldInfo domainManagerField = domain.GetType().GetField("_domainManager", BindingFlags.Instance | BindingFlags.NonPublic);
-            domainManagerField.SetValue(domain, manager);
+            FieldInfo domainManagerField = domain.GetType()
+                .GetField("_domainManager", BindingFlags.Instance | BindingFlags.NonPublic);
+            domainManagerField?.SetValue(domain, manager);
             /* Preparing test end */
 #endif
         }

@@ -65,7 +65,7 @@ namespace OData2Poco
         {
             get
             {
-                return _setting.AddNavigation && !_setting.AddEager ? "virtual" : String.Empty;
+                return _setting.AddNavigation && !_setting.AddEager ? " virtual" : string.Empty;
             }
         }
 
@@ -83,14 +83,7 @@ namespace OData2Poco
         /// <summary>
         /// The declaration of property in C# 
         /// </summary>
-        public string Declaration
-        {
-            get
-            {
-                return string.Format("{0} {1} {2} {3} {{get;set;}} {4}\n",
-                VirtualModifier, "public", _property.PropType + NullableModifier, Name, _property.PropComment);
-            }
-        }
+        public string Declaration => $"public{VirtualModifier} {_property.PropType + NullableModifier} {Name} {{get;set;}} {_property.PropComment}\n";
 
         public override string ToString()
         {

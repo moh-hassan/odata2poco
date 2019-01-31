@@ -23,8 +23,8 @@
 
   <!-- version -->
   <PropertyGroup>
-    <Version>3.0.0</Version>
-    <!--<AssemblyVersion>3.0.1.0</AssemblyVersion>-->
+    <Version>3.0.3</Version>
+    <AssemblyVersion>3.0.3.0</AssemblyVersion>
   </PropertyGroup>
 
 

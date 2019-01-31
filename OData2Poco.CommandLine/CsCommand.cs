@@ -77,7 +77,7 @@ namespace OData2Poco.CommandLine
                 });
 
 
-            _logger.Info("Start processing url: " + ArgOptions.Url);
+            _logger.Info($"Start processing url: {ArgOptions.Url}");
             //show result
             await GenerateCodeCommandAsync();
             ServiceInfo();
@@ -163,6 +163,10 @@ namespace OData2Poco.CommandLine
             {
                 _logger.Normal("---------------Code Generated--------------------------------");
                 _logger.Normal(Code);
+            }
+            else
+            {
+                _logger.Error("Code not generated");
             }
         }
 

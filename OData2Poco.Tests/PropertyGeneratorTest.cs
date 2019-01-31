@@ -296,7 +296,7 @@ public int CategoryID {get;set;} ";
             // Act 
             var sut = new PropertyGenerator(property, setting);
             // Assert 
-            Assert.IsTrue(sut.Declaration.Contains("virtual public List<Product> Products {get;set;}"));
+            Assert.IsTrue(sut.Declaration.Contains("public virtual List<Product> Products {get;set;}"));
         }
 
         [Test]

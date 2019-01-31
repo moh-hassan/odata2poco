@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if x
+using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
@@ -93,3 +94,4 @@ public class MyClas
         }
     }
 }
+#endif
