@@ -1,0 +1,31 @@
+<Project >
+  <PropertyGroup Condition=" '$(TargetId)' == 'net45'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
+    <!--<IsTool>true</IsTool>-->
+    <IncludeBuildOutput>False</IncludeBuildOutput>
+    <Merged>..\o2p</Merged>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetId)' == 'net45'">
+    <Content Include="$(OutputPath)$(Merged)\$(AssemblyName).exe" PackagePath="tools\" />
+  </ItemGroup>
+
+  
+
+  <Target Name="ILMerge" AfterTargets="Build" Condition=" '$(TargetId)' == 'net45'">
+    <ItemGroup>
+      <!--<ILMergePackage Include="$(NuGetPackageRoot)\ilmerge\*\tools\ilmerge.exe" />-->
+      <ILMergePackage Include="$(SolutionDir)tools\ilmerge\tools\net452\ilmerge.exe" />
+    </ItemGroup>
+
+    <Error Condition="!Exists(@(ILMergePackage->'%(FullPath)'))" Text="You are trying to use the ILMerge package, but it is not installed or at the correct location" />
+    <Message Text="Start ilMerge : @(ILMergePackage->'%(fullpath)')" Importance="High" />
+    <Message Text="OutputPath: $(OutputPath)" Importance="High" />
+    <Message Text="AssemblyName: $(AssemblyName)" Importance="High" />
+    <MakeDir Directories="$(OutputPath)$(Merged)"      Condition="!Exists('$(OutputPath)$(Merged)')" />
+    <Exec Command="@(ILMergePackage->'%(fullpath)') /ndebug /target:exe /targetplatform:v4 /log:merge.log /out:$(OutputPath)$(Merged)\$(AssemblyName).exe /wildcards  /target:exe $(OutputPath)$(AssemblyName).exe $(OutputPath)*.dll" />
+
+  </Target>
+
+</Project>

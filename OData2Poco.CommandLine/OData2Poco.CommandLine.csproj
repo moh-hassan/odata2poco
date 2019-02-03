@@ -1,60 +1,78 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;net45</TargetFrameworks>
-    <TargetFrameworks Condition="$(TargetId) == 'netcore'">netcoreapp2.1</TargetFrameworks>
-    <TargetFrameworks Condition="$(TargetId) == 'net45'">net45</TargetFrameworks>
+    <!--<TargetId>net45</TargetId>-->
+    <TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>
+    <!--<RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>-->
+    <TargetFramework Condition=" '$(TargetId)' == 'netcore'">netcoreapp2.1</TargetFramework>
+    <TargetFramework Condition=" '$(TargetId)' == 'net45'">net45</TargetFramework>
     <AssemblyName>O2Pgen</AssemblyName>
     <Authors>Mohamed Hassan</Authors>
     <Product>O2Pgen</Product>
     <Description>
-      o2gen is a CommandLine tool for generating c# POCO classes from OData feeds.
+      o2gen is a CommandLine tool for generating c# and vb.net POCO classes from OData feeds.
     </Description>
+
   </PropertyGroup>
 
 
-  <ItemGroup>
+
+  <Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" Condition=" '$(TargetId)' == 'net45' " />
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <!--<ItemGroup Condition="'$(TargetFramework.StartWith ('net45')'">-->
-    <PackageReference Include="CommandLineParser" Version="2.3.0" />
+    <PackageReference Include="CommandLineParser" Version="2.3.0">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
     <PackageReference Include="CommandLineParser" Version="2.4.3" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
-    <PackageReference Include="CommandLineParser" Version="2.4.3" />
-  </ItemGroup>
+  
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
     <DefineConstants>NET45;NETFULL</DefineConstants>
   </PropertyGroup>
 
   <Choose>
-    <!--<When Condition="$(TargetId) == 'net45'">-->
-    <When Condition="'$(TargetFramework)' == 'net45'">
+    <When Condition=" '$(TargetId)' == 'net45'">
       <PropertyGroup>
         <PackageId>OData2Poco.CommandLine</PackageId>
         <AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
         <PackageTags>odata;charp;vb.net;o2pgen;meta-xml;web-api</PackageTags>
+
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       </PropertyGroup>
+      <ItemGroup>
+
+      </ItemGroup>
     </When>
-    <Otherwise>
-      <!--<When Condition="$(TargetId) == 'netcore'">-->
+    <When Condition=" '$(TargetId)' == 'netcore'">
       <PropertyGroup>
-        <PackAsTool>True</PackAsTool>
+        <!--<PackAsTool>True</PackAsTool>-->
         <PackageId>OData2Poco.dotnet.o2pgen</PackageId>
         <AssemblyTitle>OData2Poco.dotnet.o2pgen</AssemblyTitle>
         <ToolCommandName>dotnet-o2pgen</ToolCommandName>
-        <!--<PackAsToolShimRuntimeIdentifiers>win-x64;win-x86</PackAsToolShimRuntimeIdentifiers>-->
-        <PackageTags>odata;charp;c#;vb.net;web-api;netcore;dotnet;dotnet-o2pgen;meta-xml</PackageTags>
+        <PackageTags>odata;charp;c#;vb.net;mono;netcore;dotnet;dotnet-o2pgen;metaxml</PackageTags>
       </PropertyGroup>
-      <!--</When>-->
-    </Otherwise>
+
+    </When>
   </Choose>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+    <PackAsTool>true</PackAsTool>
+  </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -63,9 +81,12 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
 
+
   <!-- Need to conditionally bring in references for the .NET Framework 4.5 target -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Threading.Tasks" />
   </ItemGroup>
+
+
 </Project>
