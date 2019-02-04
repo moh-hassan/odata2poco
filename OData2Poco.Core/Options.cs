@@ -12,7 +12,7 @@ using OData2Poco.CommandLine.InfraStructure.Logging;
 namespace OData2Poco.CommandLine
 {
     // Define a class to receive parsed values
-    class Options
+    public class Options
     {
         public Options()
         {

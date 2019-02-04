@@ -1,77 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!--<TargetId>net45</TargetId>-->
-    <TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>
-    <!--<RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>-->
-    <TargetFramework Condition=" '$(TargetId)' == 'netcore'">netcoreapp2.1</TargetFramework>
-    <TargetFramework Condition=" '$(TargetId)' == 'net45'">net45</TargetFramework>
+    <TargetFramework>net45</TargetFramework>
     <AssemblyName>O2Pgen</AssemblyName>
     <Authors>Mohamed Hassan</Authors>
-    <Product>O2Pgen</Product>
-    <Description>
-      o2gen is a CommandLine tool for generating c# and vb.net POCO classes from OData feeds.
-    </Description>
+    <Product>OData2Poco.CommandLine</Product>
+    <Description>o2gen is a CommandLine tool for generating c# and vb.net POCO classes from OData feeds.</Description>
+  </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>OData2Poco.CommandLine</PackageId>
+    <AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
+    <PackageTags>odata;charp;vb.net;o2pgen;meta-xml;web-api</PackageTags>
   </PropertyGroup>
 
 
+  <Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
+  <Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" />
 
-  <Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" Condition=" '$(TargetId)' == 'net45' " />
-  
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+  <ItemGroup>
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj">
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
   </ItemGroup>
 
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+  <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.3.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <PackageReference Include="CommandLineParser" Version="2.4.3" />
-  </ItemGroup>
   
+  <ItemGroup>
+    <PackageReference Include="ilmerge" Version="3.0.21">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
+  <PropertyGroup>
     <DefineConstants>NET45;NETFULL</DefineConstants>
-  </PropertyGroup>
-
-  <Choose>
-    <When Condition=" '$(TargetId)' == 'net45'">
-      <PropertyGroup>
-        <PackageId>OData2Poco.CommandLine</PackageId>
-        <AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
-        <PackageTags>odata;charp;vb.net;o2pgen;meta-xml;web-api</PackageTags>
-
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      </PropertyGroup>
-      <ItemGroup>
-
-      </ItemGroup>
-    </When>
-    <When Condition=" '$(TargetId)' == 'netcore'">
-      <PropertyGroup>
-        <!--<PackAsTool>True</PackAsTool>-->
-        <PackageId>OData2Poco.dotnet.o2pgen</PackageId>
-        <AssemblyTitle>OData2Poco.dotnet.o2pgen</AssemblyTitle>
-        <ToolCommandName>dotnet-o2pgen</ToolCommandName>
-        <PackageTags>odata;charp;c#;vb.net;mono;netcore;dotnet;dotnet-o2pgen;metaxml</PackageTags>
-      </PropertyGroup>
-
-    </When>
-  </Choose>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <PackAsTool>true</PackAsTool>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -80,13 +48,4 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
-
-
-  <!-- Need to conditionally bring in references for the .NET Framework 4.5 target -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Threading.Tasks" />
-  </ItemGroup>
-
-
 </Project>

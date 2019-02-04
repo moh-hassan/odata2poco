@@ -21,7 +21,7 @@ namespace OData2Poco.CommandLine
         public static int RetCode = (int)ExitCodes.Success;
         public static IPocoFileSystem _pocoFileSystem;
 
-        public static async Task Main(string[] args)
+        public static async Task Main1(string[] args)
         {
             var argument = string.Join(" ", args);
             try

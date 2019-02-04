@@ -21,14 +21,15 @@ namespace OData2Poco.CommandLine.Test
         public async Task vb_convert_Test()
         {
             var source = @"public class MyClas {}";
-            var vbCode = await CodeConvertorRestService.CodeConvert(source);
+            //var vbCode = await CodeConvertorRestService.CodeConvert(source);
+            var vbCode = await VbCodeConvertor.CodeConvert(source);
             Assert.That(vbCode, Does.Contain("Public Class MyClas"));
             Assert.That(vbCode, Does.Contain("End Class"));
 
         }
 
         [Test]
-        public async Task vb_convert_Test2()
+        public async Task vb_convert_attribute_Test()
         {
             var source = @"
 [Table]
@@ -38,8 +39,9 @@ public class MyClas
     public int Id {get;set;}
   public string Name {get;set;}
 }";
-            var vbCode = await CodeConvertorRestService.CodeConvert(source);
-          
+            //var vbCode = await CodeConvertorRestService.CodeConvert(source);
+            var vbCode = await VbCodeConvertor.CodeConvert(source);
+
             /*
            <Table>
            Public Class MyClas

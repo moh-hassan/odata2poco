@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net452</TargetFrameworks>
+    <TargetFrameworks>net452;netcoreapp2.1</TargetFrameworks>
 
     <Authors>Mohamed Hassan</Authors>
     <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
@@ -22,7 +22,8 @@
  
 
   <ItemGroup>
-    <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" />
+    <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" Condition="'$(TargetFramework)' == 'net452'" />
+    <ProjectReference Include="..\OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
   </ItemGroup>
 
 

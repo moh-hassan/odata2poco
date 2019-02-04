@@ -11,6 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.CommandLine.Test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5CE1A01D-B4EE-45F0-9E97-2DA9AA53FA13}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
 		OData2Poco.CommandLine\licence.txt = OData2Poco.CommandLine\licence.txt
 	EndProjectSection
 EndProject
@@ -18,7 +19,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D69DB09-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.Tests", "OData2Poco.Tests\OData2Poco.Tests.csproj", "{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OData2Poco.Core", "OData2Poco.Core\OData2Poco.Core.shproj", "{7FCA2548-B30B-4F82-A261-61E48162D462}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.dotnet.o2pgen", "OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj", "{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		OData2Poco.Core\OData2Poco.Core.projitems*{7fca2548-b30b-4f82-a261-61e48162d462}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -40,6 +48,10 @@ Global
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

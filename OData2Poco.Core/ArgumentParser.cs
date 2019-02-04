@@ -27,7 +27,7 @@ namespace OData2Poco.CommandLine
             Logger = ColoredConsole.Default;
         }
 
-        internal async Task<int> RunOptionsAsync(string[] args, Func<Options, Task> func)
+        public async Task<int> RunOptionsAsync(string[] args, Func<Options, Task> func)
         {
             Logger.Clear();
             var result = GetParserResult(args);
@@ -47,7 +47,7 @@ namespace OData2Poco.CommandLine
             return retCode;
         }
 
-        internal async Task<int> RunOptionsAsync(string[] args)
+        public async Task<int> RunOptionsAsync(string[] args)
         {
             return await RunOptionsAsync(args, async x =>
             {

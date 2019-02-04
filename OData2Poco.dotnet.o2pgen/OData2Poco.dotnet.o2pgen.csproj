@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>O2Pgen</AssemblyName>
+    <Authors>Mohamed Hassan</Authors>
+    <Product>OData2Poco.dotnet.o2pgen</Product>
+    <Description>o2gen is a CommandLine tool for generating c# and vb.net POCO classes from OData feeds.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackAsTool>True</PackAsTool>
+    <PackageId>OData2Poco.dotnet.o2pgen</PackageId>
+    <AssemblyTitle>OData2Poco.dotnet.o2pgen</AssemblyTitle>
+    <ToolCommandName>dotnet-o2pgen</ToolCommandName>
+    <PackageTags>odata;charp;c#;vb.net;mono;netcore;dotnet;dotnet-o2pgen;metaxml</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackAsTool>true</PackAsTool>
+  </PropertyGroup>
+
+  <Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+    <PackageReference Include="CommandLineParser" Version="2.4.3" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+</Project>
