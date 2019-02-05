@@ -63,9 +63,9 @@ public class MyClas
         {
             var url = TestSample.NorthWindV4;
             var args = $"-r {url}  -v -a key req --lang vb".Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            await Program.RunOptionsAsync(args);
-            Program.Logger.Silent = true;
-            var output = Program.OutPut;
+            await StartUp.RunOptionsAsync(args);
+            StartUp.Logger.Silent = true;
+            var output = StartUp.OutPut;
             Assert.That(output, Does.Contain("Public Partial Class Product"));
             Assert.That(output, Does.Contain("<Key>"));
             Assert.That(output, Does.Contain("<Required>"));
@@ -77,9 +77,9 @@ public class MyClas
         {
             var url = TestSample.NorthWindV4;
             var args = $"-r {url}  -v --lang zz".Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            await Program.RunOptionsAsync(args);
+            await StartUp.RunOptionsAsync(args);
 
-            var output = Program.Logger.Output.ToString();
+            var output = StartUp.Logger.Output.ToString();
             Assert.That(output, Does.Contain("Invalid Language Option 'zz'. It's set to 'cs'."));
 
         }
@@ -88,9 +88,9 @@ public class MyClas
         {
             var url = TestSample.NorthWindV4;
             var args = $"-r {url}  -v -a zz".Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            await Program.RunOptionsAsync(args);
+            await StartUp.RunOptionsAsync(args);
 
-            var output = Program.Logger.Output.ToString();
+            var output = StartUp.Logger.Output.ToString();
             Assert.That(output, Does.Contain("Attribute 'zz' isn't valid. It will be  droped"));
 
         }

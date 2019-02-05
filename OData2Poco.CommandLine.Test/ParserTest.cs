@@ -8,11 +8,12 @@ namespace OData2Poco.CommandLine.Test
     public class ParserTest : BaseTest
     {
         private static string Url = TestSample.NorthWindV4;
-        private ArgumentParser argumentParser;
+
+        public ArgumentParser ArgumentParser { get; set; }
 
         public ParserTest()
         {
-            argumentParser = new ArgumentParser();
+            ArgumentParser = new ArgumentParser();
         }
         [OneTimeSetUp]
         public void SetupOneTime()
@@ -25,7 +26,7 @@ namespace OData2Poco.CommandLine.Test
         {
             ArgumentParser.Logger.Silent = true;
             ArgumentParser.Logger.Clear();
-            var exitCode = await argumentParser.RunOptionsAsync(args);
+            var exitCode = await ArgumentParser.RunOptionsAsync(args);
             var help = ArgumentParser.Help;
             return new Tuple<int, string>(exitCode, help);
         }

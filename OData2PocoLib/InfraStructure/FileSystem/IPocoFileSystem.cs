@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace OData2Poco.CommandLine.InfraStructure.FileSystem
+namespace OData2Poco.InfraStructure.FileSystem
 {
     public interface IPocoFileSystem
     {

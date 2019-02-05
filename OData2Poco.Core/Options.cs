@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using CommandLine;
 using CommandLine.Text;
-using OData2Poco.CommandLine.InfraStructure.Logging;
 
 //(c) 2016-2018 Mohamed Hassan, MIT License
 ////Project site: https://github.com/moh-hassan/odata2poco

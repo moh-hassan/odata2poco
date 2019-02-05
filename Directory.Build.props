@@ -2,7 +2,6 @@
   <PropertyGroup>
     <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
     <PackageOutputPath>$(SolutionDir)build</PackageOutputPath>
-    <!--<GenerateAssemblyInfo>false</GenerateAssemblyInfo>-->
     <LangVersion>7.3</LangVersion>
     <Authors>Mohamed Hassan</Authors>
     <Copyright>Copyright © 2016-2018, Mohamed Hassan </Copyright>
@@ -27,7 +26,7 @@
 
   <!-- version -->
   <PropertyGroup>
-    <Version>3.0.31</Version>
+    <Version>3.0.3</Version>
     <AssemblyVersion>3.0.3.0</AssemblyVersion>
   </PropertyGroup>
 

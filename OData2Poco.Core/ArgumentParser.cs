@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandLine;
-using OData2Poco.CommandLine.InfraStructure.Logging;
 using OData2Poco.Extensions;
+using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.CommandLine
 {
@@ -54,7 +54,7 @@ namespace OData2Poco.CommandLine
                 Logger.Info(ApplicationInfo.HeadingInfo);
                 Logger.Normal(ApplicationInfo.Copyright);
                 //Console.WriteLine(ApplicationInfo.Description);
-                await new CsCommand(x, Program._pocoFileSystem).Execute().ConfigureAwait(false);
+                await new CsCommand(x, StartUp._pocoFileSystem).Execute().ConfigureAwait(false);
 
             });
         }

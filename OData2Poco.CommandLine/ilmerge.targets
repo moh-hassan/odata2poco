@@ -12,12 +12,15 @@
     <Content Include="$(Merged)\$(AssemblyName).exe" PackagePath="tools\" />
   </ItemGroup>
 
+  <Target Name="MakeMyDir" BeforeTargets="Build">
+    <Message Text="Creating folder : $(PackageOutputPath)" Importance="High" />
+    <MakeDir Directories="$(PackageOutputPath)"      Condition="!Exists('$(PackageOutputPath)')" />
+  </Target>
 
-
-  <Target Name="ILMerge" AfterTargets="Build">
+  <Target Name="ILMerge" AfterTargets="Build" Condition="'$(OS)' == 'Windows_NT'">
     <ItemGroup>
       <ILMergePackage Include="$(NuGetPackageRoot)\ilmerge\3.0.21\**\ilmerge.exe" />
-      <ILMergePackage Include="/home/travis/.nuget/packages/ilmerge/3.0.21/**/ilmerge.exe"  Condition=" '$(OS)' != 'Windows_NT' "/>
+      <ILMergePackage Include="/home/travis/.nuget/packages/ilmerge/3.0.21/**/ilmerge.exe"  Condition=" '$(OS)' == 'Unix' "/>
       <!--<ILMergePackage Include="$(SolutionDir)tools\ilmerge\tools\net452\ilmerge.exe" />-->
     </ItemGroup>
 
@@ -34,7 +37,7 @@
     
     <Error Condition="!Exists(@(ILMergePackage->'%(FullPath)'))" Text="You are trying to use the ILMerge package, but it is not installed or at the correct location" />
 
-    <MakeDir Directories="$(Merged)"      Condition="!Exists('$(Merged)')" />
+    <!--<MakeDir Directories="$(Merged)"      Condition="!Exists('$(Merged)')" />-->
     <Exec Command="@(ILMergePackage->'%(fullpath)') /ndebug /target:exe /targetplatform:v4 /log:merge.log /out:$(Merged)\$(AssemblyName).exe /wildcards  /target:exe $(OutputPath)$(AssemblyName).exe $(OutputPath)*.dll" />
 
   </Target>

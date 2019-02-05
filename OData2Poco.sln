@@ -8,11 +8,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.CommandLine", "OData2Poco.CommandLine\OData2Poco.CommandLine.csproj", "{59C02B8C-7388-490A-801C-AEA5244E3879}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.CommandLine.Test", "OData2Poco.CommandLine.Test\OData2Poco.CommandLine.Test.csproj", "{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BCC5139D-A1C0-46E7-ABA7-72E9660607DE} = {BCC5139D-A1C0-46E7-ABA7-72E9660607DE}
+		{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69} = {DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}
+	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5CE1A01D-B4EE-45F0-9E97-2DA9AA53FA13}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Welcome", ".Welcome", "{5CE1A01D-B4EE-45F0-9E97-2DA9AA53FA13}"
 	ProjectSection(SolutionItems) = preProject
-		Directory.Build.props = Directory.Build.props
-		OData2Poco.CommandLine\licence.txt = OData2Poco.CommandLine\licence.txt
+		license.txt = license.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D69DB09-904B-4145-A7CB-C8A448F9FDF8}"

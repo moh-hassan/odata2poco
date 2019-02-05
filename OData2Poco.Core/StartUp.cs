@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using OData2Poco.CommandLine.InfraStructure.FileSystem;
-using OData2Poco.CommandLine.InfraStructure.Logging;
 using OData2Poco.Extensions;
+using OData2Poco.InfraStructure.FileSystem;
+using OData2Poco.InfraStructure.Logging;
 
 //todo: file source
 //(c) 2016-2018 Mohamed Hassan
@@ -13,7 +13,7 @@ using OData2Poco.Extensions;
 
 namespace OData2Poco.CommandLine
 {
-    public class Program
+    public class StartUp
     {
         private static readonly Stopwatch Sw = new Stopwatch();
         public static ColoredConsole Logger = ColoredConsole.Default;

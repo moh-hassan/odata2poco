@@ -8,7 +8,7 @@ OData2Poco is available in three flavers:
 - A .Net Core Global tool  **dotnet-o2pgen** support netcoreapp2.1.
 - A class library: support net45/netstandard2.0.
 
-[![NuGet Version](https://img.shields.io/nuget/v/OData2Poco.svg?label=Nuget%20Version)](https://www.nuget.org/packages/OData2Poco.CommandLine)
+[![NuGet Version](https://img.shields.io/nuget/v/OData2Poco.CommandLine.svg?label=nuget%20Console&style=flat)](https://www.nuget.org/packages/OData2Poco.CommandLine)
 [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg?label=Chocolatey%20Version)](https://chocolatey.org/packages/odata2poco-commandline)
 [![Global Tool NuGet Version](https://img.shields.io/nuget/v/OData2Poco.dotnet.o2pgen.svg?label=dotnet%20Global%20Tool&style=flat)](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen)
 

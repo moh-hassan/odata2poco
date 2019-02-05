@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Odata2Poco.NetCore</id>
+    <version>3.0.0</version>
+    <authors>Mohamed Hassan</authors>
+    <owners>Mohamed Hassan</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/moh-hassan/odata2poco/blob/master/license.txt?raw=true</licenseUrl>
+    <projectUrl>https://github.com/moh-hassan/odata2poco</projectUrl>
+    <iconUrl>https://github.com/moh-hassan/odata2poco/blob/master/ODataLogo-32.ico?raw=true</iconUrl>
+    <description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds.
+      Project site: https://github.com/moh-hassan/odata2poco</description>
+    <releaseNotes>Version: 3.0.0
+      What is new:
+      - Maintainance: Migrating to vs2017 and c#7
+      - New: Support colored Console
+      - New: Support NetStandard2.0,NetStandard1.1 and net45</releaseNotes>
+    <copyright>Copyright ©  Mohamed Hassan 2016</copyright>
+    <tags>OData poco code-generation</tags>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+  </metadata>
+</package>

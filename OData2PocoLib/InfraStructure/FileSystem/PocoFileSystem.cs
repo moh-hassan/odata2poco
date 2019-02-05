@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using OData2Poco.CommandLine.InfraStructure.Logging;
+using OData2Poco.InfraStructure.Logging;
 
-namespace OData2Poco.CommandLine.InfraStructure.FileSystem
+namespace OData2Poco.InfraStructure.FileSystem
 {
     public class PocoFileSystem : IPocoFileSystem
     {

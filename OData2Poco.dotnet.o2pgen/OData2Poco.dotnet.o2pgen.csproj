@@ -7,7 +7,7 @@
     <Authors>Mohamed Hassan</Authors>
     <Product>OData2Poco.dotnet.o2pgen</Product>
     <Description>o2gen is a CommandLine tool for generating c# and vb.net POCO classes from OData feeds.</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 
   </PropertyGroup>
 
@@ -29,7 +29,7 @@
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+  <ItemGroup Condition="$(TargetFramework.StartsWith('netcore')) ">
     <PackageReference Include="CommandLineParser" Version="2.4.3" />
   </ItemGroup>
 

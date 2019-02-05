@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace OData2Poco.CommandLine.InfraStructure.Logging
+namespace OData2Poco.InfraStructure.Logging
 {
     public interface ILog
     {

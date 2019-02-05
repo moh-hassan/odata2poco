@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using OData2Poco.Api;
-using OData2Poco.CommandLine.InfraStructure.FileSystem;
-using OData2Poco.CommandLine.InfraStructure.Logging;
 using OData2Poco.Extensions;
+using OData2Poco.InfraStructure.FileSystem;
+using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.CommandLine
 {
