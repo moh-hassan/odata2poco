@@ -18,6 +18,7 @@ namespace OData2Poco.Tests
         public void Init()
         {
             Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
+             
         }
 
         [Test]
@@ -36,7 +37,10 @@ namespace OData2Poco.Tests
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public void GenerateDefaultFromXmlFilesTest(string file, string version, int n)
         {
-            // var o2p = new O2P()
+            Console.WriteLine($"BaseDirectory: {TestSample.BaseDirectory}");
+            Console.WriteLine($"FakeFolder: {TestSample.FakeFolder}");
+            Console.WriteLine($"NorthWindV4: {TestSample.NorthWindV4}");
+          
             var o2p = new O2P();
             var xml = File.ReadAllText(file);
             var code = o2p.Generate(xml);

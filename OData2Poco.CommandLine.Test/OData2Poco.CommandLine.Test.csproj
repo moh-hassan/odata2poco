@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net45;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>
 
     <Authors>Mohamed Hassan</Authors>
     <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
     <Product>OData2Poco</Product>
     <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
+
+    </PropertyGroup>
   <ItemGroup>
     <None Remove="ProgramTests.NetCore.cs.txt" />
   </ItemGroup>
