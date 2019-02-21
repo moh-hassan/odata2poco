@@ -16,7 +16,7 @@ namespace OData2Poco.CommandLine
     public class StartUp
     {
         private static readonly Stopwatch Sw = new Stopwatch();
-        public static ColoredConsole Logger = ColoredConsole.Default;
+        public static ColoredConsole Logger = PocoLogger.Default;
         public static string OutPut => Logger.Output.ToString();
         public static int RetCode = (int)ExitCodes.Success;
         public static IPocoFileSystem _pocoFileSystem;

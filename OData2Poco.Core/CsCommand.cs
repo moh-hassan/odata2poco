@@ -7,6 +7,7 @@ using OData2Poco.Api;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
+using OData2Poco.OAuth2;
 
 namespace OData2Poco.CommandLine
 {
@@ -17,8 +18,9 @@ namespace OData2Poco.CommandLine
     {
         public readonly Options ArgOptions;
         public PocoSetting PocoSettingOptions;
+        public OdataConnectionString odataConnectionString;
         public string Code { get; private set; }
-        private readonly ColoredConsole _logger = ColoredConsole.Default;
+        private readonly ColoredConsole _logger = PocoLogger.Default;
         public O2P O2PGen { get; set; }
         public List<string> Errors; //model generation errors
         private IPocoFileSystem _fileSystem;
@@ -35,27 +37,12 @@ namespace OData2Poco.CommandLine
             Errors = new List<string>();
 
             ArgOptions = options;
-            O2PGen = new O2P(config =>
-            {
-                config.AddNavigation = options.Navigation;
-                config.AddNullableDataType = options.AddNullableDataType;
-                config.AddEager = options.Eager;
-                config.Inherit = string.IsNullOrWhiteSpace(options.Inherit) ? null : options.Inherit;
-                config.NamespacePrefix = string.IsNullOrEmpty(options.Namespace) ? string.Empty : options.Namespace;
-                config.NameCase = options.NameCase.ToCaseEnum();
-                config.Attributes = options.Attributes?.ToList();
-
-                config.AddKeyAttribute = options.Key;
-                config.AddTableAttribute = options.Table;
-                config.AddRequiredAttribute = options.Required;
-                config.AddJsonAttribute = options.AddJsonAttribute;
-
-            });
-            PocoSettingOptions = O2PGen.Setting;
+            odataConnectionString = options.GetOdataConnectionString();
+            Console.WriteLine($"=======command: { odataConnectionString.EnvironmentVariables.Dump()}");
+            PocoSettingOptions = options.GetPocoSetting();
+            O2PGen = new O2P(PocoSettingOptions);
         }
-
-
-
+        
         public async Task Execute()
         {
 
@@ -77,7 +64,8 @@ namespace OData2Poco.CommandLine
                 });
 
 
-            _logger.Info($"Start processing url: {ArgOptions.Url}");
+            //_logger.Info($"Start processing url: {ArgOptions.Url}");
+            _logger.Info($"Start processing url: { odataConnectionString.ServiceUrl}");
             //show result
             await GenerateCodeCommandAsync();
             ServiceInfo();
@@ -109,7 +97,7 @@ namespace OData2Poco.CommandLine
         public void ServiceInfo()
         {
             _logger.Normal($"{new string('-', 15)}Service Information {new string('-', 15)}");
-            _logger.Info($"OData Service Url: {ArgOptions.Url} ");
+            _logger.Info($"OData Service Url: {odataConnectionString.ServiceUrl} ");
             _logger.Info($"OData Service Version: {O2PGen.MetaDataVersion} ");
             _logger.Info($"Number of Entities: {O2PGen.ClassList.Count}");
             _logger.Normal(new string('-', 50));
@@ -147,7 +135,9 @@ namespace OData2Poco.CommandLine
             items.ForEach(m =>
             {
                 var index = items.IndexOf(m);
-                var remoteUrl = string.IsNullOrEmpty(m.EntitySetName) ? "" : ArgOptions.Url + @"/" + m.EntitySetName;
+                var remoteUrl = string.IsNullOrEmpty(m.EntitySetName) 
+                    ? "" 
+                    : odataConnectionString.ServiceUrl + @"/" + m.EntitySetName;
                 //v1.5
                 _logger.Normal($"{index + 1}: {m.Name} {remoteUrl}");
             });
@@ -173,7 +163,7 @@ namespace OData2Poco.CommandLine
         private void ShowHeaderCommand()
         {
             //------------ header -h for http media only not file--------------------
-            if (ArgOptions.Header && ArgOptions.Url.StartsWith("http"))
+            if (ArgOptions.Header && odataConnectionString.ServiceUrl.StartsWith("http"))
             {
                 Console.WriteLine();
                 _logger.Normal("HTTP Header");
@@ -185,15 +175,16 @@ namespace OData2Poco.CommandLine
         private async Task GenerateCodeCommandAsync()
         {
 
-            if (ArgOptions.Url.StartsWith("http"))
-            {
-                Code = await O2PGen.GenerateAsync(new Uri(ArgOptions.Url), ArgOptions.User, ArgOptions.Password);
-            }
-            else
-            {
-                var xml = File.ReadAllText(ArgOptions.Url);
-                Code = O2PGen.Generate(xml);
-            }
+            //if (ArgOptions.Url.StartsWith("http"))
+            //{
+            //Code = await O2PGen.GenerateAsync(new Uri(ArgOptions.Url), ArgOptions.User, ArgOptions.Password);
+            Code = await O2PGen.GenerateAsync(odataConnectionString);
+            //}
+            //else
+            //{
+            //    var xml = File.ReadAllText(ArgOptions.Url);
+            //    Code = O2PGen.Generate(xml);
+            //}
 
 
             if (ArgOptions.Lang == "cs")

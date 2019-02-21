@@ -14,17 +14,26 @@ namespace OData2Poco.CommandLine
         public static bool ShowVersionOrHelp = false;
         private static StringWriter HelpWriter;
         public static string Help => HelpWriter.ToString();
-        public static ColoredConsole Logger;
+        public static ColoredConsole Logger=PocoLogger.Default;
         public static string OutPut => Logger.Output.ToString();
 
+        public  void ClearLogger()
+        {
+            //ArgumentParser.Logger.Silent = true;
+            Logger.Clear();
+        }
+        public  void SetLoggerSilent(bool flag=true)
+        {
+            Logger.Silent = flag;
 
+        }
         public ArgumentParser(ColoredConsole logger)
         {
             Logger = logger;
         }
         public ArgumentParser()
         {
-            Logger = ColoredConsole.Default;
+            //Logger = ColoredConsole.Default;
         }
 
         public async Task<int> RunOptionsAsync(string[] args, Func<Options, Task> func)
@@ -76,7 +85,7 @@ namespace OData2Poco.CommandLine
                 Logger.Normal(HelpWriter.ToString().RemoveEmptyLines());
                 return 0;
             }
-           
+
             Logger.Normal(HelpWriter.ToString().RemoveEmptyLines());
             return (int)ExitCodes.ArgumentsInvalid;
         }

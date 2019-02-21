@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>
-
+    <!--<TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>-->
+    <!--<TargetFramework>net45</TargetFramework>-->
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <Authors>Mohamed Hassan</Authors>
     <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
     <Product>OData2Poco</Product>

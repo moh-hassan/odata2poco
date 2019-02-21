@@ -1,43 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-//using System.Net.Http;
-using System.Net.Http.Headers;
+using OData2Poco.Extensions;
+using OData2Poco.OAuth2;
 
 namespace OData2Poco
 {
-    internal class MetaDataReader  
+    internal class MetaDataReader
     {
-        public static  async Task<MetaDataInfo> LoadMetaDataHttpAsync(Uri serviceUri,string user ,string password)
+        public static async Task<MetaDataInfo> LoadMetaDataHttpAsync(OdataConnectionString odataConnString)
         {
-            string url = serviceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
+            // to avoid the Error Message:
+            //An error occurred while sending the request.-->
+            //The underlying connection was closed: An unexpected error occurred on a send. --
+            //->Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host. --->An existing connection was forcibly closed by the remote host--->
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 
+                                                   | SecurityProtocolType.Tls11 
+                                                   | SecurityProtocolType.Tls;
+
+
+            Uri serviceUri = new Uri(odataConnString.ServiceUrl);
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("User-Agent", "OData2Poco in Codeplex");
-                //credintial
-                if (!string.IsNullOrEmpty(user))
-                {
-                    var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(user + ":" + password));
-                    Debug.WriteLine(token);
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", token);
-                }
+                await new Authenticator(client).Authenticate(odataConnString);
+
+
+                client.DefaultRequestHeaders.Add("User-Agent", "OData2Poco");
+                string url = serviceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
 
                 using (HttpResponseMessage response = await client.GetAsync(url))
                 {
-                    //   Debug.WriteLine(await response.Content.ReadAsStringAsync());
-                    //response.EnsureSuccessStatusCode();
+
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
                         //Debug.WriteLine(content);
                         if (!string.IsNullOrEmpty(content))
                         {
-                           // content = Helper.PrettyXml(content);
+
                             var metaData = new MetaDataInfo
                             {
                                 MetaDataAsString = content,
@@ -51,49 +57,21 @@ namespace OData2Poco
                             {
                                 string value = entry.Value.FirstOrDefault();
                                 string key = entry.Key;
-                                //Debug.WriteLine(key +":" +value);
                                 metaData.ServiceHeader.Add(key, value);
                             }
                             metaData.ServiceVersion = Helper.GetServiceVersion(metaData.ServiceHeader);
-                            //Debug.WriteLine(metaData.MetaDataAsString);
                             return metaData;
                         }
 
                     }
-                    Debug.WriteLine(response.ReasonPhrase);
-                    // throw new WebException("Http Error " + (int)response.StatusCode + ": " + response.ReasonPhrase);
-                    throw new HttpRequestException("Http Error " + (int) response.StatusCode + ": " +
+                    //Debug.WriteLine(response.ReasonPhrase);
+                    throw new HttpRequestException("Http Error " + (int)response.StatusCode + ": " +
                                                    response.ReasonPhrase);
 
 
                 }
             }
         }
-#if fileSupport
-        internal static async Task<MetaDataInfo> LoadMetaDataFileAsync(string fname)
-        {
-            IFile dataFile = await FileSystem.Current.GetFileFromPathAsync(fname);
-            if (dataFile == null)
-                throw new FileNotFoundException("File not found: " + fname);
-
-            var content = await dataFile.ReadAllTextAsync();
-            Debug.WriteLine(content);
-            if (!string.IsNullOrEmpty(content))
-            {
-              var metaData = new MetaDataInfo
-                {
-                    MetaDataAsString = content,
-                    MetaDataVersion = Helper.GetMetadataVersion(content),
-                    ServiceUrl = fname,
-                    SchemaNamespace = Helper.GetNameSpace(content),
-                    MediaType = Media.Xml
-                };
-                Debug.WriteLine(content);
-                return metaData;
-            }
-            return new MetaDataInfo();
-        }
-#endif
 
         /// <summary>
         /// Load Metadata from xml string
@@ -114,6 +92,27 @@ namespace OData2Poco
             return metaData;
         }
 
-        public MetaDataInfo MetaData { get; set; }
+
+        public static async Task<MetaDataInfo> LoadMetadataAsync(OdataConnectionString odataConnString)
+        {
+            MetaDataInfo MetaData= new MetaDataInfo();
+            if (!odataConnString.ServiceUrl.StartsWith("http"))
+            {
+                //return await GenerateFromFileAsync(odataConnString.ServiceUrl);
+                string xml;
+                using (StreamReader reader = new StreamReader(odataConnString.ServiceUrl))
+                {
+                    xml = await reader.ReadToEndAsync();
+                     MetaData = LoadMetaDataFromXml(xml);
+                    return MetaData;
+                }
+            }
+
+            MetaData = await LoadMetaDataHttpAsync(odataConnString);
+            return MetaData;
+        }
+
+
+        //public MetaDataInfo MetaData { get; set; }
     }
 }

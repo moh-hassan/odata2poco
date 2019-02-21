@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CommandLine;
 using CommandLine.Text;
+using OData2Poco.Extensions;
+//using OData2Poco.OAuth2;
 
 //(c) 2016-2018 Mohamed Hassan, MIT License
 ////Project site: https://github.com/moh-hassan/odata2poco
@@ -16,7 +17,6 @@ namespace OData2Poco.CommandLine
         public Options()
         {
             Attributes = new List<string>();
-            Generators = new List<string>();
         }
 
         [Option('r', "url", Required = true, HelpText = "URL of OData feed.")]
@@ -25,8 +25,16 @@ namespace OData2Poco.CommandLine
         [Option('u', "user", HelpText = "User name for authentication.")]
         public string User { get; set; }
 
-        [Option('p', "password", HelpText = "password for authentication.")]
+        [Option('p', "password", HelpText = "password/token Or access_token for authentication.")]
         public string Password { get; set; }
+
+        [Option("token-endpoint", HelpText = "OAuth2 Token Endpoint server.")]
+        public string TokenEndPoint { get; set; }
+
+        [Option("token-params", Separator = ',',
+            HelpText = "OAuth2 Token Parameters with key=value separated by Ampersand ',' formated as: 'client_id=xxx&client_secret=xxx&...', no space allowed\r\n. If you start the data with the letter @, the rest should be a filename with JSON format.")]
+        public string TokenParams { get; set; }
+
 
         [Option('f', "filename", Default = "poco.cs", HelpText = "filename to save generated c# code.")]
         public string CodeFilename { get; set; }
@@ -67,9 +75,7 @@ namespace OData2Poco.CommandLine
         [Option('a', "attribute",
         HelpText = "Attributes, Allowed values: key, req, json,tab,dm,proto,db,display")]
         public IEnumerable<string> Attributes { get; set; }
-
-
-        public IEnumerable<string> Generators { get; set; }
+     
         [Option("lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
         public string Lang { get; set; } //v3
 
@@ -89,12 +95,16 @@ namespace OData2Poco.CommandLine
         //obsolete use -a json
         [Option('j', "Json", Hidden = true, HelpText = "Obsolete, use -a json, Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
         public bool AddJsonAttribute { get; set; }
+
+        //[Option("param-file",Hidden  = true, HelpText = "Path of parameter file")]
+        public string ParamFile { get; set; } //v3
+
         public List<string> Errors = new List<string>();
         #region usage
 #if NETFULL
         [Usage(ApplicationAlias = "o2pgen")]
 #else
-        [Usage(ApplicationAlias = "dotnet o2pgen")]
+        [Usage(ApplicationAlias = "dotnet-o2pgen")]
 #endif
         public static IEnumerable<Example> Examples
         {
@@ -111,6 +121,43 @@ namespace OData2Poco.CommandLine
                 });
             }
         }
+        #endregion
+
+        #region fill pocosetting
+
+    public     PocoSetting GetPocoSetting()
+        {
+            return new PocoSetting
+            {
+                AddNavigation = Navigation,
+                AddNullableDataType = AddNullableDataType,
+                AddEager = Eager,
+                Inherit = string.IsNullOrWhiteSpace(Inherit) ? null : Inherit,
+                NamespacePrefix = string.IsNullOrEmpty(Namespace) ? string.Empty : Namespace,
+                NameCase = NameCase.ToCaseEnum(),
+                Attributes = Attributes?.ToList(),
+                //obsolete
+                AddKeyAttribute = Key,
+                AddTableAttribute = Table,
+                AddRequiredAttribute = Required,
+                AddJsonAttribute = AddJsonAttribute,
+            };
+        }
+
+        public OdataConnectionString GetOdataConnectionString()
+        {
+          var connString=  new OdataConnectionString
+            {
+                ServiceUrl = Url,
+                UserName = User,
+                Password = Password,
+                TokenUrl = TokenEndPoint,
+                TokenParams = TokenParams,
+                ParamFile = ParamFile
+            };
+            return connString;
+        }
+
         #endregion
         public int Validate()
         {
@@ -152,8 +199,6 @@ namespace OData2Poco.CommandLine
 
                 }
             }
-
-
             return 0;
         }
 

@@ -25,6 +25,8 @@ public static class TestSample
     public static string UrlNorthWindV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
     public const string UrlNorthWindV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
     public const string UrlTripPinService = "http://services.odata.org/V4/TripPinServiceRW";
+    //parameter file
+    public static string Param1 => GetFullPath("param1.txt");
     public static string GetFullPath(string relative)
     {
         var path = Path.GetFullPath(Path.Combine(BaseDirectory, RelativeFakeFolder, relative));

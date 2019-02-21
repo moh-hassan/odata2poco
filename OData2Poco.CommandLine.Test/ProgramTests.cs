@@ -28,8 +28,8 @@ namespace OData2Poco.CommandLine.Test
 
         private async Task<Tuple<int, string>> RunCommand(string s)
         {
-            ArgumentParser.Logger.Silent = true;
-            ArgumentParser.Logger.Clear();
+            _argumentParser.ClearLogger();
+            _argumentParser.SetLoggerSilent();
 
             string[] args = s.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var retcode = await _argumentParser.RunOptionsAsync(args);

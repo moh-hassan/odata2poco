@@ -5,7 +5,8 @@ using NUnit.Framework;
 
 namespace OData2Poco.CommandLine.Test
 {
-    internal class VbConversionTest : BaseTest
+    [TestFixture]
+    internal class VbConversionTest //: BaseTest
     {
         public string WorkingDirectory { get; set; }
         [OneTimeSetUp]

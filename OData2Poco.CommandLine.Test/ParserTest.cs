@@ -9,11 +9,11 @@ namespace OData2Poco.CommandLine.Test
     {
         private static string Url = TestSample.NorthWindV4;
 
-        public ArgumentParser ArgumentParser { get; set; }
+        public ArgumentParser _argumentParser { get; set; }
 
         public ParserTest()
         {
-            ArgumentParser = new ArgumentParser();
+            _argumentParser = new ArgumentParser();
         }
         [OneTimeSetUp]
         public void SetupOneTime()
@@ -24,9 +24,9 @@ namespace OData2Poco.CommandLine.Test
 
         async Task<Tuple<int, string>> RunCommand(string[] args)
         {
-            ArgumentParser.Logger.Silent = true;
-            ArgumentParser.Logger.Clear();
-            var exitCode = await ArgumentParser.RunOptionsAsync(args);
+            _argumentParser.ClearLogger();
+            _argumentParser.SetLoggerSilent();
+            var exitCode = await _argumentParser.RunOptionsAsync(args);
             var help = ArgumentParser.Help;
             return new Tuple<int, string>(exitCode, help);
         }
