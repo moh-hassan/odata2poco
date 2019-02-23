@@ -7,7 +7,6 @@ using OData2Poco.Api;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
-using OData2Poco.OAuth2;
 
 namespace OData2Poco.CommandLine
 {
@@ -38,7 +37,6 @@ namespace OData2Poco.CommandLine
 
             ArgOptions = options;
             odataConnectionString = options.GetOdataConnectionString();
-            Console.WriteLine($"=======command: { odataConnectionString.EnvironmentVariables.Dump()}");
             PocoSettingOptions = options.GetPocoSetting();
             O2PGen = new O2P(PocoSettingOptions);
         }
@@ -62,9 +60,6 @@ namespace OData2Poco.CommandLine
                 {
                     _logger.Warn(x);
                 });
-
-
-            //_logger.Info($"Start processing url: {ArgOptions.Url}");
             _logger.Info($"Start processing url: { odataConnectionString.ServiceUrl}");
             //show result
             await GenerateCodeCommandAsync();
@@ -108,18 +103,6 @@ namespace OData2Poco.CommandLine
         {
             ShowOptions(ArgOptions);
         }
-
-
-        #region Utility
-
-
-
-        private void SaveToFile(string fileName, string text)
-        {
-            _fileSystem.SaveToFile(fileName, text);
-        }
-
-        #endregion
 
         #region commands
 
@@ -174,22 +157,10 @@ namespace OData2Poco.CommandLine
 
         private async Task GenerateCodeCommandAsync()
         {
-
-            //if (ArgOptions.Url.StartsWith("http"))
-            //{
-            //Code = await O2PGen.GenerateAsync(new Uri(ArgOptions.Url), ArgOptions.User, ArgOptions.Password);
             Code = await O2PGen.GenerateAsync(odataConnectionString);
-            //}
-            //else
-            //{
-            //    var xml = File.ReadAllText(ArgOptions.Url);
-            //    Code = O2PGen.Generate(xml);
-            //}
-
-
             if (ArgOptions.Lang == "cs")
             {
-                _logger.Info("Saving generated CSharp code to file : " + ArgOptions.CodeFilename);
+                _logger.Normal("Saving generated CSharp code to file : " + ArgOptions.CodeFilename);
                 SaveToFile(ArgOptions.CodeFilename, Code);
                 _logger.Confirm("CSharp code  is generated Successfully.");
             }
@@ -214,7 +185,6 @@ namespace OData2Poco.CommandLine
                 _logger.Warn($"Lang option: '{ArgOptions.Lang}' isn't valid. Only cs or vb are accepted \r\n No code is generated");
                 Code = "";
             }
-
         }
 
         private void SaveMetaDataCommand()
@@ -223,11 +193,14 @@ namespace OData2Poco.CommandLine
             if (string.IsNullOrEmpty(ArgOptions.MetaFilename)) return;
 
             _logger.Normal("");
-            _logger.Info($"Saving Metadata to file : {ArgOptions.MetaFilename}");
+            _logger.Normal($"Saving Metadata to file : {ArgOptions.MetaFilename}");
             var metaData = O2PGen.MetaDataAsString.FormatXml();
             SaveToFile(ArgOptions.MetaFilename, metaData);
         }
-
+        private void SaveToFile(string fileName, string text)
+        {
+            _fileSystem.SaveToFile(fileName, text);
+        }
         #endregion
     }
 }

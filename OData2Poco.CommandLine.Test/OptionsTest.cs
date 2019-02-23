@@ -40,38 +40,5 @@ namespace OData2Poco.CommandLine.Test
             Assert.That(options.Errors, Is.Not.Empty);
 
         }
-        [Test]
-        public void Read_paramfile_test()
-        {
-            var options = new Options
-            {
-                ParamFile = TestSample.Param1,
-            };
-            
-            var connString=options.GetOdataConnectionString();
-            Console.WriteLine(options.ParamFile);
-            Console.WriteLine($"connString.ParamFile {connString.ParamFile}");
-            var dict=connString.EnvironmentVariables;
-            Assert.That(dict.Count, Is.GreaterThan(0));
-            Assert.That(dict["url"], Is.EqualTo("http://localhost"));
-            Console.WriteLine(dict.Dump());
-        }
-        [Test]
-        public void Read_paramfile_test2()
-        {
-            var options = new Options
-            {
-                Url = "{{url}}",
-                ParamFile = TestSample.Param1,
-            };
-
-            var connString = options.GetOdataConnectionString();
-            //Console.WriteLine(options.ParamFile);
-            //Console.WriteLine($"connString.ParamFile {connString.ParamFile}");
-            //var dict = connString.EnvironmentVariables;
-            //Assert.That(dict.Count, Is.GreaterThan(0));
-            //Assert.That(dict["url"], Is.EqualTo("http://localhost"));
-            Console.WriteLine($"connString.ServiceUrl= {connString.ServiceUrl}");
-        }
     }
 }

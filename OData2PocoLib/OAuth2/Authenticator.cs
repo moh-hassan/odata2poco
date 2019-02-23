@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -35,11 +32,8 @@ namespace OData2Poco.OAuth2
             {
 
                 Logger.Info("Authenticating with OAuth2");
-                //Console.WriteLine(odataConnString.Dump());
                 var accessToken = await GetAccessTokenAsync(odataConnString);
                 Authenticate(accessToken);
-                //Environment.Exit(0); //test
-
             }
         }
 
@@ -50,7 +44,6 @@ namespace OData2Poco.OAuth2
             if (!string.IsNullOrEmpty(user))
             {
                 var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(user + ":" + password));
-                Console.WriteLine(token);
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", token);
             }
         }
@@ -61,26 +54,19 @@ namespace OData2Poco.OAuth2
             if (!string.IsNullOrEmpty(token))
             {
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                _client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-
             }
         }
 
         public async Task<string> GetAccessTokenAsync(OdataConnectionString odataConnString)
         {
-            Logger.Normal($"Start Connecting to Token endpoint: {odataConnString.TokenUrl}");
-                if (!string.IsNullOrEmpty(odataConnString.TokenUrl))
-            {
-                TokenEndpoint tokenEndPoint =
-                    new TokenEndpoint(odataConnString);
-                string accessToken = await tokenEndPoint.GetAccessTokenAsync();
-                odataConnString.Password = accessToken;
-                Logger.Normal($"Token endpoint Reply with access_token: {accessToken}");
-                File.WriteAllText("access_token.txt", accessToken);
-                return accessToken;
-            }
+            Logger.Normal($"Start connecting to Token endpoint: {odataConnString.TokenUrl}");
+            if (string.IsNullOrEmpty(odataConnString.TokenUrl)) return string.Empty;
+            TokenEndpoint tokenEndPoint =new TokenEndpoint(odataConnString);
+            var accessToken = await tokenEndPoint.GetAccessTokenAsync();
+            odataConnString.Password = accessToken;
+            Logger.Normal($"Token endpoint reply with access_token");
+            return accessToken;
 
-            return "";
         }
     }
 }
