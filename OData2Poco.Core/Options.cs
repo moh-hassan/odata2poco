@@ -17,6 +17,7 @@ namespace OData2Poco.CommandLine
         public Options()
         {
             Attributes = new List<string>();
+            Errors = new List<string>();
         }
 
         [Option('r', "url", Required = true, HelpText = "URL of OData feed.")]
@@ -28,11 +29,11 @@ namespace OData2Poco.CommandLine
         [Option('p', "password", HelpText = "password/token Or access_token for authentication.")]
         public string Password { get; set; }
 
-        [Option("token-endpoint", HelpText = "OAuth2 Token Endpoint server.")]
-        public string TokenEndPoint { get; set; }
+        [Option("token-endpoint", HelpText = "OAuth2 Token Endpoint.")]
+        public string TokenEndpoint { get; set; }
 
-        [Option("token-params", Separator = ',',
-            HelpText = "OAuth2 Token Parameters with key=value separated by Ampersand ',' formated as: 'client_id=xxx&client_secret=xxx&...', no space allowed\r\n. If you start the data with the letter @, the rest should be a filename with JSON format.")]
+        [Option("token-params", HelpText =
+                "OAuth2 Token Parameters with key=value separated by Ampersand '&' formated as: 'client_id=xxx&client_secret=xxx&...', no space allowed.")]
         public string TokenParams { get; set; }
 
 
@@ -69,13 +70,14 @@ namespace OData2Poco.CommandLine
         public string Namespace { get; set; }
 
 
-        [Option('c', "case", Default = "none", HelpText = "Type pas or camel to Convert Property Name to PascalCase or CamelCase")]
+        [Option('c', "case", Default = "none",
+            HelpText = "Type pas or camel to Convert Property Name to PascalCase or CamelCase")]
         public string NameCase { get; set; }
 
         [Option('a', "attribute",
-        HelpText = "Attributes, Allowed values: key, req, json,tab,dm,proto,db,display")]
+            HelpText = "Attributes, Allowed values: key, req, json,tab,dm,proto,db,display")]
         public IEnumerable<string> Attributes { get; set; }
-     
+
         [Option("lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
         public string Lang { get; set; } //v3
 
@@ -92,15 +94,18 @@ namespace OData2Poco.CommandLine
         //obsolete use -a req
         [Option('q', "required", Hidden = true, HelpText = "Obsolete, use -a req, Add Required attribute")]
         public bool Required { get; set; }
+
         //obsolete use -a json
-        [Option('j', "Json", Hidden = true, HelpText = "Obsolete, use -a json, Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
+        [Option('j', "Json", Hidden = true,
+            HelpText =
+                "Obsolete, use -a json, Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
         public bool AddJsonAttribute { get; set; }
 
-        //[Option("param-file",Hidden  = true, HelpText = "Path of parameter file")]
-        public string ParamFile { get; set; } //v3
+        [Option("param-file",  HelpText = "Path to parameter file (json or text format. Postman Environment is supported)")]
+        public string ParamFile { get; set; } //v3.1
 
-        public List<string> Errors = new List<string>();
-        #region usage
+        public List<string> Errors { get; set; }
+
 #if NETFULL
         [Usage(ApplicationAlias = "o2pgen")]
 #else
@@ -120,77 +125,41 @@ namespace OData2Poco.CommandLine
                     AddNullableDataType = true
                 });
             }
+
         }
-        #endregion
-
-        #region fill pocosetting
-
-    public     PocoSetting GetPocoSetting()
-        {
-            return new PocoSetting
-            {
-                AddNavigation = Navigation,
-                AddNullableDataType = AddNullableDataType,
-                AddEager = Eager,
-                Inherit = string.IsNullOrWhiteSpace(Inherit) ? null : Inherit,
-                NamespacePrefix = string.IsNullOrEmpty(Namespace) ? string.Empty : Namespace,
-                NameCase = NameCase.ToCaseEnum(),
-                Attributes = Attributes?.ToList(),
-                //obsolete
-                AddKeyAttribute = Key,
-                AddTableAttribute = Table,
-                AddRequiredAttribute = Required,
-                AddJsonAttribute = AddJsonAttribute,
-            };
-        }
-
-        public OdataConnectionString GetOdataConnectionString()
-        {
-          var connString=  new OdataConnectionString
-            {
-                ServiceUrl = Url,
-                UserName = User,
-                Password = Password,
-                TokenUrl = TokenEndPoint,
-                TokenParams = TokenParams,
-                ParamFile = ParamFile
-            };
-            return connString;
-        }
-
-        #endregion
-        public int Validate()
+        public void Validate()
         {
 
             //validating Lang
             switch (Lang)
             {
                 case "vb":
-                    CodeFilename = Path.ChangeExtension(CodeFilename, ".vb");
+                     CodeFilename = Path.ChangeExtension( CodeFilename, ".vb");
                     break;
                 case "cs":
-                    CodeFilename = Path.ChangeExtension(CodeFilename, ".cs");
+                     CodeFilename = Path.ChangeExtension( CodeFilename, ".cs");
                     break;
                 default:
-                    Errors.Add($"Invalid Language Option '{Lang}'. It's set to 'cs'.");
-                    CodeFilename = Path.ChangeExtension(CodeFilename, ".cs");
+                    Errors.Add($"Invalid Language Option '{ Lang}'. It's set to 'cs'.");
+                    CodeFilename = Path.ChangeExtension( CodeFilename, ".cs");
+                    Lang = "cs";
                     break;
-                    //return -1;
+                //return -1;
             }
             //validate NameCase
-            if (string.IsNullOrEmpty(NameCase))
+            if (string.IsNullOrEmpty( NameCase))
             {
-                Errors.Add($"NameCase '{NameCase}' is empty. It is set to 'pas'.");//warning
-                NameCase = "pas";
+                 Errors.Add($"NameCase '{ NameCase}' is empty. It is set to 'pas'.");//warning
+                 NameCase = "pas";
             }
-            if (!Regex.IsMatch(NameCase.ToLower(), "cam|camel|none|pas", RegexOptions.IgnoreCase))
+            if (!Regex.IsMatch( NameCase.ToLower(), "cam|camel|none|pas", RegexOptions.IgnoreCase))
             {
-                Errors.Add($"NameCase '{NameCase}' isn't valid. It is set to 'pas'.");//warning
-                NameCase = "pas";
+                Errors.Add($"NameCase '{ NameCase}' isn't valid. It is set to 'pas'.");//warning
+               NameCase = "pas";
             }
 
             //validate Attributes
-            foreach (var attribute in Attributes.ToList())
+            foreach (var attribute in  Attributes.ToList())
             {
                 if (attribute.Trim().StartsWith("[")) continue;
                 if (!Regex.IsMatch(attribute.Trim().ToLower(), "key|req|tab|table|json|db|proto|dm|display", RegexOptions.IgnoreCase))
@@ -199,8 +168,8 @@ namespace OData2Poco.CommandLine
 
                 }
             }
-            return 0;
-        }
 
+        }
     }
+
 }

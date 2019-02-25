@@ -7,8 +7,12 @@ using OData2Poco.Api;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
-
-namespace OData2Poco.CommandLine
+/*
+   read parameter file into dictionary
+   recursive resolve macros in dictionary
+   replace options values for: password , tokens ,url
+ * */
+ namespace OData2Poco.CommandLine
 {
     /// <summary>
     ///     Command Pattern to manage all options of commandline
@@ -23,7 +27,7 @@ namespace OData2Poco.CommandLine
         public O2P O2PGen { get; set; }
         public List<string> Errors; //model generation errors
         private IPocoFileSystem _fileSystem;
-
+        private OptionManager optionManager;
         public CsCommand(Options options, IPocoFileSystem fileSystem)
         {
             if (fileSystem == null)
@@ -34,10 +38,9 @@ namespace OData2Poco.CommandLine
             }
 
             Errors = new List<string>();
-
-            ArgOptions = options;
-            odataConnectionString = options.GetOdataConnectionString();
-            PocoSettingOptions = options.GetPocoSetting();
+            ArgOptions= optionManager = new OptionManager(options);
+            odataConnectionString = optionManager.GetOdataConnectionString();
+            PocoSettingOptions = optionManager.GetPocoSetting();
             O2PGen = new O2P(PocoSettingOptions);
         }
         
@@ -46,14 +49,14 @@ namespace OData2Poco.CommandLine
 
             ShowOptions();
             Console.WriteLine();
-            if (ArgOptions.Validate() < 0)
-            {
+            //if (optionManager.Validate() < 0)
+            //{
                 ArgOptions.Errors.ForEach(x =>
                 {
                     _logger.Error(x);
                 });
-                return;
-            }
+                //return;
+            //}
 
             //show warning
             ArgOptions.Errors.ForEach(x =>

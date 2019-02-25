@@ -25,8 +25,8 @@
 
   <!-- version -->
   <PropertyGroup>
-    <Version>3.1.0-alpha</Version>
-    <AssemblyVersion>3.0.3.0</AssemblyVersion>
+    <Version>3.1.0</Version>
+    <AssemblyVersion>3.1.0.0</AssemblyVersion>
   </PropertyGroup>
 
 

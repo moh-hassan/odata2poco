@@ -1,0 +1,45 @@
+{
+	"id": "ad68bd24-6053-40e8-9ce6-832bd469a01b",
+	"name": "ms demo",
+	"values": [
+		{
+			"key": "url",
+			"value": "https://myorg.crm.dynamics.com",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "clientid",
+			"value": "61f81489-12ee-4a9e-aaae-a2591f45988e",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "version",
+			"value": "9.0",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "webapiurl",
+			"value": "{{url}}/api/data/v{{version}}/",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "callback",
+			"value": "https://callbackurl",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "authurl",
+			"value": "https://login.microsoftonline.com/common/oauth2/authorize?resource={{url}}",
+			"description": "",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2019-02-22T02:05:44.359Z",
+	"_postman_exported_using": "Postman/6.7.3"
+}

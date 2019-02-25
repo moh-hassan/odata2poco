@@ -262,7 +262,6 @@ namespace OData2Poco.V4
                 PropName = property.Name,
                 PropType = GetClrTypeName(property.Type),
                 Serial = serial++
-                //ToDebugString = Helper.Dump(property)
             }).ToList();
 
             return list;
