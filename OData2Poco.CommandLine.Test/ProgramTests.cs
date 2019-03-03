@@ -39,9 +39,9 @@ namespace OData2Poco.CommandLine.Test
             return tuple;
         }
 
-        [Test]
-         
-        public async Task Parameter_file_Test()
+        //[Test]
+
+        private async Task Parameter_file_Test()
         {
             //Arrange
             var a = "--env-file graph_param.txt -r {{url}} --token-endpoint {{token_endpoint}}  --token-params client_id={{client_id}}&client_secret={{client_secret}}&grant_type={{grant_type}}&resource={{resource}} ";
@@ -51,9 +51,7 @@ namespace OData2Poco.CommandLine.Test
             Console.WriteLine(output);
             //Assert
             Assert.AreEqual(0, tuble.Item1);
-            //Assert.IsTrue(output.Contains("public partial class Product"));
-            //Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations")); //-a key /or -k not set
-            //Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //a- tab / or -t not set
+            
         }
 
         [Test]

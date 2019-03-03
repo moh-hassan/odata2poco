@@ -19,7 +19,7 @@ namespace OData2Poco.Tests
         [TestCase("user_Name", "UserName")]
         [TestCase("user Name", "UserName")]
         [TestCase("user-Name", "UserName")]
-        public void ToPascalCaseTest(string name , string pascalName)
+        public void ToPascalCaseTest(string name, string pascalName)
         {
             Assert.AreEqual(pascalName, name.ToPascalCase());
         }
@@ -39,7 +39,7 @@ namespace OData2Poco.Tests
         [TestCase("cam", CaseEnum.Camel)]
         [TestCase("CAmel", CaseEnum.Camel)]
         [TestCase("pas", CaseEnum.Pas)]
-        public void StringToCaseEnumTest(string val , CaseEnum caseEnum)
+        public void StringToCaseEnumTest(string val, CaseEnum caseEnum)
         {
             Assert.AreEqual(caseEnum, val.ToCaseEnum());
         }
@@ -53,8 +53,8 @@ namespace OData2Poco.Tests
           and this is     line2";
             //Console.WriteLine(text);
             var expected = "this is line1 and this is line2";
-           // Console.WriteLine(text.TrimAllSpace());
-            Assert.AreEqual(text.TrimAllSpace(),expected);
+            // Console.WriteLine(text.TrimAllSpace());
+            Assert.AreEqual(text.TrimAllSpace(), expected);
         }
 
         [Test]
@@ -67,13 +67,36 @@ namespace OData2Poco.Tests
           and this is     line2";
             var expected = "this is line1\nand this is line2\n";
 
-  
-          //  Console.WriteLine("expected:\n{0}",expected);
+
+            //  Console.WriteLine("expected:\n{0}",expected);
             //var expected = "this is line1 and this is line2";
             //Console.WriteLine(text.TrimAllSpace(true));
             Assert.AreEqual(text.TrimAllSpace(true), expected);
         }
+        [Test]
+        [TestCase("Apple", "apple")]
+        [TestCase("apple", "Apple")]
+        [TestCase("", "")]
+        [TestCase(null, null)]
+        public void ToggleFirstLetterTest(string name, string expected)
+        {
+            var name2 = name.ToggleFirstLetter();
+            Assert.That(name2, Is.EqualTo(expected));
+        }
 
-      
+        [Test]
+        [TestCase("event", "Event")]
+        [TestCase("void", "Void")]
+        [TestCase("Void", "Void")]
+        [TestCase("char", "Char")]
+        [TestCase("Char", "Char")]
+        [TestCase("not_reserved", "not_reserved")]
+        [TestCase("", "")]
+        [TestCase(null, null)]
+        public void ChangeReservedWordTest(string name, string expected)
+        {
+            var name2 = name.ChangeReservedWord();
+            Assert.That(name2, Is.EqualTo(expected));
+        }
     }
 }

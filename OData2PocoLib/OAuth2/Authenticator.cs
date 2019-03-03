@@ -15,58 +15,61 @@ namespace OData2Poco.OAuth2
         {
             _client = client;
         }
+
         public async Task Authenticate(OdataConnectionString odataConnString)
         {
-            //Basic auth user/password
-            if (!string.IsNullOrEmpty(odataConnString.UserName) &&
-                !string.IsNullOrEmpty(odataConnString.Password))
-                Authenticate(odataConnString.UserName, odataConnString.Password);
-
-            //token
-            if (!string.IsNullOrEmpty(odataConnString.Password) &&
-                string.IsNullOrEmpty(odataConnString.UserName))
-                Authenticate(odataConnString.Password);
-
-            //OAuth2 
-            if (!string.IsNullOrEmpty(odataConnString.TokenUrl))
+            switch (odataConnString.Authenticate)
             {
+                case AuthenticationType.none:
+                    break;
 
-                Logger.Info("Authenticating with OAuth2");
-                var accessToken = await GetAccessTokenAsync(odataConnString);
-                Authenticate(accessToken);
+                case AuthenticationType.basic:
+                    Logger.Info("Authenticating with Basic");
+                    //Basic auth user/password
+                    if (!string.IsNullOrEmpty(odataConnString.UserName) &&
+                        !string.IsNullOrEmpty(odataConnString.Password))
+                    {
+
+                        Authenticate(odataConnString.UserName, odataConnString.Password);
+                    }
+                    break; ;
+
+                case AuthenticationType.token:
+                    Logger.Info("Authenticating with Token");
+                    //token
+                    if (!string.IsNullOrEmpty(odataConnString.Password) &&
+                        string.IsNullOrEmpty(odataConnString.UserName))
+                        Authenticate(odataConnString.Password);
+                    break;
+                case AuthenticationType.oauth2:
+                    Logger.Info("Authenticating with OAuth2");
+                    //OAuth2 
+                    if (!string.IsNullOrEmpty(odataConnString.TokenUrl))
+                    {
+                        var accessToken = await new TokenEndpoint(odataConnString).GetAccessTokenAsync();
+                        Authenticate(accessToken);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
-
-
-        private void Authenticate(string user, string password)
+        private AuthenticationHeaderValue Authenticate(string user, string password)
         {
             //credintial
-            if (!string.IsNullOrEmpty(user))
-            {
-                var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(user + ":" + password));
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", token);
-            }
+            if (string.IsNullOrEmpty(user)) return null;
+            var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(user + ":" + password));
+            var headerValue = new AuthenticationHeaderValue("Basic", token);
+            _client.DefaultRequestHeaders.Authorization = headerValue;
+            return headerValue;
         }
-
-        private void Authenticate(string token)
+        private AuthenticationHeaderValue Authenticate(string token)
         {
             //credintial
-            if (!string.IsNullOrEmpty(token))
-            {
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            }
-        }
-
-        public async Task<string> GetAccessTokenAsync(OdataConnectionString odataConnString)
-        {
-            Logger.Normal($"Start connecting to Token endpoint: {odataConnString.TokenUrl}");
-            if (string.IsNullOrEmpty(odataConnString.TokenUrl)) return string.Empty;
-            TokenEndpoint tokenEndPoint =new TokenEndpoint(odataConnString);
-            var accessToken = await tokenEndPoint.GetAccessTokenAsync();
-            odataConnString.Password = accessToken;
-            Logger.Normal($"Token endpoint reply with access_token");
-            return accessToken;
-
+            if (string.IsNullOrEmpty(token)) return null;
+            var headerValue = new AuthenticationHeaderValue("Bearer", token);
+            _client.DefaultRequestHeaders.Authorization = headerValue;
+            return headerValue;
         }
     }
 }

@@ -66,6 +66,7 @@ using OData2Poco.InfraStructure.Logging;
             _logger.Info($"Start processing url: { odataConnectionString.ServiceUrl}");
             //show result
             await GenerateCodeCommandAsync();
+            GenerateProjectCommand();
             ServiceInfo();
 
             SaveMetaDataCommand();
@@ -199,6 +200,20 @@ using OData2Poco.InfraStructure.Logging;
             _logger.Normal($"Saving Metadata to file : {ArgOptions.MetaFilename}");
             var metaData = O2PGen.MetaDataAsString.FormatXml();
             SaveToFile(ArgOptions.MetaFilename, metaData);
+        }
+
+         private void GenerateProjectCommand()
+        {
+             //---------   --gen-project, -g
+           if (!ArgOptions.GenerateProject) return;
+           var fname=  "un.proj";
+           if(ArgOptions.Lang=="cs")
+              fname=  Path.ChangeExtension(ArgOptions.CodeFilename, ".csproj");
+           if(ArgOptions.Lang=="vb")
+               fname=  Path.ChangeExtension(ArgOptions.CodeFilename, ".csproj");
+           var projectCode=O2PGen.GenerateProject();
+           _logger.Normal($"Generating project file {fname}");
+           File.WriteAllText(fname,projectCode);
         }
         private void SaveToFile(string fileName, string text)
         {

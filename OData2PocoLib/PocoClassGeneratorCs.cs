@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
 using OData2Poco.CustAttributes;
@@ -16,14 +15,8 @@ namespace OData2Poco
     internal class PocoClassGeneratorCs : IPocoClassGenerator
     {
         private static IPocoGenerator _pocoGen;
-        public IDictionary<string, ClassTemplate> PocoModel { get;  set; } //= new Dictionary<string, ClassTemplate>();
-        public string PocoModelAsJson
-        {
-            get
-            {
-                return JsonConvert.SerializeObject(PocoModel, Formatting.Indented);
-            }
-        }
+        public IDictionary<string, ClassTemplate> PocoModel { get;  set; } 
+        public string PocoModelAsJson => JsonConvert.SerializeObject(PocoModel, Formatting.Indented);
 
         /// <summary>
         ///     Constructor
@@ -39,6 +32,8 @@ namespace OData2Poco
             PocoModel = new Dictionary<string, ClassTemplate>();
             Template = new FluentCsTextTemplate();
             var list = _pocoGen.GeneratePocoList(); //generate all classes from model
+            //check reserved keywords
+            ModelManager.RenameeClasses(list);
             if (list != null)
                 foreach (var item in list)
                 {

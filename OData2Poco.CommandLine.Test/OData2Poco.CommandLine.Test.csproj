@@ -28,6 +28,14 @@
     <ProjectReference Include="..\OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj" Condition="$(TargetFramework.StartsWith('netcore')) " />
   </ItemGroup>
 
+ 
+
+  <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\..\cache\.nuget\nunit\3.11.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 
   <ItemGroup>
     <None Update="Data\invalidxml.xml">

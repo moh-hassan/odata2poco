@@ -12,7 +12,7 @@ namespace OData2Poco.InfraStructure.FileSystem
         public void SaveToFile(string filePath, Func<Stream> getStream)
         {
             using (Stream incomingStream = getStream())
-            using (Stream fileStream = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
+            using (Stream fileStream = File.Open(filePath, FileMode.CreateNew, FileAccess.Write))
             {
                 incomingStream.CopyTo(fileStream);
                 fileStream.Close();
@@ -50,12 +50,11 @@ namespace OData2Poco.InfraStructure.FileSystem
                 Logger.Error($"Fail to save file: {filePath}");
                 Logger.Error(e.Message);
             }
-          
         }
 
         public void SaveToFile(string filePath, string content, Encoding encoding)
         {
-                using (FileStream fileStream = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
+                using (FileStream fileStream = File.Open(filePath, FileMode.Create, FileAccess.Write))
                 using (var streamWriter = new StreamWriter(fileStream, encoding))
                 {
                     streamWriter.Write(content);

@@ -44,20 +44,12 @@ namespace OData2Poco.Api
             return gen;
         }
 
-        //private string GenerateCodeAsync(MetaDataInfo metaData)
-        //{
-        //    var gen = PocoFactory.GeneratePoco(metaData, Setting);
-        //    ClassList = gen.ClassList;
-
-        //    CodeText = gen.ToString();
-        //    return CodeText;
-        //}
-        //public async Task<string> GenerateAsync(OdataConnectionString odataConnString)
-        //{
-        //    MetaData = await MetaDataReader.LoadMetadataAsync(odataConnString);
-        //    var code = GenerateCodeAsync(MetaData);
-        //    return code;
-        //}
+        public string GenerateProject()
+        {
+           var proj = new ProjectGenerator(Setting.Attributes);
+           return proj.GetProjectCode();
+        }
+      
 
 
     }

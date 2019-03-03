@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace OData2Poco.Extensions
 {
-    
+
     /// <summary>
     /// Utility for CamelCase/PascalCase Conversion
     /// </summary>
@@ -29,10 +29,10 @@ namespace OData2Poco.Extensions
             if (text.Length < 2) return text.ToUpper();  //one char
 
             // Split the string into words.
-            char[] delimiterChars = {' ', '-','_', '.'};
+            char[] delimiterChars = { ' ', '-', '_', '.' };
             string[] words = text.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
 
-           
+
             string result = "";
             foreach (string word in words)
             {
@@ -58,10 +58,10 @@ namespace OData2Poco.Extensions
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static CaseEnum ToCaseEnum(this string  name )
+        public static CaseEnum ToCaseEnum(this string name)
         {
             var nameCase = name.ToLower().Substring(0, 3);
-          switch (nameCase)
+            switch (nameCase)
             {
                 case "pas": return CaseEnum.Pas;
                 case "cam": return CaseEnum.Camel;
@@ -75,23 +75,23 @@ namespace OData2Poco.Extensions
         /// <param name="text"></param>
         /// <param name="keepCrLf"></param>
         /// <returns></returns>
-        public static string TrimAllSpace(this string text,bool keepCrLf=false)
+        public static string TrimAllSpace(this string text, bool keepCrLf = false)
         {
-          
+
             var result = "";
             Regex trimmer = new Regex(@"\s+");
             if (!keepCrLf)
             {
-                 result = trimmer.Replace(text.Trim(), " ");
+                result = trimmer.Replace(text.Trim(), " ");
                 return result;
             }
-            
-            var lines = text.Split(new[]{'\n','\r'}, StringSplitOptions.RemoveEmptyEntries);
+
+            var lines = text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
-                result += string.Format("{0}\n",trimmer.Replace(line.Trim(), " "));
+                result += string.Format("{0}\n", trimmer.Replace(line.Trim(), " "));
             }
-       
+
             return result;
         }
         /// <summary>
@@ -101,9 +101,9 @@ namespace OData2Poco.Extensions
         /// <returns></returns>
         public static string ToCsAttribute(this string text)
         {
-            return "[" +text + "]";
+            return "[" + text + "]";
         }
-     
+
         public static string NewLine(this string text)
         {
             return text + Environment.NewLine;
@@ -126,7 +126,7 @@ namespace OData2Poco.Extensions
         public static string ToJson(this object data)
         {
             var json = JsonConvert.SerializeObject(data, Formatting.Indented);
-         return json;
+            return json;
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace OData2Poco.Extensions
         {
             return ToJson(o);
         }
-       
+
 
         public static string RemoveEmptyLines(this string input)
         {
@@ -243,6 +243,20 @@ namespace OData2Poco.Extensions
             }
             string result = builder.ToString();
             return result;
+        }
+
+        public static string ToggleFirstLetter(this string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return name;
+            char[] letters = name.ToCharArray();
+            if (letters[0] >= 'a' && letters[0] <= 'z')
+                //Convert lowercase to uppercase 
+                letters[0] = (char)(letters[0] - 32);
+            else if (letters[0] >= 'A' && letters[0] <= 'Z')
+                //Convert uppercase to lowercase 
+                letters[0] = (char)(letters[0] + 32);
+            return new string(letters);
         }
     }
 }
