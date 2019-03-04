@@ -160,12 +160,12 @@ namespace OData2Poco.CommandLine
         public void Validate()
         {
 
-            //load       parameterfile 
-            //new ParameterFile(this).Init();
-            Authenticate=Authenticate??"none";
-            CodeFilename=CodeFilename??"poco.cs";
-            NameCase=NameCase??"none";
+            //set defaults for null values
             Lang=Lang??"cs";
+            Authenticate=Authenticate??"none";
+            CodeFilename=CodeFilename?? (Lang=="cs"? "poco.cs": "poco.vb");
+            NameCase=NameCase??"none";
+           
 
             if (Password != null && Password.StartsWith("@"))
             {

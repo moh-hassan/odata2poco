@@ -3,11 +3,7 @@ using System;
 using NUnit.Framework;
 using OData2Poco.Exceptions;
 using OData2Poco.Extensions;
-/*
- * todo
- * file not found
- *
- */
+
 namespace OData2Poco.CommandLine.Test
 {
     public class OptionManagerTest
@@ -27,8 +23,6 @@ namespace OData2Poco.CommandLine.Test
                 NameCase = nameCase
             };
             var om = new OptionManager(options);
-            //om.Validate();
-            //Assert.That(ret, Is.EqualTo(0));
             Assert.That(options.Errors, Is.Empty);
             Console.WriteLine(options.Errors.Dump());
         }

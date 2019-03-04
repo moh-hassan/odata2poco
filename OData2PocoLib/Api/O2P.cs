@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using OData2Poco.OAuth2;
 
 namespace OData2Poco.Api
 {
@@ -14,14 +11,11 @@ namespace OData2Poco.Api
         public PocoSetting Setting { get; set; }
         public List<ClassTemplate> ClassList { get; set; }
         private MetaDataInfo MetaData { get; set; }
-        //public string ServiceUrl => MetaData.ServiceUrl;
         public string MetaDataAsString => MetaData.MetaDataAsString;
         public string MetaDataVersion => MetaData.MetaDataVersion;
-        //public string ServiceVersion => MetaData.ServiceVersion;
-        //public string SchemaNamespace => MetaData.SchemaNamespace;
+       
         public Dictionary<string, string> ServiceHeader => MetaData.ServiceHeader;
-        //public Media MediaType => MetaData.MediaType;
-        //public Media Source { get; set; }
+       
         public string CodeText { get; set; }
         public O2P(PocoSetting setting = null)
         {
