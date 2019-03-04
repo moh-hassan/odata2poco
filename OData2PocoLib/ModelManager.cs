@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
