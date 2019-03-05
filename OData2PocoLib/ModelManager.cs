@@ -17,19 +17,24 @@ namespace OData2Poco
         {
             ClassChangedName = new Dictionary<string, string>();
         }
-        public static void RenameeClasses(List<ClassTemplate> list)
+        public static void RenameClasses(List<ClassTemplate> list)
         {
             list.Update(c => c.Name = RenameClass(c.Name));
             list.ForEach(classTemplate => classTemplate.Properties.Update(RenameProperty));
             ModifyPropertiesType(list);
         }
-
+        public static void AddItem(string key, string value)
+        {
+            if (!ClassChangedName.ContainsKey(key))
+                ClassChangedName.Add(key, value);
+        }
         public static string RenameClass(string className)
         {
             if (!className.IsCSharpReservedWord()) return className;
             var newClassName = className.ToggleFirstLetter();
             Logger.Normal($"The class: '{className}' is a reserved keyword. It's renamed to '{newClassName}'");
-            ClassChangedName.Add(className, newClassName);
+            //ClassChangedName[className]=  newClassName;
+            AddItem(className,newClassName);
             return newClassName;
         }
 

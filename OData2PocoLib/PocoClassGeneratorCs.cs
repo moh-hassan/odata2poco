@@ -33,7 +33,7 @@ namespace OData2Poco
             Template = new FluentCsTextTemplate();
             var list = _pocoGen.GeneratePocoList(); //generate all classes from model
             //check reserved keywords
-            ModelManager.RenameeClasses(list);
+            ModelManager.RenameClasses(list);
             if (list != null)
                 foreach (var item in list)
                 {
