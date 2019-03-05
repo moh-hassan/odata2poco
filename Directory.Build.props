@@ -3,7 +3,7 @@
     <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
     <PackageOutputPath>$(SolutionDir)build</PackageOutputPath>   
     <Authors>Mohamed Hassan</Authors>
-    <Copyright>Copyright © 2016-2018, Mohamed Hassan </Copyright>
+    <Copyright>Copyright © 2016-2019, Mohamed Hassan </Copyright>
     <Product>OData2Poco</Product>
     <PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
     <PackageIconUrl>https://github.com/moh-hassan/odata2poco/blob/master/ODataLogo-32.ico?raw=true </PackageIconUrl>
@@ -14,6 +14,7 @@
     <Company>OData2Poco</Company>
     <PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
     <PackageTags>OData poco code-generation</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <!-- Disable warnings from XML documentation.-->
     <NoWarn>$(NoWarn);1570;1572;1573;1587</NoWarn>
     <LangVersion>latest</LangVersion>
@@ -25,8 +26,8 @@
 
   <!-- version -->
   <PropertyGroup>
-    <Version>3.0.3</Version>
-    <AssemblyVersion>3.0.3.0</AssemblyVersion>
+    <Version>3.1.0</Version>
+    <AssemblyVersion>3.1.0.0</AssemblyVersion>
   </PropertyGroup>
 
 

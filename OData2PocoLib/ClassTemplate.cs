@@ -16,11 +16,12 @@ namespace OData2Poco
         public List<PropertyTemplate> Properties { get; set; }
         public List<string> Keys { get; set; }
         public List<string> Navigation { get; set; }
-        
+
         //to support enum generation code
         public bool IsEnum { get; set; }
         public bool IsFlags { get; set; } //v3, Add [FlagsAttribute] to enum
         public List<string> EnumElements { get; set; }
+        public string OriginalName { get; set; }
         public ClassTemplate()
         {
             Properties = new List<PropertyTemplate>();

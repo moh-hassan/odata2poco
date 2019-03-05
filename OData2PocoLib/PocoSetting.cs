@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace OData2Poco
 {
@@ -13,14 +12,7 @@ namespace OData2Poco
         /// Example int? , double?
         /// </summary>
         public bool AddNullableDataType { get; set; }
-        /// <summary>
-        /// Add KeyAttribute [Key] to the property of POCO class
-        /// </summary>
-        public bool AddKeyAttribute { get; set; }//obsolete, use Attributes.add("key")
-
-        public bool AddTableAttribute { get; set; } //obsolete, use Attributes.add("tab")
-
-        public bool AddRequiredAttribute { get; set; }//obsolete, use Attributes.add("req")
+       
         /// <summary>
         /// Add Navigation properties as virtual properties
         /// </summary>
@@ -60,19 +52,25 @@ namespace OData2Poco
         /// </summary>
         public CaseEnum NameCase { get; set; }
 
+      
+
+        //add attributes: key,req,dm,tab,json,proto,display and db
+        public List<string> Attributes { get; set; }
+
         /// <summary>
-        /// Add DataMember Attribute
+        /// Add KeyAttribute [Key] to the property of POCO class
         /// </summary>
-        public bool AddDataMemberAttribute { get; set; }
+        public bool AddKeyAttribute { get; set; }//obsolete, use Attributes.add("key")
+
+        public bool AddTableAttribute { get; set; } //obsolete, use Attributes.add("tab")
+
+       public bool AddRequiredAttribute { get; set; }//obsolete, use Attributes.add("req")
+       
         /// <summary>
         /// Add JsonProperty Attribute
         ///example:     [JsonProperty(PropertyName = "email")]
         /// </summary>
         public bool AddJsonAttribute { get; set; } ////obsolete, use Attributes.add("json")
-
-        //add attributes: key,req,dm,tab,json,proto,display and db
-        public List<string> Attributes { get; set; }
-
         /// <summary>
         /// Initialization
         /// </summary>

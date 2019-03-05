@@ -10,11 +10,11 @@ namespace OData2Poco
     /// Convert name to Camel/Pascal Case
     /// Generate the declaration of property e.g.   virtual public int? name  {get;set;} //comment
     /// </summary>
- public   class PropertyGenerator
+ public   class PropertyGenerator 
     {
-        private AttributeFactory AttributeManager = AttributeFactory.Default;
-        private readonly PropertyTemplate _property; //{ get; set; }
-        private readonly PocoSetting _setting;// { get; set; }
+        private readonly AttributeFactory _attributeManager = AttributeFactory.Default;
+        private readonly PropertyTemplate _property;  
+        private readonly PocoSetting _setting; 
         /// <summary>
         /// Initialize in cto
         /// </summary>
@@ -25,7 +25,7 @@ namespace OData2Poco
             _property = propertyTemplate;
             _setting = pocoSetting;
         }
-     //todo: support user defined custom attributes for properties/class
+    
         /// <summary>
         /// Get all attributes based on PocoSetting initialization
         /// </summary>
@@ -33,7 +33,7 @@ namespace OData2Poco
         public List<string> GetAllAttributes()
         {
            
-            return AttributeManager.GetAllAttributes(_property);
+            return _attributeManager.GetAllAttributes(_property);
         }
         /// <summary>
         /// Name in camlcase /pascase
@@ -61,24 +61,12 @@ namespace OData2Poco
         /// <summary>
         /// Virtual Modifier
         /// </summary>
-        public string VirtualModifier
-        {
-            get
-            {
-                return _setting.AddNavigation && !_setting.AddEager ? " virtual" : string.Empty;
-            }
-        }
+        public string VirtualModifier => _setting.AddNavigation && !_setting.AddEager ? " virtual" : string.Empty;
 
         /// <summary>
         /// NullableModifier represented by "?" added to type , e.g int?
         /// </summary>
-        public string NullableModifier
-        {
-            get
-            {
-                return _setting.AddNullableDataType && _property.IsNullable ? Helper.GetNullable(_property.PropType) : String.Empty;
-            }
-        }
+        public string NullableModifier => _setting.AddNullableDataType && _property.IsNullable ? Helper.GetNullable(_property.PropType) : String.Empty;
 
         /// <summary>
         /// The declaration of property in C# 
@@ -87,8 +75,7 @@ namespace OData2Poco
 
         public override string ToString()
         {
-            var text = string.Format("{0}\n{1}",
-                string.Join(Environment.NewLine,GetAllAttributes()), Declaration);
+            var text = $"{string.Join(Environment.NewLine, GetAllAttributes())}\n{Declaration}";
             return text;
         }
       

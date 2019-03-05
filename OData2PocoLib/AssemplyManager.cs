@@ -47,9 +47,7 @@ namespace OData2Poco
                 }
             }
         }
-        //add all assemplies for using either for attribute or datatype 
-        //TODO: load entries from configuration file
-        //TODO: Entries may be passed to pocosetting for external references defined by user
+     
       
         private readonly Dictionary<string, string> _assemplyDict = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase)
         {
@@ -57,11 +55,14 @@ namespace OData2Poco
             {"Key","System.ComponentModel.DataAnnotations"},
             {"Required" ,"System.ComponentModel.DataAnnotations"},
             {"Table" ,"System.ComponentModel.DataAnnotations.Schema"},
-            {"Json","Newtonsoft.Json"}, //extrnal type can be installed from nuget
+            {"json","Newtonsoft.Json"}, //extrnal type can be installed from nuget
             //assemplies for Geographic data type
             {"Geometry","Microsoft.Spatial"}, //extrnal type can be installed from nuget
             {"Geography", "Microsoft.Spatial"} ,//extrnal type can be installed from nuget
-            {"GeographyPoint","Microsoft.Spatial" }
+            {"GeographyPoint","Microsoft.Spatial" },
+            {"DataMember","System.Runtime.Serialization" },
+            {"proto","ProtoBuf" }, //extrnal type can be installed from nuget
+            
             
         };
 
@@ -91,6 +92,8 @@ namespace OData2Poco
 
             if (_pocoSetting.AddJsonAttribute) AddAssemplyByKey("json");
             if (_pocoSetting.Attributes.Contains("json")) AddAssemplyByKey("json");
+            if (_pocoSetting.Attributes.Contains("dm")) AddAssemplyByKey("DataMember");
+            if (_pocoSetting.Attributes.Contains("proto")) AddAssemplyByKey("proto");
             AddAssempliesOfDataType();//add assemplies of datatype
         }
 

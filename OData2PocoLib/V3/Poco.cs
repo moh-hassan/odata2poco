@@ -10,6 +10,8 @@ using System.Xml;
 using Microsoft.Data.Edm.Library.Values;
 using Microsoft.Data.Edm;
 using Microsoft.Data.Edm.Csdl;
+using  ISchemaType= Microsoft.Data.Edm.IEdmSchemaType;
+
 #else
 using Microsoft.OData.Edm;
 using Microsoft.OData.Edm.Validation;
@@ -91,7 +93,7 @@ namespace OData2Poco.V4
 
         private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
 
-        public string GetEntitySetName(string entityName)
+        private string GetEntitySetName(string entityName)
         {
             //Console.WriteLine("name {0}",entityName);
             if (entityName == null) return "un";
@@ -166,7 +168,7 @@ namespace OData2Poco.V4
         }
 
 
-        private ClassTemplate GeneratePocoClass(IEdmSchemaType ent)
+        internal ClassTemplate GeneratePocoClass(IEdmSchemaType ent)
         {
             if (ent == null) return null;
             var classTemplate = new ClassTemplate
@@ -200,6 +202,9 @@ namespace OData2Poco.V4
             //set the key ,comment
             foreach (var property in entityProperties)
             {
+                property.ClassName = classTemplate.Name;
+                //handle reserved cs keywords
+               
                 if (classTemplate.Navigation.Exists(x => x == property.PropName)) property.IsNavigate = true;
 
                 if (classTemplate.Keys.Exists(x => x == property.PropName)) property.IsKey = true;
@@ -262,7 +267,6 @@ namespace OData2Poco.V4
                 PropName = property.Name,
                 PropType = GetClrTypeName(property.Type),
                 Serial = serial++
-                //ToDebugString = Helper.Dump(property)
             }).ToList();
 
             return list;

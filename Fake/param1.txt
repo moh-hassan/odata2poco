@@ -1,0 +1,9 @@
+url=http://localhost
+client_id=aaaaa-bbbbb-cccccc-ddddd
+tenant=d1feaa8f-c0ef-4c1d-9052-a07008cc86b7
+client_secret=zmu19LGZ6SP8fCGJrCnvqp2/EmlhFr11mVaQsMvL9LA1
+grant_type=client_credentials
+resource=http://myorg.com
+url2={{url}}/data
+password=123aaaaaBbbbbCcccc
+token_params=client_id=?&client_secret=?&grant_type=?&resource={{resource}}

@@ -1,0 +1,47 @@
+﻿
+
+  -a, --attribute     Attributes, Allowed values: key, req, json,tab,dm,proto,db,display
+  -b, --nullable      Add nullable data types
+  -c, --case          (Default: none) Type pas or camel to Convert Property Name to PascalCase or CamelCase
+d 
+  -e, --eager         Add non virtual navigation Properties for Eager Loading
+  -f, --filename      (Default: poco.cs) filename to save generated c# code.
+*g
+  -h, --header        List  http header of the service
+  -i, --inherit       for class inheritance from  BaseClass and/or interfaces
+j
+k
+  -l, --list          List POCO classes to standard output.
+m
+  -n, --navigation    Add navigation properties
+*o
+  -p, --password      password/token Or access_token for authentication.
+q
+  -r, --url           Required. URL of OData feed.
+s
+  -t, --token-endpoint    OAuth2 Token Endpoint.
+  -u, --user          User name for authentication.
+  -v, --verbose       Prints C# code to standard output.
+w
+  -x, --metafile      Xml filename to save metadata.
+y
+z
+
+ 
+  --token-params      OAuth2 Token Parameters with key=value separated by Ampersand '&' formated as: 'client_id=xxx&client_secret=xxx&...', no space allowed.
+   --lang              (Default: cs) Type cs for CSharp, vb for VB.NET
+ 
+ //----todo
+ g gen-project csproj/vbproj
+ o auth
+
+ 
+ 
+ 
+  
+  -m, --namespace     A namespace prefix for the OData namespace
+ 
+ 
+  --lang              (Default: cs) Type cs for CSharp, vb for VB.NET
+  --help              Display this help screen.
+  --version           Display version information.

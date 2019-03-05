@@ -1,0 +1,32 @@
+﻿
+
+o2pgen --help
+
+OData2Poco 3.1.0
+Copyright c 2016-2018, Mohamed Hassan
+USAGE:
+Default setting:
+o2pgen --url http://services.odata.org/V4/OData/OData.svc
+Add json, key Attributes with camel case and nullable types:
+o2pgen --attribute json key --nullable --case camel --url http://services.odata.
+org/V4/OData/OData.svc
+  -r, --url           Required. URL of OData feed.
+  -u, --user          User name for authentication.
+  -p, --password      password/token Or access_token for authentication.
+  --token-endpoint    OAuth2 Token Endpoint.
+  --token-params      OAuth2 Token Parameters with key=value separated by Ampersand '&' formated as: 'client_id=xxx&client_secret=xxx&...', no space allowed.
+  -f, --filename      (Default: poco.cs) filename to save generated c# code.
+  -x, --metafile      Xml filename to save metadata.
+  -v, --verbose       Prints C# code to standard output.
+  -d, --header        List  http header of the service
+  -l, --list          List POCO classes to standard output.
+  -n, --navigation    Add navigation properties
+  -e, --eager         Add non virtual navigation Properties for Eager Loading
+  -b, --nullable      Add nullable data types
+  -i, --inherit       for class inheritance from  BaseClass and/or interfaces
+  -m, --namespace     A namespace prefix for the OData namespace
+  -c, --case          (Default: none) Type pas or camel to Convert Property Name to PascalCase or CamelCase
+  -a, --attribute     Attributes, Allowed values: key, req, json,tab,dm,proto,db,display
+  --lang              (Default: cs) Type cs for CSharp, vb for VB.NET
+  --help              Display this help screen.
+  --version           Display version information.

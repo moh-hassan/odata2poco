@@ -7,19 +7,20 @@ moh.hassan20@gmail.com
 The MIT License (MIT) (http://odata2poco.codeplex.com/license)
 Copyright (c) 2016-2019 Mohamed Hassan
 
-Notes:for T4 code generation , rename this file as your_file_name.tt and 
-set property Custom Tool=TextTemplatingFileGenerator
+notes:for T4 code generation , rename this file as your_file_name.tt and set property Custom Tool=TextTemplatingFileGenerator
 */
 #>
-
 <#@ template language="C#" debug="false" hostspecific="true" #>
 <#@ output extension=".cs" #>
 <# /* Load the current project's DLL to make sure the OData2Poco can find things */ #>
 <#@ assembly name= "$(projectDir)bin\\debug\\net45\\OData2Poco.dll" #> 
+ 
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
 <#@ Import Namespace="System.Collections.Generic" #>
 <#@ import namespace="OData2Poco" #>
 <#@ import namespace="OData2Poco.Api" #>
-
  <#	
 
 //*****************************  Settings ************************************** 

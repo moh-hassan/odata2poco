@@ -28,8 +28,8 @@ namespace OData2Poco.CommandLine.Test
 
         private async Task<Tuple<int, string>> RunCommand(string s)
         {
-            ArgumentParser.Logger.Silent = true;
-            ArgumentParser.Logger.Clear();
+            _argumentParser.ClearLogger();
+            _argumentParser.SetLoggerSilent();
 
             string[] args = s.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var retcode = await _argumentParser.RunOptionsAsync(args);
@@ -39,7 +39,21 @@ namespace OData2Poco.CommandLine.Test
             return tuple;
         }
 
-        
+        //[Test]
+
+        private async Task Parameter_file_Test()
+        {
+            //Arrange
+            var a = "--env-file graph_param.txt -r {{url}} --token-endpoint {{token_endpoint}}  --token-params client_id={{client_id}}&client_secret={{client_secret}}&grant_type={{grant_type}}&resource={{resource}} ";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            Console.WriteLine(output);
+            //Assert
+            Assert.AreEqual(0, tuble.Item1);
+            
+        }
+
         [Test]
         [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
