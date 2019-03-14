@@ -11,13 +11,20 @@
 </Description>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Client\**" />
+    <EmbeddedResource Remove="Client\**" />
+    <None Remove="Client\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="csproject_template.txt" />
+    <None Remove="TypeScript\tsclass.liquid" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="csproject_template.txt" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotLiquid" Version="2.0.298" />
     <PackageReference Include="Microsoft.Data.Edm" Version="5.8.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1 " />
 
@@ -40,6 +47,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Copyright>Copyright © 2016-2019, Mohamed Hassan</Copyright>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
     <!-- Microsoft.OData.Edm v7+ -->
   </PropertyGroup>
 

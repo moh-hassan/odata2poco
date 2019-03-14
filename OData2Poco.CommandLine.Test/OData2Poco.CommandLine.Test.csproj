@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!--<TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>-->
-    <!--<TargetFramework>net45</TargetFramework>-->
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFrameworks>net45;netcoreapp2.1</TargetFrameworks>
+    <!--<TargetFramework>net461</TargetFramework>-->
+    <!--<TargetFramework>netcoreapp2.1</TargetFramework>-->
     <Authors>Mohamed Hassan</Authors>
     <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
     <Product>OData2Poco</Product>
@@ -27,15 +28,6 @@
     <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" Condition="$(TargetFramework.StartsWith('net4')) " />
     <ProjectReference Include="..\OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj" Condition="$(TargetFramework.StartsWith('netcore')) " />
   </ItemGroup>
-
- 
-
-  <ItemGroup>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\..\cache\.nuget\nunit\3.11.0\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 
   <ItemGroup>
     <None Update="Data\invalidxml.xml">

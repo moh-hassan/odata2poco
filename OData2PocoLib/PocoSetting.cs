@@ -71,6 +71,14 @@ namespace OData2Poco
         ///example:     [JsonProperty(PropertyName = "email")]
         /// </summary>
         public bool AddJsonAttribute { get; set; } ////obsolete, use Attributes.add("json")
+
+        public string Prefix { get; set; }
+        public string Suffix { get; set; }
+        public bool MultiFiles { get; set; }
+        public string ModuleName { get; set; }
+        public bool AddReference { get; set; }
+        public bool GenerateInterface { get; set; }
+
         /// <summary>
         /// Initialization
         /// </summary>

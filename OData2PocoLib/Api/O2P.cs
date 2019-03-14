@@ -10,12 +10,12 @@ namespace OData2Poco.Api
     {
         public PocoSetting Setting { get; set; }
         public List<ClassTemplate> ClassList { get; set; }
-        private MetaDataInfo MetaData { get; set; }
-        public string MetaDataAsString => MetaData.MetaDataAsString;
-        public string MetaDataVersion => MetaData.MetaDataVersion;
-       
-        public Dictionary<string, string> ServiceHeader => MetaData.ServiceHeader;
-       
+        internal MetaDataInfo MetaData { get; set; }
+        public string MetaDataAsString => MetaData?.MetaDataAsString;
+        public string MetaDataVersion => MetaData?.MetaDataVersion;
+        public string SchemaNamespace =>MetaData?.SchemaNamespace;
+        public Dictionary<string, string> ServiceHeader => MetaData?.ServiceHeader;
+
         public string CodeText { get; set; }
         public O2P(PocoSetting setting = null)
         {
@@ -24,27 +24,42 @@ namespace OData2Poco.Api
             MetaData = new MetaDataInfo();
         }
 
+       
+        //internal async Task<IPocoGenerator> GenerateModel(OdataConnectionString odataConnString)
+        //{
+        //    //MetaData = await MetaDataReader.LoadMetadataAsync(odataConnString);
+        //    IPocoGenerator gen = await PocoFactory.GenerateModel(odataConnString, Setting);
+        //    return gen;
+        //}
         public async Task<string> GenerateAsync(OdataConnectionString odataConnString)
         {
-            MetaData = await MetaDataReader.LoadMetadataAsync(odataConnString);
-            var gen = GenerateModel(MetaData);
-            CodeText = gen.ToString();
+            
+            var generator = await PocoFactory.GeneratePoco(odataConnString, Setting);
+            ClassList = generator.ClassList;
+            CodeText = generator.ToString();
             return CodeText;
         }
-        private IPocoClassGenerator GenerateModel(MetaDataInfo metaData)
-        {
-            var gen = PocoFactory.GeneratePoco(metaData, Setting);
-            ClassList = gen.ClassList;
-            return gen;
-        }
+        //public async Task<string> GenerateAsync(OdataConnectionString odataConnString)
+        //{
+        //    var gen = await GenerateModel(odataConnString);
+        //    var generatorCs = new PocoClassGeneratorCs(gen, Setting);
+        //    ClassList = generatorCs.ClassList;
+        //    CodeText = generatorCs.ToString();
+        //    return CodeText;
+        //}
+        //public async Task<string> GenerateTsAsync(OdataConnectionString odataConnString)
+        //{
+        //    var gen = await GenerateModel(odataConnString);
+        //    var ts = new PocoClassGeneratorTs(gen, Setting);
+        //    ClassList = ts.ClassList;
+        //    CodeText = ts.ToString();
+        //    return CodeText;
+        //}
 
         public string GenerateProject()
         {
-           var proj = new ProjectGenerator(Setting.Attributes);
-           return proj.GetProjectCode();
+            var proj = new ProjectGenerator(Setting.Attributes);
+            return proj.GetProjectCode();
         }
-      
-
-
     }
 }

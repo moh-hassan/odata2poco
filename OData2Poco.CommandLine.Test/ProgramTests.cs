@@ -9,7 +9,7 @@ namespace OData2Poco.CommandLine.Test
 {
    
     [TestFixture]
-    public class ProgramTests : BaseTest
+    public partial class ProgramTests : BaseTest
     {
         
         private readonly ArgumentParser _argumentParser;

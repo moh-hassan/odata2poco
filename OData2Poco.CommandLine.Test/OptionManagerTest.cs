@@ -1,8 +1,8 @@
 ﻿
 using System;
 using NUnit.Framework;
-using OData2Poco.Exceptions;
-using OData2Poco.Extensions;
+//using OData2Poco.Exceptions;
+//using OData2Poco.Extensions;
 
 namespace OData2Poco.CommandLine.Test
 {
@@ -24,7 +24,7 @@ namespace OData2Poco.CommandLine.Test
             };
             var om = new OptionManager(options);
             Assert.That(options.Errors, Is.Empty);
-            Console.WriteLine(options.Errors.Dump());
+            //Console.WriteLine(options.Errors.Dump());
         }
         [Test]
         [TestCase("zz")]

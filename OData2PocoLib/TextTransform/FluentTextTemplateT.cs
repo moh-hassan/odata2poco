@@ -11,19 +11,9 @@ namespace OData2Poco.TextTransform
     {
         string _currentIndent = "";
         bool _endsWithNewline;
-     
-
-
-
+        public string Header { get; set; }
+        public string Footer { get; set; }
         StringBuilder _generationText;
-        /// <summary>
-        /// The string builder that generation-time code is using to assemble generated output
-        /// </summary>
-        protected StringBuilder GenerationText
-        {
-            get => _generationText ?? (_generationText = new StringBuilder());
-            set => _generationText = value;
-        }
 
         List<int> _indentLengths;
         /// <summary>
@@ -41,7 +31,14 @@ namespace OData2Poco.TextTransform
         /// </summary>
         public virtual IDictionary<string, object> Session { get; set; }
 
-
+        /// <summary>
+        /// The string builder that generation-time code is using to assemble generated output
+        /// </summary>
+        protected StringBuilder GenerationText
+        {
+            get => _generationText ?? (_generationText = new StringBuilder());
+            set => _generationText = value;
+        }
         public FluentTextTemplate()
         {
             ToStringHelper = new ToStringInstanceHelper();
@@ -239,7 +236,43 @@ namespace OData2Poco.TextTransform
             }
 
         }
-    }
 
+        //public T WriteLineFor(List<string> list, string separator = ",", string indent = "\t")
+        //{
+        //    foreach (var p in list)
+        //    {
+        //        var comma = list.IsLastElement(p) ? "" : separator;
+        //        PushIndent(indent)
+        //            .WriteLine($"{p.Trim()} {comma}")
+        //            .PopIndent();
+        //    }
+        //    return (T)this;
+        //}
+        public T WriteLineFormatFor(List<string> list, string format)
+        {
+            foreach (var p in list)
+            {
+                WriteLine(string.Format(format, p));
+            }
+            return (T)this;
+        }
+       
+        public T WriteIf(bool condition, string ifTrue, string ifFalse)
+        {
+            return condition
+                ? Write(ifTrue)
+                : Write(ifFalse);
+        }
+        public T WriteIf(bool condition,
+            Action<T> ifTrue,
+            Action<T> ifFalse)
+        {
+            if (condition)
+                ifTrue((T)this);
+            else
+                ifFalse((T)this);
+            return (T)this;
+        }
+    }
 }
 

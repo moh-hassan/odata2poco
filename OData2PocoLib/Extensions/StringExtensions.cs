@@ -258,5 +258,9 @@ namespace OData2Poco.Extensions
                 letters[0] = (char)(letters[0] + 32);
             return new string(letters);
         }
+        public static string ToNullable(this string name, bool isNullable)
+        {
+            return isNullable ? $"{name}?" : name;
+        }
     }
 }

@@ -7,11 +7,11 @@ namespace OData2Poco
     {
         PocoSetting PocoSetting { get; set; }
         ClassTemplate this[string index] { get; }
-        List<ClassTemplate> ClassList { get; } //
+        List<ClassTemplate> ClassList { get; } 
         string GeneratePoco();
-        //v2.2 to support exporting model as json
         IDictionary<string, ClassTemplate> PocoModel { get;  }
         string PocoModelAsJson { get; }
+        //Language LangName { get; set;}
     }
 }
 

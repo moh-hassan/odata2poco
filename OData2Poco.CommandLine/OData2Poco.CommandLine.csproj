@@ -40,12 +40,15 @@
     <DefineConstants>NET45;NETFULL</DefineConstants>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <!--<DebugType>pdbonly</DebugType>-->
+    <DebugType>none</DebugType>
   </PropertyGroup>
 </Project>
