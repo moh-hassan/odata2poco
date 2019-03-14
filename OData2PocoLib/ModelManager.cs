@@ -10,7 +10,7 @@ namespace OData2Poco
     /// </summary>
     internal class ModelManager
     {
-        private static readonly ColoredConsole Logger = PocoLogger.Default;
+        private static readonly ILog Logger = PocoLogger.Default;
         private static Dictionary<string, string> ClassChangedName { get; }
 
         static ModelManager()

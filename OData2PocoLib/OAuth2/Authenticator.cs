@@ -9,7 +9,7 @@ namespace OData2Poco.OAuth2
 {
     internal class Authenticator
     {
-        public static ColoredConsole Logger = PocoLogger.Default;
+        public static ILog Logger = PocoLogger.Default;
         private readonly HttpClient _client;
         public Authenticator(HttpClient client)
         {

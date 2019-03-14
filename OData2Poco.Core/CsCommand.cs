@@ -23,7 +23,7 @@ using OData2Poco.InfraStructure.Logging;
         public PocoSetting PocoSettingOptions;
         public OdataConnectionString odataConnectionString;
         public string Code { get; private set; }
-        private readonly ColoredConsole _logger = PocoLogger.Default;
+        private readonly ILog _logger = PocoLogger.Default;
         public O2P O2PGen { get; set; }
         public List<string> Errors; //model generation errors
         private IPocoFileSystem _fileSystem;

@@ -13,7 +13,7 @@ namespace OData2Poco.OAuth2
     /// </summary>
     internal class TokenEndpoint
     {
-        public static ColoredConsole Logger = PocoLogger.Default;
+        public static ILog Logger = PocoLogger.Default;
         public string TokenUrl { get; set; }
         public string TokenParams { get; set; }
         public Dictionary<string, string> TokenParamsCollection { get; set; }

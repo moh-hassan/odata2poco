@@ -263,9 +263,7 @@ namespace OData2Poco.V4
 
             return list;
         }
-        //-----------
-
-        //------------
+        
         //fill all properties/name of the class template
         private string GetClrTypeName(IEdmTypeReference edmTypeReference)
         {
