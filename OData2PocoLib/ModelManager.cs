@@ -12,10 +12,11 @@ namespace OData2Poco
     {
         private static readonly ILog Logger = PocoLogger.Default;
         private static Dictionary<string, string> ClassChangedName { get; }
-
+        public static List<string> ModelWarning { get;set;}
         static ModelManager()
         {
             ClassChangedName = new Dictionary<string, string>();
+            ModelWarning= new List<string>();
         }
         public static void RenameClasses(List<ClassTemplate> list)
         {
@@ -32,7 +33,7 @@ namespace OData2Poco
         {
             if (!className.IsCSharpReservedWord()) return className;
             var newClassName = className.ToggleFirstLetter();
-            Logger.Normal($"The class: '{className}' is a reserved keyword. It's renamed to '{newClassName}'");
+            ModelWarning.Add($"The class: '{className}' is a reserved keyword. It's renamed to '{newClassName}'");
             //ClassChangedName[className]=  newClassName;
             AddItem(className,newClassName);
             return newClassName;
@@ -53,14 +54,14 @@ namespace OData2Poco
                 var name = m.Groups[1].ToString();
                 if (!ClassChangedName.ContainsKey(name)) return type;
                 newType = $"List<{ClassChangedName[name]}>";
-                Logger.Normal($"++ Modify the type of the property: '{prop.ClassName}.{prop.PropName}' from  {type} to {newType}");
+                ModelWarning.Add($"Modify the type of the property: '{prop.ClassName}.{prop.PropName}' from  {type} to {newType}");
                 return newType;
             }
 
             if (!ClassChangedName.ContainsKey(type)) return type;
 
             newType = ClassChangedName[type];
-           Logger.Normal($"++ Modify the type of the property: '{prop.ClassName}.{prop.PropName}' from  {type} to {newType}");
+            ModelWarning.Add($"++ Modify the type of the property: '{prop.ClassName}.{prop.PropName}' from  {type} to {newType}");
             return newType;
         }
         public static PropertyTemplate RenameProperty(PropertyTemplate property)
@@ -71,7 +72,7 @@ namespace OData2Poco
                 //issue12, property name is the same as class name
                 //error CS0542: '<PropName>': member names cannot be the same as their enclosing type
                 newName = property.PropName.ToggleFirstLetter();
-               Logger.Normal($"Rename the property '{property.ClassName}.{property.PropName}' to '{newName}' for  avoiding the Compiler error CS0542 ");
+                ModelWarning.Add($"Rename the property '{property.ClassName}.{property.PropName}' to '{newName}' for  avoiding the Compiler error CS0542 ");
                 property.PropName = newName;
 
                 property.PropComment += "//Renamed";
@@ -80,7 +81,7 @@ namespace OData2Poco
             if (!property.PropName.IsCSharpReservedWord()) return property;
 
             newName = property.PropName.ToggleFirstLetter();
-         Logger.Normal($"Rename the property {property.ClassName}.{property.PropName} to '{newName}' becauuse its name is a reserved keyword");
+            ModelWarning.Add($"Rename the property {property.ClassName}.{property.PropName} to '{newName}' becauuse its name is a reserved keyword");
             property.PropName = newName;
             return property;
         }

@@ -26,6 +26,9 @@ namespace OData2Poco
         public PocoClassGeneratorCs(IPocoGenerator pocoGen, PocoSetting setting = null)
         {
             PocoSetting = setting ?? new PocoSetting();
+            //add jsonproperty to properties/classes that are renamed
+            PocoSetting?.Attributes.Add("original"); //v3.2
+
             //initialize AttributeFactory to use pocosetting.Attributes
             AttributeFactory.Default.Init(PocoSetting); 
             _pocoGen = pocoGen;

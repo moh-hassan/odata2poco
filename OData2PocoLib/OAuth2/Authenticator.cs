@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -20,11 +21,13 @@ namespace OData2Poco.OAuth2
         {
             switch (odataConnString.Authenticate)
             {
-                case AuthenticationType.none:
+                case AuthenticationType.None:
+                case AuthenticationType.Ntlm:
+                case AuthenticationType.Digest:
                     break;
 
-                case AuthenticationType.basic:
-                    Logger.Info("Authenticating with Basic");
+                case AuthenticationType.Basic:
+                    Logger.Trace("Authenticating with Basic");
                     //Basic auth user/password
                     if (!string.IsNullOrEmpty(odataConnString.UserName) &&
                         !string.IsNullOrEmpty(odataConnString.Password))
@@ -34,15 +37,15 @@ namespace OData2Poco.OAuth2
                     }
                     break; ;
 
-                case AuthenticationType.token:
-                    Logger.Info("Authenticating with Token");
+                case AuthenticationType.Token:
+                    Logger.Trace("Authenticating with Token");
                     //token
                     if (!string.IsNullOrEmpty(odataConnString.Password) &&
                         string.IsNullOrEmpty(odataConnString.UserName))
                         Authenticate(odataConnString.Password);
                     break;
-                case AuthenticationType.oauth2:
-                    Logger.Info("Authenticating with OAuth2");
+                case AuthenticationType.Oauth2:
+                    Logger.Trace("Authenticating with OAuth2");
                     //OAuth2 
                     if (!string.IsNullOrEmpty(odataConnString.TokenUrl))
                     {
@@ -50,15 +53,15 @@ namespace OData2Poco.OAuth2
                         Authenticate(accessToken);
                     }
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                //default:
+                //    throw new ArgumentOutOfRangeException();
             }
         }
         private AuthenticationHeaderValue Authenticate(string user, string password)
         {
             //credintial
             if (string.IsNullOrEmpty(user)) return null;
-            var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(user + ":" + password));
+            var token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user}:{password}"));
             var headerValue = new AuthenticationHeaderValue("Basic", token);
             _client.DefaultRequestHeaders.Authorization = headerValue;
             return headerValue;
@@ -71,5 +74,7 @@ namespace OData2Poco.OAuth2
             _client.DefaultRequestHeaders.Authorization = headerValue;
             return headerValue;
         }
+
+      
     }
 }

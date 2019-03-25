@@ -5,12 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using OData2Poco.InfraStructure.Logging;
 using OData2Poco.OAuth2;
 
 namespace OData2Poco
 {
     internal class MetaDataReader
     {
+        public static ILog Logger = PocoLogger.Default;
         public static async Task<MetaDataInfo> LoadMetaDataHttpAsync(OdataConnectionString odataConnString)
         {
             // to avoid the Error Message://An error occurred while sending the request.-->
@@ -20,9 +22,39 @@ namespace OData2Poco
 
 
             var serviceUri = new Uri(odataConnString.ServiceUrl);
-            using (var client = new HttpClient())
+            CredentialCache credentials = new CredentialCache();
+            switch (odataConnString.Authenticate)
             {
-                await new Authenticator(client).Authenticate(odataConnString);
+                case AuthenticationType.Ntlm:
+                    Logger.Trace("Authenticating with NTLM");
+                    credentials.Add(serviceUri, "NTLM",
+                        new NetworkCredential(odataConnString.UserName, odataConnString.Password, odataConnString.Domain));
+                    break;
+                case AuthenticationType.Digest:
+                    Logger.Trace("Authenticating with Digest");
+                    credentials.Add(serviceUri, "Digest",
+                        new NetworkCredential(odataConnString.UserName, odataConnString.Password, odataConnString.Domain));
+                    break;
+            }
+            //UseDefaultCredentials for NTLM support in windows
+            var handler = new HttpClientHandler()
+            {
+                UseDefaultCredentials = true,
+                Credentials = credentials,
+            };
+
+            if (!string.IsNullOrEmpty(odataConnString.Proxy))
+            {
+                Logger.Trace($"Using Proxy: '{odataConnString.Proxy}'");
+                handler.UseProxy=true;
+                handler.Proxy=   new WebProxy(odataConnString.Proxy);
+            }
+
+            using (var client = new HttpClient(handler))
+            {
+                var auth = new Authenticator(client);
+                //authenticate
+                await auth.Authenticate(odataConnString);
                 client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
                 client.DefaultRequestHeaders.Add("User-Agent", "OData2Poco");
                 string url = serviceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
@@ -31,11 +63,11 @@ namespace OData2Poco
                 {
                     if (!response.IsSuccessStatusCode)
                         throw new HttpRequestException(
-                            $"Http Error {(int) response.StatusCode}: {response.ReasonPhrase}");
+                            $"Http Error {(int)response.StatusCode}: {response.ReasonPhrase}");
                     var content = await response.Content.ReadAsStringAsync();
                     if (string.IsNullOrEmpty(content))
                         throw new HttpRequestException(
-                            $"Http Error {(int) response.StatusCode}: {response.ReasonPhrase}");
+                            $"Http Error {(int)response.StatusCode}: {response.ReasonPhrase}");
                     var metaData = new MetaDataInfo
                     {
                         MetaDataAsString = content,

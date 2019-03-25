@@ -40,29 +40,27 @@ namespace OData2Poco
         {
             var metaData = await MetaDataReader.LoadMetadataAsync(connectionString);
             IPocoGenerator generator = Create(metaData, setting);
-            //save to cache for latter use
-            ServiceCache.Default.AddGenerator(generator);
             return generator;
         }
 
-        internal static async Task<IPocoClassGenerator> GeneratePoco(OdataConnectionString connectionString,
-            PocoSetting setting)
-        {
-          var gen = await  GenerateModel( connectionString, setting);
-          switch (setting.Lang)
-          {  
-              case Language.CS:
-              case Language.VB:
-                  return new PocoClassGeneratorCs(gen, setting);
-              //todo
-              //case Language.TS:
-              //    return new PocoClassGeneratorTs(gen, setting);
-              default:
-                  throw new ArgumentOutOfRangeException();
-          }
-        }
+        //internal static async Task<IPocoClassGenerator> GeneratePoco(OdataConnectionString connectionString,
+        //    PocoSetting setting)
+        //{
+        //  var gen = await  GenerateModel( connectionString, setting);
+        //  switch (setting.Lang)
+        //  {  
+        //      case Language.CS:
+        //      case Language.VB:
+        //          return new PocoClassGeneratorCs(gen, setting);
+        //      //todo
+        //      //case Language.TS:
+        //      //    return new PocoClassGeneratorTs(gen, setting);
+        //      default:
+        //          throw new ArgumentOutOfRangeException();
+        //  }
+        //}
 
-
+        //----------
         //var generatorCs = new PocoClassGeneratorCs(gen, Setting);
         
         //public async Task<string> GenerateAsync(OdataConnectionString odataConnString)

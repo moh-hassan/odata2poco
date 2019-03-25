@@ -17,6 +17,8 @@ namespace OData2Poco.OAuth2
         public string TokenUrl { get; set; }
         public string TokenParams { get; set; }
         public Dictionary<string, string> TokenParamsCollection { get; set; }
+        //json string 
+        public string LastToken { get; set; }
         public TokenEndpoint(OdataConnectionString odataConnectionString)
         {
             //OConnectionString = odataConnectionString;
@@ -62,6 +64,18 @@ namespace OData2Poco.OAuth2
             return token;
         }
 
+        /*
+ Note: The json token is in the form:
+
+token_type     : Bearer
+expires_in     : 3600
+ext_expires_in : 3600
+expires_on     : 1553441019
+not_before     : 1553437119
+resource       : https://resource.com
+access_token   : bi05REFMcXdodUhZbkhRNjNHZUNYYyIsImtpZCI6Ik4tbEMwbi05REFMcXdod...
+
+*/
         public async Task<string> GetToken(Uri authenticationUrl, Dictionary<string, string> authenticationCredentials)
         {
             var client = new HttpClient();
@@ -70,8 +84,34 @@ namespace OData2Poco.OAuth2
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 throw new Exception($"Fail to get access_token, Http status code: ({(int)response.StatusCode}) {response.StatusCode}");
             var responseString = await response.Content.ReadAsStringAsync();
-            var jtoken = JToken.Parse(responseString);
-            return jtoken != null ? jtoken["access_token"].ToString() : string.Empty;
+            LastToken = responseString;
+            return ParseTokenResponse(responseString, "access_token");
+        }
+        public DateTime ToLocalDateTime(long unixDate)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime date = epoch.AddSeconds(unixDate);
+            return date.ToLocalTime();
+        }
+
+        internal DateTime ExpiresOn()
+        {
+            if (string.IsNullOrEmpty(LastToken))
+                return DateTime.MinValue;
+            var expireOn = ParseTokenResponse(LastToken, "expires_on");
+            var expireOnLong = Convert.ToInt64(expireOn);
+            var date = ToLocalDateTime(expireOnLong);
+            return date;
+        }
+        internal string ParseTokenResponse(string content, string key)
+        {
+            if (string.IsNullOrEmpty(content) || string.IsNullOrEmpty(key))
+                return null;
+            var token = JObject.Parse(content).SelectToken(key);
+            return token?.ToString();
+
         }
     }
 }
+
+

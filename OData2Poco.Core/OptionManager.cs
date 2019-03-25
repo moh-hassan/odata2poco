@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using OData2Poco.Extensions;
 
 
@@ -23,8 +22,9 @@ namespace OData2Poco.CommandLine
                 AddNullableDataType = PocoOptions.AddNullableDataType,
                 AddEager = PocoOptions.Eager,
                 Inherit = string.IsNullOrWhiteSpace(PocoOptions.Inherit) ? null : PocoOptions.Inherit,
-                NamespacePrefix = string.IsNullOrEmpty(PocoOptions.Namespace) ? string.Empty : PocoOptions.Namespace,
-                NameCase = PocoOptions.NameCase.ToCaseEnum(),
+                NamespacePrefix = string.IsNullOrEmpty(PocoOptions.Namespace)
+                    ? string.Empty : PocoOptions.Namespace,
+                NameCase = PocoOptions.NameCase.ToEnum<CaseEnum>(),
                 Attributes = PocoOptions.Attributes?.ToList(),
                 //obsolete
                 AddKeyAttribute = PocoOptions.Key,
@@ -44,10 +44,10 @@ namespace OData2Poco.CommandLine
                 TokenUrl = PocoOptions.TokenEndpoint,
                 TokenParams = PocoOptions.TokenParams,
                 ParamFile = PocoOptions.ParamFile,
-                //Authenticate = Options.Authenticate,
+                Domain = PocoOptions.Domain,
+                Authenticate = PocoOptions.Authenticate.ToEnum<AuthenticationType>(),
+                Proxy = PocoOptions.Proxy,
             };
-            Enum.TryParse(PocoOptions.Authenticate, out AuthenticationType auth);
-            connString.Authenticate = auth;
             return connString;
         }
 

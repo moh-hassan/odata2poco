@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,7 +10,7 @@ namespace OData2Poco.CustAttributes
     public class PocoAttributesList : IEnumerable<INamedAttribute>
     {
         readonly List<INamedAttribute> _namedAttributes; //= new List<ICustomeAttribute>();
-       public INamedAttribute this[string index] => GetAttributeObject(index);
+        public INamedAttribute this[string index] => GetAttributeObject(index);
 
         public PocoAttributesList()
         {
@@ -19,6 +18,10 @@ namespace OData2Poco.CustAttributes
             FillNamedAttributes();
             //LoadPluginAttributes();
 
+        }
+        public List<string> SupportedAttributes()
+        {
+            return _namedAttributes.Select(x => x.Name).ToList();
         }
         public IEnumerator<INamedAttribute> GetEnumerator()
         {
@@ -37,37 +40,36 @@ namespace OData2Poco.CustAttributes
 
         private void FillNamedAttributes()
         {
-          
+
             var asm = typeof(INamedAttribute).GetTypeInfo().Assembly;
-          ;
             var types = asm.DefinedTypes
-                .Where(x => x.ImplementedInterfaces.Contains(typeof(INamedAttribute)));
+                  .Where(x => x.ImplementedInterfaces.Contains(typeof(INamedAttribute)));
 
             foreach (var type in types)
             {
                 var item = (INamedAttribute)Activator.CreateInstance(type);
 
                 _namedAttributes.Add(item);
-             
+
             }
 
         }
 
         public void LoadPluginAttributes()
         {
-         
-            string foldr = "plugin"; 
-            foldr=Path.GetFullPath(foldr);
+
+            string foldr = "plugin";
+            foldr = Path.GetFullPath(foldr);
             if (!Directory.Exists(foldr)) return;
-          
+
             var pluginList = Helper.LoadPlugin<INamedAttribute>(foldr)
                 .Cast<INamedAttribute>().ToList();
 
-          
+
             if (pluginList.Any())
             {
-               
-                
+
+
                 _namedAttributes.AddRange(pluginList);
             }
 

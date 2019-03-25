@@ -35,14 +35,7 @@ namespace OData2Poco.Tests
         }
 
 
-        [Test]
-        [TestCase("cam", CaseEnum.Camel)]
-        [TestCase("CAmel", CaseEnum.Camel)]
-        [TestCase("pas", CaseEnum.Pas)]
-        public void StringToCaseEnumTest(string val, CaseEnum caseEnum)
-        {
-            Assert.AreEqual(caseEnum, val.ToCaseEnum());
-        }
+
 
         [Test]
         public void TrimAllSpaceAndCrLfTest()
@@ -97,6 +90,31 @@ namespace OData2Poco.Tests
         {
             var name2 = name.ChangeReservedWord();
             Assert.That(name2, Is.EqualTo(expected));
+        }
+
+        [Test]
+        [TestCase("camel", CaseEnum.Camel)]
+        [TestCase("CAMEL", CaseEnum.Camel)]
+        [TestCase("pas", CaseEnum.Pas)]
+        [TestCase("anyvalue", CaseEnum.None)]
+        public void StringToCaseEnumTest(string val, CaseEnum expected)
+        {
+            var enumValue = val.ToEnum<CaseEnum>();
+            //Assert
+            Assert.That(enumValue, Is.EqualTo(expected));
+        }
+
+        [Test]
+        [TestCase("basic", AuthenticationType.Basic)]
+        [TestCase("BASIC", AuthenticationType.Basic)]
+        [TestCase("undefined", AuthenticationType.None)]
+        public void AuthenticationTypeTest(string auth, AuthenticationType expected)
+        {
+            //Arrange
+            //Act
+            AuthenticationType? authType = auth.ToEnum<AuthenticationType>();
+            //Assert
+            Assert.That(authType, Is.EqualTo(expected));
         }
     }
 }

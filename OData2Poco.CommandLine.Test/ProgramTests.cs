@@ -207,7 +207,7 @@ namespace OData2Poco.CommandLine.Test
         public async Task PocoSettingWithJsonAttributeAndCamelCaseTest(string url, string version, int n)
         {
             //Arrange
-            var a = $"-r {url}  -j -c cam -v";
+            var a = $"-r {url}  -j -c camel -v";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;

@@ -8,6 +8,7 @@ namespace OData2Poco.InfraStructure.Logging
         StringBuilder Output { get; set; }
         bool Silent  { get; set; }
         void Debug(string msg);
+        void Trace(string msg);
         void Warn(string msg);
         void Warn(Func<string> message);
         void Info(string msg);

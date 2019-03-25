@@ -1,13 +1,15 @@
 ﻿
-// ReSharper disable InconsistentNaming
+// xReSharper disable InconsistentNaming
 
 namespace OData2Poco
 {
     public enum AuthenticationType
     {
-        none, 
-        basic, 
-        token, 
-        oauth2
+        None, 
+        Basic, 
+        Token, 
+        Oauth2,
+        Ntlm,
+        Digest
     }
 }

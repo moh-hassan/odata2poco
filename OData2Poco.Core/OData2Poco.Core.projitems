@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CommandLineUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CsCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ICommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InternalVisible.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OptionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Options.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StartUp.cs" />

@@ -4,6 +4,15 @@
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
 
+##  Version 3.2.0  
+**Release Date:**   
+
+**What is news:**
+- Fix: Issue#18  Convert EDM.TIME in Odata v3 to TimeSpan.
+- New: Support NTLM window authentication (Issue#19).
+- New: Add jsonProperty to attributes/classes that are renamed because name is a reserved keyword.
+- New: Show/hide model warning due to renaming properties/classes whose name is a reserved  keyword.
+
 ##  Version 3.1.0  
 **Release Date:**   March 4, 2019
 

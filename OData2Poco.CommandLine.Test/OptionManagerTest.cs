@@ -14,7 +14,7 @@ namespace OData2Poco.CommandLine.Test
         [TestCase("cam")]
         [TestCase("camel")]
         [TestCase("none")]
-
+        [TestCase("zzz")]
         public void NameCase_valid_Test(string nameCase)
         {
             var options = new Options
@@ -24,21 +24,8 @@ namespace OData2Poco.CommandLine.Test
             };
             var om = new OptionManager(options);
             Assert.That(options.Errors, Is.Empty);
-            //Console.WriteLine(options.Errors.Dump());
+           
         }
-        [Test]
-        [TestCase("zz")]
-        [TestCase("_")]
-        [TestCase("")]
-        public void NameCase_invalid_Test(string nameCase)
-        {
-            var options = new Options
-            {
-                Lang = "cs",
-                NameCase = nameCase
-            };
-            var om = new OptionManager(options);
-            Assert.That(options.Errors, Is.Not.Empty);
-        }
+       
     }
 }

@@ -12,6 +12,7 @@ namespace OData2Poco.InfraStructure.Logging
         public ConsoleColor InfoColor = ConsoleColor.Cyan;
         public ConsoleColor ErrorColor = ConsoleColor.Red;
         public ConsoleColor SucessColor = ConsoleColor.Green;
+        public ConsoleColor TraceColor = ConsoleColor.DarkGray;
         public StringBuilder Output { get; set; }
         public bool Silent { get; set; }
 
@@ -59,7 +60,10 @@ namespace OData2Poco.InfraStructure.Logging
         {
             //throw new NotImplementedException();
         }
-
+        public void Trace(string msg)
+        {
+            Log(TraceColor, msg);
+        }
         public void Warn(string msg)
         {
             Log(WarningColor, msg);

@@ -54,22 +54,6 @@ namespace OData2Poco.Extensions
         }
 
         /// <summary>
-        /// Convert string expression to CaseEnum enumeration
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static CaseEnum ToCaseEnum(this string name)
-        {
-            var nameCase = name.ToLower().Substring(0, 3);
-            switch (nameCase)
-            {
-                case "pas": return CaseEnum.Pas;
-                case "cam": return CaseEnum.Camel;
-                default: return CaseEnum.None;
-            }
-        }
-
-        /// <summary>
         /// remove extra white spaces and keeping CRLF if needed
         /// </summary>
         /// <param name="text"></param>
@@ -261,6 +245,19 @@ namespace OData2Poco.Extensions
         public static string ToNullable(this string name, bool isNullable)
         {
             return isNullable ? $"{name}?" : name;
+        }
+        public static T ToEnum<T>(this string value)
+        {
+            try
+            {
+                return (T) Enum.Parse(typeof(T), value, true);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return default;
         }
     }
 }
