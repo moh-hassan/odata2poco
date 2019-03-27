@@ -24,6 +24,10 @@
   <ItemGroup>
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="Data\category.json">

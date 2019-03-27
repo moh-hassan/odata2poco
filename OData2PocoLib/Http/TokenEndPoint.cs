@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using OData2Poco.InfraStructure.Logging;
 
-namespace OData2Poco.OAuth2
+namespace OData2Poco.Http
 {
     /// <summary>
     /// Generate access_token for OAuth2

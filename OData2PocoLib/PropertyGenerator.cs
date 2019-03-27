@@ -71,7 +71,7 @@ namespace OData2Poco
         /// <summary>
         /// The declaration of property in C# 
         /// </summary>
-        public string Declaration => $"public{VirtualModifier} {_property.PropType + NullableModifier} {Name} {{get;set;}} {_property.PropComment}\n";
+        public string Declaration => $"public{VirtualModifier} {_property.PropType + NullableModifier} {Name} {{get;set;}} {_property.PropComment}";
 
         public override string ToString()
         {

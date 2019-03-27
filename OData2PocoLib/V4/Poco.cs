@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using OData2Poco.InfraStructure.Logging;
+using OData2Poco.Extensions;
 #if odataV3
 using Microsoft.Data.Edm.Library.Values;
 using Microsoft.Data.Edm;
@@ -89,12 +89,11 @@ namespace OData2Poco.V4
 
         private string GetEntitySetName(string entityName)
         {
-            //Console.WriteLine("name {0}",entityName);
             if (entityName == null) return "un";
 #if odataV3
-            var result = EntitySets.FirstOrDefault(m => m.ElementType.Name == entityName);
+            var result = EntitySets?.FirstOrDefault(m => m.ElementType.Name == entityName);
 #else
-            var result = EntitySets.FirstOrDefault(m => m.EntityType().Name == entityName);
+            var result = EntitySets?.FirstOrDefault(m => m.EntityType().Name == entityName);
 #endif
             return result != null ? result.Name : string.Empty;
         }
@@ -142,12 +141,12 @@ namespace OData2Poco.V4
             var list = new List<ClassTemplate>();
             var model2 = LoadModelFromString(MetaDataAsString);
             var schemaElements = model2.SchemaElements.OfType<IEdmSchemaType>();
-            //var schemaElements = SchemaElements;
+            
 
 #if odataV3
-            EntitySets = model2.EntityContainers().First().EntitySets();
+                EntitySets = model2.EntityContainers()?.FirstOrDefault()?.EntitySets();
 #else
-            EntitySets = model2.EntityContainer.EntitySets();
+                EntitySets = model2.EntityContainer?.EntitySets();
 #endif
 
             foreach (var type in schemaElements)
@@ -169,11 +168,13 @@ namespace OData2Poco.V4
         {
             if (ent == null) return null;
             var className = ent.Name;
+            
             var classTemplate = new ClassTemplate
             {
                 Name = className,
                 OriginalName = className,
-                IsEnum = ent is IEdmEnumType
+                IsEnum = ent is IEdmEnumType,
+                NameSpace=ent.Namespace,
             };
 
             //for enum type , stop here , no more information needed
@@ -263,7 +264,7 @@ namespace OData2Poco.V4
 
             return list;
         }
-        
+
         //fill all properties/name of the class template
         private string GetClrTypeName(IEdmTypeReference edmTypeReference)
         {

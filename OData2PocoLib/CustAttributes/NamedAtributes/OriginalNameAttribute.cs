@@ -15,22 +15,27 @@ namespace OData2Poco.CustAttributes.NamedAtributes
     {
         public string Name { get; } = "original";
 
-        public List<string> GetAttributes(PropertyTemplate property) =>
-            new List<string> {
-                property.OriginalName !=property.PropName 
-                  //  ? $"//[OriginalName({property.OriginalName})]"
-                ?$"[JsonProperty(\"{property.OriginalName}\")]"
-                :string.Empty,
-                };
-
-        public List<string> GetAttributes(ClassTemplate classTemplate) =>
-            new List<string>
+        public List<string> GetAttributes(PropertyTemplate property)
+        {
+            return new List<string>
             {
-               classTemplate.OriginalName !=classTemplate.Name
-                //? $"//[OriginalName({classTemplate.OriginalName})]"
-                ?$"[JsonProperty(\"{classTemplate.OriginalName}\")]"
-                :string.Empty,
-                };
+                property.OriginalName != property.PropName
+                    //  ? $"//[OriginalName({property.OriginalName})]"
+                    ? $"[JsonProperty(\"{property.OriginalName}\")]"
+                    : string.Empty,
+            };
+        }
+
+        public List<string> GetAttributes(ClassTemplate classTemplate)
+        {
+            return new List<string>
+            {
+                classTemplate.OriginalName != classTemplate.Name
+                    //? $"//[OriginalName({classTemplate.OriginalName})]"
+                    ? $"[JsonProperty(\"{classTemplate.OriginalName}\")]"
+                    : string.Empty,
+            };
+        }
     }
 }
 

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using OData2Poco.InfraStructure.Logging;
 
-namespace OData2Poco.OAuth2
+namespace OData2Poco.Http
 {
     internal class Authenticator
     {
@@ -29,19 +28,19 @@ namespace OData2Poco.OAuth2
                 case AuthenticationType.Basic:
                     Logger.Trace("Authenticating with Basic");
                     //Basic auth user/password
-                    if (!string.IsNullOrEmpty(odataConnString.UserName) &&
-                        !string.IsNullOrEmpty(odataConnString.Password))
-                    {
+                    //if (!string.IsNullOrEmpty(odataConnString.UserName) &&
+                    //    !string.IsNullOrEmpty(odataConnString.Password))
+                    //{
 
                         Authenticate(odataConnString.UserName, odataConnString.Password);
-                    }
+                    //}
                     break; ;
 
                 case AuthenticationType.Token:
                     Logger.Trace("Authenticating with Token");
                     //token
-                    if (!string.IsNullOrEmpty(odataConnString.Password) &&
-                        string.IsNullOrEmpty(odataConnString.UserName))
+                    //if (!string.IsNullOrEmpty(odataConnString.Password) &&
+                    //    string.IsNullOrEmpty(odataConnString.UserName))
                         Authenticate(odataConnString.Password);
                     break;
                 case AuthenticationType.Oauth2:

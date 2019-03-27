@@ -5,8 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using OData2Poco;
+using OData2Poco.Http;
 using OData2Poco.InfraStructure.Logging;
-using OData2Poco.OAuth2;
 
 namespace OData2Poco
 {
@@ -21,73 +22,31 @@ namespace OData2Poco
                                                    | SecurityProtocolType.Tls;
 
 
-            var serviceUri = new Uri(odataConnString.ServiceUrl);
-            CredentialCache credentials = new CredentialCache();
-            switch (odataConnString.Authenticate)
+
+
+            var client = new CustomeHttpClient(odataConnString);
+            var content = await client.ReadMetaDataAsync();
+
+            var metaData = new MetaDataInfo
             {
-                case AuthenticationType.Ntlm:
-                    Logger.Trace("Authenticating with NTLM");
-                    credentials.Add(serviceUri, "NTLM",
-                        new NetworkCredential(odataConnString.UserName, odataConnString.Password, odataConnString.Domain));
-                    break;
-                case AuthenticationType.Digest:
-                    Logger.Trace("Authenticating with Digest");
-                    credentials.Add(serviceUri, "Digest",
-                        new NetworkCredential(odataConnString.UserName, odataConnString.Password, odataConnString.Domain));
-                    break;
-            }
-            //UseDefaultCredentials for NTLM support in windows
-            var handler = new HttpClientHandler()
-            {
-                UseDefaultCredentials = true,
-                Credentials = credentials,
+                MetaDataAsString = content,
+                MetaDataVersion = Helper.GetMetadataVersion(content),
+                ServiceUrl = client.ServiceUri.OriginalString,
+                SchemaNamespace = Helper.GetNameSpace(content),
+                MediaType = Media.Http,
+                ServiceHeader = new Dictionary<string, string>()
             };
-
-            if (!string.IsNullOrEmpty(odataConnString.Proxy))
+            foreach (var entry in client.Response.Headers)
             {
-                Logger.Trace($"Using Proxy: '{odataConnString.Proxy}'");
-                handler.UseProxy=true;
-                handler.Proxy=   new WebProxy(odataConnString.Proxy);
+                string value = entry.Value.FirstOrDefault();
+                string key = entry.Key;
+                metaData.ServiceHeader.Add(key, value);
             }
-
-            using (var client = new HttpClient(handler))
-            {
-                var auth = new Authenticator(client);
-                //authenticate
-                await auth.Authenticate(odataConnString);
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-                client.DefaultRequestHeaders.Add("User-Agent", "OData2Poco");
-                string url = serviceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
-
-                using (HttpResponseMessage response = await client.GetAsync(url))
-                {
-                    if (!response.IsSuccessStatusCode)
-                        throw new HttpRequestException(
-                            $"Http Error {(int)response.StatusCode}: {response.ReasonPhrase}");
-                    var content = await response.Content.ReadAsStringAsync();
-                    if (string.IsNullOrEmpty(content))
-                        throw new HttpRequestException(
-                            $"Http Error {(int)response.StatusCode}: {response.ReasonPhrase}");
-                    var metaData = new MetaDataInfo
-                    {
-                        MetaDataAsString = content,
-                        MetaDataVersion = Helper.GetMetadataVersion(content),
-                        ServiceUrl = serviceUri.OriginalString,
-                        SchemaNamespace = Helper.GetNameSpace(content),
-                        MediaType = Media.Http,
-                        ServiceHeader = new Dictionary<string, string>()
-                    };
-                    foreach (var entry in response.Headers)
-                    {
-                        string value = entry.Value.FirstOrDefault();
-                        string key = entry.Key;
-                        metaData.ServiceHeader.Add(key, value);
-                    }
-                    metaData.ServiceVersion = Helper.GetServiceVersion(metaData.ServiceHeader);
-                    return metaData;
-                }
-            }
+            metaData.ServiceVersion = Helper.GetServiceVersion(metaData.ServiceHeader);
+            return metaData;
         }
+
+
 
         /// <summary>
         /// Load Metadata from xml string

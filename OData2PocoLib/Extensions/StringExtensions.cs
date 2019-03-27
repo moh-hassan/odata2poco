@@ -169,12 +169,19 @@ namespace OData2Poco.Extensions
             text = text.Replace("__", "_");
             return text;
         }
-
-        public static string Dump(this object o)
+       
+        public static string Dump<T>(this T obj,int level=1)
         {
-            return ToJson(o);
+            return JsonConvert.SerializeObject(obj,  Formatting.Indented,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                    MaxDepth = level,
+                });
+             
         }
-
 
         public static string RemoveEmptyLines(this string input)
         {

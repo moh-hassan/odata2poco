@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OData2Poco.Api;
-using OData2Poco.OAuth2;
 
 namespace OData2Poco.Tests
 {
