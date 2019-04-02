@@ -1,13 +1,6 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OData2Poco.Extensions;
+using OData2Poco.Http;
 
 namespace OData2Poco.Tests
 {

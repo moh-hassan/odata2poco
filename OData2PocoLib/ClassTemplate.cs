@@ -26,7 +26,11 @@ namespace OData2Poco
         //v1.4.0
         public string EntitySetName { get; set; }
         public string NameSpace { get; set; }
+        public string FullName =>string.IsNullOrEmpty(NameSpace)
+            ?Name
+            :$"{NameSpace}.{Name}";
         public bool IsComplex { get; set; }
+        public bool IsAbstrct { get;set;}
         public ClassTemplate()
         {
             Properties = new List<PropertyTemplate>();

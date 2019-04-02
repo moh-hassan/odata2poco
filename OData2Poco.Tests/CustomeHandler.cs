@@ -10,19 +10,11 @@ using Newtonsoft.Json;
 namespace OData2Poco.Tests
 {
     
-    public class RouteHandler : DelegatingHandler
+    public class CustomeHandler : DelegatingHandler
     {
+        readonly Action<HttpRequestMessage> _testingAction;
 
-        Action<HttpRequestMessage> _testingAction;
-
-        //public SampleRouteHandler(HttpMessageHandler innerHandler,
-        //    Action<HttpRequestMessage> testingAction) : base(innerHandler)
-        //{
-        //    _testingAction = testingAction;
-            
-        //}
-
-        public RouteHandler(Action<HttpRequestMessage> testingAction)
+        public CustomeHandler(Action<HttpRequestMessage> testingAction)
         {
             _testingAction = testingAction;
         }
@@ -33,7 +25,7 @@ namespace OData2Poco.Tests
             var resp = new HttpResponseMessage(HttpStatusCode.OK)
             {
 
-                Content = new JsonContent(new
+                Content = new PayloadContent(new
                 {
                     Success = true,
                     Message = "Success"
@@ -43,22 +35,13 @@ namespace OData2Poco.Tests
             var tsc = new TaskCompletionSource<HttpResponseMessage>();
             tsc.SetResult(resp);
             return tsc.Task;
-
-            //var response = await base.SendAsync(request, ct);
-            //Console.WriteLine(response.Dump());
-            //if (!response.IsSuccessStatusCode)
-            //{
-            //    Console.WriteLine("{0}\t{1}\t{2}", request.RequestUri,
-            //        (int)response.StatusCode, response.Headers.Date);
-            //}
-            //return response;
         }
     }
 
-    internal class JsonContent : HttpContent
+    internal class PayloadContent : HttpContent
     {
         private readonly MemoryStream _stream = new MemoryStream();
-        public JsonContent(object value)
+        public PayloadContent(object value)
         {
 
             Headers.ContentType = new MediaTypeHeaderValue("application/json");

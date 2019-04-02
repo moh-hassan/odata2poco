@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using OData2Poco.Extensions;
+using OData2Poco.Http;
 
 
 namespace OData2Poco.CommandLine

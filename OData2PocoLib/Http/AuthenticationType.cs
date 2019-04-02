@@ -1,7 +1,6 @@
 ﻿
-// xReSharper disable InconsistentNaming
 
-namespace OData2Poco
+namespace OData2Poco.Http
 {
     public enum AuthenticationType
     {

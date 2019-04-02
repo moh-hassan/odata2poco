@@ -18,20 +18,18 @@ OData2Poco is available in three flavers:
 |AppVeyor                    |Windows      |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
 |Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
 
-### OData2Poco V3.1 is Released on March 4, 2019
+### OData2Poco V3.2.0 is Released on April 2, 2019
 
-# **The new Features in V3.1.0:** #
+# **The new Features in V3.2.0:** #
 
- - New: Support Oauth2 by generating token for `client_credentials` having `client_id and  client_secret`.
-  - New: Support token authentication (including oauth2 with `access_token`). The token can be read from text file or json file. 
-  - New: add new option `-o, --auth` to control authentication: none,basic,token and oauth2.
-  - New options: `--token-endpoint` to get OAuth2 Token Endpoint, `--token-params` to get OAuth2 Token Parameters.
-  - New: Renaming classes/properties that have a name match a reserved c# keywords.
-  - New: Renaming properties that have a name match its class type to avoid the compiler error CS0542.
-  - New: Renaming enum elements that match reserved c# keywords.
-  - New: add new option '-g, --generate' to generate a project Csproj/vbproj with a multi-target framework (vs2017 SDK style).
-  - Fix: issue#12: POCO compile errors.
-  - Tested with Dynamics 365 for Finance and Operations and Dynamics 365 CRM.
+ - New: Support NTLM window authentication (Issue#19).
+- New: Add jsonProperty(originalName) to properties that are renamed because its name is the same as its enclosing type.
+- New: Show/hide model warning due to renaming properties/classes whose name is a reserved  keyword.
+- New: Support abstract class.
+- New: support complex type inheritance
+- Fix: Convert EDM.TIME in Odata v3 to TimeSpan  (Issue#18).
+- Fix: Support multi schema (Issue#20).
+- Fix: Support multi containers in OData  v3.
 
 ***The new version 3.1.0.360 can be downloaded from:*** [github](https://github.com/moh-hassan/odata2poco/releases "github")
 

@@ -21,7 +21,7 @@ namespace OData2Poco
         /// Add Navigation properties as non virtual properties for eager loading
         /// </summary>
         public bool AddEager { get; set; }
-        //public bool AddDataContractAttribute { get; set; }
+      
         /// <summary>
         /// The language of code generation, Defalt is CS 
         /// Current supported language is C# only

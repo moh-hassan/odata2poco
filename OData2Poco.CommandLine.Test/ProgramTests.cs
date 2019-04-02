@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using OData2Poco.TestUtility;
 
 
 namespace OData2Poco.CommandLine.Test
@@ -81,7 +82,6 @@ namespace OData2Poco.CommandLine.Test
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
-          
             //Assert
             Assert.AreEqual(0, tuble.Item1);
 

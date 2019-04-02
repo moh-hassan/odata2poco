@@ -1,0 +1,72 @@
+ <edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices m:DataServiceVersion="3.0" m:MaxDataServiceVersion="3.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+   <Schema Namespace="ODataDemo" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+    <EntityType Name="Customer">    
+       <Key>
+          <PropertyRef Name="ID" />
+        </Key> 
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" />		
+		<Property Name="CustomerName" Type="Edm.String" />
+		<Property Name="Address" Type="Edm.String" />       
+	 </EntityType>	 
+	 <ComplexType Name="Location">
+        <Property Name="Address" Type="Edm.String"/>
+        <Property Name="City" Type="Edm.String"/>
+      </ComplexType>
+	    <EntityContainer Name="DemoService" m:IsDefaultEntityContainer="true">
+		<EntitySet Name="Customer" EntityType="ODataDemo.Customer" />
+		</EntityContainer>
+  </Schema>
+  <Schema Namespace="ODataDemo2" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <EntityType Name="Customer">    
+       <Key>
+          <PropertyRef Name="ID" />
+        </Key> 
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" />		
+		<Property Name="CustomerName" Type="Edm.String" />
+		<Property Name="Address" Type="Edm.String" />       
+				
+      </EntityType>	 
+	  <EntityType Name="Customer2">    
+       <Key>
+          <PropertyRef Name="ID" />
+        </Key> 
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" />		
+		<Property Name="CustomerName" Type="Edm.String" />
+		<Property Name="Address" Type="Edm.String" />   
+	  </EntityType>	
+	    <EnumType Name="Feature">
+        <Member Name="Feature1" Value="0"/>
+        <Member Name="Feature2" Value="1"/>
+        <Member Name="Feature3" Value="2"/>
+        <Member Name="Feature4" Value="3"/>
+      </EnumType>
+	  
+	    <EntityContainer Name="DemoService2" m:IsDefaultEntityContainer="false">
+		<EntitySet Name="Customer" EntityType="ODataDemo2.Customer" />
+		<EntitySet Name="Customer2" EntityType="ODataDemo2.Customer" />
+		</EntityContainer>
+  </Schema>
+   <Schema Namespace="ODataDemo3" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+ <EntityType Name="Customer3">    
+       <Key>
+          <PropertyRef Name="ID" />
+        </Key> 
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" />		
+		<Property Name="CustomerName" Type="Edm.String" />
+		<Property Name="Address" Type="Edm.String" />       
+				
+      </EntityType>		
+	  <EntityType Name="Applicant">        
+        <Property Name="Applicant" Type="Edm.Int32" Nullable="false" />		
+		<Property Name="AddressState" Type="Edm.String" />	      
+				
+      </EntityType>	
+      <EnumType Name="PersonGender" IsFlags="true">
+        <Member Name="Male" Value="0"/>
+        <Member Name="Female" Value="1"/>
+        <Member Name="Unknow" Value="2"/>
+      </EnumType>	  
+  </Schema>
+ </edmx:DataServices>
+</edmx:Edmx>	  

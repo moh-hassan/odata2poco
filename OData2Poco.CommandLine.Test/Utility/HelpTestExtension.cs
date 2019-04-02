@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+// ReSharper disable CheckNamespace
 
-namespace OData2Poco.CommandLine.Test
+namespace OData2Poco.TestUtility
 {
     public static class HelpTestExtension
     {

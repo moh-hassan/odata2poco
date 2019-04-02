@@ -26,6 +26,10 @@ public static class TestSample
     public const string UrlNorthWindV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
     public const string UrlNorthWindV2 = "http://services.odata.org/V2/Northwind/Northwind.svc";
     public const string UrlTripPinService = "http://services.odata.org/V4/TripPinServiceRW";
+    public static string MultiSchemaV3 => GetFullPath( "odata-multischema-v3.xml");
+    public static string SampleWebApiV4 => GetFullPath( "sample-webapi-V4.xml");
+    public static string SampleWebApiInvalidV4 => GetFullPath( "sample-webapi-Invalid-V4.xml");
+    public static string SampleWebApiInvalidV3 => GetFullPath( "sample-webapi-Invalid-V3.xml");
     //parameter file
     public static string Param1 => GetFullPath("param1.txt");
     public static string PostmanParams => GetFullPath("postman.json");

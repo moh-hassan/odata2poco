@@ -1,8 +1,5 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NUnit.Framework;
-using OData2Poco.Extensions;
 using OData2Poco.Http;
 
 namespace OData2Poco.Tests
@@ -35,7 +32,7 @@ namespace OData2Poco.Tests
 
 
             };
-            var client = new CustomeHttpClient(connection, new RouteHandler(r =>
+            var client = new CustomeHttpClient(connection, new CustomeHandler(r =>
              {
                  Assert.AreEqual(r.RequestUri.ToString(), "http://localhost/odata2/api/northwind/$metadata");
 
@@ -62,7 +59,7 @@ namespace OData2Poco.Tests
 
 
             };
-            var client = new CustomeHttpClient(connection, new RouteHandler(r =>
+            var client = new CustomeHttpClient(connection, new CustomeHandler(r =>
              {
                  Assert.AreEqual(r.RequestUri.ToString(), "http://localhost/odata2/api/northwind/$metadata");
 

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net45;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
     <Authors>Mohamed Hassan</Authors>
@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Compile Include="..\Fake\CommonTestData.cs" Link="CommonTestData.cs" />
+    <Compile Include="..\OData2Poco.CommandLine.Test\Utility\HelpTestExtension.cs" Link="HelpTestExtension.cs" />
   </ItemGroup>
   
   <ItemGroup>

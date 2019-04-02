@@ -26,16 +26,8 @@ namespace OData2Poco.CustAttributes.NamedAtributes
             };
         }
 
-        public List<string> GetAttributes(ClassTemplate classTemplate)
-        {
-            return new List<string>
-            {
-                classTemplate.OriginalName != classTemplate.Name
-                    //? $"//[OriginalName({classTemplate.OriginalName})]"
-                    ? $"[JsonProperty(\"{classTemplate.OriginalName}\")]"
-                    : string.Empty,
-            };
-        }
+        public List<string> GetAttributes(ClassTemplate classTemplate) => new List<string>();
+        
     }
 }
 

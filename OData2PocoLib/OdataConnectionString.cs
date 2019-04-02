@@ -1,4 +1,6 @@
-﻿namespace OData2Poco
+﻿using OData2Poco.Http;
+
+namespace OData2Poco
 {
     public class OdataConnectionString
     {

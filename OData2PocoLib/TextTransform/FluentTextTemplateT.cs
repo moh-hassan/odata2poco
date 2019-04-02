@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
+using OData2Poco.Extensions;
 
 //part of logic is derived from microsoft textTemplate
 namespace OData2Poco.TextTransform
 {
     // use a combination of the Builder pattern with generics :
-    public class FluentTextTemplate<T>  where T : FluentTextTemplate<T>
+    public class FluentTextTemplate<T> where T : FluentTextTemplate<T>
     {
         string _currentIndent = "";
         bool _endsWithNewline;
@@ -46,7 +48,13 @@ namespace OData2Poco.TextTransform
 
         public override string ToString()
         {
-            return GenerationText.ToString();
+            var sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(Header))
+                sb.AppendLine(Header);
+            sb.Append(GenerationText);
+            if (!string.IsNullOrEmpty(Footer))
+                sb.AppendLine().AppendLine(Footer);
+            return sb.ToString();
         }
 
         /// <summary>
@@ -117,7 +125,7 @@ namespace OData2Poco.TextTransform
             return (T)this;
         }
 
-    
+
 
         /// <summary>
         /// Write formatted text directly into the generated output
@@ -181,7 +189,7 @@ namespace OData2Poco.TextTransform
                     _currentIndent = _currentIndent.Remove(_currentIndent.Length - indentLength);
                 }
             }
-        
+
             PopIndentText = returnValue;
             return (T)this;
         }
@@ -201,9 +209,13 @@ namespace OData2Poco.TextTransform
             WriteLine("");
             return (T)this;
         }
-        public T Tab()
+        public T Tab(int n = 1)
         {
-            Write("\t");
+            for (int i = 0; i < n; i++)
+            {
+                Write("\t");
+            }
+
             return (T)this;
         }
 
@@ -237,26 +249,13 @@ namespace OData2Poco.TextTransform
 
         }
 
-        //public T WriteLineFor(List<string> list, string separator = ",", string indent = "\t")
-        //{
-        //    foreach (var p in list)
-        //    {
-        //        var comma = list.IsLastElement(p) ? "" : separator;
-        //        PushIndent(indent)
-        //            .WriteLine($"{p.Trim()} {comma}")
-        //            .PopIndent();
-        //    }
-        //    return (T)this;
-        //}
-        public T WriteLineFormatFor(List<string> list, string format)
+      
+        public T WriteIf(bool condition, string ifTrue)
         {
-            foreach (var p in list)
-            {
-                WriteLine(string.Format(format, p));
-            }
+            if (condition)
+                Write(ifTrue);
             return (T)this;
         }
-       
         public T WriteIf(bool condition, string ifTrue, string ifFalse)
         {
             return condition
@@ -273,6 +272,26 @@ namespace OData2Poco.TextTransform
                 ifFalse((T)this);
             return (T)this;
         }
+
+        public T WriteList(List<string> list, string separator = " ")
+        {
+
+            list.ForEach(x =>
+            {
+                if (!string.IsNullOrEmpty(x))
+                    Write(list.IsLast(x) ? $"{x}" : $"{x}{separator}");
+            });
+            return (T)this;
+        }
+        //text is string with a char separator <, ; : space>
+        public T WriteList(string text, string separator = " ")
+        {
+            var list = text.Split(new[] { ',', ';', ':', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
+            return WriteList(list, separator);
+        }
+
+
     }
 }
 

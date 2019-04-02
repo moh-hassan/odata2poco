@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Fake\CommonTestData.cs" Link="CommonTestData.cs" />
+    <Compile Include="..\Fake\CommonTestData.cs" Link="Utility\CommonTestData.cs" />
   </ItemGroup>
 
  
