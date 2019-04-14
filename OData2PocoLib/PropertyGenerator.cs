@@ -10,11 +10,11 @@ namespace OData2Poco
     /// Convert name to Camel/Pascal Case
     /// Generate the declaration of property e.g.   virtual public int? name  {get;set;} //comment
     /// </summary>
- public   class PropertyGenerator 
+    public class PropertyGenerator
     {
         private readonly AttributeFactory _attributeManager = AttributeFactory.Default;
-        private readonly PropertyTemplate _property;  
-        private readonly PocoSetting _setting; 
+        private readonly PropertyTemplate _property;
+        private readonly PocoSetting _setting;
         /// <summary>
         /// Initialize in cto
         /// </summary>
@@ -25,14 +25,14 @@ namespace OData2Poco
             _property = propertyTemplate;
             _setting = pocoSetting;
         }
-    
+
         /// <summary>
         /// Get all attributes based on PocoSetting initialization
         /// </summary>
         /// <returns></returns>
         public List<string> GetAllAttributes()
         {
-           
+
             return _attributeManager.GetAllAttributes(_property);
         }
         /// <summary>
@@ -78,7 +78,11 @@ namespace OData2Poco
             var text = $"{string.Join(Environment.NewLine, GetAllAttributes())}\n{Declaration}";
             return text;
         }
-      
+
+        public static implicit operator string(PropertyGenerator pg)
+        {
+            return pg.ToString();
+        }
     }//
 }//
 

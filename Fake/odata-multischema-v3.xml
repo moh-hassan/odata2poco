@@ -43,7 +43,7 @@
       </EnumType>
 	  
 	    <EntityContainer Name="DemoService2" m:IsDefaultEntityContainer="false">
-		<EntitySet Name="Customer" EntityType="ODataDemo2.Customer" />
+		<EntitySet Name="Customers" EntityType="ODataDemo2.Customer" />
 		<EntitySet Name="Customer2" EntityType="ODataDemo2.Customer" />
 		</EntityContainer>
   </Schema>

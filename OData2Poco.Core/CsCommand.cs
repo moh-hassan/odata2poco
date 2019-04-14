@@ -118,17 +118,18 @@ namespace OData2Poco.CommandLine
             if (!ArgOptions.ListPoco) return;
 
             Console.WriteLine();
-            _logger.Info($"POCO classes (count: {O2PGen.ClassList.Count}");
-            _logger.Normal(new string('=', 20));
-            var items = O2PGen.ClassList.OrderBy(m => m.Name).ToList();
+            _logger.Info($"POCO classes (count: {O2PGen.ClassList.Count}) | EntitySet");
+            _logger.Normal(new string('=', 40));
+            var items = O2PGen.ClassList.OrderBy(m => m.NameSpace).ThenBy(x=>x.Name).ToList();
             items.ForEach(m =>
             {
                 var index = items.IndexOf(m);
                 var remoteUrl = string.IsNullOrEmpty(m.EntitySetName)
-                    ? ""
+                    ? string.Empty
                     : odataConnectionString.ServiceUrl + @"/" + m.EntitySetName;
-                //v1.5
-                _logger.Normal($"{index + 1}: {m.Name} {remoteUrl}");
+                _logger.Normal(!string.IsNullOrEmpty(remoteUrl)
+                    ? $"{index + 1}: {m.NameSpace}.{m.Name} | {remoteUrl}"
+                    : $"{index + 1}: {m.NameSpace}.{m.Name}");
             });
         }
 

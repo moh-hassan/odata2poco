@@ -30,6 +30,7 @@ namespace OData2Poco
             ?Name
             :$"{NameSpace}.{Name}";
         public bool IsComplex { get; set; }
+        public bool IsEntity { get; set; }
         public bool IsAbstrct { get;set;}
         public ClassTemplate()
         {
