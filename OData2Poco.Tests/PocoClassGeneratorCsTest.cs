@@ -364,15 +364,12 @@ namespace BookStore
 	public partial class Shape
 	{
 	}
-
 	public partial class Circle : Shape
 	{
 	}
-
 	public partial class Rectangle : Shape
 	{
 	}
-
 }
 ";
             Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
@@ -404,15 +401,12 @@ namespace BookStore
 	public partial class Shape
 	{
 	}
-
 	public partial class Circle : Shape
 	{
 	}
-
 	public partial class Rectangle : Shape
 	{
 	}
-
 }
 ";
             Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));

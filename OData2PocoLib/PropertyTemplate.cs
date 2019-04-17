@@ -11,11 +11,15 @@ namespace OData2Poco
         public bool IsKey { get; set; }
         public bool IsNavigate { get; set; }
         public bool IsNullable { get; set; }
-        public bool Iscomputed { get; set; }
+        //public bool Iscomputed { get; set; }
         public int Serial { get; set; }
         public string ClassName { get; set; }
         public string ClassNameSpace { get; set; }
         public string OriginalName { get; set; }
         public string OriginalType { get; set; }
+        public int? MaxLength { get; set; }
+        public int? Precision { get; set; }
+        public int? Scale { get; set; }
+        
     }
 }

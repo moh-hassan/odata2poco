@@ -7,7 +7,7 @@
           <PropertyRef Name="Id" />
         </Key>
         <Property Name="Id" Type="Edm.Int32" Nullable="false" />
-        <Property Name="Title" Type="Edm.String" />
+        <Property Name="Title" Type="Edm.String" MaxLength="30"/>
         <Property Name="Shape" Type="BookStore.Shape" />
       </EntityType>
       <ComplexType Name="Shape" Abstract="true">

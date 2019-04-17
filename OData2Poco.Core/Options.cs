@@ -16,7 +16,7 @@ namespace OData2Poco.CommandLine
     // Define a class to receive parsed values
     public class Options
     {
-       
+
         [Option('r', "url", Required = true, HelpText = "URL of OData feed.")]
         public string Url { get; set; }
 
@@ -90,7 +90,7 @@ namespace OData2Poco.CommandLine
         [Option('o', "auth", Default = "none", HelpText = "Authentication type, allowed values: none, basic, token, oauth2.")]
         public string Authenticate { get; set; }
 
-        [Option("show-warning",  HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
+        [Option("show-warning", HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
         public bool ShowWarning { get; set; }
         //TODO--- ---------------------------
         //following are obsolete and will be removed in the next release
@@ -121,10 +121,10 @@ namespace OData2Poco.CommandLine
             Attributes = new List<string>();
             Errors = new List<string>();
             //set default
-            Authenticate="none";
-            CodeFilename="poco.cs";
-            NameCase="none";
-            Lang="cs";
+            Authenticate = "none";
+            CodeFilename = "poco.cs";
+            NameCase = "none";
+            Lang = "cs";
         }
 
 #if NETFULL
@@ -169,11 +169,11 @@ namespace OData2Poco.CommandLine
         {
 
             //set defaults for null values
-            Lang=Lang??"cs";
-            Authenticate=Authenticate??"none";
-            CodeFilename=CodeFilename?? (Lang=="cs"? "poco.cs": "poco.vb");
-            NameCase=NameCase??"none";
-           
+            Lang = Lang ?? "cs";
+            Authenticate = Authenticate ?? "none";
+            CodeFilename = CodeFilename ?? (Lang == "cs" ? "poco.cs" : "poco.vb");
+            NameCase = NameCase ?? "none";
+
 
             if (Password != null && Password.StartsWith("@"))
             {
@@ -181,7 +181,7 @@ namespace OData2Poco.CommandLine
                 var text = File.ReadAllText(fname);
                 Password = GetToken(text);
             }
-           
+
 
             //validating Lang
             switch (Lang)
@@ -204,7 +204,7 @@ namespace OData2Poco.CommandLine
             foreach (var attribute in Attributes.ToList())
             {
                 if (attribute.Trim().StartsWith("[")) continue;
-                if (!Regex.IsMatch(attribute.Trim().ToLower(), "key|req|tab|table|json|db|proto|dm|display|original", RegexOptions.IgnoreCase))
+                if (!Regex.IsMatch(attribute.Trim().ToLower(), "key|req|tab|table|json|db|proto|dm|display|original|max", RegexOptions.IgnoreCase))
                 {
                     Errors.Add($"Attribute '{attribute}' isn't valid. It will be  droped.");//warning
 

@@ -288,11 +288,26 @@ namespace OData2Poco.V4
                 PropType = GetClrTypeName(property.Type),
                 Serial = serial++,
                 ClassNameSpace = ent.Namespace,
+                MaxLength = GetMaxLength(property),
             }).ToList();
 
             return list;
         }
-
+        int?  GetMaxLength(IEdmProperty property)
+        {
+            int?  maxLength=null;
+            switch (property.Type.PrimitiveKind())
+            {
+                case EdmPrimitiveTypeKind.String:
+                      maxLength = property.Type.AsString().MaxLength;
+                    break;
+                case EdmPrimitiveTypeKind.Binary:
+                      maxLength = property.Type.AsBinary().MaxLength;
+                    break;
+            }
+            //property.Type.AsDecimal().Precision
+            return maxLength ?? 0;
+        }
         //fill all properties/name of the class template
         private string GetClrTypeName(IEdmTypeReference edmTypeReference)
         {

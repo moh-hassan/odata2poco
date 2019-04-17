@@ -230,8 +230,6 @@ namespace BookStore
             };
             var o2P = new O2P(setting);
             var code = await o2P.GenerateAsync(conn);
-            //Console.WriteLine(o2P.ClassList.Dump());
-            //Console.WriteLine(code);
             Assert.That(code, Does.Contain("public partial class Circle : Shape"));
             Assert.That(code, Does.Contain("public partial class Rectangle : Shape"));
 
