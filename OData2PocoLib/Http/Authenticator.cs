@@ -27,20 +27,12 @@ namespace OData2Poco.Http
 
                 case AuthenticationType.Basic:
                     Logger.Trace("Authenticating with Basic");
-                    //Basic auth user/password
-                    //if (!string.IsNullOrEmpty(odataConnString.UserName) &&
-                    //    !string.IsNullOrEmpty(odataConnString.Password))
-                    //{
-
                         Authenticate(odataConnString.UserName, odataConnString.Password);
-                    //}
                     break; ;
 
                 case AuthenticationType.Token:
                     Logger.Trace("Authenticating with Token");
                     //token
-                    //if (!string.IsNullOrEmpty(odataConnString.Password) &&
-                    //    string.IsNullOrEmpty(odataConnString.UserName))
                         Authenticate(odataConnString.Password);
                     break;
                 case AuthenticationType.Oauth2:
@@ -52,8 +44,6 @@ namespace OData2Poco.Http
                         Authenticate(accessToken);
                     }
                     break;
-                //default:
-                //    throw new ArgumentOutOfRangeException();
             }
         }
         private AuthenticationHeaderValue Authenticate(string user, string password)

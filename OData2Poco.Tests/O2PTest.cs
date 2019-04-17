@@ -20,7 +20,7 @@ namespace OData2Poco.Tests
 
         [Test]
      
-        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
+        //[TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public async Task GenerateDefaultTest(string url, string version, int n)
         {

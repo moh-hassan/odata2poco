@@ -123,7 +123,7 @@ namespace OData2Poco.V4
 
             return enumList;
         }
-        
+
         private string GetEntitySetName(IEdmSchemaType ct)
         {
             if (ct.TypeKind != EdmTypeKind.Entity)
@@ -153,7 +153,7 @@ namespace OData2Poco.V4
             return entitySets;
 #endif
         }
-        
+
         /// <summary>
         ///     Fill List with class name and properties of corresponding entitie to be used for generating code
         /// </summary>
@@ -162,7 +162,6 @@ namespace OData2Poco.V4
         {
             var list = new List<ClassTemplate>();
             var model2 = LoadModelFromString();
-            //IEnumerable<IEdmSchemaType> schemaElements = model2.SchemaElements.OfType<IEdmSchemaType>();
             IEnumerable<IEdmSchemaType> schemaElements = GetSchemaElements(model2);
             foreach (var type in schemaElements.ToList())
             {
@@ -202,7 +201,7 @@ namespace OData2Poco.V4
                         classTemplate.IsAbstrct = entityType.IsAbstract;
                         // Set base type by default
                         var baseEntityType = entityType.BaseEntityType();
-                        if (baseEntityType != null) classTemplate.BaseType = baseEntityType.Name;
+                        if (baseEntityType != null) classTemplate.BaseType = baseEntityType.FullName(); //.Name
                         classTemplate.EntitySetName = GetEntitySetName(ent);
                         break;
                     }
@@ -211,20 +210,8 @@ namespace OData2Poco.V4
                     {
                         classTemplate.IsComplex = true;
                         classTemplate.IsAbstrct = complexType.IsAbstract;
-                        var baseEntityType = complexType.BaseType;
-                        if (baseEntityType != null)
-                        {
-                            var namespaceDot = $"{complexType.Namespace}.";
-                            //remove namespace from type
-#if odataV3
-                            var parent = baseEntityType.ToString().Replace(namespaceDot, "");
-#else
-                            var parent = baseEntityType.FullTypeName().Replace(namespaceDot, "");
-#endif
-
-                            classTemplate.BaseType = parent;
-                        }
-
+                        if (complexType.BaseType != null) 
+                            classTemplate.BaseType = complexType.BaseType.ToString();
                         break;
                     }
                 default:
@@ -257,7 +244,7 @@ namespace OData2Poco.V4
             classTemplate.Properties.AddRange(entityProperties);
             return classTemplate;
         }
-        
+
         private List<string> GetNavigation(IEdmSchemaType ent)
         {
             var list = new List<string>();
@@ -299,7 +286,8 @@ namespace OData2Poco.V4
                 IsNullable = property.Type.IsNullable,
                 PropName = property.Name,
                 PropType = GetClrTypeName(property.Type),
-                Serial = serial++
+                Serial = serial++,
+                ClassNameSpace = ent.Namespace,
             }).ToList();
 
             return list;
@@ -317,26 +305,26 @@ namespace OData2Poco.V4
             if (edmTypeReference.IsEnum())
             {
                 if (edmType is IEdmEnumType ent)
-                    return ent.Name;
+                    return ent.FullName();
             }
 
             if (edmTypeReference.IsComplex())
             {
 
                 if (edmType is IEdmComplexType edmComplexType)
-                    return edmComplexType.Name;
+                    return edmComplexType.FullName();
             }
 
             if (edmTypeReference.IsEntity())
             {
                 if (edmType is IEdmEntityType ent)
-                    return ent.Name;
+                    return ent.FullName();
             }
 
             if (edmTypeReference.IsEntityReference())
             {
                 if (edmType is IEdmEntityType ent)
-                    return ent.Name;
+                    return ent.FullName();
             }
 
 
@@ -347,7 +335,7 @@ namespace OData2Poco.V4
             if (primitiveElementType == null)
             {
                 if (!(elementTypeReference.Definition is IEdmSchemaElement schemaElement)) return clrTypeName;
-                clrTypeName = schemaElement.Name;
+                clrTypeName = schemaElement.FullName();
                 clrTypeName = $"List<{clrTypeName}>";
                 return clrTypeName;
             }
@@ -378,6 +366,7 @@ namespace OData2Poco.V4
         }
 
         #region Helper Methods
+
         internal IEdmSchemaType GetSchemaType(string name, string nameSpace)
         {
             return (IEdmSchemaType)Model.SchemaElements.FirstOrDefault(x => x.Name == name && x.Namespace == nameSpace);
@@ -390,11 +379,11 @@ namespace OData2Poco.V4
         {
             return model.SchemaElements.OfType<IEdmSchemaType>();
         }
-        
-     internal   IEnumerable<IEdmSchemaType> GetSchemaElements(Func<IEnumerable<IEdmSchemaType>,IEnumerable<IEdmSchemaType>> func)
+
+        internal IEnumerable<IEdmSchemaType> GetSchemaElements(Func<IEnumerable<IEdmSchemaType>, IEnumerable<IEdmSchemaType>> func)
         {
-            var elements= Model.SchemaElements.OfType<IEdmSchemaType>();
-          return  func(elements);
+            var elements = Model.SchemaElements.OfType<IEdmSchemaType>();
+            return func(elements);
 
         }
         #endregion

@@ -56,7 +56,6 @@ namespace OData2Poco.CommandLine.Test
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public async Task DefaultSettingTest(string url, string version, int n)
         {
@@ -73,7 +72,6 @@ namespace OData2Poco.CommandLine.Test
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public async Task PocoSettingTest(string url, string version, int n)
         {
@@ -101,7 +99,7 @@ namespace OData2Poco.CommandLine.Test
         public async Task PocoWithInheritanceTest()
         {
             //Arrange
-            var url = TestSample.UrlTripPinService; 
+            var url = TestSample.TripPin4Flag;
             var a = $"-r {url} -v";
             //Act
             var tuble = await RunCommand(a);
@@ -114,7 +112,7 @@ namespace OData2Poco.CommandLine.Test
         public async Task PropertyInheritenceTest()
         {
             //Arrange
-            var url = TestSample.UrlTripPinService; 
+            var url = TestSample.TripPin4Flag; 
             var a = $"-r {url} -v";
             //Act
             var tuble = await RunCommand(a);
@@ -131,7 +129,7 @@ namespace OData2Poco.CommandLine.Test
         public async Task PocoWithBaseClassTest()
         {
             //Arrange
-            var url = TestSample.UrlTripPinService; 
+            var url = TestSample.TripPin4Flag; 
             const string myBaseClass = nameof(myBaseClass);
 
             var a = $"-r {url} -v -i {myBaseClass}";
@@ -151,7 +149,7 @@ namespace OData2Poco.CommandLine.Test
         public async Task PropertyDuplicationTest()
         {
             //Arrange
-            var url = TestSample.UrlTripPinService; 
+            var url = TestSample.TripPin4Flag; 
             const string myBaseClass = nameof(myBaseClass);
 
             var a = $"-r {url} -v -i {myBaseClass}";
@@ -203,7 +201,7 @@ namespace OData2Poco.CommandLine.Test
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public async Task PocoSettingWithJsonAttributeAndCamelCaseTest(string url, string version, int n)
         {
             //Arrange
@@ -220,7 +218,7 @@ namespace OData2Poco.CommandLine.Test
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public async Task PocoSettingWithJsonAttributePasCaseTest(string url, string version, int n)
         {
             //Arrange
@@ -364,6 +362,23 @@ public enum Feature
             //Assert
             Assert.That(output, Does.Match(expected.GetRegexPattern()));
            
+
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]
+        //[TestCaseSource(typeof(TestSample), nameof(TestSample.UrlOdatadCases))]
+        public async Task Url_test(string url, string version, int n)
+        {
+            //Arrange
+           
+            var a = $"-r {url} -v ";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            Assert.AreEqual(0, tuble.Item1);
+            Assert.IsTrue(output.Contains("public partial class Product")); //-v
 
         }
 

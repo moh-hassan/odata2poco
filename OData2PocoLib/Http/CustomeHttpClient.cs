@@ -6,7 +6,7 @@ using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.Http
 {
-    internal class CustomeHttpClient
+    internal class CustomeHttpClient  :IDisposable
     {
         public static ILog Logger = PocoLogger.Default;
         readonly OdataConnectionString _odataConnectionString;
@@ -26,7 +26,12 @@ namespace OData2Poco.Http
         }
         private async Task SetHttpClient()
         {
-           
+            //UseDefaultCredentials for NTLM support in windows
+            var handler = new HttpClientHandler
+            {
+                UseDefaultCredentials = true,
+            };
+
             CredentialCache credentials = new CredentialCache();
             switch (_odataConnectionString.Authenticate)
             {
@@ -34,20 +39,16 @@ namespace OData2Poco.Http
                     Logger.Trace("Authenticating with NTLM");
                     credentials.Add(ServiceUri, "NTLM",
                         new NetworkCredential(_odataConnectionString.UserName, _odataConnectionString.Password, _odataConnectionString.Domain));
+                    handler.Credentials = credentials;
                     break;
                 case AuthenticationType.Digest:
                     Logger.Trace("Authenticating with Digest");
                     credentials.Add(ServiceUri, "Digest",
                         new NetworkCredential(_odataConnectionString.UserName, _odataConnectionString.Password, _odataConnectionString.Domain));
+                    handler.Credentials = credentials;
                     break;
             }
 
-            //UseDefaultCredentials for NTLM support in windows
-            var handler = new HttpClientHandler()
-            {
-                UseDefaultCredentials = true,
-                Credentials = credentials,
-            };
 
             if (!string.IsNullOrEmpty(_odataConnectionString.Proxy))
             {
@@ -64,11 +65,18 @@ namespace OData2Poco.Http
             }
             else
                 _client = new HttpClient(handler);
-            var auth = new Authenticator(_client);
-            //authenticate
-            await auth.Authenticate(_odataConnectionString);
+
+            if (_odataConnectionString.Authenticate == AuthenticationType.Basic ||
+                _odataConnectionString.Authenticate == AuthenticationType.Token ||
+                _odataConnectionString.Authenticate == AuthenticationType.Oauth2)
+            {
+                Authenticator auth = new Authenticator(_client);
+                //authenticate
+                await auth.Authenticate(_odataConnectionString);
+            }
             _client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-            _client.DefaultRequestHeaders.Add("User-Agent", "OData2Poco");
+            var agent="OData2Poco";  
+            _client.DefaultRequestHeaders.Add("User-Agent", agent);
         }
 
         internal async Task<string> ReadMetaDataAsync()
@@ -87,6 +95,13 @@ namespace OData2Poco.Http
                         $"Http Error {(int)response.StatusCode}: {response.ReasonPhrase}");
                 return content;
             }
+        }
+
+        public void Dispose()
+        {
+            _delegatingHandler?.Dispose();
+            Response?.Dispose();
+            _client?.Dispose();
         }
     }
 

@@ -25,6 +25,9 @@ public static class TestSample
     public const string UrlNorthWindV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
     public const string UrlNorthWindV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
     public const string UrlNorthWindV2 = "http://services.odata.org/V2/Northwind/Northwind.svc";
+    public const string UrlOdataV4 = "https://services.odata.org/V4/OData/OData.svc";
+    public const string UrlOdataV3 = "https://services.odata.org/V3/OData/OData.svc";
+    
     public const string UrlTripPinService = "http://services.odata.org/V4/TripPinServiceRW";
     public static string MultiSchemaV3 => GetFullPath( "odata-multischema-v3.xml");
     public static string SampleWebApiV4 => GetFullPath( "sample-webapi-V4.xml");
@@ -42,14 +45,19 @@ public static class TestSample
 
     #region Test Cases
 
-    //set url = http://services.odata.org/V4/OData/OData.svc
-    public static object[] UrlCases =
+   
+    public static object[] UrlNorthwindCases =
         {
             //url ,version ,noOfClasses
             new object[] { UrlNorthWindV4, "4.0", 26},
             new object[] { UrlNorthWindV3, "1.0", 26}
         };
-
+    public static object[] UrlOdatadCases =
+    {
+        //url ,version ,noOfClasses
+        new object[] { UrlOdataV4, "4.0", 26},
+        new object[] { UrlOdataV3, "1.0", 26}
+    };
 
     public static object[] FileCases =
         {

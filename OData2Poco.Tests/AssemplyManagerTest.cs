@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace OData2Poco.Tests
@@ -10,7 +11,7 @@ namespace OData2Poco.Tests
           public void AddAsemplyTest()
           {
               var pocosetting = new PocoSetting();
-              AssemplyManager am = new AssemplyManager(pocosetting, new ConcurrentDictionary<string, ClassTemplate>());
+              AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());
               am.AddAssemply("xyz");
               Assert.IsTrue(am.AssemplyReference.Exists(m => m.Contains("xyz")));
           }
@@ -18,7 +19,7 @@ namespace OData2Poco.Tests
           public void AddAsemplyArrayTest()
           {
               var pocosetting = new PocoSetting();
-              AssemplyManager am = new AssemplyManager(pocosetting, new ConcurrentDictionary<string, ClassTemplate>());
+              AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());
               am.AddAssemply("xyz", "abc");
               Assert.IsTrue(am.AssemplyReference.Exists(m => m.Contains("xyz")));
               Assert.IsTrue(am.AssemplyReference.Exists(m => m.Contains("abc")));
@@ -39,7 +40,7 @@ namespace OData2Poco.Tests
                   AddKeyAttribute = true
               };
 
-              AssemplyManager am = new AssemplyManager(pocosetting,new ConcurrentDictionary<string, ClassTemplate>());
+              AssemplyManager am = new AssemplyManager(pocosetting,new List<ClassTemplate>());
               Assert.IsTrue(am.AssemplyReference.Exists(m => m.Contains(value)));
           }
           [Test]
@@ -51,7 +52,7 @@ namespace OData2Poco.Tests
                   AddRequiredAttribute = true
               };
 
-              AssemplyManager am = new AssemplyManager(pocosetting, new ConcurrentDictionary<string, ClassTemplate>());
+              AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());
               Assert.IsTrue(am.AssemplyReference.Exists(m => m.Contains("System.ComponentModel.DataAnnotations.Schema")));
           }
           [Test]
@@ -63,7 +64,7 @@ namespace OData2Poco.Tests
                   AddRequiredAttribute = true
               };
 
-              AssemplyManager am = new AssemplyManager(pocosetting, new ConcurrentDictionary<string, ClassTemplate>());
+              AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());
               am.AddAssemply("xyz");
               Assert.IsTrue(am.AssemplyReference.Exists(m => m.Contains("System.ComponentModel.DataAnnotations.Schema")));
               Assert.IsTrue(am.AssemplyReference.Exists(m => m.Contains("xyz")));

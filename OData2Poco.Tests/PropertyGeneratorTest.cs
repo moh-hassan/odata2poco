@@ -1,20 +1,22 @@
-﻿//#define DEBUG
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using OData2Poco.CustAttributes;
 using OData2Poco.Extensions;
 using OData2Poco.TestUtility;
-
+//  //todo rename /keyword
 namespace OData2Poco.Tests
 {
     [Category("property_generation")]
     [TestFixture]
     class PropertyGeneratorTest
     {
-        private readonly AttributeFactory _attributeManager = AttributeFactory.Default;
-      
+        private  AttributeFactory _attributeManager ;
+        [OneTimeSetUp]
+        public void Init()
+        {
+            _attributeManager = AttributeFactory.Default;
+        }
         [Test]
         public void DefaultPropertyDeclaration_test()
         {
@@ -81,7 +83,7 @@ namespace OData2Poco.Tests
             Assert.IsTrue(sut.Declaration.Contains("public int categoryID {get;set;}"));
         }
         [Test]
-        public void PascalCasePropertyDeclaration()
+        public void PascalCasePropertyDeclarationTest()
         {
             // Arrange 
             var setting = new PocoSetting
@@ -167,8 +169,8 @@ namespace OData2Poco.Tests
             // Act 
             var sut = new PropertyGenerator(property, setting);
             // Assert 
-            var expected = "[JsonProperty(PropertyName = \"CategoryID\")] " +Environment.NewLine+
-                           "public int categoryID {get;set;} ";
+            var expected =
+                $"[JsonProperty(PropertyName = \"CategoryID\")] {Constant.NewLine}public int categoryID {{get;set;}} ";
 
        
             Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
@@ -229,7 +231,6 @@ public int CategoryID {get;set;} ";
         }
 
         [Test]
-        //Description property is null
         public void IsNullablePropertyDeclaration_test()
         { 
             // Arrange 
@@ -362,6 +363,128 @@ public int CategoryID {get;set;} ";
           
            
         }
+        [Test]
+        public void Property_has_type_in_other_namespac_test()
+        {
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddEager = false,
+            };
+            var property = new PropertyTemplate
+            {
+                PropName = "Table",
+                PropType = "SP.SimpleDataTable",
+                ClassNameSpace = "SP1",
+            };
+            var expected="public SP.SimpleDataTable Table {get;set;}";
+            // Act 
+            string sut = new PropertyGenerator(property, setting);
+            // Assert 
+            Assert.IsTrue(sut.Contains(expected));
 
+        }
+        [Test]
+        public void Property_has_type_in_the_same_namespac_test()
+        {
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddEager = false,
+            };
+            var property = new PropertyTemplate
+            {
+                PropName = "Table",
+                PropType = "SP.SimpleDataTable",
+                ClassNameSpace = "SP",
+            };
+            var expected="public SimpleDataTable Table {get;set;}";
+            // Act 
+            string sut = new PropertyGenerator(property, setting);
+            // Assert 
+            Assert.IsTrue(sut.Contains(expected));
+        }
+        [Test]
+        public void Property_has_type_without_prefix_namespac_test()
+        {
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                AddEager = false,
+            };
+            var property = new PropertyTemplate
+            {
+                PropName = "Table",
+                PropType = "SimpleDataTable",
+                ClassNameSpace = "SP",
+            };
+            var expected="public SimpleDataTable Table {get;set;}";
+            // Act 
+            string sut = new PropertyGenerator(property, setting);
+            // Assert 
+            Assert.IsTrue(sut.Contains(expected));
+        }
+        [Test]
+        public void Property_has_collection_type_in_the_same_namespac_test()
+        {
+            // Arrange
+            var setting = new PocoSetting();
+            var property = new PropertyTemplate
+            {
+                PropName = "Table",
+                PropType = "List<SP.SimpleDataTable>",
+                ClassNameSpace = "SP",
+            };
+            var expected="public List<SimpleDataTable> Table {get;set;}";
+            // Act 
+            string sut = new PropertyGenerator(property, setting);
+            // Assert 
+            Assert.IsTrue(sut.Contains(expected));
+        }
+        [Test]
+        public void Property_has_collection_type_in_different_namespac_test()
+        {
+            // Arrange 
+            var setting = new PocoSetting();
+            var property = new PropertyTemplate
+            {
+                PropName = "Table",
+                PropType = "List<SP.SimpleDataTable>",
+                ClassNameSpace = "SP1",
+            };
+            var expected="public List<SP.SimpleDataTable> Table {get;set;}";
+            // Act 
+            string sut = new PropertyGenerator(property, setting);
+            // Assert 
+            Assert.IsTrue(sut.Contains(expected));
+        }
+        [Test]
+        public void Property_has__type_collection_without_prefix_namespac_test()
+        {
+            // Arrange 
+            var setting = new PocoSetting();
+            var property = new PropertyTemplate
+            {
+                PropName = "Table",
+                PropType = "List<SimpleDataTable>",
+                ClassNameSpace = "SP1",
+            };
+            var expected="public List<SimpleDataTable> Table {get;set;}";
+            // Act 
+            string sut = new PropertyGenerator(property, setting);
+            // Assert 
+            Assert.IsTrue(sut.Contains(expected));
+        }
+        [Test]
+        public void Property_isnull_test()
+        {
+            // Arrange 
+          
+           
+            // Act 
+            string sut = new PropertyGenerator(null, null);
+            // Assert 
+            Assert.That(sut, Is.EqualTo(""));
+        }
     }
 }
