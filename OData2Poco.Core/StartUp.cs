@@ -16,7 +16,7 @@ namespace OData2Poco.CommandLine
     public class StartUp
     {
         private static readonly Stopwatch Sw = new Stopwatch();
-        public static ColoredConsole Logger = PocoLogger.Default;
+        public static ILog Logger = PocoLogger.Default;
         public static string OutPut => Logger.Output.ToString();
         public static int RetCode = (int)ExitCodes.Success;
         public static IPocoFileSystem _pocoFileSystem;
@@ -73,7 +73,8 @@ namespace OData2Poco.CommandLine
 
         internal static async Task<int> RunOptionsAsync(string[] args)
         {
-            var argumentParser = new ArgumentParser(Logger);
+           // var argumentParser = new ArgumentParser(Logger);
+           var argumentParser = new ArgumentParser();
             return await argumentParser.RunOptionsAsync(args);
         }
     }

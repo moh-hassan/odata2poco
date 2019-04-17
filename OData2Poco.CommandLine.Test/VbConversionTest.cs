@@ -6,23 +6,13 @@ using NUnit.Framework;
 namespace OData2Poco.CommandLine.Test
 {
     [TestFixture]
-    internal class VbConversionTest //: BaseTest
+    public partial class ProgramTests  
     {
-        public string WorkingDirectory { get; set; }
-        [OneTimeSetUp]
-        public void SetupOneTime()
-        {
-            Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
-            WorkingDirectory = Environment.CurrentDirectory;
-        }
-
-
 
         [Test]
         public async Task vb_convert_Test()
         {
             var source = @"public class MyClas {}";
-            //var vbCode = await CodeConvertorRestService.CodeConvert(source);
             var vbCode = await VbCodeConvertor.CodeConvert(source);
             Assert.That(vbCode, Does.Contain("Public Class MyClas"));
             Assert.That(vbCode, Does.Contain("End Class"));
@@ -40,7 +30,7 @@ public class MyClas
     public int Id {get;set;}
   public string Name {get;set;}
 }";
-            //var vbCode = await CodeConvertorRestService.CodeConvert(source);
+         
             var vbCode = await VbCodeConvertor.CodeConvert(source);
 
             /*
@@ -63,10 +53,10 @@ public class MyClas
         public async Task vb_code_generation_end_to_end_Test()
         {
             var url = TestSample.NorthWindV4;
-            var args = $"-r {url}  -v -a key req --lang vb".Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            await StartUp.RunOptionsAsync(args);
-            StartUp.Logger.Silent = true;
-            var output = StartUp.OutPut;
+            var a = $"-r {url}  -v -a key req --lang vb";
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+
             Assert.That(output, Does.Contain("Public Partial Class Product"));
             Assert.That(output, Does.Contain("<Key>"));
             Assert.That(output, Does.Contain("<Required>"));
@@ -77,23 +67,23 @@ public class MyClas
         public async Task Lang_invalid_Test()
         {
             var url = TestSample.NorthWindV4;
-            var args = $"-r {url}  -v --lang zz".Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            await StartUp.RunOptionsAsync(args);
-
-            var output = StartUp.Logger.Output.ToString();
+            var a = $"-r {url}  -v --lang zz";
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
             Assert.That(output, Does.Contain("Invalid Language Option 'zz'. It's set to 'cs'."));
 
         }
+
         [Test]
         public async Task Attribute_invalid_Test()
         {
             var url = TestSample.NorthWindV4;
-            var args = $"-r {url}  -v -a zz".Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            await StartUp.RunOptionsAsync(args);
-
-            var output = StartUp.Logger.Output.ToString();
+            var a = $"-r {url}  -v -a zz";
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
             Assert.That(output, Does.Contain("Attribute 'zz' isn't valid. It will be  droped"));
-
         }
+ 
     }
 }
+

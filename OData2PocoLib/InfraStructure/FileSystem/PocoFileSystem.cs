@@ -8,7 +8,7 @@ namespace OData2Poco.InfraStructure.FileSystem
 {
     public class PocoFileSystem : IPocoFileSystem
     {
-        static readonly ColoredConsole Logger = PocoLogger.Default;
+        static readonly ILog Logger = PocoLogger.Default;
         public void SaveToFile(string filePath, Func<Stream> getStream)
         {
             using (Stream incomingStream = getStream())

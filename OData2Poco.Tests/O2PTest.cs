@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OData2Poco.Api;
-using OData2Poco.OAuth2;
 
 namespace OData2Poco.Tests
 {
@@ -21,7 +20,7 @@ namespace OData2Poco.Tests
 
         [Test]
      
-        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
+        //[TestCaseSource(typeof(TestSample), nameof(TestSample.UrlCases))]
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public async Task GenerateDefaultTest(string url, string version, int n)
         {

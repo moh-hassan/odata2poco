@@ -1,0 +1,47 @@
+ <edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices m:DataServiceVersion="3.0" m:MaxDataServiceVersion="3.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <Schema Namespace="ODataDemo" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+ <EntityType Name="AllTypesEntity">    
+       <Key>
+          <PropertyRef Name="ID" />
+        </Key> 
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" />   
+		<Property Name="Edm_Int32" Type="Edm.Int32" />
+		<Property Name="Edm_String" Type="Edm.String" />
+		<Property Name="Edm_Binary" Type="Edm.Binary" />
+        <Property Name="Edm_Decimal" Type="Edm.Decimal" />
+		<Property Name="Edm_Int16" Type="Edm.Int16" />
+		<Property Name="Edm_Single" Type="Edm.Single" />
+		<Property Name="Edm_Boolean" Type="Edm.Boolean" />
+		<Property Name="Edm_Double" Type="Edm.Double" />
+		<Property Name="Edm_Guid" Type="Edm.Guid" />
+		<Property Name="Edm_Byte" Type="Edm.Byte" />
+		<Property Name="Edm_Int64" Type="Edm.Int64" />
+		<Property Name="Edm_SByte" Type="Edm.SByte" />
+		<Property Name="Edm_Stream" Type="Edm.Stream" />
+		<Property Name="Edm_Geography" Type="Edm.Geography" />
+		<Property Name="Edm_GeographyPoint" Type="Edm.GeographyPoint" />
+		<Property Name="Edm_GeographyLineString" Type="Edm.GeographyLineString" />
+		<Property Name="Edm_GeographyPolygon" Type="Edm.GeographyPolygon" />
+		<Property Name="Edm_GeographyCollection" Type="Edm.GeographyCollection" />
+		<Property Name="Edm_GeographyMultiPolygon" Type="Edm.GeographyMultiPolygon" />
+		<Property Name="Edm_GeographyMultiLineString" Type="Edm.GeographyMultiLineString" />
+		<Property Name="Edm_GeographyMultiPoint" Type="Edm.GeographyMultiPoint" />
+		<Property Name="Edm_Geometry" Type="Edm.Geometry" />
+		<Property Name="Edm_GeometryPoint" Type="Edm.GeometryPoint" />
+		<Property Name="Edm_GeometryLineString" Type="Edm.GeometryLineString" />
+		<Property Name="Edm_GeometryPolygon" Type="Edm.GeometryPolygon" />
+		<Property Name="Edm_GeometryCollection" Type="Edm.GeometryCollection" />
+		<Property Name="Edm_GeometryMultiPolygon" Type="Edm.GeometryMultiPolygon" />
+		<Property Name="Edm_GeometryMultiLineString" Type="Edm.GeometryMultiLineString" />
+		<Property Name="Edm_GeometryMultiPoint" Type="Edm.GeometryMultiPoint" />
+		<Property Name="Edm_DateTimeOffset" Type="Edm.DateTimeOffset" />
+		<Property Name="Edm_DateTime" Type="Edm.DateTime" />
+		<Property Name="Edm_Time" Type="Edm.Time" />		
+      </EntityType>	 
+	    <EntityContainer Name="DemoService" m:IsDefaultEntityContainer="true">
+		<EntitySet Name="AllTypesEntity" EntityType="ODataDemo.AllTypesEntity" />
+		</EntityContainer>
+  </Schema>
+ </edmx:DataServices>
+</edmx:Edmx>	  

@@ -7,7 +7,7 @@ namespace OData2Poco
     /// <summary>
     /// Define the propertis of the class 
     /// </summary>
-    public partial class ClassTemplate
+    public class ClassTemplate
     {
         public string Name { get; set; }
         public string BaseType { get; set; }
@@ -22,6 +22,16 @@ namespace OData2Poco
         public bool IsFlags { get; set; } //v3, Add [FlagsAttribute] to enum
         public List<string> EnumElements { get; set; }
         public string OriginalName { get; set; }
+       
+        //v1.4.0
+        public string EntitySetName { get; set; }
+        public string NameSpace { get; set; }
+        public string FullName =>string.IsNullOrEmpty(NameSpace)
+            ?Name
+            :$"{NameSpace}.{Name}";
+        public bool IsComplex { get; set; }
+        public bool IsEntity { get; set; }
+        public bool IsAbstrct { get;set;}
         public ClassTemplate()
         {
             Properties = new List<PropertyTemplate>();
@@ -29,9 +39,6 @@ namespace OData2Poco
             EnumElements = new List<string>();
             Navigation = new List<string>();
         }
-        //v1.4.0
-        public string EntitySetName { get; set; }
-        public bool IsComplex { get; set; }
 
         private readonly AttributeFactory _attributeFactory = AttributeFactory.Default;
 

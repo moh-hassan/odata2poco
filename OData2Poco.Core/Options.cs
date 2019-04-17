@@ -16,16 +16,6 @@ namespace OData2Poco.CommandLine
     // Define a class to receive parsed values
     public class Options
     {
-        public Options()
-        {
-            Attributes = new List<string>();
-            Errors = new List<string>();
-            //set default
-            Authenticate="none";
-            CodeFilename="poco.cs";
-            NameCase="none";
-            Lang="cs";
-        }
 
         [Option('r', "url", Required = true, HelpText = "URL of OData feed.")]
         public string Url { get; set; }
@@ -35,6 +25,10 @@ namespace OData2Poco.CommandLine
 
         [Option('p', "password", HelpText = "password or/token Or access_token /Or client_secret in oauth2.")]
         public string Password { get; set; }
+        [Option("domain", HelpText = "Domain in Active Directory.")]
+        public string Domain { get; set; }
+        [Option("proxy", HelpText = "Http Proxy in the form: 'server:port'.")]
+        public string Proxy { get; set; }
 
         [Option('t', "token-endpoint", HelpText = "OAuth2 Token Endpoint.")]
         public string TokenEndpoint { get; set; }
@@ -95,6 +89,9 @@ namespace OData2Poco.CommandLine
         public bool GenerateProject { get; set; }
         [Option('o', "auth", Default = "none", HelpText = "Authentication type, allowed values: none, basic, token, oauth2.")]
         public string Authenticate { get; set; }
+
+        [Option("show-warning", HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
+        public bool ShowWarning { get; set; }
         //TODO--- ---------------------------
         //following are obsolete and will be removed in the next release
         //obsolete use -a key
@@ -118,6 +115,17 @@ namespace OData2Poco.CommandLine
 
 
         public List<string> Errors { get; set; }
+
+        public Options()
+        {
+            Attributes = new List<string>();
+            Errors = new List<string>();
+            //set default
+            Authenticate = "none";
+            CodeFilename = "poco.cs";
+            NameCase = "none";
+            Lang = "cs";
+        }
 
 #if NETFULL
         [Usage(ApplicationAlias = "o2pgen")]
@@ -161,11 +169,11 @@ namespace OData2Poco.CommandLine
         {
 
             //set defaults for null values
-            Lang=Lang??"cs";
-            Authenticate=Authenticate??"none";
-            CodeFilename=CodeFilename?? (Lang=="cs"? "poco.cs": "poco.vb");
-            NameCase=NameCase??"none";
-           
+            Lang = Lang ?? "cs";
+            Authenticate = Authenticate ?? "none";
+            CodeFilename = CodeFilename ?? (Lang == "cs" ? "poco.cs" : "poco.vb");
+            NameCase = NameCase ?? "none";
+
 
             if (Password != null && Password.StartsWith("@"))
             {
@@ -173,11 +181,7 @@ namespace OData2Poco.CommandLine
                 var text = File.ReadAllText(fname);
                 Password = GetToken(text);
             }
-            if (Authenticate != null && !Regex.IsMatch(Authenticate?.ToLower(), "none|basic|token|oauth2", RegexOptions.IgnoreCase))
-            {
-                Errors.Add($"Authenticate '{ Authenticate}' isn't valid. It is set to 'none'.");//warning
-                Authenticate = "none";
-            }
+
 
             //validating Lang
             switch (Lang)
@@ -195,23 +199,12 @@ namespace OData2Poco.CommandLine
                     break;
                     //return -1;
             }
-            //validate NameCase
-            if (string.IsNullOrEmpty(NameCase))
-            {
-                Errors.Add($"NameCase '{ NameCase}' is empty. It is set to 'pas'.");//warning
-                NameCase = "pas";
-            }
-            if (!Regex.IsMatch(NameCase.ToLower(), "cam|camel|none|pas", RegexOptions.IgnoreCase))
-            {
-                Errors.Add($"NameCase '{ NameCase}' isn't valid. It is set to 'pas'.");//warning
-                NameCase = "pas";
-            }
 
             //validate Attributes
             foreach (var attribute in Attributes.ToList())
             {
                 if (attribute.Trim().StartsWith("[")) continue;
-                if (!Regex.IsMatch(attribute.Trim().ToLower(), "key|req|tab|table|json|db|proto|dm|display|origin", RegexOptions.IgnoreCase))
+                if (!Regex.IsMatch(attribute.Trim().ToLower(), "key|req|tab|table|json|db|proto|dm|display|original|max", RegexOptions.IgnoreCase))
                 {
                     Errors.Add($"Attribute '{attribute}' isn't valid. It will be  droped.");//warning
 

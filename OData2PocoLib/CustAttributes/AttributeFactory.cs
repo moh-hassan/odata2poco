@@ -11,7 +11,7 @@ namespace OData2Poco.CustAttributes
         private readonly PocoAttributesList _pocoAttributesList;
         private static readonly Lazy<AttributeFactory> Lazy =
             new Lazy<AttributeFactory>(() => new AttributeFactory());
-
+        public List<string> SupportedAttributes=>_pocoAttributesList.SupportedAttributes();
         public static AttributeFactory Default => Lazy.Value;
 
         private AttributeFactory()

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using OData2Poco.CustAttributes;
+using OData2Poco.Extensions;
 
 
 namespace OData2Poco.Tests
@@ -422,6 +424,12 @@ namespace OData2Poco.Tests
 
 
         }
-
+        [Test]
+        public void PocoAttributesList_supported_attributes_test()
+        {
+           var atts= new  PocoAttributesList().SupportedAttributes();
+           Assert.That(atts.Count(),Is.GreaterThan(0));
+        }
+        
     }
 }

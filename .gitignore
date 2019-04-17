@@ -9,7 +9,8 @@ temp/
 MyTester/
 build/
 tools/
-experiment/
+Experiment/
+Plugins/
 
 
 # User-specific files

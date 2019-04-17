@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using OData2Poco.TestUtility;
 
 namespace OData2Poco.CommandLine.Test
 {

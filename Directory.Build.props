@@ -26,15 +26,15 @@
 
   <!-- version -->
   <PropertyGroup>
-    <Version>3.1.0</Version>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
+    <Version>3.2.0</Version>
+    <AssemblyVersion>3.2.0.0</AssemblyVersion>
   </PropertyGroup>
 
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
       <PackageReference Include="nunit" Version="3.11.0" />
-      <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+      <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
   </ItemGroup>
 
   <PropertyGroup>

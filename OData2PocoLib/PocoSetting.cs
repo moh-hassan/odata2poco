@@ -21,7 +21,7 @@ namespace OData2Poco
         /// Add Navigation properties as non virtual properties for eager loading
         /// </summary>
         public bool AddEager { get; set; }
-        //public bool AddDataContractAttribute { get; set; }
+      
         /// <summary>
         /// The language of code generation, Defalt is CS 
         /// Current supported language is C# only
@@ -71,6 +71,14 @@ namespace OData2Poco
         ///example:     [JsonProperty(PropertyName = "email")]
         /// </summary>
         public bool AddJsonAttribute { get; set; } ////obsolete, use Attributes.add("json")
+
+        public string Prefix { get; set; }
+        public string Suffix { get; set; }
+        public bool MultiFiles { get; set; }
+        public string ModuleName { get; set; }
+        public bool AddReference { get; set; }
+        public bool GenerateInterface { get; set; }
+
         /// <summary>
         /// Initialization
         /// </summary>

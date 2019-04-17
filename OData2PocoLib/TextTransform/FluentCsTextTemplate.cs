@@ -41,49 +41,32 @@
         }
         public FluentCsTextTemplate WriteComment(string str)
         {
-            if (str.Trim().StartsWith(@"//")) Write(str);
-            else Write("//" + str);
+            if (string.IsNullOrEmpty(str))
+                return this;
+            Write(str.Trim().StartsWith(@"//") ? str : $"//{str}");
             return this;
         }
-        public FluentCsTextTemplate WriteLineAttribute(string att)
+        private string DeclareClass(string name, string inherit = "", string visibility = "public", bool partial = true, bool abstractClass = false)
         {
-            WriteLine("[{0}]", att);
-            return this;
+            var abstractKeyword = abstractClass ? " abstract" : "";
+            var partialKeyword = partial ? " partial" : "";
+            var baseClass = string.IsNullOrEmpty(inherit) ? "" : $" : {inherit}";
+            return $"{visibility}{abstractKeyword}{partialKeyword} class {name}{baseClass}";
         }
-
-        public FluentCsTextTemplate WriteLineProperty(string typeName, string name,
-            string visiblity = "public",
-            bool isVirtual = false,
-            bool isNullable =false,
-            string comment = "")
+        internal FluentCsTextTemplate StartClass(string name, string inherit = "", string visibility = "public", bool partial = true, bool abstractClass = false)
         {
-            if (isVirtual) Write("virtual ");
-            Write("{0} ", visiblity);
-           
-            Write("{0}{1} {2}  {{get;set;}} ", typeName, isNullable?"?":"" ,name );
-            if (!string.IsNullOrEmpty(comment)) WriteComment(comment);
-            NewLine();
+            //syntax: 'public abstract partial class MyClass : parent'
+            PushTabIndent() // ident one tab
+            .Write(DeclareClass(name, inherit, visibility, partial, abstractClass))
+            .NewLine()
+            .LeftBrace()
+            .PushSpaceIndent(); //push tab  for the next write block
             return this;
         }
-
-        public FluentCsTextTemplate StartClass(string name, string inherit, string visibility = "public",bool partial=false)
+        public FluentCsTextTemplate StartClass(ClassTemplate ct)
         {
-            PushTabIndent();// ident one tab
-            //partial support v2.2.0
-            if (partial) Write("{0} {1} ", visibility, "partial");
-            else Write("{0} ", visibility);
-
-            if (string.IsNullOrWhiteSpace(inherit))
-                WriteLine("class {0}", name);
-            else
-                WriteLine("class {0} : {1}", name, inherit);
-
-            LeftBrace();
-
-            PushSpaceIndent(); //prepare for the next write
-            return this;
+            return StartClass(ct.Name, ct.BaseType, abstractClass: ct.IsAbstrct);
         }
-
         public FluentCsTextTemplate EndClass()
         {
             PopIndent();
@@ -92,6 +75,10 @@
             return this;
         }
 
+        public static implicit operator string(FluentCsTextTemplate ft)
+        {
+            return ft.ToString();
+        }
     }
 }
 

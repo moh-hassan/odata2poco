@@ -12,7 +12,7 @@ using OData2Poco.InfraStructure.Logging;
    recursive resolve macros in dictionary
    replace options values for: password , tokens ,url
  * */
- namespace OData2Poco.CommandLine
+namespace OData2Poco.CommandLine
 {
     /// <summary>
     ///     Command Pattern to manage all options of commandline
@@ -23,7 +23,7 @@ using OData2Poco.InfraStructure.Logging;
         public PocoSetting PocoSettingOptions;
         public OdataConnectionString odataConnectionString;
         public string Code { get; private set; }
-        private readonly ColoredConsole _logger = PocoLogger.Default;
+        private readonly ILog _logger = PocoLogger.Default;
         public O2P O2PGen { get; set; }
         public List<string> Errors; //model generation errors
         private IPocoFileSystem _fileSystem;
@@ -38,12 +38,12 @@ using OData2Poco.InfraStructure.Logging;
             }
 
             Errors = new List<string>();
-            ArgOptions= optionManager = new OptionManager(options);
+            ArgOptions = optionManager = new OptionManager(options);
             odataConnectionString = optionManager.GetOdataConnectionString();
             PocoSettingOptions = optionManager.GetPocoSetting();
             O2PGen = new O2P(PocoSettingOptions);
         }
-        
+
         public async Task Execute()
         {
 
@@ -51,11 +51,11 @@ using OData2Poco.InfraStructure.Logging;
             Console.WriteLine();
             //if (optionManager.Validate() < 0)
             //{
-                ArgOptions.Errors.ForEach(x =>
-                {
-                    _logger.Error(x);
-                });
-                //return;
+            ArgOptions.Errors.ForEach(x =>
+            {
+                _logger.Error(x);
+            });
+            //return;
             //}
 
             //show warning
@@ -66,6 +66,7 @@ using OData2Poco.InfraStructure.Logging;
             _logger.Info($"Start processing url: { odataConnectionString.ServiceUrl}");
             //show result
             await GenerateCodeCommandAsync();
+            ShowWarning(); //warning of model property/class renaming
             GenerateProjectCommand();
             ServiceInfo();
 
@@ -84,6 +85,7 @@ using OData2Poco.InfraStructure.Logging;
             list.ForEach(x => _logger.Normal(x));
             _logger.Normal("********************************************");
         }
+        //errors of invalid commandline options
         public void ShowErrors()
         {
             if (Errors.Count == 0) return;
@@ -116,17 +118,18 @@ using OData2Poco.InfraStructure.Logging;
             if (!ArgOptions.ListPoco) return;
 
             Console.WriteLine();
-            _logger.Info($"POCO classes (count: {O2PGen.ClassList.Count}");
-            _logger.Normal(new string('=', 20));
-            var items = O2PGen.ClassList.OrderBy(m => m.Name).ToList();
+            _logger.Info($"POCO classes (count: {O2PGen.ClassList.Count}) | EntitySet");
+            _logger.Normal(new string('=', 40));
+            var items = O2PGen.ClassList.OrderBy(m => m.NameSpace).ThenBy(x=>x.Name).ToList();
             items.ForEach(m =>
             {
                 var index = items.IndexOf(m);
-                var remoteUrl = string.IsNullOrEmpty(m.EntitySetName) 
-                    ? "" 
+                var remoteUrl = string.IsNullOrEmpty(m.EntitySetName)
+                    ? string.Empty
                     : odataConnectionString.ServiceUrl + @"/" + m.EntitySetName;
-                //v1.5
-                _logger.Normal($"{index + 1}: {m.Name} {remoteUrl}");
+                _logger.Normal(!string.IsNullOrEmpty(remoteUrl)
+                    ? $"{index + 1}: {m.NameSpace}.{m.Name} | {remoteUrl}"
+                    : $"{index + 1}: {m.NameSpace}.{m.Name}");
             });
         }
 
@@ -202,22 +205,33 @@ using OData2Poco.InfraStructure.Logging;
             SaveToFile(ArgOptions.MetaFilename, metaData);
         }
 
-         private void GenerateProjectCommand()
+        private void GenerateProjectCommand()
         {
-             //---------   --gen-project, -g
-           if (!ArgOptions.GenerateProject) return;
-           var fname=  "un.proj";
-           if(ArgOptions.Lang=="cs")
-              fname=  Path.ChangeExtension(ArgOptions.CodeFilename, ".csproj");
-           if(ArgOptions.Lang=="vb")
-               fname=  Path.ChangeExtension(ArgOptions.CodeFilename, ".csproj");
-           var projectCode=O2PGen.GenerateProject();
-           _logger.Normal($"Generating project file {fname}");
-           File.WriteAllText(fname,projectCode);
+            //---------   --gen-project, -g
+            if (!ArgOptions.GenerateProject) return;
+            var fname = "un.proj";
+            if (ArgOptions.Lang == "cs")
+                fname = Path.ChangeExtension(ArgOptions.CodeFilename, ".csproj");
+            if (ArgOptions.Lang == "vb")
+                fname = Path.ChangeExtension(ArgOptions.CodeFilename, ".csproj");
+            var projectCode = O2PGen.GenerateProject();
+            _logger.Normal($"Generating project file {fname}");
+            File.WriteAllText(fname, projectCode);
         }
         private void SaveToFile(string fileName, string text)
         {
             _fileSystem.SaveToFile(fileName, text);
+        }
+        //Show warning of model warning of renaming properties
+        private void ShowWarning()
+        {
+            if (ArgOptions.ShowWarning)
+            {
+                O2PGen.ModelWarning.ForEach(x =>
+                {
+                    _logger.Normal(x);
+                });
+            }
         }
         #endregion
     }

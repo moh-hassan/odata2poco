@@ -5,12 +5,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using OData2Poco.OAuth2;
+using OData2Poco;
+using OData2Poco.Http;
+using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco
 {
     internal class MetaDataReader
     {
+        public static ILog Logger = PocoLogger.Default;
         public static async Task<MetaDataInfo> LoadMetaDataHttpAsync(OdataConnectionString odataConnString)
         {
             // to avoid the Error Message://An error occurred while sending the request.-->
@@ -19,43 +22,31 @@ namespace OData2Poco
                                                    | SecurityProtocolType.Tls;
 
 
-            var serviceUri = new Uri(odataConnString.ServiceUrl);
-            using (var client = new HttpClient())
-            {
-                await new Authenticator(client).Authenticate(odataConnString);
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-                client.DefaultRequestHeaders.Add("User-Agent", "OData2Poco");
-                string url = serviceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
 
-                using (HttpResponseMessage response = await client.GetAsync(url))
-                {
-                    if (!response.IsSuccessStatusCode)
-                        throw new HttpRequestException(
-                            $"Http Error {(int) response.StatusCode}: {response.ReasonPhrase}");
-                    var content = await response.Content.ReadAsStringAsync();
-                    if (string.IsNullOrEmpty(content))
-                        throw new HttpRequestException(
-                            $"Http Error {(int) response.StatusCode}: {response.ReasonPhrase}");
-                    var metaData = new MetaDataInfo
-                    {
-                        MetaDataAsString = content,
-                        MetaDataVersion = Helper.GetMetadataVersion(content),
-                        ServiceUrl = serviceUri.OriginalString,
-                        SchemaNamespace = Helper.GetNameSpace(content),
-                        MediaType = Media.Http,
-                        ServiceHeader = new Dictionary<string, string>()
-                    };
-                    foreach (var entry in response.Headers)
-                    {
-                        string value = entry.Value.FirstOrDefault();
-                        string key = entry.Key;
-                        metaData.ServiceHeader.Add(key, value);
-                    }
-                    metaData.ServiceVersion = Helper.GetServiceVersion(metaData.ServiceHeader);
-                    return metaData;
-                }
+
+            var client = new CustomeHttpClient(odataConnString);
+            var content = await client.ReadMetaDataAsync();
+
+            var metaData = new MetaDataInfo
+            {
+                MetaDataAsString = content,
+                MetaDataVersion = Helper.GetMetadataVersion(content),
+                ServiceUrl = client.ServiceUri.OriginalString,
+                SchemaNamespace = Helper.GetNameSpace(content),
+                MediaType = Media.Http,
+                ServiceHeader = new Dictionary<string, string>()
+            };
+            foreach (var entry in client.Response.Headers)
+            {
+                string value = entry.Value.FirstOrDefault();
+                string key = entry.Key;
+                metaData.ServiceHeader.Add(key, value);
             }
+            metaData.ServiceVersion = Helper.GetServiceVersion(metaData.ServiceHeader);
+            return metaData;
         }
+
+
 
         /// <summary>
         /// Load Metadata from xml string

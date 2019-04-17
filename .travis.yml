@@ -4,7 +4,6 @@ os:
   - osx
 mono: none
 dotnet: 2.1.502
-solution: OData2Poco.sln
 script:
  - dotnet restore
  - dotnet build OData2PocoLib/OData2Poco.csproj -f netstandard2.0

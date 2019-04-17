@@ -14,7 +14,7 @@ namespace OData2Poco.Extensions
         /// <param name="update">The update statement to execute for each element.</param>
         /// <exception cref="ArgumentNullException">Argument is Null</exception>
         /// <returns>The numer of records affected.</returns>
-        public static int Update<TSource,TArg>(this IEnumerable<TSource> source, Func<TSource,TArg> update)
+        public static int Update<TSource, TArg>(this IEnumerable<TSource> source, Func<TSource, TArg> update)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (update == null) throw new ArgumentNullException(nameof(update));
@@ -28,6 +28,11 @@ namespace OData2Poco.Extensions
                 count++;
             }
             return count;
+        }
+
+        public static bool IsLast(this List<string> list, string item)
+        {
+            return list.IndexOf(item) == list.Count - 1;
         }
     }
 }

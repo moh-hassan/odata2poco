@@ -4,6 +4,19 @@
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
 
+##  Version 3.2.0  
+**Release Date:**  April 2, 2019 
+
+**What is news:**
+- New: Support NTLM window authentication (Issue#19).
+- New: Add jsonProperty(originalName) to properties that are renamed because its name is the same as its enclosing type.
+- New: Show/hide model warning due to renaming properties/classes whose name is a reserved  keyword.
+- New: Support abstract class.
+- New: support complex type inheritance
+- Fix: Convert EDM.TIME in Odata v3 to TimeSpan  (Issue#18).
+- Fix: Support multi schema (Issue#20).
+- Fix: Support multi containers in OData  v3.
+
 ##  Version 3.1.0  
 **Release Date:**   March 4, 2019
 

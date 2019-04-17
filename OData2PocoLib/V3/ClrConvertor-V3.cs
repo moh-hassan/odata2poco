@@ -11,7 +11,7 @@ namespace OData2Poco.V3
         internal readonly Dictionary<EdmPrimitiveTypeKind, string> ClrDictionary = new Dictionary
               <EdmPrimitiveTypeKind, string>
         {
-  
+
             {EdmPrimitiveTypeKind.Int32, "int"},
             {EdmPrimitiveTypeKind.String, "string"},
             {EdmPrimitiveTypeKind.Binary, "byte[]"},
@@ -42,10 +42,12 @@ namespace OData2Poco.V3
             {EdmPrimitiveTypeKind.GeometryMultiLineString, "GeometryMultiLineString"},
             {EdmPrimitiveTypeKind.GeometryMultiPoint, "GeometryMultiPoint"},
             {EdmPrimitiveTypeKind.DateTimeOffset, "DateTimeOffset"},
-              {EdmPrimitiveTypeKind.DateTime, "DateTime"}
-     
+            {EdmPrimitiveTypeKind.DateTime, "DateTime"},
+            {EdmPrimitiveTypeKind.Time, "TimeSpan"},
+           // {EdmPrimitiveTypeKind.None, "dynamic"},
+
         };
 
-    
+
     }
 }

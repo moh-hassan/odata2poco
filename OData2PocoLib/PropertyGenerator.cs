@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using OData2Poco.CustAttributes;
 using OData2Poco.Extensions;
 
@@ -10,11 +12,12 @@ namespace OData2Poco
     /// Convert name to Camel/Pascal Case
     /// Generate the declaration of property e.g.   virtual public int? name  {get;set;} //comment
     /// </summary>
- public   class PropertyGenerator 
+    public class PropertyGenerator
     {
         private readonly AttributeFactory _attributeManager = AttributeFactory.Default;
-        private readonly PropertyTemplate _property;  
-        private readonly PocoSetting _setting; 
+        private readonly PropertyTemplate _property;
+        private readonly PocoSetting _setting;
+        readonly string _nl = Environment.NewLine;
         /// <summary>
         /// Initialize in cto
         /// </summary>
@@ -23,16 +26,20 @@ namespace OData2Poco
         public PropertyGenerator(PropertyTemplate propertyTemplate, PocoSetting pocoSetting)
         {
             _property = propertyTemplate;
-            _setting = pocoSetting;
+            _setting = pocoSetting ?? new PocoSetting();
         }
-    
+
+        //string GetPocoType(PropertyTemplate propertyTemplate)
+        //{
+        //    var ns =propertyTemplate
+        //}
         /// <summary>
         /// Get all attributes based on PocoSetting initialization
         /// </summary>
         /// <returns></returns>
         public List<string> GetAllAttributes()
         {
-           
+
             return _attributeManager.GetAllAttributes(_property);
         }
         /// <summary>
@@ -51,9 +58,9 @@ namespace OData2Poco
                         return _property.PropName.ToCamelCase();
 
                     case CaseEnum.None:
-                        return _property.PropName;
+                        return _property?.PropName;
                     default:
-                        return _property.PropName;
+                        return _property?.PropName;
                 }
             }
         }
@@ -68,17 +75,42 @@ namespace OData2Poco
         /// </summary>
         public string NullableModifier => _setting.AddNullableDataType && _property.IsNullable ? Helper.GetNullable(_property.PropType) : String.Empty;
 
-        /// <summary>
-        /// The declaration of property in C# 
-        /// </summary>
-        public string Declaration => $"public{VirtualModifier} {_property.PropType + NullableModifier} {Name} {{get;set;}} {_property.PropComment}\n";
+        public string Declaration => $"public{VirtualModifier} {ReducedPropertyTypeName}{NullableModifier} {Name} {{get;set;}} {_property?.PropComment}";
 
         public override string ToString()
         {
-            var text = $"{string.Join(Environment.NewLine, GetAllAttributes())}\n{Declaration}";
+            if (_property == null)
+                return "";
+            var atts = string.Join(_nl, GetAllAttributes());
+            var text = $"{atts}{_nl}{Declaration}";
             return text;
         }
-      
+
+        string ReducedPropertyTypeName => ReducedPropertyType(_property);
+        internal string ReducedPropertyType(PropertyTemplate pt)
+        {
+            if (pt == null) return "";
+            var reducedName = pt.PropType;
+            //not prefixed with namespace
+            if (!reducedName.Contains(".")) return reducedName;
+
+            var ns = $"{pt.ClassNameSpace}."; //
+
+            if (pt.PropType.StartsWith(ns))
+                reducedName = pt.PropType.Replace(ns, "");
+            //collection
+            var match = Regex.Match(pt.PropType.Trim(), "List<(.+?)>");
+            if (!match.Success) return reducedName;
+            var type = match.Groups[1].ToString();
+            var typeReduced = type.Replace(ns, "");
+            reducedName = $"List<{typeReduced}>";
+
+            return reducedName;
+        }
+        public static implicit operator string(PropertyGenerator pg)
+        {
+            return pg.ToString();
+        }
     }//
 }//
 

@@ -14,7 +14,7 @@ namespace OData2Poco
         /// </summary>
         public  List<string> AssemplyReference;
         private readonly PocoSetting _pocoSetting;
-        private readonly IDictionary<string, ClassTemplate> _model;
+        private readonly List<ClassTemplate> _model;
         /// <summary>
         /// Default using assemplies
         /// </summary>
@@ -24,7 +24,8 @@ namespace OData2Poco
         /// </summary>
         /// <param name="pocoSetting">Seting parameters of generating code</param>
         /// <param name="model">The model containing all classes </param>
-        public AssemplyManager(PocoSetting pocoSetting, IDictionary<string, ClassTemplate> model)
+        //public AssemplyManager(PocoSetting pocoSetting, IDictionary<string, ClassTemplate> model)
+        public AssemplyManager(PocoSetting pocoSetting, List<ClassTemplate> model)
         {
             _pocoSetting = pocoSetting;
             _model = model;
@@ -105,7 +106,7 @@ namespace OData2Poco
         {
             foreach (var entry in _model)
             {
-                var properties = entry.Value.Properties;
+                var properties = entry.Properties;
                 foreach (var property in properties)
                 {
                     var type = property.PropType;

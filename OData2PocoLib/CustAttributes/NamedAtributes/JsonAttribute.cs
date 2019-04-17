@@ -7,7 +7,9 @@ namespace OData2Poco.CustAttributes.NamedAtributes
     {
         public string Name { get;  } = "json";
         public List<string> GetAttributes(PropertyTemplate property) => 
-            new List<string> { $"[JsonProperty(PropertyName = {property.PropName.Quote()})]"};
+           string.IsNullOrEmpty(property.OriginalName) || property.OriginalName == property.PropName
+        ? new List<string> { $"[JsonProperty(PropertyName = {property.PropName.Quote()})]"}
+        : new List<string>();
 
         public List<string> GetAttributes(ClassTemplate property) => new List<string>();
     }
