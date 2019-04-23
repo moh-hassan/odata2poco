@@ -18,11 +18,11 @@ OData2Poco is available in three flavers:
 |AppVeyor                    |Windows      |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
 |Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
 
-### OData2Poco V3.2.0 is Released on April 2, 2019
+### OData2Poco V3.2.0 is Released on April 16, 2019
 
 # **The new Features in V3.2.0:** #
 
-- New: Support Windows NTLM authentication. 
+- New: Support Windows NTLM authentication(Thanks to @lobster2012-user for help). 
 - New: Support Microsoft Digest authentication.
 - New: Support Integrated Windows Authentication, enabling users to log in with their Windows credentials (Issue#19).
 - New: Add jsonProperty(originalName) to properties that are renamed because its name is the same as its enclosing type.
@@ -34,9 +34,12 @@ OData2Poco is available in three flavers:
 - Fix: Support multi schema (Issue#20).
 - Fix: Support multi containers in OData  v3.
 
-***The new version 3.2.0.17 can be downloaded from:*** [github](https://github.com/moh-hassan/odata2poco/releases/tag/3.2.0.17)
+***The new version 3.2.0 can be downloaded from Nuget:*** 
 
-----------
+- [Console (o2pgen)](https://www.nuget.org/packages/OData2Poco.CommandLine/3.2.0)
+- [Netcore Global tool (dotnet-o2pgen)](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen)
+- [Class libraryl](https://www.nuget.org/packages/OData2Poco/3.2.0)
+
 
 
 **Features of OData2Poco**
@@ -89,40 +92,48 @@ OData2Poco is available in three flavers:
 **OData2Poco.CommandLine (o2pgen) console application:** 
 
 From [Nuget Gallery](https://www.nuget.org/packages/OData2Poco.CommandLine):
- ![](http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&DownloadId=1567512)
+
+       Install-Package OData2Poco.CommandLine 
 
 From [Chocolatey Gallery](https://chocolatey.org/packages/odata2poco-commandline):
 
      choco install odata2poco-commandline
 
+**OData2Poco.dotnet.o2pgen (dotnet-o2pgen) NetCore Global tool:** 
+
+From [Nuget Gallery](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen):
+
+       dotnet tool install --global OData2Poco.dotnet.o2pgen  
+
 **OData2Poco Class library:** 
 
 From [Nuget Gallery](https://www.nuget.org/packages/OData2Poco/)
-![enter image description here](http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&DownloadId=1562964)
+
+         Install-Package OData2Poco
 
 
-
-**Release Notes**
-https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md
+**Release Notes** [Review](https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md)
 
 
  **Try it:**
  dotnet Global Tool: 
- Install from nuget gallary
+ Install from nuget gallary, run the command:
+
        dotnet o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/
 	   For help type: dotnet o2pgen --help
 
-Consol net45 tool
+Consol net45 tool:
+
        o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/
  
  Note: The same options are available for dotnet Global tool or Console tool
 
- **How to use**
+ **Documentation**
 
-Read the documentation:[Wiki](https://github.com/moh-hassan/odata2poco/wiki)
+Read the:[Wiki](https://github.com/moh-hassan/odata2poco/wiki)
 
 ## Acknowledgements: 
 
 **Thank you [JetBrains](https://www.jetbrains.com "JetBrain") for [Resharper](https://www.jetbrains.com/resharper/ "Resharper") open source license**
 
-![](http://download-codeplex.sec.s-msft.com/Download?ProjectName=odata2poco&DownloadId=1569779)
+![](art/resharper2.jpg)
