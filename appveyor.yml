@@ -1,3 +1,52 @@
+version: 3.2.0.{build}
+branches:
+  only:
+    - feature/appveyor
+	
+image: Visual Studio 2017
+
+	
+configuration: Release
+init:
+ - ps: |
+      git config --global core.autocrlf input
+      
+      if ($env:APPVEYOR_REPO_TAG -eq "true") {
+        $ver = $env:APPVEYOR_REPO_TAG_NAME
+        if($ver.StartsWith("v") -eq $true) { $ver = $ver.Substring(1) }
+        Update-AppveyorBuild -Version $ver
+      }
+
+- cmd: set EnableNuGetPackageRestore=true
+install:
+- cmd: 'echo current directory: %CD%'
+nuget:
+  disable_publish_on_pr: true
+
 before_build:
-  - nuget restore
-  
+- cmd: >-   
+
+    msbuild /t:restore
+build:
+  project: OData2Poco.sln
+  verbosity: minimal
+after_build:
+- ps: >-
+    $console_tool='./OData2Poco.CommandLine/OData2Poco.CommandLine.csproj'
+    $global_tool='./OData2Poco.dotnet.o2pgen/OData2Poco.dotnet.o2pgen.csproj'
+    $configuration='release'
+    #dotnet pack $global_tool -v m -c $configuration --no-restore --no-build
+    #dotnet pack $console_tool -v m -c $configuration --no-restore --no-build
+    msbuild $console_tool /t:pack  -p:configuration=release  -p:NoBuild=true
+    msbuild $global_tool /t:pack  -p:configuration=release  -p:NoBuild=true
+    dir .\build
+
+artifacts:
+- path: .\build\OData2Poco.dotnet.o2pgen*.nupkg
+  name: global_tool
+- path: .\build\o2pgen.exe
+  name: o2p_exe
+- path: .\build\OData2Poco.CommandLine.*.nupkg
+  name: o2pgen
+- path: .\build\OData2Poco.*.nupkg
+  name: lib
