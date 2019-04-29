@@ -1,4 +1,3 @@
-#version is nly changed by  RELEASE TAG
 version: 3.2.0.{build}
 image: Visual Studio 2017
 pull_requests:
@@ -40,20 +39,4 @@ artifacts:
   name: o2pgen
 - path: .\build\OData2Poco.*.nupkg
   name: lib
-  
-deploy:
-- provider: GitHub
-  auth_token:
-     secure: sB33uLo96nR+LGmYLdPmY/segb6d4O061N2e8Nbz6iyHg82D0RysMxWE5JKnXmU+
-  artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
-  prerelease: false  
-  on:
-    APPVEYOR_REPO_TAG: true
-
-- provider: NuGet
-  api_key:
-    secure: /rB5L8YZcb6Wucl3e3E55tAuOuQ/Gj4UdGtGT3xe/SZK12BX1+Xeo9rshcpIUyce
-  artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
-  on:
-    APPVEYOR_REPO_TAG: true
   
