@@ -16,7 +16,7 @@
 
 
   <Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
-  <Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" />
+ <!-- <Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" /> -->
 
   <ItemGroup>
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj">
@@ -24,12 +24,13 @@
     </ProjectReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.5.0" >
+<ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.5.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
   
+ <!-- 
   <ItemGroup>
     <PackageReference Include="ilmerge" Version="3.0.21">
       <PrivateAssets>All</PrivateAssets>
@@ -39,6 +40,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+-->
 
   <PropertyGroup>
     <DefineConstants>NET45;NETFULL</DefineConstants>
