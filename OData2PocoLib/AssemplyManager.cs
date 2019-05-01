@@ -50,11 +50,12 @@ namespace OData2Poco
         }
      
       
-        private readonly Dictionary<string, string> _assemplyDict = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase)
+        private readonly Dictionary<string, string> _assemplyDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             //assemplies for attributes
             {"Key","System.ComponentModel.DataAnnotations"},
             {"Required" ,"System.ComponentModel.DataAnnotations"},
+            {"Req" ,"System.ComponentModel.DataAnnotations"},
             {"Table" ,"System.ComponentModel.DataAnnotations.Schema"},
             {"json","Newtonsoft.Json"}, //extrnal type can be installed from nuget
             //assemplies for Geographic data type

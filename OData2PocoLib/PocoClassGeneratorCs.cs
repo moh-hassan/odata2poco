@@ -12,6 +12,8 @@ namespace OData2Poco
     /// </summary>
     internal class PocoClassGeneratorCs : IPocoClassGenerator
     {
+        string nl=Environment.NewLine;
+
         public string LangName { get; set; } = "csharp";
         public List<ClassTemplate> ClassList { get; set; } 
         private static IPocoGenerator _pocoGen;
@@ -147,9 +149,10 @@ namespace OData2Poco
             ////for enum
             if (ent.IsEnum)
             {
-                var elements = string.Join(",\r\n ", ent.EnumElements.ToArray());
+                
+                var elements = string.Join($",{nl}", ent.EnumElements.ToArray());
                 var flagAttribute = ent.IsFlags ? "[Flags] " : "";
-                var enumString = $"\t{flagAttribute}public enum {ent.Name}\r\n\t {{\r\n {elements} \r\n\t}}";
+                var enumString = $"\t{flagAttribute}public enum {ent.Name}{nl}\t {{{nl} {elements} {nl}\t}}";
                 return enumString;
             }
 

@@ -80,18 +80,19 @@ namespace OData2Poco.CommandLine.Test
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
+            Console.WriteLine(output);
             //Assert
             Assert.AreEqual(0, tuble.Item1);
 
-            Assert.IsTrue(output.Contains("public partial class Product"));
-            Assert.IsTrue(output.Contains("[Table(\"Products\")]")); //-a tab/ -t
-            Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //-a tab  
-            Assert.IsTrue(output.Contains("[Key]")); //-k
-            Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations")); //-a key  
-            Assert.IsTrue(output.Contains("[Required]"));  //-q
-            Assert.IsTrue(output.Contains("public virtual Supplier Supplier {get;set;}")); //-n
-            Assert.IsTrue(output.Contains("int?"));  //-b
-            Assert.IsFalse(output.Contains("public partial class Product :")); // -i is not set
+            Assert.That(output, Does.Contain("public partial class Product"));
+            Assert.That(output, Does.Contain("[Table(\"Products\")]")); //-a tab/ -t
+            Assert.That(output, Does.Contain("System.ComponentModel.DataAnnotations.Schema")); //-a tab  
+            Assert.That(output, Does.Contain("[Key]"));
+            Assert.That(output, Does.Contain("System.ComponentModel.DataAnnotations")); //-a key  
+            Assert.That(output, Does.Contain("[Required]"));  
+            Assert.That(output, Does.Contain("public virtual Supplier Supplier {get;set;}")); //-n
+            Assert.That(output, Does.Contain("int?"));  //-b
+            
         }
 
        
