@@ -92,6 +92,9 @@ namespace OData2Poco.CommandLine
 
         [Option("show-warning", HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
         public bool ShowWarning { get; set; }
+
+        [Option("plugin",  HelpText = "Plugin folder path")]
+        public string PluginPath { get; set; }  
         //TODO--- ---------------------------
         //following are obsolete and will be removed in the next release
         //obsolete use -a key

@@ -10,7 +10,7 @@ namespace OData2Poco.CommandLine
         }
 		static Program()
     {
-        CosturaUtility.Initialize();
+        //CosturaUtility.Initialize();
     }
 
     }

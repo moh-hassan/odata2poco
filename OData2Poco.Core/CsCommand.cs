@@ -49,20 +49,24 @@ namespace OData2Poco.CommandLine
 
             ShowOptions();
             Console.WriteLine();
-            //if (optionManager.Validate() < 0)
-            //{
+           
             ArgOptions.Errors.ForEach(x =>
             {
                 _logger.Error(x);
             });
-            //return;
-            //}
+           
 
             //show warning
             ArgOptions.Errors.ForEach(x =>
                 {
                     _logger.Warn(x);
                 });
+            //setup plugin path
+         
+            if (!string.IsNullOrEmpty(ArgOptions.PluginPath))
+            {
+                Parameters.PluginPath =ArgOptions.PluginPath;
+            }
             _logger.Info($"Start processing url: { odataConnectionString.ServiceUrl}");
             //show result
             await GenerateCodeCommandAsync();

@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using OData2Poco.Extensions;
+using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.CustAttributes
 {
     public class PocoAttributesList : IEnumerable<INamedAttribute>
     {
+        private readonly ILog _logger = PocoLogger.Default;
         readonly List<INamedAttribute> _namedAttributes; //= new List<ICustomeAttribute>();
         public INamedAttribute this[string index] => GetAttributeObject(index);
 
@@ -16,8 +19,7 @@ namespace OData2Poco.CustAttributes
         {
             _namedAttributes = new List<INamedAttribute>();
             FillNamedAttributes();
-            //LoadPluginAttributes();
-
+            LoadPluginAttributes();
         }
         public List<string> SupportedAttributes()
         {
@@ -58,20 +60,16 @@ namespace OData2Poco.CustAttributes
         public void LoadPluginAttributes()
         {
 
-            string foldr = "plugin";
+            string foldr =Parameters.PluginPath;
+            if (string.IsNullOrEmpty(foldr)) return;
             foldr = Path.GetFullPath(foldr);
             if (!Directory.Exists(foldr)) return;
-
             var pluginList = Helper.LoadPlugin<INamedAttribute>(foldr)
                 .Cast<INamedAttribute>().ToList();
 
-
-            if (pluginList.Any())
-            {
-
-
-                _namedAttributes.AddRange(pluginList);
-            }
+            if (!pluginList.Any()) return;
+            _logger.Trace($"Loading Plugin folder={foldr}-found ({pluginList.Count})");
+            _namedAttributes.AddRange(pluginList);
 
         }
 

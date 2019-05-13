@@ -1,0 +1,25 @@
+<Project >
+   <PropertyGroup>
+    <PackageId>OData2Poco.CommandLine</PackageId>
+    <AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
+    <PackageTags>odata;charp;vb.net;o2pgen;meta-xml;web-api</PackageTags>
+  
+    <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
+    <IsTool>true</IsTool>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!--<IncludeBuildOutput>False</IncludeBuildOutput>-->
+  </PropertyGroup>
+  
+   <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="3.3.3">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+  <None Update="FodyWeavers.xml">
+    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
+
+</Project>
