@@ -48,8 +48,7 @@ namespace OData2Poco.CommandLine.Test
             var a = "--env-file graph_param.txt -r {{url}} --token-endpoint {{token_endpoint}}  --token-params client_id={{client_id}}&client_secret={{client_secret}}&grant_type={{grant_type}}&resource={{resource}} ";
             //Act
             var tuble = await RunCommand(a);
-            var output = tuble.Item2;
-            Console.WriteLine(output);
+            var output = tuble.Item2;           
             //Assert
             Assert.AreEqual(0, tuble.Item1);
             
@@ -79,8 +78,7 @@ namespace OData2Poco.CommandLine.Test
             var a = $"-r {url} -v -a key tab req -n -b";
             //Act
             var tuble = await RunCommand(a);
-            var output = tuble.Item2;
-            Console.WriteLine(output);
+            var output = tuble.Item2;           
             //Assert
             Assert.AreEqual(0, tuble.Item1);
 

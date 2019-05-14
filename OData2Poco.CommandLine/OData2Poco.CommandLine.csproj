@@ -8,17 +8,6 @@
     <Description>o2gen is a CommandLine tool for generating c# and vb.net POCO classes from OData feeds.</Description>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <PackageId>OData2Poco.CommandLine</PackageId>
-    <AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
-    <PackageTags>odata;charp;vb.net;o2pgen;meta-xml;web-api</PackageTags>
-  
-    <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
-    <IsTool>true</IsTool>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <!--<IncludeBuildOutput>False</IncludeBuildOutput>-->
-  </PropertyGroup>
-
   <Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildProjectDirectory)\fody.props" /> 
  <!-- <Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" /> -->
@@ -29,10 +18,16 @@
     </ProjectReference>
   </ItemGroup>  
 
-<ItemGroup>
+  <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.5.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+  </ItemGroup>  
+
+  <ItemGroup>
+    <None Update="FodyWeavers.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   
