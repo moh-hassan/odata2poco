@@ -1,35 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using OData2Poco.Core;
 using OData2Poco.TestUtility;
 
 namespace OData2Poco.CommandLine.Test
 {
     [Category("parser")]
-    public class ParserTest : BaseTest
+    public class ParserTest 
     {
         private static string Url = TestSample.NorthWindV4;
-
-        public ArgumentParser _argumentParser { get; set; }
-
-        public ParserTest()
-        {
-            _argumentParser = new ArgumentParser();
-        }
-        [OneTimeSetUp]
-        public void SetupOneTime()
-        {
-            Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
-        }
 
 
         async Task<Tuple<int, string>> RunCommand(string[] args)
         {
-            _argumentParser.ClearLogger();
-            _argumentParser.SetLoggerSilent();
-            var exitCode = await _argumentParser.RunOptionsAsync(args);
-            var help = ArgumentParser.Help;
-            return new Tuple<int, string>(exitCode, help);
+            return await new ParserUtility().RunCommand(args);
         }
         [Test]
         public async Task Arg_contains_version_Test()

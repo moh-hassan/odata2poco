@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using System.Threading.Tasks;
 using OData2Poco.InfraStructure.Logging;
 
@@ -26,13 +29,29 @@ namespace OData2Poco.Http
         }
         private async Task SetHttpClient()
         {
+            
             //UseDefaultCredentials for NTLM support in windows
             var handler = new HttpClientHandler
             {
                 UseDefaultCredentials = true,
             };
+            if (_delegatingHandler != null)
+            {
+                Logger.Trace($"Attaching Delegating Handler");
+                _delegatingHandler.InnerHandler = handler;
+                _client = new HttpClient(_delegatingHandler);
+            }
+            else
+                _client = new HttpClient(handler);
+            _client.Timeout = Timeout.InfiniteTimeSpan;
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
+            var agent="OData2Poco";  
+            _client.DefaultRequestHeaders.Add("User-Agent", agent);
 
             CredentialCache credentials = new CredentialCache();
+            if (_odataConnectionString.Authenticate == AuthenticationType.None) return;
+
             switch (_odataConnectionString.Authenticate)
             {
                 case AuthenticationType.Ntlm:
@@ -57,14 +76,7 @@ namespace OData2Poco.Http
                 handler.Proxy = new WebProxy(_odataConnectionString.Proxy);
             }
 
-            if (_delegatingHandler != null)
-            {
-                Logger.Trace($"Attaching Delegating Handler");
-                _delegatingHandler.InnerHandler = handler;
-                _client = new HttpClient(_delegatingHandler);
-            }
-            else
-                _client = new HttpClient(handler);
+          
 
             if (_odataConnectionString.Authenticate == AuthenticationType.Basic ||
                 _odataConnectionString.Authenticate == AuthenticationType.Token ||
@@ -74,9 +86,7 @@ namespace OData2Poco.Http
                 //authenticate
                 await auth.Authenticate(_odataConnectionString);
             }
-            _client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-            var agent="OData2Poco";  
-            _client.DefaultRequestHeaders.Add("User-Agent", agent);
+           
         }
 
         internal async Task<string> ReadMetaDataAsync()

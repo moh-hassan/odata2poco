@@ -15,11 +15,11 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-  
+ <!-- 
   <ItemGroup>
   <None Update="FodyWeavers.xml">
     <CopyToOutputDirectory>Never</CopyToOutputDirectory>
   </None>
 </ItemGroup>
-
+-->
 </Project>

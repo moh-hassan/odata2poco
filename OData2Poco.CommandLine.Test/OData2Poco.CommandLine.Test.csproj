@@ -5,53 +5,25 @@
     <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
     <Product>OData2Poco</Product>
     <IsTestProject>true</IsTestProject>
-
     </PropertyGroup>
-  <ItemGroup>
-    <None Remove="ProgramTests.NetCore.cs.txt" />
-  </ItemGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net4')) ">
-    <DefineConstants>NET45;NETFULL</DefineConstants>
-  </PropertyGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+  <!--<ItemGroup Condition="$(TargetFramework.StartsWith('net4')) AND '$(Configuration)' == 'Release'">
     <PackageReference Include="Costura.Fody" Version="3.3.3" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <Compile Include="..\Fake\CommonTestData.cs" Link="Utility\CommonTestData.cs" />
   </ItemGroup>
 
- 
-
   <ItemGroup>
-    <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" Condition="$(TargetFramework.StartsWith('net4')) " />
-    <ProjectReference Include="..\OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj" Condition="$(TargetFramework.StartsWith('netcore')) " />
-    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!--<None Update="Data\invalidxml.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\northwindV3.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\northwindV4.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>-->
-    <None Update="FodyWeavers.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\OData2Poco.Core\OData2Poco.Core.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <!--<DebugType>pdbonly</DebugType>-->
-    <DebugType>none</DebugType>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   
 </Project>

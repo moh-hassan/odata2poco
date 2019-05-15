@@ -28,11 +28,9 @@ namespace OData2Poco.CommandLine
             try
             {
                 _pocoFileSystem = new PocoFileSystem();
-   #if NETFULL             
+   #if NET45             
                 if (!(Console.IsOutputRedirected || Console.IsErrorRedirected))
-#pragma warning disable PC001 // API not supported on all platforms
                         Console.BufferHeight = Int16.MaxValue - 1;
-#pragma warning restore PC001 // API not supported on all platforms
   #endif              
                 // Catch all unhandled exceptions in all threads.
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;

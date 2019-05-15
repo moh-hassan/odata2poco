@@ -1,8 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using OData2Poco.Core;
 using OData2Poco.TestUtility;
 
 
@@ -10,48 +10,11 @@ namespace OData2Poco.CommandLine.Test
 {
    
     [TestFixture]
-    public partial class ProgramTests : BaseTest
+    public partial class ProgramTests 
     {
-        
-        private readonly ArgumentParser _argumentParser;
-
-        public ProgramTests()
-        {
-            _argumentParser = new ArgumentParser();
-
-        }
-        [OneTimeSetUp]
-        public void SetupOneTime()
-        {
-            //WorkingDirectory
-            Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
-        }
-
         private async Task<Tuple<int, string>> RunCommand(string s)
         {
-            _argumentParser.ClearLogger();
-            _argumentParser.SetLoggerSilent();
-
-            string[] args = s.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            var retcode = await _argumentParser.RunOptionsAsync(args);
-            string outText = ArgumentParser.OutPut;
-            var exitCode = retcode;
-            Tuple<int, string> tuple = new Tuple<int, string>(exitCode, outText );
-            return tuple;
-        }
-
-        //[Test]
-
-        private async Task Parameter_file_Test()
-        {
-            //Arrange
-            var a = "--env-file graph_param.txt -r {{url}} --token-endpoint {{token_endpoint}}  --token-params client_id={{client_id}}&client_secret={{client_secret}}&grant_type={{grant_type}}&resource={{resource}} ";
-            //Act
-            var tuble = await RunCommand(a);
-            var output = tuble.Item2;           
-            //Assert
-            Assert.AreEqual(0, tuble.Item1);
-            
+              return await new ParserUtility().RunCommand(s);
         }
 
         [Test]
@@ -365,12 +328,11 @@ public enum Feature
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]
-        //[TestCaseSource(typeof(TestSample), nameof(TestSample.UrlOdatadCases))]
+        //[TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlOdatadCases))]
         public async Task Url_test(string url, string version, int n)
         {
             //Arrange
-           
             var a = $"-r {url} -v ";
             //Act
             var tuble = await RunCommand(a);

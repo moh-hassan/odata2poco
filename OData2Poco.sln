@@ -10,7 +10,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.CommandLine.Test", "OData2Poco.CommandLine.Test\OData2Poco.CommandLine.Test.csproj", "{3C05AB7B-2D2A-400A-AEDD-9DDE69566DF4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BCC5139D-A1C0-46E7-ABA7-72E9660607DE} = {BCC5139D-A1C0-46E7-ABA7-72E9660607DE}
-		{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69} = {DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Welcome", ".Welcome", "{5CE1A01D-B4EE-45F0-9E97-2DA9AA53FA13}"
@@ -23,14 +22,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D69DB09-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.Tests", "OData2Poco.Tests\OData2Poco.Tests.csproj", "{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OData2Poco.Core", "OData2Poco.Core\OData2Poco.Core.shproj", "{7FCA2548-B30B-4F82-A261-61E48162D462}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.Core", "OData2Poco.Core\OData2Poco.Core.csproj", "{C2790304-548E-4D7A-9D52-C7489F1A1E0B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.dotnet.o2pgen", "OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj", "{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.dotnet.o2pgen", "OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj", "{A6B447DC-CF7D-4D16-9468-CF872DB15EFD}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		OData2Poco.Core\OData2Poco.Core.projitems*{7fca2548-b30b-4f82-a261-61e48162d462}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -52,10 +48,14 @@ Global
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B8935C5-5F10-4D96-9434-3A455A6BDAEA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE9E6AB3-807F-4760-B2BB-F3B0999DCA69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2790304-548E-4D7A-9D52-C7489F1A1E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2790304-548E-4D7A-9D52-C7489F1A1E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2790304-548E-4D7A-9D52-C7489F1A1E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2790304-548E-4D7A-9D52-C7489F1A1E0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6B447DC-CF7D-4D16-9468-CF872DB15EFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B447DC-CF7D-4D16-9468-CF872DB15EFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6B447DC-CF7D-4D16-9468-CF872DB15EFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6B447DC-CF7D-4D16-9468-CF872DB15EFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

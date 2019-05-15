@@ -24,26 +24,14 @@
     <PackAsTool>true</PackAsTool>
   </PropertyGroup>
 
-  <Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
-
   <ItemGroup>
-    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.5.0" />
-    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <ProjectReference Include="..\OData2Poco.Core\OData2Poco.Core.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
-    <CodeAnalysisRuleSet>OData2Poco.dotnet.o2pgen.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <CodeAnalysisRuleSet>OData2Poco.dotnet.o2pgen.ruleset</CodeAnalysisRuleSet>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 </Project>
