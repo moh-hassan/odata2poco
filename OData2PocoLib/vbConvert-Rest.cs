@@ -5,8 +5,10 @@
  * Part of the SharpDevelop OSS project. MIT-licensed.
  ***********************************************************************************************************************/
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -17,10 +19,14 @@ public class CodeConvertorRestService
 {
     public static async Task<string> CodeConvert(string source, string lang = "cs2vb.net")
     {
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                                               | SecurityProtocolType.Tls11
+                                               | SecurityProtocolType.Tls;
+
         using (var client = new HttpClient())
         {
             client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-
+            client.Timeout = Timeout.InfiniteTimeSpan;
             ConvertRequest p = new ConvertRequest
             {
                 Code = source,

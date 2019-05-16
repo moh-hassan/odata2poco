@@ -5,11 +5,12 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
+using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.Http
 {
-    internal class CustomeHttpClient  :IDisposable
+    internal class CustomeHttpClient : IDisposable
     {
         public static ILog Logger = PocoLogger.Default;
         readonly OdataConnectionString _odataConnectionString;
@@ -29,7 +30,7 @@ namespace OData2Poco.Http
         }
         private async Task SetHttpClient()
         {
-            
+
             //UseDefaultCredentials for NTLM support in windows
             var handler = new HttpClientHandler
             {
@@ -46,7 +47,7 @@ namespace OData2Poco.Http
             _client.Timeout = Timeout.InfiniteTimeSpan;
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-            var agent="OData2Poco";  
+            var agent = "OData2Poco";
             _client.DefaultRequestHeaders.Add("User-Agent", agent);
 
             CredentialCache credentials = new CredentialCache();
@@ -76,7 +77,7 @@ namespace OData2Poco.Http
                 handler.Proxy = new WebProxy(_odataConnectionString.Proxy);
             }
 
-          
+
 
             if (_odataConnectionString.Authenticate == AuthenticationType.Basic ||
                 _odataConnectionString.Authenticate == AuthenticationType.Token ||
@@ -86,24 +87,32 @@ namespace OData2Poco.Http
                 //authenticate
                 await auth.Authenticate(_odataConnectionString);
             }
-           
+
         }
 
         internal async Task<string> ReadMetaDataAsync()
         {
+            if (_odataConnectionString.ServiceUrl.StartsWith("https"))
+                // to avoid the Error Message://An error occurred while sending the request.-->
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                                                       | SecurityProtocolType.Tls11
+                                                       | SecurityProtocolType.Tls;
+
             await SetHttpClient();
             string url = ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
-            using (HttpResponseMessage response = await _client.GetAsync(url))
+
+            try
             {
-                Response = response;
-                if (!response.IsSuccessStatusCode)
-                    throw new HttpRequestException(
-                        $"Http Error {(int)response.StatusCode}: {response.ReasonPhrase}");
-                var content = await response.Content.ReadAsStringAsync();
-                if (string.IsNullOrEmpty(content))
-                    throw new HttpRequestException(
-                        $"Http Error {(int)response.StatusCode}: {response.ReasonPhrase}");
+                Response = await _client.GetAsync(url).ConfigureAwait(false);
+                Response.EnsureSuccessStatusCode();
+                var content = await Response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 return content;
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error in reading: {_odataConnectionString.ServiceUrl}");
+                Logger.Error(e.FullExceptionMessage());
+                throw;
             }
         }
 

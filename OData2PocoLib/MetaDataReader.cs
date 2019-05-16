@@ -16,13 +16,6 @@ namespace OData2Poco
         public static ILog Logger = PocoLogger.Default;
         public static async Task<MetaDataInfo> LoadMetaDataHttpAsync(OdataConnectionString odataConnString)
         {
-            // to avoid the Error Message://An error occurred while sending the request.-->
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                                                   | SecurityProtocolType.Tls11
-                                                   | SecurityProtocolType.Tls;
-
-
-
 
             var client = new CustomeHttpClient(odataConnString);
             var content = await client.ReadMetaDataAsync();
