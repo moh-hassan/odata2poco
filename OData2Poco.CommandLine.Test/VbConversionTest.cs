@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace OData2Poco.CommandLine.Test
 {
     [TestFixture]
-    public partial class ProgramTests  
+    public abstract partial class ProgramTests  
     {
 
         [Test]

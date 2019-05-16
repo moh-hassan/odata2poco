@@ -7,9 +7,10 @@
     <IsTestProject>true</IsTestProject>
     </PropertyGroup>
 
-  <!--<ItemGroup Condition="$(TargetFramework.StartsWith('net4')) AND '$(Configuration)' == 'Release'">
-    <PackageReference Include="Costura.Fody" Version="3.3.3" />
-  </ItemGroup>-->
+  <ItemGroup>
+    <PackageReference Include="MedallionShell" Version="1.6.0" />
+
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\Fake\CommonTestData.cs" Link="Utility\CommonTestData.cs" />

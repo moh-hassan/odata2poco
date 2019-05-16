@@ -10,11 +10,13 @@ namespace OData2Poco.CommandLine.Test
 {
    
     [TestFixture]
-    public partial class ProgramTests 
+    public abstract partial class ProgramTests 
     {
-        private async Task<Tuple<int, string>> RunCommand(string s)
+        protected abstract  Task<Tuple<int, string>> RunCommand(string s);
+        [OneTimeSetUp]
+        public void RunBeforeAnyTests()
         {
-              return await new ParserUtility().RunCommand(s);
+            Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
         }
 
         [Test]
