@@ -110,7 +110,7 @@ namespace OData2Poco.Http
             }
             catch (Exception e)
             {
-                Logger.Error($"Error in reading: {_odataConnectionString.ServiceUrl}");
+                Logger.Error($"Error:{(int)Response.StatusCode}: {Response.ReasonPhrase}- in reading: {_odataConnectionString.ServiceUrl}");
                 Logger.Error(e.FullExceptionMessage());
                 throw;
             }
