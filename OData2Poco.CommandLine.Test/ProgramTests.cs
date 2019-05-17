@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -13,10 +14,23 @@ namespace OData2Poco.CommandLine.Test
     public abstract partial class ProgramTests 
     {
         protected abstract  Task<Tuple<int, string>> RunCommand(string s);
-        [OneTimeSetUp]
-        public void RunBeforeAnyTests()
+        //[OneTimeSetUp]
+        //public void RunBeforeAnyTests()
+        //{
+        //    Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
+        //}
+
+        public string WinLinuxPath(string winpath)
         {
-            Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
+            var pathList=winpath.Split('\\');
+            var path="";
+            foreach (var s in pathList)
+            {
+                Console.WriteLine(s);
+                path =Path.Combine(path,s);
+            }
+           // Console.WriteLine(path);
+             return path;
         }
 
         [Test]
