@@ -14,16 +14,11 @@ namespace OData2Poco.CommandLine.Test
     public abstract partial class ProgramTests 
     {
         protected abstract  Task<Tuple<int, string>> RunCommand(string s);
-        //[OneTimeSetUp]
-        //public void RunBeforeAnyTests()
-        //{
-        //    Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
-        //}
-
-        public string WinLinuxPath(string winpath)
+        
+        public string WinLinuxPath(string winpath,string wd="")
         {
-            var pathList=winpath.Split('\\');
-            var path="";
+            var pathList=winpath.Split(new []{'\\' ,'/'});
+            var path=wd;
             foreach (var s in pathList)
             {
                 Console.WriteLine(s);
@@ -344,8 +339,8 @@ public enum Feature
         }
 
         [Test]
-        //[TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]
-        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlOdatadCases))]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]
+       // [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlOdatadCases))]
         public async Task Url_test(string url, string version, int n)
         {
             //Arrange

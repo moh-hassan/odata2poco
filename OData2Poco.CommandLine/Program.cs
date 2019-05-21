@@ -8,10 +8,6 @@ namespace OData2Poco.CommandLine
         {
             await StartUp.Main1(args);
         }
-		static Program()
-    {
-        //CosturaUtility.Initialize();
-    }
 
     }
 }

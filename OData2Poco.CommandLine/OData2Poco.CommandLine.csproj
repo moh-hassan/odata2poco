@@ -19,22 +19,24 @@
     <!--<IncludeBuildOutput>true</IncludeBuildOutput>-->
   </PropertyGroup>
    
+  <!--<Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" />-->
+
   <ItemGroup>
+    <ProjectReference Include="..\OData2Poco.Core\OData2Poco.Core.csproj" >
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <PackageReference Include="Costura.Fody" Version="3.3.3">
-      <PrivateAssets>All</PrivateAssets>
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
- 
-  <ItemGroup>
-    <ProjectReference Include="..\OData2Poco.Core\OData2Poco.Core.csproj">
-      <PrivateAssets>All</PrivateAssets>
-    </ProjectReference>
-  </ItemGroup> 
 
   <PropertyGroup>
     <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
+    <!--<SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>-->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
