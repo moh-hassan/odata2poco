@@ -7,9 +7,8 @@ namespace OData2Poco.CommandLine
     {
         public static async Task<string> CodeConvert(string code)
         {
-            //throw new NotImplementedException();
-            var vbCode = await CodeConvertorRestService.CodeConvert(code);
-            return vbCode;
+            // Individuals do not want to call out to an external service.
+            throw new NotImplementedException();
         }
     }
 }

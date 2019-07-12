@@ -7,7 +7,7 @@ namespace OData2Poco.dotnet.o2pgen
     {
         public static async Task Main(string[] args)
         {
-            await StartUp.Main1(args);
+            await StartUp.Run(args);
         }
     }
 }

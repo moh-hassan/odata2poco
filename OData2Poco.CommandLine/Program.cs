@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
-
-namespace OData2Poco.CommandLine
+﻿namespace OData2Poco.CommandLine
 {
-    internal class Program
+    using System.Threading.Tasks;
+
+    public class Program
     {
         public static async Task Main(string[] args)
         {
-            await StartUp.Main1(args);
+            await StartUp.Run(args);
         }
     }
 }
