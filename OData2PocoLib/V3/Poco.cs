@@ -35,10 +35,10 @@ namespace OData2Poco.V4
     /// </summary>
     internal partial class Poco : IPocoGenerator
     {
-        [CanBeNull] private readonly PocoSetting _setting;
-        [NotNull] public MetaDataInfo MetaData { get; set; }
+        private readonly PocoSetting _setting;
+        public MetaDataInfo MetaData { get; set; }
         public string MetaDataAsString => MetaData.MetaDataAsString;
-        [NotNull] private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
+        private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
         private readonly ILog _logger = PocoLogger.Default;
         private List<string> SchemaErrors { get; set; }
         IEdmModel Model { get; set; }
@@ -293,16 +293,16 @@ namespace OData2Poco.V4
 
             return list;
         }
-        int?  GetMaxLength(IEdmProperty property)
+        int? GetMaxLength(IEdmProperty property)
         {
-            int?  maxLength=null;
+            int? maxLength = null;
             switch (property.Type.PrimitiveKind())
             {
                 case EdmPrimitiveTypeKind.String:
-                      maxLength = property.Type.AsString().MaxLength;
+                    maxLength = property.Type.AsString().MaxLength;
                     break;
                 case EdmPrimitiveTypeKind.Binary:
-                      maxLength = property.Type.AsBinary().MaxLength;
+                    maxLength = property.Type.AsBinary().MaxLength;
                     break;
             }
             //property.Type.AsDecimal().Precision
