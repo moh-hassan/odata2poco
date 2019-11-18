@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using OData2Poco.CustAttributes;
 using OData2Poco.Extensions;
@@ -29,10 +30,6 @@ namespace OData2Poco
             _setting = pocoSetting ?? new PocoSetting();
         }
 
-        //string GetPocoType(PropertyTemplate propertyTemplate)
-        //{
-        //    var ns =propertyTemplate
-        //}
         /// <summary>
         /// Get all attributes based on PocoSetting initialization
         /// </summary>
@@ -75,7 +72,20 @@ namespace OData2Poco
         /// </summary>
         public string NullableModifier => _setting.AddNullableDataType && _property.IsNullable ? Helper.GetNullable(_property.PropType) : String.Empty;
 
-        public string Declaration => $"public{VirtualModifier} {ReducedPropertyTypeName}{NullableModifier} {Name} {{get;set;}} {_property?.PropComment}";
+        public string Declaration =>
+            new StringBuilder()
+                .Append($"public{VirtualModifier}")
+                .Append(" ")
+                .Append(ReducedPropertyTypeName)
+                .Append(NullableModifier)
+                .Append(" ")
+                .Append(Name)
+                .Append(" ")
+                .Append(_property.IsReadOnly ? "{get;}" : "{get;set;}")
+                .Append(" ")
+                //.Append(_property?.PropComment)
+                .Append(Comment())
+                .ToString();
 
         public override string ToString()
         {
@@ -110,6 +120,13 @@ namespace OData2Poco
         public static implicit operator string(PropertyGenerator pg)
         {
             return pg.ToString();
+        }
+        private string Comment()
+        {
+            var comment = _property?.PropComment + (_property?.IsReadOnly == true?" ReadOnly": "");
+            if (!string.IsNullOrEmpty(comment))
+                comment = $"//{comment}";
+            return comment;
         }
     }//
 }//

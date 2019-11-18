@@ -238,7 +238,7 @@ namespace OData2Poco.V4
                 if (classTemplate.Keys.Exists(x => x == property.PropName)) property.IsKey = true;
                 var comment = (property.IsKey ? "PrimaryKey" : string.Empty)
                               + (property.IsNullable ? string.Empty : " not null");
-                if (!string.IsNullOrEmpty(comment)) property.PropComment = $"//{comment}";
+                if (!string.IsNullOrEmpty(comment)) property.PropComment = comment;
             }
 
             classTemplate.Properties.AddRange(entityProperties);
@@ -289,6 +289,7 @@ namespace OData2Poco.V4
                 Serial = serial++,
                 ClassNameSpace = ent.Namespace,
                 MaxLength = GetMaxLength(property),
+                IsReadOnly = Model.IsReadOnly(property),
             }).ToList();
 
             return list;
