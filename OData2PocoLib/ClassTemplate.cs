@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using OData2Poco.CustAttributes;
+using OData2Poco.Extensions;
 
 
 namespace OData2Poco
@@ -43,5 +44,23 @@ namespace OData2Poco
         private readonly AttributeFactory _attributeFactory = AttributeFactory.Default;
 
         public List<string> GetAllAttributes() => _attributeFactory.GetAllAttributes(this);
+        /// <summary>
+        /// Change Name Case to Pas or Camel.
+        /// </summary>
+        /// <param name="caseEnum"></param>
+        /// <returns></returns>
+        public ClassTemplate ChangeCase(CaseEnum caseEnum)
+        {
+            switch (caseEnum)
+            {
+                case CaseEnum.Pas:
+                    Name =Name.ToPascalCase();
+                    break;
+                case CaseEnum.Camel:
+                    Name =Name.ToCamelCase();
+                    break;
+            }
+            return this;
+        }
     }
 }
