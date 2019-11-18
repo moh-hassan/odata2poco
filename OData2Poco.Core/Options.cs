@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CommandLine;
 using CommandLine.Text;
 using Newtonsoft.Json.Linq;
-using OData2Poco.Extensions;
+
 //using OData2Poco.OAuth2;
 
 //(c) 2016-2018 Mohamed Hassan, MIT License
@@ -75,6 +74,13 @@ namespace OData2Poco.CommandLine
             HelpText = "Type pas or camel to Convert Property Name to PascalCase or CamelCase")]
         public string NameCase { get; set; }
 
+        /// <summary>
+        /// Convert Entity Name to PascalCase or CamelCase by passing  `pas` or `camel`
+        /// </summary>
+        [Option( "entity-case", Default = "none",
+            HelpText = "Type pas or camel to Convert Entity Name to PascalCase or CamelCase")]
+        public string EntityNameCase { get; set; }
+
         [Option('a', "attribute",
             HelpText = "Attributes, Allowed values: key, req, json,tab,dm,proto,db,display")]
         public IEnumerable<string> Attributes { get; set; }
@@ -112,6 +118,12 @@ namespace OData2Poco.CommandLine
                 "Obsolete, use -a json, Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
         public bool AddJsonAttribute { get; set; }
 
+        /// <summary>
+        /// Filter the Entities by FullName, case insensitive. Use comma delemeted list of entity names. Name may include the special characters * and ?. The char *  represents a string of characters and ? match any single char.
+        /// </summary>
+        [Option( "include",
+            HelpText = "Filter the Entities by FullName, case insensitive. Use space delemeted list of entity names. Name may include the special characters * and ?. The char *  represents a string of characters and ? match any single char.")]
+        public IEnumerable<string> Include { get; set; }
 
 
         public List<string> Errors { get; set; }
@@ -125,6 +137,7 @@ namespace OData2Poco.CommandLine
             CodeFilename = "poco.cs";
             NameCase = "none";
             Lang = "cs";
+            Include= new List<string>();
         }
 
 #if NETFULL
