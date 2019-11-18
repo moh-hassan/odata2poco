@@ -7,7 +7,7 @@ using OData2Poco.Extensions;
 namespace OData2Poco.Tests
 {
     [Category("PocoClassGeneratorCsTest")]
-  public   class PocoClassGeneratorCsTest
+    public class PocoClassGeneratorCsTest
     {
         string _nl = Environment.NewLine;
 
@@ -261,14 +261,14 @@ public enum Feature
             //Assert
             Assert.That(sut.ClassList.Count, Is.EqualTo(1));
             Assert.That(name, Is.EqualTo("Event"));
-           
+
         }
         [Test]
         public void Prefix_namespace_test()
         {
             //Arrange
-            var setting = new PocoSetting{NamespacePrefix = "abc"};
-            var ct = new ClassTemplate { Name = "Folder", NameSpace = "SP"};
+            var setting = new PocoSetting { NamespacePrefix = "abc" };
+            var ct = new ClassTemplate { Name = "Folder", NameSpace = "SP" };
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
@@ -276,14 +276,14 @@ public enum Feature
             var code = sut.GeneratePoco();
             //Assert
             Assert.That(code, Does.Contain("abc.SP"));
-            
+
         }
         [Test]
         public void code_generation_test()
         {
             //Arrange
             var setting = new PocoSetting();
-            var ct = new ClassTemplate { Name = "Folder", NameSpace = "SP"};
+            var ct = new ClassTemplate { Name = "Folder", NameSpace = "SP" };
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
@@ -301,20 +301,20 @@ public enum Feature
         {
             //Arrange
             var setting = new PocoSetting();
-            var list= new List<ClassTemplate>
+            var list = new List<ClassTemplate>
             {
                 new ClassTemplate { Name = "Folder", NameSpace = "SP"},
                 new ClassTemplate { Name = "Folder", NameSpace = "SP2",BaseType = "SP.Folder"},
                 new ClassTemplate { Name = "File", NameSpace = "SP2"},
             };
             var gen = Moq.Moq4IPocoGenerator(list);
-            
+
             //Act
             var sut = new PocoClassGeneratorCs(gen, setting);
             var code = sut.GeneratePoco();
-         
+
             //Assert
-            var expected=@"
+            var expected = @"
 using SP;
 using SP2;
 namespace SP
@@ -336,7 +336,7 @@ namespace SP2
 }
 ";
             Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
-            
+
         }
 
         [Test]
@@ -344,21 +344,21 @@ namespace SP2
         {
             //Arrange
             var setting = new PocoSetting();
-            var list= new List<ClassTemplate>
+            var list = new List<ClassTemplate>
             {
                 new ClassTemplate { Name = "Shape", NameSpace = "BookStore"},
                 new ClassTemplate { Name = "Circle", NameSpace = "BookStore",BaseType = "BookStore.Shape", IsComplex = true},
                 new ClassTemplate { Name = "Rectangle", NameSpace = "BookStore",BaseType = "BookStore.Shape",IsEntity = true},
-                 
+
             };
             var gen = Moq.Moq4IPocoGenerator(list);
-            
+
             //Act
             var sut = new PocoClassGeneratorCs(gen, setting);
             var code = sut.GeneratePoco();
-        
+
             //Assert
-            var expected=@"
+            var expected = @"
 namespace BookStore
 {
 	public partial class Shape
@@ -381,21 +381,21 @@ namespace BookStore
         {
             //Arrange
             var setting = new PocoSetting();
-            var list= new List<ClassTemplate>
+            var list = new List<ClassTemplate>
             {
                 new ClassTemplate { Name = "Shape", NameSpace = "BookStore"},
                 new ClassTemplate { Name = "Circle", NameSpace = "BookStore",BaseType = "Shape", IsComplex = true},
                 new ClassTemplate { Name = "Rectangle", NameSpace = "BookStore",BaseType = "Shape",IsEntity = true},
-                 
+
             };
             var gen = Moq.Moq4IPocoGenerator(list);
-            
+
             //Act
             var sut = new PocoClassGeneratorCs(gen, setting);
             var code = sut.GeneratePoco();
-           
+
             //Assert
-            var expected=@"
+            var expected = @"
 namespace BookStore
 {
 	public partial class Shape
@@ -411,6 +411,22 @@ namespace BookStore
 ";
             Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
 
+        }
+
+        [Test]
+        [TestCase("Product", CaseEnum.Camel, "product")]
+        [TestCase("Customer_Country", CaseEnum.Camel, "customerCountry")]
+        public void entity_change_case_test(string name, CaseEnum caseEnum, string newName)
+        {
+            //Arrange
+            var ct = new ClassTemplate
+            {
+                Name = name,
+            };
+            //Act
+            var newCt = ct.ChangeCase(caseEnum);
+            //Assert
+            Assert.That(newCt.Name,Is.EqualTo(newName));
         }
     }
 }
