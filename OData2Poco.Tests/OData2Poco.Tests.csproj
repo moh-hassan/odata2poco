@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Compile Include="..\Fake\CommonTestData.cs" Link="CommonTestData.cs" />
+    <Compile Include="..\Fake\projectTestData.cs" Link="projectTestData.cs" />
     <Compile Include="..\OData2Poco.CommandLine.Test\Utility\HelpTestExtension.cs" Link="HelpTestExtension.cs" />
   </ItemGroup>
 
