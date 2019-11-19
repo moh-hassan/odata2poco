@@ -20,19 +20,6 @@ OData2Poco is available in three flavers:
 
 ### OData2Poco V3.2.0 is Released on April 16, 2019
 
-# **The new Features in V3.2.0:** #
-
-- New: Support Windows NTLM authentication(Thanks to @lobster2012-user for help). 
-- New: Support Microsoft Digest authentication.
-- New: Support Integrated Windows Authentication, enabling users to log in with their Windows credentials (Issue#19).
-- New: Add jsonProperty(originalName) to properties that are renamed because its name is the same as its enclosing type.
-- New: Show/hide model warning due to renaming properties/classes whose name is a reserved  keyword.
-- New: Support abstract class.
-- New: support complex type inheritance
-- New: Add attribute [MaxLength] for max length of string/byte[] properties.
-- Fix: Convert EDM.TIME in Odata v3 to TimeSpan  (Issue#18).
-- Fix: Support multi schema (Issue#20).
-- Fix: Support multi containers in OData  v3.
 
 ***The new version 3.2.0 can be downloaded from Nuget:*** 
 
@@ -40,7 +27,17 @@ OData2Poco is available in three flavers:
 - [Netcore Global tool (dotnet-o2pgen)](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen)
 - [Class libraryl](https://www.nuget.org/packages/OData2Poco/3.2.0)
 
+## What is new in V3.3.0
+- Filter model using the option [--include](https://github.com/moh-hassan/odata2poco/wiki/CommandLine-Reference#--include) 
+- Change case of Classes to Camel/Pas using the option --entity-case
+- Generated ReadOnly Properties if the vocabulary of the metadata include:Computed or Permissions:Read.
+- Removing Vb conversion external service.
 
+
+Try the new feature by the command
+``` 
+o2pgen -r http://services.odata.org/V4/TripPinServiceRW -v --include air* --entity-case camel
+```
 
 **Features of OData2Poco**
    
@@ -85,6 +82,20 @@ OData2Poco is available in three flavers:
 - Support Microsoft.OData.Edm library version 7.5+ (OData v4).
 - Support Microsoft.Data.Edm library (OData v1-v3).
 - MIT License. 
+
+ **Features added in V3.2.0:** 
+
+- New: Support Windows NTLM authentication(Thanks to @lobster2012-user for help). 
+- New: Support Microsoft Digest authentication.
+- New: Support Integrated Windows Authentication, enabling users to log in with their Windows credentials (Issue#19).
+- New: Add jsonProperty(originalName) to properties that are renamed because its name is the same as its enclosing type.
+- New: Show/hide model warning due to renaming properties/classes whose name is a reserved  keyword.
+- New: Support abstract class.
+- New: support complex type inheritance
+- New: Add attribute [MaxLength] for max length of string/byte[] properties.
+- Fix: Convert EDM.TIME in Odata v3 to TimeSpan  (Issue#18).
+- Fix: Support multi schema (Issue#20).
+- Fix: Support multi containers in OData  v3.
 
  
 ## Install

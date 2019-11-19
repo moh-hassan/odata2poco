@@ -4,6 +4,17 @@
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
 
+
+##  Version 3.3.0  
+**Release Date:**  Nov 19, 2019 
+
+**What is new in 3.2.0:**
+
+- New: Filter model using the option [--include](https://github.com/moh-hassan/odata2poco/wiki/CommandLine-Reference#--include) 
+- New: Change case of Classes to Camel/Pas using the option `--entity-case`
+- New: Generated ReadOnly Properties if the vocabulary of the Metadata include:`Computed or Permissions:Read`.
+- Remove: Vb conversion external service.
+
 ##  Version 3.2.0  
 **Release Date:**  April 02, 2019 
 

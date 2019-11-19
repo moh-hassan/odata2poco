@@ -28,22 +28,18 @@ namespace OData2Poco
 
             list2 = list2.Select(x => $"\\b{x}\\b");
             var pattern = string.Join("|", list2);
-            //Console.WriteLine($"pattern={pattern}");
-
             foreach (var item in list1)
             {
-                // var name=$"{item.NameSpace}{item.Name}";
                 var name = item.Name;
+
                 if (!string.IsNullOrEmpty(item.NameSpace))
                     name = $"{item.NameSpace}.{item.Name}";
+
                 var match = Regex.Match(name, pattern,
                     RegexOptions.IgnoreCase
                           | RegexOptions.IgnorePatternWhitespace);
                 if (match.Success)
-                {
-                    //Console.WriteLine($"found: {item}");
                     yield return item;
-                }
             }
         }
     }

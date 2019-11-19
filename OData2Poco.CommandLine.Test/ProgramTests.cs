@@ -491,6 +491,22 @@ public enum Feature
             Assert.IsTrue(output.Contains("public partial class Product"));
             Assert.IsTrue(!output.Contains("public partial class Product_Sales_for_1997"));
         }
+        [Test]
+        public async Task Model_filter_is_auto_prefixed_by_star_online_test()
+        {
+            //Arrange
+            string url = TestSample.UrlTripPinService; 
+           // string url = TestSample.UrlNorthWindV4; 
+            var a = $"-r {url} --include air*  -v "; //like *product
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+           //Assert
+            Assert.IsTrue(output.Contains("public partial class AirportLocation"));
+            Assert.IsTrue(output.Contains("public partial class Airline"));
+            Assert.IsTrue(output.Contains("public partial class Airport"));
+            Assert.IsTrue(!output.Contains("public partial class City"));
+        }
         #endregion
 
         #region readonly
