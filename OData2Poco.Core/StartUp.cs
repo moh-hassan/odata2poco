@@ -21,7 +21,7 @@ namespace OData2Poco.CommandLine
         public static int RetCode = (int)ExitCodes.Success;
         public static IPocoFileSystem _pocoFileSystem;
 
-        public static async Task Main1(string[] args)
+        public static async Task Run(string[] args)
         {
             var argument = string.Join(" ", args);
             try
@@ -73,8 +73,8 @@ namespace OData2Poco.CommandLine
 
         internal static async Task<int> RunOptionsAsync(string[] args)
         {
-           // var argumentParser = new ArgumentParser(Logger);
-           var argumentParser = new ArgumentParser();
+            // var argumentParser = new ArgumentParser(Logger);
+            var argumentParser = new ArgumentParser();
             return await argumentParser.RunOptionsAsync(args);
         }
     }

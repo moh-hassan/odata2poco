@@ -80,7 +80,7 @@ namespace OData2Poco.CommandLine
         public void ShowOptions(Options option)
         {
             //format option as: -n Navigation= True
-            _logger.Normal("************* CommandLine options***********");
+            _logger.Normal("************* CommandLine Options***********");
             var list = CommandLineUtility.GetOptions(option);
             list.ForEach(x => _logger.Normal(x));
             _logger.Normal("********************************************");
@@ -102,7 +102,7 @@ namespace OData2Poco.CommandLine
             _logger.Info($"OData Service Version: {O2PGen.MetaDataVersion} ");
             _logger.Info($"Number of Entities: {O2PGen.ClassList.Count}");
             _logger.Normal(new string('-', 50));
-            _logger.Sucess("Success creation of the Poco Model");
+            _logger.Sucess("Successfully Generated PoCo Models");
         }
 
         public void ShowOptions()
@@ -120,7 +120,7 @@ namespace OData2Poco.CommandLine
             Console.WriteLine();
             _logger.Info($"POCO classes (count: {O2PGen.ClassList.Count}) | EntitySet");
             _logger.Normal(new string('=', 40));
-            var items = O2PGen.ClassList.OrderBy(m => m.NameSpace).ThenBy(x=>x.Name).ToList();
+            var items = O2PGen.ClassList.OrderBy(m => m.NameSpace).ThenBy(x => x.Name).ToList();
             items.ForEach(m =>
             {
                 var index = items.IndexOf(m);
