@@ -85,7 +85,7 @@ namespace OData2Poco.CommandLine
             HelpText = "Attributes, Allowed values: key, req, json,tab,dm,proto,db,display")]
         public IEnumerable<string> Attributes { get; set; }
 
-        [Option("lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
+       // [Option("lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
         public string Lang { get; set; } //v3
         [Option("param-file", Hidden = true, HelpText = "Path to parameter file (json or text format. Postman Environment is supported)")]
         public string ParamFile { get; set; } //v3.1

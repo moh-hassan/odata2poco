@@ -8,7 +8,10 @@ namespace OData2Poco.CommandLine
         public static async Task<string> CodeConvert(string code)
         {
             // Individuals do not want to call out to an external service.
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            await Task.FromResult(false);
+            Console.WriteLine("Vb Converter is removed");
+            return code;
         }
     }
 }
