@@ -315,7 +315,7 @@ public int CategoryID {get;set;} ";
             {
                 PropName = "ProductId",
                 PropType = "int",
-                PropComment = "// not null",
+                //PropComment = "// not null",
                 IsKey = true
             };
             // Act 
@@ -323,7 +323,7 @@ public int CategoryID {get;set;} ";
             var expected=@"
 [Key]
 [JsonProperty(PropertyName = ""ProductId"")]
-        public virtual int ProductId {get;set;} // not null
+        public virtual int ProductId {get;set;}
 ";
             // Assert 
            Assert.That(sut, Does.Match(expected.GetRegexPattern()));

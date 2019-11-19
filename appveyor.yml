@@ -1,3 +1,59 @@
+#version is nly changed by  RELEASE TAG
+version: 3.2.0.{build}
+image: Visual Studio 2017
+pull_requests:
+  do_not_increment_build_number: true
+
+init:
+  - ps: |
+      git config --global core.autocrlf input
+      
+      if ($env:APPVEYOR_REPO_TAG -eq "true") {
+        $ver = $env:APPVEYOR_REPO_TAG_NAME
+        if($ver.StartsWith("v") -eq $true) { $ver = $ver.Substring(1) }
+        Update-AppveyorBuild -Version $ver
+      }
+
+configuration: Release
+
+install:
+- cmd: 'echo current directory: %CD%'
+nuget:
+  disable_publish_on_pr: true
 before_build:
-  - nuget restore
+- cmd: 'nuget restore odata2poco.sln'
+
+build:
+  project: OData2Poco.sln
+  verbosity: minimal
+after_test:
+- ps: |
+       msbuild ./OData2Poco.CommandLine/OData2Poco.CommandLine.csproj  /t:pack  -p:configuration=release  -p:NoBuild=true
+       msbuild ./OData2Poco.dotnet.o2pgen/OData2Poco.dotnet.o2pgen.csproj /t:pack  -p:configuration=release  -p:NoBuild=true
+       dir .\build
+artifacts:
+- path: .\build\OData2Poco.dotnet.o2pgen*.nupkg
+  name: global_tool
+- path: .\build\o2pgen.exe
+  name: o2p_exe
+- path: .\build\OData2Poco.CommandLine.*.nupkg
+  name: o2pgen
+- path: .\build\OData2Poco.*.nupkg
+  name: lib
+  
+deploy:
+- provider: GitHub
+  auth_token:
+     secure: sB33uLo96nR+LGmYLdPmY/segb6d4O061N2e8Nbz6iyHg82D0RysMxWE5JKnXmU+
+  artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
+  prerelease: false  
+  on:
+    APPVEYOR_REPO_TAG: true
+
+- provider: NuGet
+  api_key:
+    secure: /rB5L8YZcb6Wucl3e3E55tAuOuQ/Gj4UdGtGT3xe/SZK12BX1+Xeo9rshcpIUyce
+  artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
+  on:
+    APPVEYOR_REPO_TAG: true
   

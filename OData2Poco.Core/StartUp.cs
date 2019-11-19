@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
@@ -27,9 +28,12 @@ namespace OData2Poco.CommandLine
             try
             {
                 _pocoFileSystem = new PocoFileSystem();
+   #if NETFULL             
                 if (!(Console.IsOutputRedirected || Console.IsErrorRedirected))
-                    Console.BufferHeight = Int16.MaxValue - 1;
-
+#pragma warning disable PC001 // API not supported on all platforms
+                        Console.BufferHeight = Int16.MaxValue - 1;
+#pragma warning restore PC001 // API not supported on all platforms
+  #endif              
                 // Catch all unhandled exceptions in all threads.
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 Sw.Start();

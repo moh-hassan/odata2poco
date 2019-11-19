@@ -48,11 +48,13 @@ namespace OData2Poco
         /// </value>
         public string NamespacePrefix { get; set; }
         /// <summary>
-        /// Gets or sets a NameCase: Pas/Camel/None for string conversion.
+        /// Gets or sets a NameCase: Pas/Camel/None for case conversion.
         /// </summary>
         public CaseEnum NameCase { get; set; }
 
-      
+        /// Gets or sets Entity NameCase: Pas/Camel/None for case conversion.
+        /// </summary>
+        public CaseEnum EntityNameCase { get; set; }
 
         //add attributes: key,req,dm,tab,json,proto,display and db
         public List<string> Attributes { get; set; }
@@ -78,7 +80,7 @@ namespace OData2Poco
         public string ModuleName { get; set; }
         public bool AddReference { get; set; }
         public bool GenerateInterface { get; set; }
-
+        public List<string> Include { get; set; }
         /// <summary>
         /// Initialization
         /// </summary>

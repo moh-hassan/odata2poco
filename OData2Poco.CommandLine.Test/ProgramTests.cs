@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -8,11 +9,11 @@ using OData2Poco.TestUtility;
 
 namespace OData2Poco.CommandLine.Test
 {
-   
+
     [TestFixture]
     public partial class ProgramTests : BaseTest
     {
-        
+
         private readonly ArgumentParser _argumentParser;
 
         public ProgramTests()
@@ -36,7 +37,7 @@ namespace OData2Poco.CommandLine.Test
             var retcode = await _argumentParser.RunOptionsAsync(args);
             string outText = ArgumentParser.OutPut;
             var exitCode = retcode;
-            Tuple<int, string> tuple = new Tuple<int, string>(exitCode, outText );
+            Tuple<int, string> tuple = new Tuple<int, string>(exitCode, outText);
             return tuple;
         }
 
@@ -52,7 +53,7 @@ namespace OData2Poco.CommandLine.Test
             Console.WriteLine(output);
             //Assert
             Assert.AreEqual(0, tuble.Item1);
-            
+
         }
 
         [Test]
@@ -83,18 +84,18 @@ namespace OData2Poco.CommandLine.Test
             //Assert
             Assert.AreEqual(0, tuble.Item1);
 
-            Assert.IsTrue(output.Contains("public partial class Product"));
-            Assert.IsTrue(output.Contains("[Table(\"Products\")]")); //-a tab/ -t
-            Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //-a tab  
-            Assert.IsTrue(output.Contains("[Key]")); //-k
-            Assert.IsTrue(output.Contains("System.ComponentModel.DataAnnotations")); //-a key  
-            Assert.IsTrue(output.Contains("[Required]"));  //-q
-            Assert.IsTrue(output.Contains("public virtual Supplier Supplier {get;set;}")); //-n
-            Assert.IsTrue(output.Contains("int?"));  //-b
-            Assert.IsFalse(output.Contains("public partial class Product :")); // -i is not set
+            Assert.That(output, Does.Contain("public partial class Product"));
+            Assert.That(output, Does.Contain("[Table(\"Products\")]")); //-a tab/ -t
+            Assert.That(output, Does.Contain("System.ComponentModel.DataAnnotations.Schema")); //-a tab  
+            Assert.That(output, Does.Contain("[Key]"));
+            Assert.That(output, Does.Contain("System.ComponentModel.DataAnnotations")); //-a key  
+            Assert.That(output, Does.Contain("[Required]"));
+            Assert.That(output, Does.Contain("public virtual Supplier Supplier {get;set;}")); //-n
+            Assert.That(output, Does.Contain("int?"));  //-b
+
         }
 
-       
+
         [Test]
         public async Task PocoWithInheritanceTest()
         {
@@ -112,7 +113,7 @@ namespace OData2Poco.CommandLine.Test
         public async Task PropertyInheritenceTest()
         {
             //Arrange
-            var url = TestSample.TripPin4Flag; 
+            var url = TestSample.TripPin4Flag;
             var a = $"-r {url} -v";
             //Act
             var tuble = await RunCommand(a);
@@ -129,7 +130,7 @@ namespace OData2Poco.CommandLine.Test
         public async Task PocoWithBaseClassTest()
         {
             //Arrange
-            var url = TestSample.TripPin4Flag; 
+            var url = TestSample.TripPin4Flag;
             const string myBaseClass = nameof(myBaseClass);
 
             var a = $"-r {url} -v -i {myBaseClass}";
@@ -149,7 +150,7 @@ namespace OData2Poco.CommandLine.Test
         public async Task PropertyDuplicationTest()
         {
             //Arrange
-            var url = TestSample.TripPin4Flag; 
+            var url = TestSample.TripPin4Flag;
             const string myBaseClass = nameof(myBaseClass);
 
             var a = $"-r {url} -v -i {myBaseClass}";
@@ -190,7 +191,7 @@ namespace OData2Poco.CommandLine.Test
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
-          
+
             //Assert
             Assert.AreEqual(0, tuble.Item1); //exit code
             Assert.IsTrue(output.Contains("public partial class Category"));
@@ -319,13 +320,13 @@ namespace OData2Poco.CommandLine.Test
         {
             //Arrange
             var url = TestSample.TripPin4Flag;
-             
+
 
             var a = $"-r {url} -v";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
-        
+
             var expected = @"
 public enum Feature
 	 {
@@ -337,7 +338,7 @@ public enum Feature
 ";
             //Assert
             Assert.That(output, Does.Match(expected.GetRegexPattern()));
-          
+
 
         }
         [Test]
@@ -358,10 +359,10 @@ public enum Feature
                 Female=1,
                 Unknow=2
         }
-"; 
+";
             //Assert
             Assert.That(output, Does.Match(expected.GetRegexPattern()));
-           
+
 
         }
 
@@ -371,7 +372,7 @@ public enum Feature
         public async Task Url_test(string url, string version, int n)
         {
             //Arrange
-           
+
             var a = $"-r {url} -v ";
             //Act
             var tuble = await RunCommand(a);
@@ -382,6 +383,141 @@ public enum Feature
 
         }
 
+        #region Name Case
+
+        [Test]
+        public async Task Entity_case_change_test()
+        {
+            //Arrange
+            string url = TestSample.NorthWindV4;
+            var a = $"-r {url} --entity-case camel -v ";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+
+            //Assert
+            Assert.AreEqual(0, tuble.Item1);
+            Assert.IsTrue(output.Contains("public partial class product"));
+            Assert.IsTrue(output.Contains("public partial class customer"));
+
+        }
+
+        #endregion
+
+        #region filter
+
+        [Test]
+        public async Task Model_filter_star_test()
+        {
+            //Arrange
+            string url = TestSample.NorthWindV4;
+            var a = $"-r {url} --include * -v ";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            Assert.IsTrue(output.Contains("public partial class Product"));
+            Assert.IsTrue(output.Contains("public partial class Customer"));
+
+        }
+        [Test]
+        public async Task Model_filter_q_mark_test()
+        {
+            //Arrange
+            string url = TestSample.NorthWindV4;
+            var a = $"-r {url} --include *Suppli?? -v ";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            Assert.IsTrue(output.Contains("public partial class Supplier"));
+        }
+        [Test]
+        public async Task Model_filter_namespace_star_test()
+        {
+            //Arrange
+            string url = TestSample.NorthWindV4;
+            var a = $"-r {url} --include NorthwindModel* -v ";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            Assert.IsTrue(output.Contains("public partial class Supplier"));
+            Assert.IsTrue(output.Contains("public partial class Customer"));
+
+        }
+        [Test]
+        public async Task Model_filter_multi_values_test()
+        {
+            //Arrange
+            string url = TestSample.NorthWindV4;
+            var a = $"-r {url} --include *product_*  *customer_* -v ";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            Assert.IsTrue(output.Contains("public partial class Current_Product_List"));
+            Assert.IsTrue(output.Contains("public partial class Customer_and_Suppliers_by_City"));
+            Assert.IsTrue(output.Contains("public partial class Product_Sales_for_1997"));
+        }
+
+        [Test]
+        public async Task Model_filter_case_insensetive_test()
+        {
+            //Arrange
+            string url = TestSample.NorthWindV4;
+            var a = $"-r {url} --include *PROduCT*  -v ";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+
+            Assert.IsTrue(output.Contains("public partial class Current_Product_List"));
+            Assert.IsTrue(output.Contains("public partial class Product_Sales_for_1997"));
+
+        }
+
+        [Test]
+        public async Task Model_filter_is_auto_prefixed_by_star_test()
+        {
+            //Arrange
+            string url = TestSample.NorthWindV4;
+            var a = $"-r {url} --include product  -v "; //like *product
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+
+            Assert.IsTrue(output.Contains("public partial class Product"));
+            Assert.IsTrue(!output.Contains("public partial class Product_Sales_for_1997"));
+        }
+        #endregion
+
+        #region readonly
+
+        [Test]
+        public async Task Model_readonly_test()
+        {
+            //Arrange
+            string url = TestSample.TripPin4;
+            var a = $"-r {url}  -v ";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            var list = new List<string>
+            {
+                "public int TripId {get;} //PrimaryKey not null ReadOnly" ,
+                "public int PlanItemId {get;} //PrimaryKey not null ReadOnly",
+                "public string AirlineCode {get;} //PrimaryKey not null ReadOnly"
+             };
+            foreach (var s in list)
+            {
+                Assert.IsTrue(output.Contains(s));
+            }
+        }
+
+        #endregion
     }
 
 }

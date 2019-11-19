@@ -169,10 +169,10 @@ namespace OData2Poco.Extensions
             text = text.Replace("__", "_");
             return text;
         }
-       
-        public static string Dump<T>(this T obj,int level=1)
+
+        public static string Dump<T>(this T obj, int level = 1)
         {
-            return JsonConvert.SerializeObject(obj,  Formatting.Indented,
+            return JsonConvert.SerializeObject(obj, Formatting.Indented,
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
@@ -180,7 +180,7 @@ namespace OData2Poco.Extensions
                     PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                     MaxDepth = level,
                 });
-             
+
         }
 
         public static string RemoveEmptyLines(this string input)
@@ -257,7 +257,7 @@ namespace OData2Poco.Extensions
         {
             try
             {
-                return (T) Enum.Parse(typeof(T), value, true);
+                return (T)Enum.Parse(typeof(T), value, true);
             }
             catch (Exception)
             {
@@ -265,6 +265,12 @@ namespace OData2Poco.Extensions
             }
 
             return default;
+        }
+        public static JObject ToJObject(this string json)
+        {
+            var j = JObject.Parse(json);
+            return j;
+
         }
     }
 }

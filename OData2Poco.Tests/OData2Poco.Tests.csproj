@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
     <Authors>Mohamed Hassan</Authors>
@@ -10,7 +10,7 @@
     <Product>OData2Poco</Product>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
-  <ItemGroup >
+  <ItemGroup>
     <PackageReference Include="NSubstitute" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
@@ -21,9 +21,13 @@
 
   <ItemGroup>
     <Compile Include="..\Fake\CommonTestData.cs" Link="CommonTestData.cs" />
+    <Compile Include="..\Fake\projectTestData.cs" Link="projectTestData.cs" />
     <Compile Include="..\OData2Poco.CommandLine.Test\Utility\HelpTestExtension.cs" Link="HelpTestExtension.cs" />
   </ItemGroup>
-  
+
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net4')) ">
+    <DefineConstants>NET45;NETFULL</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
   </ItemGroup>
@@ -32,11 +36,11 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Include="NSubstitute" Version="4.0.0" />
-  </ItemGroup>
+  </ItemGroup>-->
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <None Update="Data\category.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -58,5 +62,5 @@
     <None Update="Data\trippinV4Flags.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
+  </ItemGroup>-->
 </Project>

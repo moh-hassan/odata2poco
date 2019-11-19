@@ -35,10 +35,10 @@ namespace OData2Poco.V4
     /// </summary>
     internal partial class Poco : IPocoGenerator
     {
-        [CanBeNull] private readonly PocoSetting _setting;
-        [NotNull] public MetaDataInfo MetaData { get; set; }
+        private readonly PocoSetting _setting;
+        public MetaDataInfo MetaData { get; set; }
         public string MetaDataAsString => MetaData.MetaDataAsString;
-        [NotNull] private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
+        private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
         private readonly ILog _logger = PocoLogger.Default;
         private List<string> SchemaErrors { get; set; }
         IEdmModel Model { get; set; }
@@ -238,7 +238,7 @@ namespace OData2Poco.V4
                 if (classTemplate.Keys.Exists(x => x == property.PropName)) property.IsKey = true;
                 var comment = (property.IsKey ? "PrimaryKey" : string.Empty)
                               + (property.IsNullable ? string.Empty : " not null");
-                if (!string.IsNullOrEmpty(comment)) property.PropComment = $"//{comment}";
+                if (!string.IsNullOrEmpty(comment)) property.PropComment = comment;
             }
 
             classTemplate.Properties.AddRange(entityProperties);
@@ -289,20 +289,21 @@ namespace OData2Poco.V4
                 Serial = serial++,
                 ClassNameSpace = ent.Namespace,
                 MaxLength = GetMaxLength(property),
+                IsReadOnly = Model.IsReadOnly(property),
             }).ToList();
 
             return list;
         }
-        int?  GetMaxLength(IEdmProperty property)
+        int? GetMaxLength(IEdmProperty property)
         {
-            int?  maxLength=null;
+            int? maxLength = null;
             switch (property.Type.PrimitiveKind())
             {
                 case EdmPrimitiveTypeKind.String:
-                      maxLength = property.Type.AsString().MaxLength;
+                    maxLength = property.Type.AsString().MaxLength;
                     break;
                 case EdmPrimitiveTypeKind.Binary:
-                      maxLength = property.Type.AsBinary().MaxLength;
+                    maxLength = property.Type.AsBinary().MaxLength;
                     break;
             }
             //property.Type.AsDecimal().Precision

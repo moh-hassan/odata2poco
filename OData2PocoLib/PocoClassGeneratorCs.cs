@@ -12,8 +12,10 @@ namespace OData2Poco
     /// </summary>
     internal class PocoClassGeneratorCs : IPocoClassGenerator
     {
+        string nl = Environment.NewLine;
+
         public string LangName { get; set; } = "csharp";
-        public List<ClassTemplate> ClassList { get; set; } 
+        public List<ClassTemplate> ClassList { get; set; }
         private static IPocoGenerator _pocoGen;
         private static string CodeText { get; set; }
         public PocoSetting PocoSetting { get; set; }
@@ -38,8 +40,9 @@ namespace OData2Poco
 
             //initialize AttributeFactory to use pocosetting.Attributes
             AttributeFactory.Default.Init(PocoSetting);
-
             ClassList = _pocoGen.GeneratePocoList();
+            if (setting?.Include?.Count > 0)
+                ClassList = ModelFilter.FilterList(ClassList, setting.Include).ToList();
             //check reserved keywords
             ModelManager.RenameClasses(ClassList);
             Header = GetHeader() ?? "";
@@ -69,7 +72,8 @@ namespace OData2Poco
                 var pocoModel2 = ClassList.Where(x => x.NameSpace == s);
                 foreach (var item in pocoModel2)
                 {
-                    template.WriteLine(ClassToString(item)); //c# code of the class
+                    var newItem = item.ChangeCase(PocoSetting.EntityNameCase);
+                    template.WriteLine(ClassToString(newItem)); //c# code of the class
                 }
                 template.EndNamespace();
             }
@@ -147,9 +151,10 @@ namespace OData2Poco
             ////for enum
             if (ent.IsEnum)
             {
-                var elements = string.Join(",\r\n ", ent.EnumElements.ToArray());
+
+                var elements = string.Join($",{nl}", ent.EnumElements.ToArray());
                 var flagAttribute = ent.IsFlags ? "[Flags] " : "";
-                var enumString = $"\t{flagAttribute}public enum {ent.Name}\r\n\t {{\r\n {elements} \r\n\t}}";
+                var enumString = $"\t{flagAttribute}public enum {ent.Name}{nl}\t {{{nl} {elements} {nl}\t}}";
                 return enumString;
             }
 

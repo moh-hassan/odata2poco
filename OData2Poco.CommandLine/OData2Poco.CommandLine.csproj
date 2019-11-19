@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.3.0" Condition="$(TargetFramework.StartsWith('net4'))">
+    <PackageReference Include="CommandLineParser" Version="2.5.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
@@ -34,11 +34,15 @@
     <PackageReference Include="ilmerge" Version="3.0.21">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <PropertyGroup>
     <DefineConstants>NET45;NETFULL</DefineConstants>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
@@ -46,9 +50,11 @@
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
+    <CodeAnalysisRuleSet>OData2Poco.CommandLine.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <!--<DebugType>pdbonly</DebugType>-->
     <DebugType>none</DebugType>
+    <CodeAnalysisRuleSet>OData2Poco.CommandLine.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 </Project>

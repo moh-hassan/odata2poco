@@ -35,13 +35,13 @@ namespace OData2Poco.V4
     /// </summary>
     internal partial class Poco : IPocoGenerator
     {
-        [CanBeNull] private readonly PocoSetting _setting;
-        [NotNull] public MetaDataInfo MetaData { get; set; }
+        private readonly PocoSetting _setting;
+        public MetaDataInfo MetaData { get; set; }
         public string MetaDataAsString => MetaData.MetaDataAsString;
-        [NotNull] private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
+        private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
         private readonly ILog _logger = PocoLogger.Default;
         private List<string> SchemaErrors { get; set; }
-        IEdmModel Model { get; set; }
+        private IEdmModel Model { get; set; }
         internal Poco(MetaDataInfo metaData, PocoSetting setting)
         {
             _setting = setting ?? new PocoSetting();
@@ -64,7 +64,7 @@ namespace OData2Poco.V4
         //support Odata.Edm v7+
         internal virtual IEdmModel LoadModelFromString()
         {
-            IEdmModel model2;
+            IEdmModel model;
             //Microsoft.OData.Edm" v7+
             //breaking change in Odata.Edm in v7+
             var tr = new StringReader(MetaDataAsString);
@@ -78,15 +78,15 @@ namespace OData2Poco.V4
 #else
                 EdmxReader
 #endif
-                  .TryParse(reader, true, out model2, out _);  // IgnoreUnexpectedElementsAndAttributes
+                  .TryParse(reader, true, out model, out _);  // IgnoreUnexpectedElementsAndAttributes
                 //  .TryParse(reader, true, out model2, out errors);
-                EntitySets = GetEntitySets(model2);
+                EntitySets = GetEntitySets(model);
             }
             finally
             {
                 ((IDisposable)reader).Dispose();
             }
-            return model2;
+            return model;
         }
 #endif
 
@@ -161,8 +161,8 @@ namespace OData2Poco.V4
         public List<ClassTemplate> GeneratePocoList()
         {
             var list = new List<ClassTemplate>();
-            var model2 = LoadModelFromString();
-            IEnumerable<IEdmSchemaType> schemaElements = GetSchemaElements(model2);
+            Model = LoadModelFromString();
+            IEnumerable<IEdmSchemaType> schemaElements = GetSchemaElements(Model);
             foreach (var type in schemaElements.ToList())
             {
                 var ct = GeneratePocoClass(type);
@@ -238,7 +238,7 @@ namespace OData2Poco.V4
                 if (classTemplate.Keys.Exists(x => x == property.PropName)) property.IsKey = true;
                 var comment = (property.IsKey ? "PrimaryKey" : string.Empty)
                               + (property.IsNullable ? string.Empty : " not null");
-                if (!string.IsNullOrEmpty(comment)) property.PropComment = $"//{comment}";
+                if (!string.IsNullOrEmpty(comment)) property.PropComment = comment;
             }
 
             classTemplate.Properties.AddRange(entityProperties);
@@ -278,7 +278,7 @@ namespace OData2Poco.V4
                 properties = properties.Where(x => x.DeclaringType.FullTypeName() == ent.FullTypeName());
 #endif
             }
-
+           
             //add serial for properties to support protbuf v3.0
             var serial = 1;
             var list = properties.Select(property => new PropertyTemplate
@@ -289,29 +289,29 @@ namespace OData2Poco.V4
                 Serial = serial++,
                 ClassNameSpace = ent.Namespace,
                 MaxLength = GetMaxLength(property),
+                IsReadOnly = Model.IsReadOnly(property),
+                //OriginalType = property.VocabularyAnnotations(Model),
             }).ToList();
 
             return list;
         }
-        int?  GetMaxLength(IEdmProperty property)
+        int? GetMaxLength(IEdmProperty property)
         {
-            int?  maxLength=null;
+            int? maxLength = null;
             switch (property.Type.PrimitiveKind())
             {
                 case EdmPrimitiveTypeKind.String:
-                      maxLength = property.Type.AsString().MaxLength;
+                    maxLength = property.Type.AsString().MaxLength;
                     break;
                 case EdmPrimitiveTypeKind.Binary:
-                      maxLength = property.Type.AsBinary().MaxLength;
+                    maxLength = property.Type.AsBinary().MaxLength;
                     break;
             }
-            //property.Type.AsDecimal().Precision
             return maxLength ?? 0;
         }
         //fill all properties/name of the class template
         private string GetClrTypeName(IEdmTypeReference edmTypeReference)
         {
-            //CheckError(edmTypeReference);
             CheckError(edmTypeReference);
             var clrTypeName = edmTypeReference.ToString();
             var edmType = edmTypeReference.Definition;

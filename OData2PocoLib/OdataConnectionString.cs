@@ -1,4 +1,5 @@
-﻿using OData2Poco.Http;
+﻿using System.Net;
+using OData2Poco.Http;
 
 namespace OData2Poco
 {
@@ -13,6 +14,7 @@ namespace OData2Poco
         public string TokenParams { get; set; }
         public string ParamFile { get; set; }
         public AuthenticationType Authenticate { get; set; }
+        public SecurityProtocolType TlsProtocol { get; set; }=SecurityProtocolType.Tls12;
     }
 
 }

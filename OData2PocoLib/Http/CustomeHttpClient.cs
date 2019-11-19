@@ -81,6 +81,7 @@ namespace OData2Poco.Http
 
         internal async Task<string> ReadMetaDataAsync()
         {
+            ServicePointManager.SecurityProtocol =_odataConnectionString.TlsProtocol;
             await SetHttpClient();
             string url = ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
             using (HttpResponseMessage response = await _client.GetAsync(url))
