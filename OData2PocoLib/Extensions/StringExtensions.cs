@@ -52,7 +52,19 @@ namespace OData2Poco.Extensions
             text = ToPascalCase(text);
             return text.Substring(0, 1).ToLower() + text.Substring(1);
         }
+        public static string ChangeCase(this string text, CaseEnum caseEnum)
+        {
+            switch (caseEnum)
+            {
+                case CaseEnum.Pas:
+                    return text.ToPascalCase();
+                case CaseEnum.Camel:
+                    return text.ToCamelCase();
+                default:
+                    return text;
 
+            }
+        }
         /// <summary>
         /// remove extra white spaces and keeping CRLF if needed
         /// </summary>

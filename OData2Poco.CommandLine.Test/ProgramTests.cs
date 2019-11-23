@@ -385,23 +385,54 @@ public enum Feature
 
         #region Name Case
 
+
+
         [Test]
-        public async Task Entity_case_change_test()
+        public async Task Entity_case_camel_change_test()
         {
             //Arrange
-            string url = TestSample.NorthWindV4;
+            string url = TestSample.TripPin4;
             var a = $"-r {url} --entity-case camel -v ";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
-
             //Assert
-            Assert.AreEqual(0, tuble.Item1);
-            Assert.IsTrue(output.Contains("public partial class product"));
-            Assert.IsTrue(output.Contains("public partial class customer"));
-
+            var expected = new List<string> {
+                "public partial class location",
+                "public airportLocation Location {get;set;}",
+                "public partial class planItem",
+                "public partial class publicTransportation : planItem",
+            };
+            foreach (var s in expected)
+            {
+                Assert.IsTrue(output.Contains(s));
+            }
         }
 
+        [Test]
+        [TestCase("--entity-case none")]
+        [TestCase("--entity-case pas")]
+        [TestCase("")]
+        public async Task Entity_case_pas_change_test(string caseOption)
+        {
+            //Arrange
+            string url = TestSample.TripPin4;
+            var a = $"-r {url}  {caseOption} -v ";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            var expected = new List<string> {
+                "public partial class Location",
+                "public AirportLocation Location {get;set;}",
+                "public partial class PlanItem",
+                "public partial class PublicTransportation : PlanItem",
+            };
+            foreach (var s in expected)
+            {
+                Assert.IsTrue(output.Contains(s));
+            }
+        }
         #endregion
 
         #region filter
@@ -495,13 +526,13 @@ public enum Feature
         public async Task Model_filter_is_auto_prefixed_by_star_online_test()
         {
             //Arrange
-            string url = TestSample.UrlTripPinService; 
-           // string url = TestSample.UrlNorthWindV4; 
+            string url = TestSample.UrlTripPinService;
+            // string url = TestSample.UrlNorthWindV4; 
             var a = $"-r {url} --include air*  -v "; //like *product
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
-           //Assert
+            //Assert
             Assert.IsTrue(output.Contains("public partial class AirportLocation"));
             Assert.IsTrue(output.Contains("public partial class Airline"));
             Assert.IsTrue(output.Contains("public partial class Airport"));

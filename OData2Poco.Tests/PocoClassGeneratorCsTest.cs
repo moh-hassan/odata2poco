@@ -412,21 +412,5 @@ namespace BookStore
             Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
 
         }
-
-        [Test]
-        [TestCase("Product", CaseEnum.Camel, "product")]
-        [TestCase("Customer_Country", CaseEnum.Camel, "customerCountry")]
-        public void entity_change_case_test(string name, CaseEnum caseEnum, string newName)
-        {
-            //Arrange
-            var ct = new ClassTemplate
-            {
-                Name = name,
-            };
-            //Act
-            var newCt = ct.ChangeCase(caseEnum);
-            //Assert
-            Assert.That(newCt.Name,Is.EqualTo(newName));
-        }
     }
 }

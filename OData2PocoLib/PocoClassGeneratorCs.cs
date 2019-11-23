@@ -45,6 +45,9 @@ namespace OData2Poco
                 ClassList = ModelFilter.FilterList(ClassList, setting.Include).ToList();
             //check reserved keywords
             ModelManager.RenameClasses(ClassList);
+            //change case
+            if (PocoSetting.EntityNameCase != CaseEnum.None)
+                ModelChangeCase.RenameClasses(ClassList, PocoSetting.EntityNameCase);
             Header = GetHeader() ?? "";
             CodeText = null;
         }
@@ -72,8 +75,7 @@ namespace OData2Poco
                 var pocoModel2 = ClassList.Where(x => x.NameSpace == s);
                 foreach (var item in pocoModel2)
                 {
-                    var newItem = item.ChangeCase(PocoSetting.EntityNameCase);
-                    template.WriteLine(ClassToString(newItem)); //c# code of the class
+                    template.WriteLine(ClassToString(item));
                 }
                 template.EndNamespace();
             }
