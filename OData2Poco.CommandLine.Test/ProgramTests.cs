@@ -391,7 +391,7 @@ public enum Feature
         public async Task Entity_case_camel_change_test()
         {
             //Arrange
-            string url = TestSample.TripPin4;
+            string url = TestSample.TripPin4RW;
             var a = $"-r {url} --entity-case camel -v ";
             //Act
             var tuble = await RunCommand(a);
@@ -402,6 +402,8 @@ public enum Feature
                 "public airportLocation Location {get;set;}",
                 "public partial class planItem",
                 "public partial class publicTransportation : planItem",
+                "public List<location> AddressInfo {get;set;}",
+                "public List<feature> Features {get;set;}"
             };
             foreach (var s in expected)
             {
@@ -416,7 +418,7 @@ public enum Feature
         public async Task Entity_case_pas_change_test(string caseOption)
         {
             //Arrange
-            string url = TestSample.TripPin4;
+            string url = TestSample.TripPin4RW;
             var a = $"-r {url}  {caseOption} -v ";
             //Act
             var tuble = await RunCommand(a);
@@ -427,6 +429,8 @@ public enum Feature
                 "public AirportLocation Location {get;set;}",
                 "public partial class PlanItem",
                 "public partial class PublicTransportation : PlanItem",
+                "public List<Location> AddressInfo {get;set;}",
+                "public List<Feature> Features {get;set;}",
             };
             foreach (var s in expected)
             {

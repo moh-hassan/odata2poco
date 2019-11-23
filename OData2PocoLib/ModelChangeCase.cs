@@ -71,7 +71,7 @@ namespace OData2Poco
         private string RenamePropertyType(PropertyTemplate prop)
         {
             var type = prop.PropType;
-            const string pattern = "List\\<(\\w+)\\>";
+            const string pattern = @"List<([\w\.]+)>";
             var m = Regex.Match(type, pattern);
             var newName = "";
             if (!m.Success) return GetNewName(type);

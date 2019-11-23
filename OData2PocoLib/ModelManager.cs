@@ -18,7 +18,7 @@ namespace OData2Poco
             ClassChangedName = new Dictionary<string, string>();
             ModelWarning= new List<string>();
         }
-        public static void RenameClasses(List<ClassTemplate> list)
+        public static void RenameReservedWords(List<ClassTemplate> list)
         {
             list.Update(c => c.Name = RenameClass(c.Name));
             list.ForEach(classTemplate => classTemplate.Properties.Update(RenameProperty));
@@ -46,7 +46,7 @@ namespace OData2Poco
         private static string ModifyPropertyType(PropertyTemplate prop)
         {
             var type = prop.PropType;
-            const string pattern = "List\\<(\\w+)\\>";
+            const string pattern = @"List<([\w\.]+)>";
             Match m = Regex.Match(type, pattern);
             string newType;
             if (m.Success)

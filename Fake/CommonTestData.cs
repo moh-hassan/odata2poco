@@ -23,6 +23,7 @@ public static class TestSample
     public static string NorthWindV3 => GetFullPath("northwindV3.xml");
     public static string TripPin4Flag => GetFullPath("trippinV4Flags.xml"); 
     public static string TripPin4 => GetFullPath("trippinV4.xml"); 
+	public static string TripPin4RW => GetFullPath("trippin4rw.xml"); 
     public const string UrlNorthWindV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
     public const string UrlNorthWindV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
     public const string UrlNorthWindV2 = "http://services.odata.org/V2/Northwind/Northwind.svc";

@@ -41,13 +41,15 @@ namespace OData2Poco
             //initialize AttributeFactory to use pocosetting.Attributes
             AttributeFactory.Default.Init(PocoSetting);
             ClassList = _pocoGen.GeneratePocoList();
+            //filter model
             if (setting?.Include?.Count > 0)
                 ClassList = ModelFilter.FilterList(ClassList, setting.Include).ToList();
-            //check reserved keywords
-            ModelManager.RenameClasses(ClassList);
+           
             //change case
             if (PocoSetting.EntityNameCase != CaseEnum.None)
                 ModelChangeCase.RenameClasses(ClassList, PocoSetting.EntityNameCase);
+            //check reserved keywords
+            ModelManager.RenameReservedWords(ClassList);
             Header = GetHeader() ?? "";
             CodeText = null;
         }
