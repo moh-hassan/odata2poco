@@ -20,7 +20,7 @@ namespace OData2Poco.Tests
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.ClassToString(ct);
             //Assert
             var expected = "public partial class Folder : FileSystemItem";
@@ -33,7 +33,7 @@ namespace OData2Poco.Tests
             var setting = new PocoSetting();
             var ct = new ClassTemplate { Name = "Folder", NameSpace = "SP1", BaseType = "SP.FileSystemItem" };
             var gen = Moq.Moq4IPocoGenerator(ct);
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
 
             //Act
             var code = sut.ClassToString(ct);
@@ -50,7 +50,7 @@ namespace OData2Poco.Tests
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.ClassToString(ct);
             //Assert
             var expected = "public abstract partial class Folder";
@@ -65,7 +65,7 @@ namespace OData2Poco.Tests
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.ClassToString(ct);
             //Assert
             var expected = "public partial class Folder";
@@ -80,7 +80,7 @@ namespace OData2Poco.Tests
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.ClassToString(ct);
             //Assert
             var expected = "public partial class Folder";
@@ -101,7 +101,7 @@ namespace OData2Poco.Tests
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.ClassToString(ct);
             //Assert
             var expected = @"
@@ -129,7 +129,7 @@ public enum Feature
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.ClassToString(ct);
             //Assert
             var expected = @"
@@ -158,7 +158,7 @@ public enum Feature
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.ClassToString(ct);
 
             //Assert
@@ -181,7 +181,7 @@ public enum Feature
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.ClassToString(ct);
             //Assert
 
@@ -211,7 +211,7 @@ public enum Feature
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.ClassToString(ct);
             //Assert
             var expected = "public partial class Event";
@@ -226,7 +226,7 @@ public enum Feature
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var reducedType = sut.ReducedBaseTyp(ct);
 
             //Assert
@@ -242,7 +242,7 @@ public enum Feature
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var reducedType = sut.ReducedBaseTyp(ct);
             //Assert
             Assert.That(reducedType, Is.EqualTo("SP.FileSystem"));
@@ -256,7 +256,7 @@ public enum Feature
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var name = sut.ClassList.FirstOrDefault()?.Name;
             //Assert
             Assert.That(sut.ClassList.Count, Is.EqualTo(1));
@@ -272,7 +272,7 @@ public enum Feature
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.GeneratePoco();
             //Assert
             Assert.That(code, Does.Contain("abc.SP"));
@@ -287,7 +287,7 @@ public enum Feature
             var gen = Moq.Moq4IPocoGenerator(ct);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.GeneratePoco();
             //Assert
             Assert.That(code, Does.Contain("// <auto-generated>"));
@@ -310,7 +310,7 @@ public enum Feature
             var gen = Moq.Moq4IPocoGenerator(list);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.GeneratePoco();
 
             //Assert
@@ -354,7 +354,7 @@ namespace SP2
             var gen = Moq.Moq4IPocoGenerator(list);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.GeneratePoco();
 
             //Assert
@@ -391,7 +391,7 @@ namespace BookStore
             var gen = Moq.Moq4IPocoGenerator(list);
 
             //Act
-            var sut = new PocoClassGeneratorCs(gen, setting);
+            var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
             var code = sut.GeneratePoco();
 
             //Assert

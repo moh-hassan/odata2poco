@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using OData2Poco.CustAttributes;
 using OData2Poco.TextTransform;
 
@@ -12,17 +11,8 @@ namespace OData2Poco
     /// </summary>
     internal class PocoClassGeneratorCs : IPocoClassGenerator
     {
-        string nl = Environment.NewLine;
-
-        public string LangName { get; set; } = "csharp";
-        public List<ClassTemplate> ClassList { get; set; }
-        private static IPocoGenerator _pocoGen;
-        private static string CodeText { get; set; }
-        public PocoSetting PocoSetting { get; set; }
-        bool blankSpaceBeforeProperties = true;
-        //key is fullName: <namespace.className>
-        public ClassTemplate this[string key] => ClassList.FirstOrDefault(x => x.FullName == key);
-
+        private readonly IPocoGenerator _pocoGen;
+        private readonly string _nl = Environment.NewLine;
         internal string Header;
 
         //container for all classes
@@ -31,28 +21,23 @@ namespace OData2Poco
         /// </summary>
         /// <param name="pocoGen"></param>
         /// <param name="setting"></param>
-        public PocoClassGeneratorCs(IPocoGenerator pocoGen, PocoSetting setting = null)
+        private PocoClassGeneratorCs(IPocoGenerator pocoGen, PocoSetting setting)
         {
-            PocoSetting = setting ?? new PocoSetting();
+            PocoSetting = setting;
             _pocoGen = pocoGen;
-            //add jsonproperty to properties/classes that are renamed
-            PocoSetting?.Attributes.Add("original"); //v3.2
-
-            //initialize AttributeFactory to use pocosetting.Attributes
-            AttributeFactory.Default.Init(PocoSetting);
-            ClassList = _pocoGen.GeneratePocoList();
-            //filter model
-            if (setting?.Include?.Count > 0)
-                ClassList = ModelFilter.FilterList(ClassList, setting.Include).ToList();
-           
-            //change case
-            if (PocoSetting.EntityNameCase != CaseEnum.None)
-                ModelChangeCase.RenameClasses(ClassList, PocoSetting.EntityNameCase);
-            //check reserved keywords
-            ModelManager.RenameReservedWords(ClassList);
-            Header = GetHeader() ?? "";
+            ClassList = pocoGen.GeneratePocoList();
             CodeText = null;
         }
+
+        public bool BlankSpaceBeforeProperties { get; set; } = true;
+        public string LangName { get; set; } = "csharp";
+
+        private string CodeText { get; set; }
+
+        //key is fullName: <namespace.className>
+        public ClassTemplate this[string key] => ClassList.FirstOrDefault(x => x.FullName == key);
+        public List<ClassTemplate> ClassList { get; set; }
+        public PocoSetting PocoSetting { get; set; }
 
         /// <summary>
         ///     Generate C# code for all POCO classes in the model
@@ -60,39 +45,128 @@ namespace OData2Poco
         /// <returns></returns>
         public string GeneratePoco()
         {
-            //var ns = PocoModel.Select(x => x.Value.NameSpace).Distinct()
-            //    .OrderBy(x => x).ToList();
             var ns = ClassList.Select(x => x.NameSpace).Distinct()
                 .OrderBy(x => x).ToList();
-            var template = new FluentCsTextTemplate { Header = Header };
+            var template = new FluentCsTextTemplate {Header = Header};
 
             template.WriteLine(UsingAssemply(ns));
             foreach (var s in ns)
             {
-
                 //Use a user supplied namespace prefix combined with the schema namepace or just the schema namespace
 
                 var namespc = PrefixNamespace(s);
                 template.StartNamespace(namespc);
-                var pocoModel2 = ClassList.Where(x => x.NameSpace == s);
-                foreach (var item in pocoModel2)
-                {
-                    template.WriteLine(ClassToString(item));
-                }
+                var pocoModel = ClassList.Where(x => x.NameSpace == s);
+                foreach (var item in pocoModel) template.WriteLine(ClassToString(item));
                 template.EndNamespace();
             }
+
             return template.ToString();
+        }
+
+        public static PocoClassGeneratorCs GenerateCsPocoClass(IPocoGenerator pocoGen, PocoSetting setting)
+        {
+            setting = setting ?? new PocoSetting();
+            //add jsonproperty to properties/classes that are renamed
+            setting.Attributes.Add("original"); //v3.2
+
+
+            //initialize AttributeFactory to use pocosetting.Attributes
+            AttributeFactory.Default.Init(setting);
+
+            var generator = new PocoClassGeneratorCs(pocoGen, setting);
+
+            //filter model
+            var generatorClassList = generator.ClassList;
+            if (setting.Include?.Count > 0)
+                generator.ClassList = ModelFilter.FilterList(generatorClassList, setting.Include).ToList();
+
+            //change case
+            if (setting.EntityNameCase != CaseEnum.None)
+                ModelChangeCase.RenameClasses(generatorClassList, setting.EntityNameCase);
+
+            //check reserved keywords
+            ModelManager.RenameReservedWords(generatorClassList);
+            generator.Header = generator.GetHeader() ?? "";
+            //CodeText = null;
+            return generator;
+        }
+
+        public override string ToString()
+        {
+            if (string.IsNullOrEmpty(CodeText)) CodeText = GeneratePoco();
+            return CodeText;
+        }
+
+        /// <summary>
+        ///     Generte C# code for a given  Entity using FluentCsTextTemplate
+        /// </summary>
+        /// <param name="ent"> Class  to generate code</param>
+        /// <param name="includeNamespace"></param>
+        /// <returns></returns>
+        internal string ClassToString(ClassTemplate ent, bool includeNamespace = false)
+        {
+            var csTemplate = new FluentCsTextTemplate();
+
+            ////for enum
+            if (ent.IsEnum)
+            {
+                var elements = string.Join($",{_nl}", ent.EnumElements.ToArray());
+                var flagAttribute = ent.IsFlags ? "[Flags] " : "";
+                var enumString = $"\t{flagAttribute}public enum {ent.Name}{_nl}\t {{{_nl} {elements} {_nl}\t}}";
+                return enumString;
+            }
+
+
+            foreach (var item in ent.GetAllAttributes()) //not depend on pocosetting
+                csTemplate.PushIndent("\t").WriteLine(item).PopIndent();
+            var baseClass = ent.BaseType != null && PocoSetting.UseInheritance
+                ? ReducedBaseTyp(ent) //ent.BaseType 
+                : PocoSetting.Inherit;
+
+            csTemplate.StartClass(ent.Name, baseClass, partial: true, abstractClass: ent.IsAbstrct);
+
+            foreach (var p in ent.Properties)
+            {
+                var pp = new PropertyGenerator(p, PocoSetting);
+
+
+                if (p.IsNavigate)
+                    if (!PocoSetting.AddNavigation && !PocoSetting.AddEager)
+                        continue;
+
+
+                foreach (var item in pp.GetAllAttributes())
+                    if (!string.IsNullOrEmpty(item))
+                        csTemplate.WriteLine(item);
+                csTemplate.WriteLine(pp.Declaration);
+
+                if (BlankSpaceBeforeProperties)
+                    csTemplate.WriteLine(""); //empty line
+            }
+
+            csTemplate.EndClass();
+            if (includeNamespace) csTemplate.EndNamespace(); //"}" for namespace
+            CodeText = csTemplate.ToString();
+            return CodeText;
         }
 
         internal string PrefixNamespace(string name)
         {
-            string namespc = name;
+            var namespc = name;
             if (!string.IsNullOrWhiteSpace(PocoSetting.NamespacePrefix))
-            {
                 namespc = PocoSetting.NamespacePrefix + "." + name;
-            }
 
             return namespc;
+        }
+
+        internal string ReducedBaseTyp(ClassTemplate ct)
+        {
+            var ns = $"{ct.NameSpace}."; //
+            var reducedName = ct.BaseType;
+            if (ct.BaseType.StartsWith(ns))
+                reducedName = ct.BaseType.Replace(ns, "");
+            return reducedName;
         }
 
         private string GetHeader()
@@ -114,15 +188,13 @@ namespace OData2Poco
 
             return h.ToString();
         }
+
         private string UsingAssemply(List<string> nameSpaces)
         {
             var h = new FluentCsTextTemplate();
             var assemplyManager = new AssemplyManager(PocoSetting, ClassList);
             var asemplyList = assemplyManager.AssemplyReference;
-            foreach (var entry in asemplyList)
-            {
-                h.UsingNamespace(entry);
-            }
+            foreach (var entry in asemplyList) h.UsingNamespace(entry);
             //add also namespaces of the built-in schema namespaces
             if (nameSpaces.Count > 1)
                 nameSpaces.ForEach(x =>
@@ -131,80 +203,6 @@ namespace OData2Poco
                     h.UsingNamespace(namespc);
                 });
             return h.ToString();
-        }
-
-        internal string ReducedBaseTyp(ClassTemplate ct)
-        {
-            var ns = $"{ct.NameSpace}."; //
-            var reducedName = ct.BaseType;
-            if (ct.BaseType.StartsWith(ns))
-                reducedName = ct.BaseType.Replace(ns, "");
-            return reducedName;
-        }
-
-        /// <summary>
-        ///     Generte C# code for a given  Entity using FluentCsTextTemplate
-        /// </summary>
-        /// <param name="ent"> Class  to generate code</param>
-        /// <param name="includeNamespace"></param>
-        /// <returns></returns>
-        internal string ClassToString(ClassTemplate ent, bool includeNamespace = false)
-        {
-            var csTemplate = new FluentCsTextTemplate();
-
-            ////for enum
-            if (ent.IsEnum)
-            {
-
-                var elements = string.Join($",{nl}", ent.EnumElements.ToArray());
-                var flagAttribute = ent.IsFlags ? "[Flags] " : "";
-                var enumString = $"\t{flagAttribute}public enum {ent.Name}{nl}\t {{{nl} {elements} {nl}\t}}";
-                return enumString;
-            }
-
-
-
-            foreach (var item in ent.GetAllAttributes()) //not depend on pocosetting
-            {
-                csTemplate.PushIndent("\t").WriteLine(item).PopIndent();
-            }
-            var baseClass = ent.BaseType != null && PocoSetting.UseInheritance
-                ? ReducedBaseTyp(ent) //ent.BaseType 
-                : PocoSetting.Inherit;
-
-            csTemplate.StartClass(ent.Name, baseClass, partial: true, abstractClass: ent.IsAbstrct);
-
-            foreach (var p in ent.Properties)
-            {
-                var pp = new PropertyGenerator(p, PocoSetting);
-
-
-                if (p.IsNavigate)
-                {
-                    if (!PocoSetting.AddNavigation && !PocoSetting.AddEager) continue;
-                }
-
-
-                foreach (var item in pp.GetAllAttributes())
-                {
-                    if (!string.IsNullOrEmpty(item))
-                        csTemplate.WriteLine(item);
-                }
-                csTemplate.WriteLine(pp.Declaration);
-
-                if (blankSpaceBeforeProperties)
-                    csTemplate.WriteLine(""); //empty line
-            }
-            csTemplate.EndClass();
-            if (includeNamespace) csTemplate.EndNamespace(); //"}" for namespace
-            CodeText = csTemplate.ToString();
-            return CodeText;
-        }
-
-        public override string ToString()
-        {
-            if (string.IsNullOrEmpty(CodeText)) CodeText = GeneratePoco();
-            return CodeText;
         }
     }
 }

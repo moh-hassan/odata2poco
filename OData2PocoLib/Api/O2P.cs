@@ -37,7 +37,7 @@ namespace OData2Poco.Api
         public async Task<string> GenerateAsync(OdataConnectionString odataConnString)
         {
             var gen = await GenerateModel(odataConnString);
-            var generatorCs = new PocoClassGeneratorCs(gen, Setting);
+            var generatorCs = PocoClassGeneratorCs.GenerateCsPocoClass(gen, Setting);
             ClassList = generatorCs.ClassList;
             CodeText = generatorCs.ToString();
             return CodeText;

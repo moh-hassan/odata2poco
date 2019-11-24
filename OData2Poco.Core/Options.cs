@@ -77,7 +77,7 @@ namespace OData2Poco.CommandLine
         /// <summary>
         /// Convert Entity Name to PascalCase or CamelCase by passing  `pas` or `camel`
         /// </summary>
-        [Option( "entity-case", Default = "none",
+        [Option('C', "entity-case", Default = "none",
             HelpText = "Type pas or camel to Convert Entity Name to PascalCase or CamelCase")]
         public string EntityNameCase { get; set; }
 

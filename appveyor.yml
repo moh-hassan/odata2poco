@@ -1,5 +1,5 @@
 #version is nly changed by  RELEASE TAG
-version: 3.3.1-RC1.{build}
+version: 3.3.1.{build}
 image: Visual Studio 2017
 pull_requests:
   do_not_increment_build_number: true
