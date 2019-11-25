@@ -4,11 +4,16 @@
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
 
+##  Version 3.3.1  
+**Release Date:**  Nov 25, 2019 
+
+**What is new in 3.3.1:**
+- Fix Issue [#28](https://github.com/moh-hassan/odata2poco/issues/28#issuecomment-557015613): Apply change-case on Navigation Properties. 
 
 ##  Version 3.3.0  
 **Release Date:**  Nov 19, 2019 
 
-**What is new in 3.2.0:**
+**What is new in 3.3.0:**
 
 - New: Filter model using the option [--include](https://github.com/moh-hassan/odata2poco/wiki/CommandLine-Reference#--include) 
 - New: Change case of Classes to Camel/Pas using the option `--entity-case`
