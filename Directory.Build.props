@@ -1,48 +1,54 @@
 <Project>
-  <PropertyGroup>
-    <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
-    <PackageOutputPath>$(SolutionDir)build</PackageOutputPath>   
-    <Authors>Mohamed Hassan</Authors>
-    <Copyright>Copyright &#169; 2016-2019, Mohamed Hassan </Copyright>
-    <Product>OData2Poco</Product>
-    <PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
-    <PackageIconUrl>https://github.com/moh-hassan/odata2poco/blob/master/ODataLogo-32.ico?raw=true </PackageIconUrl>
-    <RepositoryUrl>https://github.com/moh-hassan/odata2poco</RepositoryUrl>
-    <PackageTags>OData poco code-generation</PackageTags>
-    <Description>OData2Poco is a tool to generate  plain-old CLR objects (POCO) from OData feeds V1-V4 OData protocol.The generation is based on the XML metadata of the service stored on the  server. POCO classes can be used in typed RESTful client OData services.</Description>
-    <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
-    <Company>OData2Poco</Company>
-    <PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
-    <PackageTags>OData poco code-generation</PackageTags>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <!-- Disable warnings from XML documentation.-->
-    <NoWarn>$(NoWarn);1570;1572;1573;1587</NoWarn>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
+		<PackageOutputPath>$(SolutionDir)build</PackageOutputPath>
+		<Authors>Mohamed Hassan</Authors>
+		<Copyright>Copyright &#169; 2016-2020, Mohamed Hassan </Copyright>
+		<Product>OData2Poco</Product>
+		<PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
+		<PackageLicenseFile>license.txt</PackageLicenseFile>
+		<PackageIcon>ODataLogo-128.png</PackageIcon>
+		<RepositoryUrl>https://github.com/moh-hassan/odata2poco</RepositoryUrl>
+		<PackageTags>OData poco code-generation</PackageTags>
+		<Description>OData2Poco is a tool to generate  plain-old CLR objects (POCO) from OData feeds V1-V4 OData protocol.The generation is based on the XML metadata of the service stored on the  server. POCO classes can be used in typed RESTful client OData services.</Description>
+		<IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
+		<Company>OData2Poco</Company>
+		<PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128</NoWarn>
+		<LangVersion>8.0</LangVersion>
+		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+		<Version Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)</Version>
+		<Version Condition="'$(VersionSuffix)' == ''">0.0.0</Version>
+	</PropertyGroup>
+	<!-- Enable building .NET Framework projects on any machine with at least MSBuild or the .NET Core SDK installed.-->
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
+	<PropertyGroup>
+		<IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
-  </PropertyGroup>
-
-  <!-- version -->
-  <PropertyGroup>
-    <Version>3.3.1</Version>
-    <AssemblyVersion>3.3.1.0</AssemblyVersion>
-  </PropertyGroup>
+	<!-- version -->
+	<!--<PropertyGroup>
+		<Version>3.4.0-preview1</Version>
+		<AssemblyVersion>3.4.0.0</AssemblyVersion>
+	</PropertyGroup>-->
 
 
-  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-      <PackageReference Include="nunit" Version="3.11.0" />
-      <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(IsTestProject)' == 'true'">
+		<PackageReference Include="nunit" Version="3.11.0" />
+		<PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="$(SolutionDir)LICENSE.txt" Pack="true" PackagePath=""/>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="$(SolutionDir)license.txt" Pack="true" PackagePath=""/>
+		<None Include="$(SolutionDir)art\ODataLogo-128.png" Pack="true" PackagePath="" />
+	</ItemGroup>
 
 </Project>

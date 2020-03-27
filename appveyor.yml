@@ -1,36 +1,57 @@
-#version is nly changed by  RELEASE TAG
-version: 3.3.1.{build}
-image: Visual Studio 2017
+#nuget version is nly changed by  RELEASE TAG
+version: 3.4.0-ci-{build}
+image: Visual Studio 2019
 pull_requests:
-  do_not_increment_build_number: true
+  do_not_increment_build_number: false
 
 init:
   - ps: |
       git config --global core.autocrlf input
-      
+      $env:CAN_PUBLISH = $true
+
       if ($env:APPVEYOR_REPO_TAG -eq "true") {
         $ver = $env:APPVEYOR_REPO_TAG_NAME
         if($ver.StartsWith("v") -eq $true) { $ver = $ver.Substring(1) }
-        Update-AppveyorBuild -Version $ver
+        try
+        {         
+          Update-AppveyorBuild -Version $ver        
+        }
+        catch
+        {
+          Write-Output "Update-AppveyorBuild Fail to change version to TAG: '$env:APPVEYOR_REPO_TAG_NAME'"   -ForegroundColor Red
+          Write-Output "Exception Error: $PSItem.Exception.Message" -ForegroundColor Red
+          $env:CAN_PUBLISH = $false
+        }
       }
+  - ps: |
+      Write-Host "APPVEYOR_BUILD_VERSION='$env:APPVEYOR_BUILD_VERSION'" -ForegroundColor Yellow
+      Write-Host "APPVEYOR_REPO_TAG_NAME= '$env:APPVEYOR_REPO_TAG_NAME'" -ForegroundColor Yellow
 
 configuration: Release
 
-install:
-- cmd: 'echo current directory: %CD%'
-nuget:
-  disable_publish_on_pr: true
-before_build:
-- cmd: 'nuget restore odata2poco.sln'
+skip_commits:
+  files:
+    - docs/*
+    - art/*
+    - '**/*.md'    
+    - .gitignore
+    - .editorconfig
+  message: /updated readme.*|update readme.*s|update docs.*|update version.*|update changelog.*/
 
-build:
-  project: OData2Poco.sln
-  verbosity: minimal
+ 
+build_script:
+- cmd: dotnet build OData2Poco.sln -c Release --version-suffix %APPVEYOR_BUILD_VERSION% 
+
+test_script: 
+- cmd: dotnet test OData2Poco.Tests/ 
+- cmd: dotnet test OData2Poco.CommandLine.Test/
+
 after_test:
-- ps: |
-       msbuild ./OData2Poco.CommandLine/OData2Poco.CommandLine.csproj  /t:pack  -p:configuration=release  -p:NoBuild=true
-       msbuild ./OData2Poco.dotnet.o2pgen/OData2Poco.dotnet.o2pgen.csproj /t:pack  -p:configuration=release  -p:NoBuild=true
-       dir .\build
+- cmd: dotnet pack OData2Poco.CommandLine/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  
+- cmd: dotnet pack OData2Poco.dotnet.o2pgen/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  
+- cmd: dotnet pack OData2PocoLib/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  
+
+ 
 artifacts:
 - path: .\build\OData2Poco.dotnet.o2pgen*.nupkg
   name: global_tool
@@ -40,20 +61,32 @@ artifacts:
   name: o2pgen
 - path: .\build\OData2Poco.*.nupkg
   name: lib
-  
+- path: '.\build\OData2Poco.*.snupkg'
+  name: symbol   
 deploy:
 - provider: GitHub
   auth_token:
      secure: sB33uLo96nR+LGmYLdPmY/segb6d4O061N2e8Nbz6iyHg82D0RysMxWE5JKnXmU+
-  artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
+  artifact: /.*(\.|\.s)nupkg/            
   prerelease: false  
   on:
     APPVEYOR_REPO_TAG: true
 
 - provider: NuGet
   api_key:
-    secure: /rB5L8YZcb6Wucl3e3E55tAuOuQ/Gj4UdGtGT3xe/SZK12BX1+Xeo9rshcpIUyce
-  artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
+    secure: /rB5L8YZcb6Wucl3e3E55tAuOuQ/Gj4UdGtGT3xe/SZK12BX1+Xeo9rshcpIUyce          
   on:
-    APPVEYOR_REPO_TAG: true
-  
+    APPVEYOR_REPO_TAG: true # Deploy on tag push only.
+    branch: master          # Release from master branch only.
+    CAN_PUBLISH: true
+
+# myget
+- provider: NuGet
+  server: https://www.myget.org/F/odata2poco/api/v2/package
+  api_key:
+    secure: hSatieECG8d1qvzcQejfzQH8vQa4W0GbXU10/xVXvL4dloo1vZMlCdHZbpZkLMNW  
+  symbol_server: https://www.myget.org/F/odata2poco/api/v2/package
+  #artifact: /.*(\.|\.s)nupkg/    
+  #on:
+    #APPVEYOR_REPO_TAG: true
+    #branch: /develop|master/  

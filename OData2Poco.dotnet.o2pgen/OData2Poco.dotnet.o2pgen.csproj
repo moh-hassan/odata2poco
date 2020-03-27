@@ -7,8 +7,7 @@
     <Authors>Mohamed Hassan</Authors>
     <Product>OData2Poco.dotnet.o2pgen</Product>
     <Description>o2gen is a CommandLine tool for generating c# and vb.net POCO classes from OData feeds.</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-
+  
   </PropertyGroup>
 
   <PropertyGroup>
@@ -36,13 +35,4 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-    <CodeAnalysisRuleSet>OData2Poco.dotnet.o2pgen.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <CodeAnalysisRuleSet>OData2Poco.dotnet.o2pgen.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
 </Project>

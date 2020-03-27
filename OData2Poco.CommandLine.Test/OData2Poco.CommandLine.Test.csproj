@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!--<TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>-->
-    <TargetFrameworks>net45;netcoreapp2.1</TargetFrameworks>
-    <!--<TargetFramework>net461</TargetFramework>-->
-    <!--<TargetFramework>netcoreapp2.1</TargetFramework>-->
+	<TargetFrameworks>net45;netcoreapp3.0</TargetFrameworks>
     <Authors>Mohamed Hassan</Authors>
     <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
     <Product>OData2Poco</Product>
@@ -21,27 +18,10 @@
   <ItemGroup>
     <Compile Include="..\Fake\CommonTestData.cs" Link="Utility\CommonTestData.cs" />
   </ItemGroup>
-
- 
-
   <ItemGroup>
     <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" Condition="$(TargetFramework.StartsWith('net4')) " />
     <ProjectReference Include="..\OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj" Condition="$(TargetFramework.StartsWith('netcore')) " />
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Data\invalidxml.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\northwindV3.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\northwindV4.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-
   
 </Project>

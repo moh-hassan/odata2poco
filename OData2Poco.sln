@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.15
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco", "OData2PocoLib\OData2Poco.csproj", "{BCC5139D-A1C0-46E7-ABA7-72E9660607DE}"
 EndProject
@@ -30,7 +30,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData2Poco.dotnet.o2pgen", 
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		OData2Poco.Core\OData2Poco.Core.projitems*{59c02b8c-7388-490a-801c-aea5244e3879}*SharedItemsImports = 5
 		OData2Poco.Core\OData2Poco.Core.projitems*{7fca2548-b30b-4f82-a261-61e48162d462}*SharedItemsImports = 13
+		OData2Poco.Core\OData2Poco.Core.projitems*{de9e6ab3-807f-4760-b2bb-f3b0999dca69}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
