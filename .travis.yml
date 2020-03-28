@@ -3,13 +3,13 @@ dist: xenial
 language: csharp
 os:
   - linux
-  - osx
+  #- osx
 mono: none
-dotnet: 3.0
+dotnet: 3.1
 install:
   - dotnet restore
 script: 
  - dotnet build OData2PocoLib/OData2Poco.csproj -f netstandard2.0
  - dotnet build OData2Poco.dotnet.o2pgen/OData2Poco.dotnet.o2pgen.csproj -f netcoreapp2.1
- - dotnet test OData2Poco.Tests/OData2Poco.Tests.csproj -f netcoreapp3.0
- - dotnet test OData2Poco.CommandLine.Test/OData2Poco.CommandLine.Test.csproj -f netcoreapp3.0
+ - dotnet test OData2Poco.Tests/OData2Poco.Tests.csproj -f netcoreapp3.1
+ - dotnet test OData2Poco.CommandLine.Test/OData2Poco.CommandLine.Test.csproj -f netcoreapp3.1
