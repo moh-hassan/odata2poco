@@ -13,15 +13,14 @@ namespace OData2Poco.TextTransform
     {
         string _currentIndent = "";
         bool _endsWithNewline;
-        public string Header { get; set; }
+        public string? Header { get; set; }
         public string Footer { get; set; }
-        StringBuilder _generationText;
 
-        List<int> _indentLengths;
         /// <summary>
         /// A list of the lengths of each indent that was added with PushIndent
         /// </summary>
-        List<int> IndentLengths => _indentLengths ?? (_indentLengths = new List<int>());
+        private List<int> IndentLengths { get; }
+       
 
         /// <summary>
         /// Gets the current indent we use when adding lines to the output
@@ -31,19 +30,20 @@ namespace OData2Poco.TextTransform
         /// <summary>
         /// Current transformation session
         /// </summary>
-        public virtual IDictionary<string, object> Session { get; set; }
+        public virtual IDictionary<string, object>? Session { get; set; }
 
         /// <summary>
         /// The string builder that generation-time code is using to assemble generated output
         /// </summary>
-        protected StringBuilder GenerationText
-        {
-            get => _generationText ?? (_generationText = new StringBuilder());
-            set => _generationText = value;
-        }
+        protected StringBuilder GenerationText { get; set; }
+       
         public FluentTextTemplate()
         {
             ToStringHelper = new ToStringInstanceHelper();
+            GenerationText = new StringBuilder();
+            IndentLengths = new List<int>();
+            Footer = "";
+            PopIndentText = "";
         }
 
         public override string ToString()

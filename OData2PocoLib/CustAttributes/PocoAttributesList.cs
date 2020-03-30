@@ -47,10 +47,7 @@ namespace OData2Poco.CustAttributes
 
             foreach (var type in types)
             {
-                var item = (INamedAttribute)Activator.CreateInstance(type);
-
-                _namedAttributes.Add(item);
-
+                if (Activator.CreateInstance(type) is INamedAttribute item) _namedAttributes.Add(item);
             }
 
         }

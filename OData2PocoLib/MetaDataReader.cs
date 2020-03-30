@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using OData2Poco;
 using OData2Poco.Http;
 using OData2Poco.InfraStructure.Logging;
 
@@ -34,14 +30,15 @@ namespace OData2Poco
                 ServiceUrl = client.ServiceUri.OriginalString,
                 SchemaNamespace = Helper.GetNameSpace(content),
                 MediaType = Media.Http,
-                ServiceHeader = new Dictionary<string, string>()
             };
-            foreach (var entry in client.Response.Headers)
-            {
-                string value = entry.Value.FirstOrDefault();
-                string key = entry.Key;
-                metaData.ServiceHeader.Add(key, value);
-            }
+            if (client.Response != null)
+                foreach (var entry in client.Response.Headers)
+                {
+                    string value = entry.Value.FirstOrDefault();
+                    string key = entry.Key;
+                    metaData.ServiceHeader.Add(key, value);
+                }
+
             metaData.ServiceVersion = Helper.GetServiceVersion(metaData.ServiceHeader);
             return metaData;
         }

@@ -55,9 +55,9 @@ namespace OData2Poco
                         return _property.PropName.ToCamelCase();
 
                     case CaseEnum.None:
-                        return _property?.PropName;
+                        return _property.PropName;
                     default:
-                        return _property?.PropName;
+                        return _property.PropName;
                 }
             }
         }
@@ -83,7 +83,6 @@ namespace OData2Poco
                 .Append(" ")
                 .Append(_property.IsReadOnly ? "{get;}" : "{get;set;}")
                 .Append(" ")
-                //.Append(_property?.PropComment)
                 .Append(Comment())
                 .ToString();
 
@@ -128,6 +127,6 @@ namespace OData2Poco
                 comment = $"//{comment}";
             return comment;
         }
-    }//
-}//
+    }
+}
 

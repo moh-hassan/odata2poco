@@ -11,7 +11,7 @@ namespace OData2Poco.V4
     /// </summary>
     static class VocabularyHelpersV4
     {
-        private static IEdmVocabularyAnnotation FindVocabularyAnnotation(this IEdmModel model, IEdmVocabularyAnnotatable target, IEdmTerm term)
+        private static IEdmVocabularyAnnotation? FindVocabularyAnnotation(this IEdmModel model, IEdmVocabularyAnnotatable target, IEdmTerm term)
         {
             var annotations = model.FindVocabularyAnnotations(target);
             if (annotations == null) return null;
@@ -58,7 +58,7 @@ namespace OData2Poco.V4
         private static bool? GetBoolean(this IEdmModel model, IEdmProperty property, IEdmTerm term)
         {
             var annotation = model.FindVocabularyAnnotation(property, term);
-            var booleanExpression = (IEdmBooleanConstantExpression) annotation?.Value;
+            var booleanExpression = annotation?.Value as IEdmBooleanConstantExpression;
             return booleanExpression?.Value;
 
         }

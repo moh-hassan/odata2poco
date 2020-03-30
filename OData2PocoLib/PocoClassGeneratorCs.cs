@@ -26,13 +26,14 @@ namespace OData2Poco
             PocoSetting = setting;
             _pocoGen = pocoGen;
             ClassList = pocoGen.GeneratePocoList();
-            CodeText = null;
+            CodeText = "";
+            Header = "";
         }
 
         public bool BlankSpaceBeforeProperties { get; set; } = true;
         public string LangName { get; set; } = "csharp";
 
-        private string CodeText { get; set; }
+        private string? CodeText { get; set; }
 
         //key is fullName: <namespace.className>
         public ClassTemplate this[string key] => ClassList.FirstOrDefault(x => x.FullName == key);
@@ -45,11 +46,11 @@ namespace OData2Poco
         /// <returns></returns>
         public string GeneratePoco()
         {
-            var ns = ClassList.Select(x => x.NameSpace).Distinct()
+            List<string> ns = ClassList.Select(x => x.NameSpace).Distinct()
                 .OrderBy(x => x).ToList();
             var template = new FluentCsTextTemplate {Header = Header};
 
-            template.WriteLine(UsingAssemply(ns));
+            template.WriteLine(UsingAssembly(ns));
             foreach (var s in ns)
             {
                 //Use a user supplied namespace prefix combined with the schema namepace or just the schema namespace
@@ -64,9 +65,9 @@ namespace OData2Poco
             return template.ToString();
         }
 
-        public static PocoClassGeneratorCs GenerateCsPocoClass(IPocoGenerator pocoGen, PocoSetting setting)
+        public static PocoClassGeneratorCs GenerateCsPocoClass(IPocoGenerator pocoGen, PocoSetting? setting)
         {
-            setting = setting ?? new PocoSetting();
+            setting ??= new PocoSetting();
             //add jsonproperty to properties/classes that are renamed
             setting.Attributes.Add("original"); //v3.2
 
@@ -95,7 +96,7 @@ namespace OData2Poco
         public override string ToString()
         {
             if (string.IsNullOrEmpty(CodeText)) CodeText = GeneratePoco();
-            return CodeText;
+            return CodeText??string.Empty;
         }
 
         /// <summary>
@@ -189,11 +190,11 @@ namespace OData2Poco
             return h.ToString();
         }
 
-        private string UsingAssemply(List<string> nameSpaces)
+        private string UsingAssembly(List<string> nameSpaces)
         {
             var h = new FluentCsTextTemplate();
-            var assemplyManager = new AssemplyManager(PocoSetting, ClassList);
-            var asemplyList = assemplyManager.AssemplyReference;
+            var assemblyManager = new AssemplyManager(PocoSetting, ClassList);
+            var asemplyList = assemblyManager.AssemplyReference;
             foreach (var entry in asemplyList) h.UsingNamespace(entry);
             //add also namespaces of the built-in schema namespaces
             if (nameSpaces.Count > 1)

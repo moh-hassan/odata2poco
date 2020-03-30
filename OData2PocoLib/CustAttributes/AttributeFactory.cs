@@ -25,7 +25,7 @@ namespace OData2Poco.CustAttributes
         /// </summary>
         /// <param name="setting"></param>
         /// <returns></returns>
-        public AttributeFactory Init(PocoSetting setting=null)
+        public AttributeFactory Init(PocoSetting? setting=null)
         {
             if (setting==null)
                 setting= new PocoSetting();

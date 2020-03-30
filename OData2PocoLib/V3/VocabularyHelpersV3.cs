@@ -6,7 +6,7 @@ namespace OData2Poco.V3
 {
     static class VocabularyHelpersV3
     {
-        private static IEdmVocabularyAnnotation FindVocabularyAnnotation(this IEdmModel model, IEdmVocabularyAnnotatable target, IEdmTerm term)
+        private static IEdmVocabularyAnnotation? FindVocabularyAnnotation(this IEdmModel model, IEdmVocabularyAnnotatable target, IEdmTerm term)
         {
             var annotations = model.FindVocabularyAnnotations(target);
             if (annotations == null) return null;

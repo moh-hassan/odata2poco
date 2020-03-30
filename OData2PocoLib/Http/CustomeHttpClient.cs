@@ -10,14 +10,15 @@ namespace OData2Poco.Http
     {
         public static ILog Logger = PocoLogger.Default;
         readonly OdataConnectionString _odataConnectionString;
-        readonly DelegatingHandler _delegatingHandler;
+        readonly DelegatingHandler? _delegatingHandler;
         public Uri ServiceUri { get; set; }
-        public HttpResponseMessage Response;
+        public HttpResponseMessage? Response;
         private HttpClient _client;
         public CustomeHttpClient(OdataConnectionString odataConnectionString)
         {
             _odataConnectionString = odataConnectionString;
             ServiceUri = new Uri(_odataConnectionString.ServiceUrl);
+            _client = new HttpClient();
         }
         public CustomeHttpClient(OdataConnectionString odataConnectionString, DelegatingHandler dh)
             : this(odataConnectionString)
@@ -102,7 +103,7 @@ namespace OData2Poco.Http
         {
             _delegatingHandler?.Dispose();
             Response?.Dispose();
-            _client?.Dispose();
+            _client.Dispose();
         }
     }
 

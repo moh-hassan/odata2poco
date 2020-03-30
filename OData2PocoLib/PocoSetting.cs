@@ -74,13 +74,13 @@ namespace OData2Poco
         /// </summary>
         public bool AddJsonAttribute { get; set; } ////obsolete, use Attributes.add("json")
 
-        public string Prefix { get; set; }
-        public string Suffix { get; set; }
+        public string? Prefix { get; set; }
+        public string? Suffix { get; set; }
         public bool MultiFiles { get; set; }
-        public string ModuleName { get; set; }
+        public string ModuleName { get; set; } = null!;
         public bool AddReference { get; set; }
         public bool GenerateInterface { get; set; }
-        public List<string> Include { get; set; }
+        public List<string>? Include { get; set; }
         /// <summary>
         /// Initialization
         /// </summary>
@@ -88,7 +88,7 @@ namespace OData2Poco
         {
             Lang = Language.CS;
             NamespacePrefix = string.Empty;
-            Inherit = null;
+            Inherit = "";
             NameCase = CaseEnum.None;
             AddJsonAttribute = false;
             Attributes = new List<string>();

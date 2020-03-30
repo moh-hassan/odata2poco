@@ -276,7 +276,7 @@ namespace OData2Poco.Extensions
                 // ignored
             }
 
-            return default;
+            return default!;
         }
         public static JObject ToJObject(this string json)
         {

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using OData2Poco.CustAttributes;
-using OData2Poco.Extensions;
 
 
 namespace OData2Poco
@@ -13,7 +12,6 @@ namespace OData2Poco
         public string Name { get; set; }
         public string BaseType { get; set; }
         public string Comment { get; set; }
-        public string ToDebugString { get; set; }
         public List<PropertyTemplate> Properties { get; set; }
         public List<string> Keys { get; set; }
         public List<string> Navigation { get; set; }
@@ -22,10 +20,10 @@ namespace OData2Poco
         public bool IsEnum { get; set; }
         public bool IsFlags { get; set; } //v3, Add [FlagsAttribute] to enum
         public List<string> EnumElements { get; set; }
-        public string OriginalName { get; set; }
+        public string OriginalName { get; set; } = null!;
        
         //v1.4.0
-        public string EntitySetName { get; set; }
+        public string? EntitySetName { get; set; }
         public string NameSpace { get; set; }
         public string FullName =>string.IsNullOrEmpty(NameSpace)
             ?Name
@@ -39,6 +37,10 @@ namespace OData2Poco
             Keys = new List<string>();
             EnumElements = new List<string>();
             Navigation = new List<string>();
+            BaseType = "";
+            Comment = "";
+            Name = "UNDEFINED";
+            NameSpace = "";
         }
 
         private readonly AttributeFactory _attributeFactory = AttributeFactory.Default;

@@ -40,13 +40,13 @@ namespace OData2Poco.Http
                     //OAuth2 
                     if (!string.IsNullOrEmpty(odataConnString.TokenUrl))
                     {
-                        var accessToken = await new TokenEndpoint(odataConnString).GetAccessTokenAsync();
+                        string? accessToken = await new TokenEndpoint(odataConnString).GetAccessTokenAsync();
                         Authenticate(accessToken);
                     }
                     break;
             }
         }
-        private AuthenticationHeaderValue Authenticate(string user, string password)
+        private AuthenticationHeaderValue? Authenticate(string user, string password)
         {
             //credintial
             if (string.IsNullOrEmpty(user)) return null;
@@ -55,7 +55,7 @@ namespace OData2Poco.Http
             _client.DefaultRequestHeaders.Authorization = headerValue;
             return headerValue;
         }
-        private AuthenticationHeaderValue Authenticate(string token)
+        private AuthenticationHeaderValue? Authenticate(string? token)
         {
             //credintial
             if (string.IsNullOrEmpty(token)) return null;

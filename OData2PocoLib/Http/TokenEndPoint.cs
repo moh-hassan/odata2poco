@@ -18,7 +18,7 @@ namespace OData2Poco.Http
         public string TokenParams { get; set; }
         public Dictionary<string, string> TokenParamsCollection { get; set; }
         //json string 
-        public string LastToken { get; set; }
+        public string? LastToken { get; set; }
         public TokenEndpoint(OdataConnectionString odataConnectionString)
         {
             //OConnectionString = odataConnectionString;
@@ -56,7 +56,7 @@ namespace OData2Poco.Http
 
             return tokenParams;
         }
-        public async Task<string> GetAccessTokenAsync()
+        public async Task<string?> GetAccessTokenAsync()
         {
             Logger.Normal($"Start connecting to Token endpoint: {TokenUrl}");
             var token = await GetToken(new Uri(TokenUrl), TokenParamsCollection);
@@ -76,7 +76,7 @@ resource       : https://resource.com
 access_token   : bi05REFMcXdodUhZbkhRNjNHZUNYYyIsImtpZCI6Ik4tbEMwbi05REFMcXdod...
 
 */
-        public async Task<string> GetToken(Uri authenticationUrl, Dictionary<string, string> authenticationCredentials)
+        public async Task<string?> GetToken(Uri authenticationUrl, Dictionary<string, string> authenticationCredentials)
         {
             var client = new HttpClient();
             var content = new FormUrlEncodedContent(authenticationCredentials);
@@ -103,7 +103,7 @@ access_token   : bi05REFMcXdodUhZbkhRNjNHZUNYYyIsImtpZCI6Ik4tbEMwbi05REFMcXdod..
             var date = ToLocalDateTime(expireOnLong);
             return date;
         }
-        internal string ParseTokenResponse(string content, string key)
+        internal string? ParseTokenResponse(string? content, string key)
         {
             if (string.IsNullOrEmpty(content) || string.IsNullOrEmpty(key))
                 return null;

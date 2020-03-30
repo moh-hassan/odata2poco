@@ -1,8 +1,7 @@
+#nullable disable
 namespace OData2Poco
 {
-    /// <summary>
-    /// 
-    /// </summary>
+   
     public partial class PropertyTemplate
     {
         public string PropName { get; set; }
@@ -23,3 +22,5 @@ namespace OData2Poco
         public bool IsReadOnly { get; set; }
     }
 }
+
+#nullable restore

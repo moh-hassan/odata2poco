@@ -11,19 +11,20 @@ namespace OData2Poco.Api
         public PocoSetting Setting { get; set; }
         public List<ClassTemplate> ClassList { get; set; }
         internal MetaDataInfo MetaData { get; set; }
-        public string MetaDataAsString => MetaData?.MetaDataAsString;
-        public string MetaDataVersion => MetaData?.MetaDataVersion;
-        public string SchemaNamespace => MetaData?.SchemaNamespace;
-        public Dictionary<string, string> ServiceHeader => MetaData?.ServiceHeader;
+        public string MetaDataAsString => MetaData.MetaDataAsString;
+        public string MetaDataVersion => MetaData.MetaDataVersion;
+        public string SchemaNamespace => MetaData.SchemaNamespace;
+        public Dictionary<string, string> ServiceHeader => MetaData.ServiceHeader;
 
         public string CodeText { get; set; }
         //warning due to renaming of reserved keywords
         public List<string> ModelWarning => ModelManager.ModelWarning;
-        public O2P(PocoSetting setting = null)
+        public O2P(PocoSetting? setting = null)
         {
             Setting = setting ?? new PocoSetting();
             ClassList = new List<ClassTemplate>();
             MetaData = new MetaDataInfo();
+            CodeText = "";
         }
 
 

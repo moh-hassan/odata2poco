@@ -41,7 +41,7 @@ namespace OData2Poco.V4
         private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
         private readonly ILog _logger = PocoLogger.Default;
         private List<string> SchemaErrors { get; set; }
-        IEdmModel Model { get; set; }
+        private IEdmModel Model { get; set; } = null!;
         internal Poco(MetaDataInfo metaData, PocoSetting setting)
         {
             _setting = setting ?? new PocoSetting();
@@ -146,7 +146,7 @@ namespace OData2Poco.V4
             var entitySets = model.EntityContainers()
                 .SelectMany(c => c.Elements)
                 .Where(x => x.ContainerElementKind == EdmContainerElementKind.EntitySet)
-                .Select(element => element as IEdmEntitySet);
+                .Select(element => (IEdmEntitySet) element);
             return entitySets;
 #else
             var entitySets = model.EntityContainer.EntitySets();
@@ -173,7 +173,7 @@ namespace OData2Poco.V4
         }
 
 
-        internal ClassTemplate GeneratePocoClass(IEdmSchemaType ent)
+        internal ClassTemplate? GeneratePocoClass(IEdmSchemaType ent)
         {
             if (ent == null) return null;
             var className = ent.Name;
@@ -211,7 +211,7 @@ namespace OData2Poco.V4
                         classTemplate.IsComplex = true;
                         classTemplate.IsAbstrct = complexType.IsAbstract;
                         if (complexType.BaseType != null)
-                            classTemplate.BaseType = complexType.BaseType.ToString();
+                            classTemplate.BaseType = complexType.BaseType.ToString()??"";
                         break;
                     }
                 default:
@@ -267,7 +267,7 @@ namespace OData2Poco.V4
         private List<PropertyTemplate> GetClassProperties(IEdmSchemaType ent)
         {
             //stop here if enum
-            if (ent is IEdmEnumType) return null;
+            if (ent is IEdmEnumType) return Enumerable.Empty<PropertyTemplate>().ToList(); //null;
             var structuredType = ent as IEdmStructuredType;
             var properties = structuredType.Properties();
             if (_setting != null && _setting.UseInheritance)
@@ -314,9 +314,11 @@ namespace OData2Poco.V4
         {
             //CheckError(edmTypeReference);
             CheckError(edmTypeReference);
-            var clrTypeName = edmTypeReference.ToString();
+            var clrTypeName = edmTypeReference.ToString()??"UNDEFINED";
             var edmType = edmTypeReference.Definition;
-            if (edmTypeReference.IsPrimitive()) return EdmToClr(edmType as IEdmPrimitiveType);
+            if (edmTypeReference.IsPrimitive())
+                if (edmType != null)
+                    return EdmToClr((IEdmPrimitiveType) edmType);
 
             if (edmTypeReference.IsEnum())
             {
