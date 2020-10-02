@@ -3,10 +3,12 @@
 # OData2Poco.CommandLine 
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
-##  Version 3.4  
-**Release Date:**  Oct 2, 2020 
 
-**What is new in 3.4:**
+##  Version 3.4.1
+**Release Date:**  Oct 3, 2020 
+
+**What is new in 3.4.1:**
+- Support JSON in .NET Core 3, PR [#32](https://github.com/moh-hassan/odata2poco/pull/31) fix issue #30
 - Update namespace of OData EDM types by @LarsBauer, PR [#31](https://github.com/moh-hassan/odata2poco/pull/31) that fix issue [#30](https://github.com/moh-hassan/odata2poco/issues/30).
 - Support nullable reference types in C# 8 in OData2Poco project library.
 - Add support to symbolic package snupkg and SourceLink.
