@@ -74,11 +74,11 @@ deploy:
 
 - provider: NuGet
   api_key:
-    secure: /rB5L8YZcb6Wucl3e3E55tAuOuQ/Gj4UdGtGT3xe/SZK12BX1+Xeo9rshcpIUyce          
+    secure: ZF4tSY1JuxGp6G9ycAf9ColR6ZF/RzF8ZPs1bZWDJxNMle7pvVmkGCC4E/xAK8jQ         
   on:
     APPVEYOR_REPO_TAG: true # Deploy on tag push only.
     branch: master          # Release from master branch only.
-    CAN_PUBLISH: true
+    
 
 # myget
 - provider: NuGet
