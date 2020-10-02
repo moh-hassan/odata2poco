@@ -40,8 +40,8 @@ namespace OData2Poco.V4
             {EdmPrimitiveTypeKind.GeometryMultiPoint, "GeometryMultiPoint"},
             {EdmPrimitiveTypeKind.DateTimeOffset, "DateTimeOffset"},
             {EdmPrimitiveTypeKind.Duration, "TimeSpan"},
-            {EdmPrimitiveTypeKind.Date, "Microsoft.OData.Edm.Library.Date"}, //DateTime not supported
-            {EdmPrimitiveTypeKind.TimeOfDay, "Microsoft.OData.Edm.Library.TimeOfDay"}
+            {EdmPrimitiveTypeKind.Date, "Microsoft.OData.Edm.Date"}, //DateTime not supported
+            {EdmPrimitiveTypeKind.TimeOfDay, "Microsoft.OData.Edm.TimeOfDay"}
         };
     }
 }
