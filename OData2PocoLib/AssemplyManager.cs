@@ -58,6 +58,7 @@ namespace OData2Poco
             {"Req" ,"System.ComponentModel.DataAnnotations"},
             {"Table" ,"System.ComponentModel.DataAnnotations.Schema"},
             {"json","Newtonsoft.Json"}, //extrnal type can be installed from nuget
+            {"json3","System.Text.Json.Serialization"},  //netcore 3+
             //assemplies for Geographic data type
             {"Geometry","Microsoft.Spatial"}, //extrnal type can be installed from nuget
             {"Geography", "Microsoft.Spatial"} ,//extrnal type can be installed from nuget
@@ -92,8 +93,9 @@ namespace OData2Poco
             if (_pocoSetting.AddTableAttribute) AddAssemplyByKey("table");
             if (_pocoSetting.Attributes.Contains("tab")) AddAssemplyByKey("table");
 
-            if (_pocoSetting.AddJsonAttribute) AddAssemplyByKey("json");
+            if (_pocoSetting.AddJsonAttribute) AddAssemplyByKey("json"); //obsolete
             if (_pocoSetting.Attributes.Contains("json")) AddAssemplyByKey("json");
+             if (_pocoSetting.Attributes.Contains("json3")) AddAssemplyByKey("json3"); //netcore 3
             if (_pocoSetting.Attributes.Contains("dm")) AddAssemplyByKey("DataMember");
             if (_pocoSetting.Attributes.Contains("proto")) AddAssemplyByKey("proto");
             AddAssempliesOfDataType();//add assemplies of datatype

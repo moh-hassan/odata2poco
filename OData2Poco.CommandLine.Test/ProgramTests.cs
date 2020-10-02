@@ -184,10 +184,12 @@ namespace OData2Poco.CommandLine.Test
 
         [Test]
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        [Category("json")]
         public async Task PocoSettingWithJsonAttributeTest(string url, string version, int n)
         {
             //Arrange
-            var a = $"-r {url}  -j -v";
+            //  var a = $"-r {url}  -j -v"; //obsolete
+            var a = $"-r {url}  -a json -v";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
@@ -201,6 +203,25 @@ namespace OData2Poco.CommandLine.Test
             Assert.IsTrue(output.Contains("CategoryName"));
         }
 
+        [Test]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        [Category("json3")]
+        public async Task PocoSettingWithJsonAttributeNetCore3Test(string url, string version, int n)
+        {
+            //Arrange           
+            var a = $"-r {url}  -a json3 -v";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+
+            //Assert
+            Assert.AreEqual(0, tuble.Item1); //exit code
+            Assert.IsTrue(output.Contains("public partial class Category"));
+            Assert.IsTrue(output.Contains("[JsonPropertyName(\"CategoryID\")]"));
+            Assert.IsTrue(output.Contains("Category"));
+            Assert.IsTrue(output.Contains(" [JsonPropertyName(\"CategoryName\")]"));
+            Assert.IsTrue(output.Contains("CategoryName"));
+        }
         [Test]
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public async Task PocoSettingWithJsonAttributeAndCamelCaseTest(string url, string version, int n)

@@ -39,7 +39,7 @@ namespace OData2Poco.CommandLine.Test
             //Act
             var result = await RunCommand(args);
             //Assert
-            Assert.That(result.Item2.Split('\n').Length, Is.EqualTo(1));
+            Assert.That(result.Item2.Split('\n').Length, Is.EqualTo(2)); //commandlinee v2.8 add newline
 
         }
 
