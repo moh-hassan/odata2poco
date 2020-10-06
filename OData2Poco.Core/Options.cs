@@ -82,7 +82,7 @@ namespace OData2Poco.CommandLine
         public string EntityNameCase { get; set; }
 
         [Option('a', "attribute",
-            HelpText = "Attributes, Allowed values: key, req, json,tab,dm,proto,db,display")]
+            HelpText = "Attributes, Allowed values: key, req, json, json3, tab, dm, proto, db, display")]
         public IEnumerable<string> Attributes { get; set; }
 
        // [Option("lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
