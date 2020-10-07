@@ -39,7 +39,9 @@ namespace OData2Poco
             {"DateTime","?" },
             {"DateTimeOffset","?" },
             {"TimeSpan","?" },
-            {"Guid","?" }
+            {"Guid","?" },
+            {"Microsoft.OData.Edm.Date","?"},
+            {"Microsoft.OData.Edm.TimeOfDay","?"},
         };
 
         /// <summary>
