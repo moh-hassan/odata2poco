@@ -1,5 +1,5 @@
 #nuget version is nly changed by  RELEASE TAG
-version: 3.4.0-ci-{build}
+version: 3.4.2-ci-{build}
 image: Visual Studio 2019
 pull_requests:
   do_not_increment_build_number: false
@@ -14,7 +14,8 @@ init:
         if($ver.StartsWith("v") -eq $true) { $ver = $ver.Substring(1) }
         try
         {         
-          Update-AppveyorBuild -Version $ver        
+          Update-AppveyorBuild -Version $ver 
+          Write-Output "Update-AppveyorBuild Success to change version to TAG: '$env:APPVEYOR_REPO_TAG_NAME'"   -ForegroundColor Green          
         }
         catch
         {

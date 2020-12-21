@@ -4,6 +4,12 @@
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
 
+##  Version 3.4.2
+**Release Date:**  Dec 21, 2020 
+
+**What is new in 3.4.2:**
+- Allow EDM types to be nullable by @LarsBauer, PR [#33](https://github.com/moh-hassan/odata2poco/pull/33), fix issue [#32](https://github.com/moh-hassan/odata2poco/issues/32)
+
 ##  Version 3.4.1
 **Release Date:**  Oct 3, 2020 
 

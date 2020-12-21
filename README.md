@@ -18,30 +18,6 @@ OData2Poco is available in three flavers:
 |AppVeyor                    |Windows      |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
 |Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
 
-### OData2Poco V3.3.1 is Released on Nov 25, 2019
-
-## What is new in V3.3.1
-- Fix Issue [#28](https://github.com/moh-hassan/odata2poco/issues/28#issuecomment-557015613): Apply change-case on Navigation Properties.
-
-
-## What is new in V3.3.0
-- Filter model using the option [--include](https://github.com/moh-hassan/odata2poco/wiki/CommandLine-Reference#--include) 
-- Change case of Classes to Camel/Pas using the option --entity-case
-- Generated ReadOnly Properties if the vocabulary of the metadata include:Computed or Permissions:Read.
-- Removing Vb conversion external service.
-
-
-Try the new feature by the command
-``` 
-o2pgen -r http://services.odata.org/V4/TripPinServiceRW -v --include air* --entity-case camel
-```
-
-***The new version 3.3.1 can be downloaded from Nuget:*** 
-
-- [Console (o2pgen)](https://www.nuget.org/packages/OData2Poco.CommandLine/3.3.1)
-- [Netcore Global tool (dotnet-o2pgen)](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen)
-- [Class libraryl](https://www.nuget.org/packages/OData2Poco/3.3.1)
-
 
 **Features of OData2Poco**
    
@@ -80,7 +56,7 @@ o2pgen -r http://services.odata.org/V4/TripPinServiceRW -v --include air* --enti
    - Define namespace to overwrite the namespace of the model.
 
 - Add primary key/mandatory comments to the properties of the class. 
-- Rename class/properties that have a name match a c# reserved keyword.  .
+- Rename class/properties that have a name match a c# reserved keyword.  
 - Save metadata and generated code to a user defined file name.
 - Support colored console windows /linux /OS fx.
 - Support Microsoft.OData.Edm library version 7.5+ (OData v4).
