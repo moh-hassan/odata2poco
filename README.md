@@ -127,4 +127,4 @@ Read the:[Wiki](https://github.com/moh-hassan/odata2poco/wiki)
 
 **Thank you [JetBrains](https://www.jetbrains.com "JetBrain") for [Resharper](https://www.jetbrains.com/resharper/ "Resharper") open source license**
 
-![](art/resharper2.jpg)
+![](art/icon-resharper.jpg)
