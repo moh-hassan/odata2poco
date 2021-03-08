@@ -1,5 +1,5 @@
 #nuget version is nly changed by  RELEASE TAG
-version: 3.4.2-ci-{build}
+version: 3.5.0-ci-{build}
 image: Visual Studio 2019
 pull_requests:
   do_not_increment_build_number: false
@@ -15,12 +15,12 @@ init:
         try
         {         
           Update-AppveyorBuild -Version $ver 
-          Write-Output "Update-AppveyorBuild Success to change version to TAG: '$env:APPVEYOR_REPO_TAG_NAME'"   -ForegroundColor Green          
+          Write-Host "Update-AppveyorBuild Success to change version to TAG: '$env:APPVEYOR_REPO_TAG_NAME'"   -ForegroundColor Green          
         }
         catch
         {
-          Write-Output "Update-AppveyorBuild Fail to change version to TAG: '$env:APPVEYOR_REPO_TAG_NAME'"   -ForegroundColor Red
-          Write-Output "Exception Error: $PSItem.Exception.Message" -ForegroundColor Red
+          Write-Host "Update-AppveyorBuild Fail to change version to TAG: '$env:APPVEYOR_REPO_TAG_NAME'"   -ForegroundColor Red
+          Write-Host "Exception Error: $PSItem.Exception.Message" -ForegroundColor Red
           $env:CAN_PUBLISH = $false
         }
       }

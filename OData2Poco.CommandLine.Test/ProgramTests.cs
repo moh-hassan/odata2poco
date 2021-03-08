@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OData2Poco.TestUtility;
@@ -402,6 +403,25 @@ public enum Feature
             Assert.AreEqual(0, tuble.Item1);
             Assert.IsTrue(output.Contains("public partial class Product")); //-v
 
+        }
+       
+        [Test]
+        [Category("code_header")]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]
+        public async Task CodeHeaderTest(string url, string version, int n)     
+        {
+            //Arrange         
+            var a = $"-r {url} -v --include Category";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;           
+            //Assert  
+            var line = $"//     Service Url: {url}";          
+            Assert.IsTrue(output.Contains(line));
+
+            Assert.IsTrue(output.Contains("//     Parameters:"));
+            Assert.IsTrue(output.Contains("// 	-v Verbose= True"));           
         }
 
         #region Name Case

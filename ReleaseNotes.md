@@ -4,6 +4,15 @@
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
 
+
+##  Version 3.5.0
+**Release Date:**  March 8, 2021 
+
+**What is new in 3.5.0:**
+- New Feature request: Add used options to the header of the code generated, issue [#35](https://github.com/moh-hassan/odata2poco/issues/35)
+- Fix of displaying serviceUrl when the source is xml file, #35.
+- Hide password when displaying used options for security.
+
 ##  Version 3.4.2
 **Release Date:**  Dec 21, 2020 
 

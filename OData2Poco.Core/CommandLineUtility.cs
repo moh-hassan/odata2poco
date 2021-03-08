@@ -41,9 +41,12 @@ namespace OData2Poco.CommandLine
                 if (!string.IsNullOrEmpty(val.ToString()))
                 {
                     var text = $"{shortName} {p1.p.Name}= {val} ";
+                    if (shortName.Equals("-p") || shortName.Equals("--password")) //hide password for security reason
+                         text = $"{shortName} {p1.p.Name}= ***** ";
                     list.Add(text);
                 }
             }
+            CodeHeader.SetParameters(list);
             return list;
         }
 

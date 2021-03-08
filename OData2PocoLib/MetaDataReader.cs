@@ -71,6 +71,7 @@ namespace OData2Poco
                 {
                     var xml = await reader.ReadToEndAsync();
                     metaData = LoadMetaDataFromXml(xml);
+                    metaData.ServiceUrl = odataConnString.ServiceUrl;
                     return metaData;
                 }
             }
