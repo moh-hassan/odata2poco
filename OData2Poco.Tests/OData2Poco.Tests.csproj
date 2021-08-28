@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net461;net5.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
     <Authors>Mohamed Hassan</Authors>
@@ -11,7 +11,7 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NSubstitute" Version="4.0.0" />
+    <PackageReference Include="NSubstitute" Version="4.2.2" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Model\**" />
@@ -34,5 +34,11 @@
   
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
     <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Update="nunit" Version="3.13.2" />
+    <PackageReference Update="NUnit3TestAdapter" Version="4.0.0" />
   </ItemGroup>
 </Project>

@@ -9,8 +9,8 @@ public static class TestSample
         get
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var codebase = new Uri(assembly.CodeBase);
-            var path = codebase.LocalPath;
+            var codebase = new Uri(assembly.Location);
+             var path = codebase.LocalPath;
             return Path.GetDirectoryName(path);
         }
     }
@@ -24,13 +24,13 @@ public static class TestSample
     public static string TripPin4Flag => GetFullPath("trippinV4Flags.xml"); 
     public static string TripPin4 => GetFullPath("trippinV4.xml"); 
 	public static string TripPin4RW => GetFullPath("trippin4rw.xml"); 
-    public const string UrlNorthWindV4 = "http://services.odata.org/V4/Northwind/Northwind.svc";
-    public const string UrlNorthWindV3 = "http://services.odata.org/V3/Northwind/Northwind.svc";
-    public const string UrlNorthWindV2 = "http://services.odata.org/V2/Northwind/Northwind.svc";
+    public const string UrlNorthWindV4 = "https://services.odata.org/V4/Northwind/Northwind.svc";
+    public const string UrlNorthWindV3 = "https://services.odata.org/V3/Northwind/Northwind.svc";
+    public const string UrlNorthWindV2 = "https://services.odata.org/V2/Northwind/Northwind.svc";
     public const string UrlOdataV4 = "https://services.odata.org/V4/OData/OData.svc";
     public const string UrlOdataV3 = "https://services.odata.org/V3/OData/OData.svc";
     
-    public const string UrlTripPinService = "http://services.odata.org/V4/TripPinServiceRW";
+    public const string UrlTripPinService = "https://services.odata.org/TripPinRESTierService";
     public static string MultiSchemaV3 => GetFullPath( "odata-multischema-v3.xml");
     public static string SampleWebApiV4 => GetFullPath( "sample-webapi-V4.xml");
     public static string SampleWebApiInvalidV4 => GetFullPath( "sample-webapi-Invalid-V4.xml");

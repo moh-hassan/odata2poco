@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	<TargetFrameworks>net45;netcoreapp3.1</TargetFrameworks>
+	<TargetFrameworks>net45;net5.0</TargetFrameworks>
     <Authors>Mohamed Hassan</Authors>
     <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
     <Product>OData2Poco</Product>
@@ -20,8 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" Condition="$(TargetFramework.StartsWith('net4')) " />
-    <ProjectReference Include="..\OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj" Condition="$(TargetFramework.StartsWith('netcore')) " />
+    <ProjectReference Include="..\OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj" Condition="$(TargetFramework.StartsWith('net5')) " />
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Update="nunit" Version="3.13.2" />
+    <PackageReference Update="NUnit3TestAdapter" Version="4.0.0" />
   </ItemGroup>
   
 </Project>
