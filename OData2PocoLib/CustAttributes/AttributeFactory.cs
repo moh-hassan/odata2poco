@@ -49,7 +49,7 @@ namespace OData2Poco.CustAttributes
             return this;
         }
       
-        private  INamedAttribute GetAttributeObject(string attName) => _pocoAttributesList[attName];
+        private  INamedAttribute? GetAttributeObject(string attName) => _pocoAttributesList[attName];
 
 
         public  List<string> GetAttributes(object property, string attName)
@@ -57,21 +57,13 @@ namespace OData2Poco.CustAttributes
             if (attName.StartsWith("[") && property is PropertyTemplate)
                 return new List<string> { attName };
 
-            INamedAttribute attributeObject = GetAttributeObject(attName);
-            switch (property)
+            var attributeObject = GetAttributeObject(attName);
+            return property switch
             {
-                case PropertyTemplate p:
-                    return attributeObject != null
-                        ? attributeObject.GetAttributes(p)
-                        : new List<string>();
-
-                case ClassTemplate c:
-                    return attributeObject != null
-                        ? attributeObject.GetAttributes(c)
-                        : new List<string>();
-                default:
-                    throw new Exception($"{property.GetType()} isn't supported for named attributes");
-            }
+                PropertyTemplate p => attributeObject != null ? attributeObject.GetAttributes(p) : new List<string>(),
+                ClassTemplate c => attributeObject != null ? attributeObject.GetAttributes(c) : new List<string>(),
+                _ => throw new Exception($"{property.GetType()} isn't supported for named attributes")
+            };
         }
 
         public  List<string> GetAttributes(object property, List<string> attNames)

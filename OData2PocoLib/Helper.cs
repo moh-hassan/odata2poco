@@ -96,7 +96,7 @@ namespace OData2Poco
         /// </summary>
         /// <param name="metadataString">XML MetaData</param>
         /// <returns></returns>
-        public static string GetNameSpace(string metadataString)
+        public static string? GetNameSpace(string metadataString)
         {
             if (string.IsNullOrEmpty(metadataString)) return "MyNameSpace";
             var reader = XmlReader.Create(new StringReader(metadataString));
@@ -117,17 +117,17 @@ namespace OData2Poco
             string fixedStringOne = text1.TrimAllSpace(); // Regex.Replace(text1.Trim(), @"\s+", " ");
             string fixedStringTwo = text2.TrimAllSpace(); // Regex.Replace(text2.Trim(), @"\s+", " ");
             //Debug.WriteLine("{0}\n{1}\n",fixedStringOne,fixedStringTwo);
-            bool isEqual = String.Equals(fixedStringOne, fixedStringTwo, StringComparison.OrdinalIgnoreCase);
+            bool isEqual = string.Equals(fixedStringOne, fixedStringTwo, StringComparison.OrdinalIgnoreCase);
             return isEqual;
         }
 
         public static string GetEmbeddedResource(string ns, string res)
         {
-            using (var reader = new StreamReader(Assembly.GetExecutingAssembly()
-                                                     .GetManifestResourceStream($"{ns}.{res}") ?? throw new InvalidOperationException()))
-            {
-                return reader.ReadToEnd();
-            }
+            using var reader = new StreamReader(Assembly
+                                .GetExecutingAssembly()
+                                .GetManifestResourceStream($"{ns}.{res}") 
+                                     ?? throw new InvalidOperationException());
+            return reader.ReadToEnd();
         }
         /// <summary>
         ///  find plugin dlls at runtime

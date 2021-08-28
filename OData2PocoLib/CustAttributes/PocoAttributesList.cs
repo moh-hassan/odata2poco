@@ -10,7 +10,7 @@ namespace OData2Poco.CustAttributes
     public class PocoAttributesList : IEnumerable<INamedAttribute>
     {
         readonly List<INamedAttribute> _namedAttributes; //= new List<ICustomeAttribute>();
-        public INamedAttribute this[string index] => GetAttributeObject(index);
+        public INamedAttribute? this[string index] => GetAttributeObject(index);
 
         public PocoAttributesList()
         {
@@ -33,7 +33,7 @@ namespace OData2Poco.CustAttributes
             return GetEnumerator();
         }
 
-        public INamedAttribute GetAttributeObject(string attName)
+        public INamedAttribute? GetAttributeObject(string attName)
         {
             return _namedAttributes.FirstOrDefault(x => x.Name == attName);
         }

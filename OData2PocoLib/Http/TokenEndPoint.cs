@@ -48,9 +48,8 @@ namespace OData2Poco.Http
 
         private string SetTokenParams(OdataConnectionString odataConnectionString)
         {
-            var tokenParams = "";
             var clientParams = $"grant_type=client_credentials&client_id={odataConnectionString.UserName}&client_secret={odataConnectionString.Password}";
-            tokenParams = string.IsNullOrEmpty(odataConnectionString.TokenParams)
+            string tokenParams = string.IsNullOrEmpty(odataConnectionString.TokenParams)
                 ? clientParams
                 : $"{clientParams}&{odataConnectionString.TokenParams}";
 
@@ -76,10 +75,11 @@ resource       : https://resource.com
 access_token   : bi05REFMcXdodUhZbkhRNjNHZUNYYyIsImtpZCI6Ik4tbEMwbi05REFMcXdod...
 
 */
-        public async Task<string?> GetToken(Uri authenticationUrl, Dictionary<string, string> authenticationCredentials)
+        public async Task<string?> GetToken(Uri authenticationUrl, 
+            Dictionary<string, string> authenticationCredentials)
         {
             var client = new HttpClient();
-            var content = new FormUrlEncodedContent(authenticationCredentials);
+            var content = new FormUrlEncodedContent(authenticationCredentials!);
             var response = await client.PostAsync(authenticationUrl, content);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 throw new Exception($"Fail to get access_token, Http status code: ({(int)response.StatusCode}) {response.StatusCode}");
@@ -107,7 +107,7 @@ access_token   : bi05REFMcXdodUhZbkhRNjNHZUNYYyIsImtpZCI6Ik4tbEMwbi05REFMcXdod..
         {
             if (string.IsNullOrEmpty(content) || string.IsNullOrEmpty(key))
                 return null;
-            var token = JObject.Parse(content).SelectToken(key);
+            var token = JObject.Parse(content!).SelectToken(key);
             return token?.ToString();
 
         }

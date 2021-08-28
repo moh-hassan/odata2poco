@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net461;net45</TargetFrameworks>
+		<TargetFrameworks>net5.0;netstandard2.0;net461;net45</TargetFrameworks>
 		<RootNamespace>OData2Poco</RootNamespace>
 		<AssemblyName>OData2Poco</AssemblyName>
 		<Authors>Mohamed Hassan</Authors>
@@ -9,7 +9,7 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<Nullable>enable</Nullable>
-		<WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
+		<!--<WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>-->
 		<Description>
 			"OData2Poco is a class library supporting netstandard2 and .NET 4.5+ to generate  plain-old CLR objects (POCO) from OData feeds that implement both V1-3 and V4 OData protocol,based on the metadata of the service stored on the  server. POCO classes can be used in typed RESTful client OData services"
 		</Description>
@@ -30,7 +30,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Data.Edm" Version="5.8.4" />
-		<PackageReference Include="Newtonsoft.Json" Version="12.0.1 " />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 
 	</ItemGroup>
 
@@ -67,7 +67,7 @@
 				<DefineConstants> $(DefineConstants);EDM7 </DefineConstants>
 			</PropertyGroup>
 			<ItemGroup>
-				<PackageReference Include="Microsoft.OData.Edm" Version="7.5.1" />
+				<PackageReference Include="Microsoft.OData.Edm" Version="7.9.1" />
 			</ItemGroup>
 		</When>
 		<Otherwise>

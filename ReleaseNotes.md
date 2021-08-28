@@ -4,6 +4,14 @@
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
 
+##  Version 4.0.0
+**Release Date:**  August 29, 2021 
+
+**What is new in 4.0.0:**
+- Support NET5.
+- Global tool with NET5 support
+- Dropping Global tool with appnetcore2.1
+- Add Class Library  with NET5 support.
 
 ##  Version 3.5.0
 **Release Date:**  March 8, 2021 

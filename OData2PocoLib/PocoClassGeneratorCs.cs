@@ -37,7 +37,7 @@ namespace OData2Poco
         private string? CodeText { get; set; }
 
         //key is fullName: <namespace.className>
-        public ClassTemplate this[string key] => ClassList.FirstOrDefault(x => x.FullName == key);
+        public ClassTemplate? this[string key] => ClassList.FirstOrDefault(x => x.FullName == key);
         public List<ClassTemplate> ClassList { get; set; }
         public PocoSetting PocoSetting { get; set; }
 

@@ -34,7 +34,8 @@ namespace OData2Poco
             if (client.Response != null)
                 foreach (var entry in client.Response.Headers)
                 {
-                    string value = entry.Value.FirstOrDefault();
+                    var value = entry.Value.FirstOrDefault();
+                    if (value == null) continue;
                     string key = entry.Key;
                     metaData.ServiceHeader.Add(key, value);
                 }
@@ -67,13 +68,11 @@ namespace OData2Poco
             MetaDataInfo metaData;
             if (!odataConnString.ServiceUrl.StartsWith("http"))
             {
-                using (StreamReader reader = new StreamReader(odataConnString.ServiceUrl))
-                {
-                    var xml = await reader.ReadToEndAsync();
-                    metaData = LoadMetaDataFromXml(xml);
-                    metaData.ServiceUrl = odataConnString.ServiceUrl;
-                    return metaData;
-                }
+                using StreamReader reader = new StreamReader(odataConnString.ServiceUrl);
+                var xml = await reader.ReadToEndAsync();
+                metaData = LoadMetaDataFromXml(xml);
+                metaData.ServiceUrl = odataConnString.ServiceUrl;
+                return metaData;
             }
 
             metaData = await LoadMetaDataHttpAsync(odataConnString);

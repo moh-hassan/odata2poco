@@ -80,10 +80,10 @@ namespace OData2Poco.CommandLine.Test
             //Arrange
             var a = $"-r {url} -v -a key tab req -n -b";
             //Act
-            var tuble = await RunCommand(a);
-            var output = tuble.Item2;
+            var tuple = await RunCommand(a);
+            var output = tuple.Item2;
             //Assert
-            Assert.AreEqual(0, tuble.Item1);
+            Assert.AreEqual(0, tuple.Item1);
 
             Assert.That(output, Does.Contain("public partial class Product"));
             Assert.That(output, Does.Contain("[Table(\"Products\")]")); //-a tab/ -t

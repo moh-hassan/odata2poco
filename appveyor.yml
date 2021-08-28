@@ -1,5 +1,5 @@
 #nuget version is nly changed by  RELEASE TAG
-version: 3.5.0-ci-{build}
+version: 4.0.0-ci-{build}
 image: Visual Studio 2019
 pull_requests:
   do_not_increment_build_number: false

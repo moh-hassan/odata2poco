@@ -54,16 +54,12 @@ namespace OData2Poco.Extensions
         }
         public static string ChangeCase(this string text, CaseEnum caseEnum)
         {
-            switch (caseEnum)
+            return caseEnum switch
             {
-                case CaseEnum.Pas:
-                    return text.ToPascalCase();
-                case CaseEnum.Camel:
-                    return text.ToCamelCase();
-                default:
-                    return text;
-
-            }
+                CaseEnum.Pas => text.ToPascalCase(),
+                CaseEnum.Camel => text.ToCamelCase(),
+                _ => text
+            };
         }
         /// <summary>
         /// remove extra white spaces and keeping CRLF if needed
@@ -143,19 +139,7 @@ namespace OData2Poco.Extensions
             }
         }
 
-        /// <summary>
-        /// Convert Json string to Typed object
-        /// </summary>
-        /// <param name="json"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static T ToObject<T>(this string json)
-        {
-            var deserializedObject = JsonConvert.DeserializeObject<T>(json);
-            return deserializedObject;
-
-        }
-
+       
         public static string Quote(this string text, char c = '"') => $"{c}{text}{c}";
 
         public static string UnQuote(this string text)

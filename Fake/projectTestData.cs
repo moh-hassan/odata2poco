@@ -9,7 +9,7 @@ public static class ProjectTestData
         get
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var codebase = new Uri(assembly.CodeBase);
+            var codebase = new Uri(assembly.Location);
             var path = codebase.LocalPath;
             return Path.GetDirectoryName(path);
         }

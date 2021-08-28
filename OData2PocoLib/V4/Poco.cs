@@ -347,8 +347,7 @@ namespace OData2Poco.V4
             if (!edmTypeReference.IsCollection()) return clrTypeName;
             if (!(edmType is IEdmCollectionType edmCollectionType)) return clrTypeName;
             var elementTypeReference = edmCollectionType.ElementType;
-            var primitiveElementType = elementTypeReference.Definition as IEdmPrimitiveType;
-            if (primitiveElementType == null)
+            if (!(elementTypeReference.Definition is IEdmPrimitiveType primitiveElementType))
             {
                 if (!(elementTypeReference.Definition is IEdmSchemaElement schemaElement)) return clrTypeName;
                 clrTypeName = schemaElement.FullName();
@@ -373,7 +372,7 @@ namespace OData2Poco.V4
         {
             var edmType = edmTypeReference.Definition;
             if (!edmType.Errors().Any()) return false;
-            var error = edmType.Errors().Select(x => $"Location: {x.ErrorLocation.ToString()}, {x.ErrorMessage }").FirstOrDefault();
+            var error = edmType.Errors().Select(x => $"Location: {x.ErrorLocation}, {x.ErrorMessage }").FirstOrDefault();
             _logger.Trace($"edmTypeReference Error: {error.Dump()}");
             _logger.Warn($"Invalid Type Reference: {edmType}");
             SchemaErrors.Add($"Invalid Type Reference: {edmType}");
@@ -383,13 +382,13 @@ namespace OData2Poco.V4
 
         #region Helper Methods
 
-        internal IEdmSchemaType GetSchemaType(string name, string nameSpace)
+        internal IEdmSchemaType? GetSchemaType(string name, string nameSpace)
         {
-            return (IEdmSchemaType)Model.SchemaElements.FirstOrDefault(x => x.Name == name && x.Namespace == nameSpace);
+            return (IEdmSchemaType?)Model.SchemaElements.FirstOrDefault(x => x.Name == name && x.Namespace == nameSpace);
         }
-        internal IEdmSchemaType GetSchemaType(string fullName)
+        internal IEdmSchemaType? GetSchemaType(string fullName)
         {
-            return (IEdmSchemaType)Model.SchemaElements.FirstOrDefault(x => x.FullName() == fullName);
+            return (IEdmSchemaType?)Model.SchemaElements.FirstOrDefault(x => x.FullName() == fullName);
         }
         IEnumerable<IEdmSchemaType> GetSchemaElements(IEdmModel model)
         {

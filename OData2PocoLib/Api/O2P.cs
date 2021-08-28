@@ -13,7 +13,7 @@ namespace OData2Poco.Api
         internal MetaDataInfo MetaData { get; set; }
         public string MetaDataAsString => MetaData.MetaDataAsString;
         public string MetaDataVersion => MetaData.MetaDataVersion;
-        public string SchemaNamespace => MetaData.SchemaNamespace;
+        public string? SchemaNamespace => MetaData.SchemaNamespace;
         public Dictionary<string, string> ServiceHeader => MetaData.ServiceHeader;
 
         public string CodeText { get; set; }

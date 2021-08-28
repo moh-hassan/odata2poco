@@ -19,8 +19,8 @@
 
   <Target Name="ILMerge" AfterTargets="Build" Condition="'$(OS)' == 'Windows_NT' and '$(Configuration)' == 'Release'">
     <ItemGroup>
-      <ILMergePackage Include="$(NuGetPackageRoot)\ilmerge\3.0.21\**\ilmerge.exe" />
-      <ILMergePackage Include="/home/travis/.nuget/packages/ilmerge/3.0.21/**/ilmerge.exe"  Condition=" '$(OS)' == 'Unix' "/>
+      <ILMergePackage Include="$(NuGetPackageRoot)\ilmerge\3.0.41\**\ilmerge.exe" />
+      <ILMergePackage Include="/home/travis/.nuget/packages/ilmerge/3.0.41/**/ilmerge.exe"  Condition=" '$(OS)' == 'Unix' "/>
       <!--<ILMergePackage Include="$(SolutionDir)tools\ilmerge\tools\net452\ilmerge.exe" />-->
     </ItemGroup>
 
