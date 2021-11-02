@@ -81,6 +81,15 @@ namespace OData2Poco.CommandLine
             HelpText = "Type pas or camel to Convert Entity Name to PascalCase or CamelCase")]
         public string EntityNameCase { get; set; }
 
+        [Option("name-map", HelpText = "A JSON file to map class and property names.")]
+        public string NameMapFile { get; set; }
+
+        // NOT AN OPTION! A a place holder because we try to parse the file
+        // at the time of option parsing so that if someone is using this
+        // programatically, they can directly setup the rename map how they
+        // see fit.
+        public RenameMap RenameMap { get; set; }
+
         [Option('a', "attribute",
             HelpText = "Attributes, Allowed values: key, req, json, json3, tab, dm, proto, db, display")]
         public IEnumerable<string> Attributes { get; set; }
@@ -224,6 +233,55 @@ namespace OData2Poco.CommandLine
                 }
             }
 
+            if(!string.IsNullOrWhiteSpace(NameMapFile))
+            {
+                if (!File.Exists(NameMapFile))
+                {
+                    Errors.Add($"{NameMapFile} does not exist or is not a file.");
+                    NameMapFile = string.Empty;
+                }
+                else
+                {
+                    //We want to validate the JSON but it also has a side effect of setting the RenameMap.                   
+                    using (var ifh = new StreamReader(NameMapFile))
+                    {
+                        RenameMap = Newtonsoft.Json.JsonConvert.DeserializeObject<RenameMap>(ifh.ReadToEnd());
+                        if (RenameMap is null)
+                        {
+                            Errors.Add("Failed to convert the rename map file to JSON.");
+                        }
+                        else
+                        {
+                            // Validate regexes.
+                            foreach(var className in RenameMap.PropertyNameMap.Keys)
+                            {
+                                foreach(var map in RenameMap.PropertyNameMap[className])
+                                {
+                                    if(map.OldName.IndexOf('^') == 0)
+                                    {
+                                        // MUST start with ^
+                                        if(className.Equals("ALL", System.StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                             try
+                                            {
+                                                Regex.IsMatch("anything", map.OldName);
+                                            }
+                                            catch(System.Exception)
+                                            {
+                                                Errors.Add("Invalid regex: " + map.OldName);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Errors.Add("There is an OldName regex for " + className + " -- They are only valid for the ALL class.");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

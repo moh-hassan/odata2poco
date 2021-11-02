@@ -84,8 +84,8 @@ namespace OData2Poco
                 generator.ClassList = ModelFilter.FilterList(generatorClassList, setting.Include).ToList();
 
             //change case
-            if (setting.EntityNameCase != CaseEnum.None)
-                ModelChangeCase.RenameClasses(generatorClassList, setting.EntityNameCase);
+            if (setting.EntityNameCase != CaseEnum.None || setting.RenameMap is not null)
+                ModelChangeCase.RenameClasses(generatorClassList, setting.EntityNameCase, setting.RenameMap);
 
             //check reserved keywords
             ModelManager.RenameReservedWords(generatorClassList);

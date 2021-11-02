@@ -26,6 +26,7 @@ namespace OData2Poco.CommandLine
                 NamespacePrefix = string.IsNullOrEmpty(PocoOptions.Namespace)
                     ? string.Empty : PocoOptions.Namespace,
                 NameCase = PocoOptions.NameCase.ToEnum<CaseEnum>(),
+                RenameMap = PocoOptions.RenameMap,
                 Attributes = PocoOptions.Attributes?.ToList(),
                 //obsolete
                 AddKeyAttribute = PocoOptions.Key,
