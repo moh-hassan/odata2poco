@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
@@ -22,16 +23,16 @@ namespace OData2Poco
         /// <param name="list">Class list</param>
         /// <param name="caseEnum">caseEnum</param>
         /// <returns></returns>
-        public static ModelChangeCase RenameClasses(List<ClassTemplate> list, CaseEnum caseEnum)
+        public static ModelChangeCase RenameClasses(List<ClassTemplate> list, CaseEnum caseEnum, RenameMap? renameMap)
         {
           
             var cc = new ModelChangeCase();
-            if (caseEnum == CaseEnum.None) return cc;
+            if (caseEnum == CaseEnum.None && renameMap is null) return cc;
 
             //rename classes
             list.Update(c =>
              {
-                 c.Name = cc.RenameClass(c.Name, caseEnum);
+                 c.Name = cc.RenameClass(c.Name, caseEnum, renameMap);
                  return c;
              });
             //rename Parent
@@ -54,8 +55,22 @@ namespace OData2Poco
             }
         }
 
-        private string RenameClass(string className, CaseEnum caseEnum)
+        private string RenameClass(string className, CaseEnum caseEnum, RenameMap? renameMap)
         {
+            if (renameMap is not null)
+            { 
+                // It is questionable if we should do InvariantCultureIgnoreCase.
+                var nameMap = renameMap.ClassNameMap
+                    .Where(cnm => cnm.OldName.Equals(className, StringComparison.InvariantCultureIgnoreCase))
+                    .FirstOrDefault();
+
+                if (nameMap is not null && !string.IsNullOrWhiteSpace(nameMap.NewName))
+                {
+                    AddItem(className, nameMap.NewName);
+                    return nameMap.NewName;
+                }
+            }
+
             var newClassName = className.ChangeCase(caseEnum);
             AddItem(className, newClassName);
             return newClassName;

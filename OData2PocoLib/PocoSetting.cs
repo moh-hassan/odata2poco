@@ -56,6 +56,11 @@ namespace OData2Poco
         /// </summary>
         public CaseEnum EntityNameCase { get; set; }
 
+        /// <summary>
+        /// Explicit rename map.
+        /// </summary>
+        public RenameMap? RenameMap { get; set; }
+
         //add attributes: key,req,dm,tab,json,proto,display and db
         public List<string> Attributes { get; set; }
 

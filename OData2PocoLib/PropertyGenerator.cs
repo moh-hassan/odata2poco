@@ -46,6 +46,12 @@ namespace OData2Poco
         {
             get
             {
+                var mappedName = MappedPropertyName();
+                if(mappedName is not null)
+                {
+                    return mappedName;
+                }
+
                 switch (_setting.NameCase)
                 {
                     case CaseEnum.Pas:
@@ -126,6 +132,65 @@ namespace OData2Poco
             if (!string.IsNullOrEmpty(comment))
                 comment = $"//{comment}";
             return comment;
+        }
+
+        private string? MappedPropertyName()
+        {
+            if(_setting.RenameMap is null)
+            {
+                return null;
+            }
+            else
+            {
+                List<PropertyNameMap>? allMap = null;
+                var map = _setting.RenameMap.PropertyNameMap;
+                foreach (var className in map.Keys)
+                {
+                    if(className.Equals("ALL", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        // The ALL is a last resort.
+                        allMap = map[className];
+                        continue;
+                    }
+                    else if(className.Equals(_property.ClassName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        var n = map[className]
+                            .Where(n => n.OldName.Equals(_property.PropName, StringComparison.InvariantCultureIgnoreCase))
+                            .FirstOrDefault();
+
+                        if(n is not null)
+                        {
+                            return string.IsNullOrWhiteSpace(n.NewName) ? null : n.NewName;
+                        }
+                    }
+                }
+
+                if(allMap is not null)
+                {
+                    var exactNameMap = allMap
+                        .Where(n => n.OldName.Equals(_property.PropName, StringComparison.InvariantCultureIgnoreCase))
+                        .FirstOrDefault();
+
+                    if (exactNameMap is not null)
+                    {
+                        return string.IsNullOrWhiteSpace(exactNameMap.NewName) ? null : exactNameMap.NewName;
+                    }
+
+                    foreach(var regexNameMap in allMap)
+                    {
+                        if(regexNameMap.OldName.IndexOf('^') == 0)
+                        {
+                            //it's a regex. We really should compile it and cache it.
+                            if(Regex.IsMatch(_property.PropName, regexNameMap.OldName, RegexOptions.IgnoreCase))
+                            {
+                                return string.IsNullOrWhiteSpace(regexNameMap.NewName) ? null : regexNameMap.NewName;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
