@@ -110,16 +110,6 @@ namespace OData2Poco.Extensions
             XDocument doc = XDocument.Parse(xml);
             return doc.ToString();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public static string ToJson(this object data)
-        {
-            var json = JsonConvert.SerializeObject(data, Formatting.Indented);
-            return json;
-        }
 
         /// <summary>
         /// Validate json string
