@@ -8,6 +8,7 @@
 		<PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
 		<PackageLicenseFile>license.txt</PackageLicenseFile>
 		<PackageIcon>ODataLogo-128.png</PackageIcon>
+		<PackageIconFullPath>$(MSBuildThisFileDirectory)art\ODataLogo-128.png</PackageIconFullPath>
 		<RepositoryUrl>https://github.com/moh-hassan/odata2poco</RepositoryUrl>
 		<PackageTags>OData poco code-generation</PackageTags>
 		<Description>OData2Poco is a tool to generate  plain-old CLR objects (POCO) from OData feeds V1-V4 OData protocol.The generation is based on the XML metadata of the service stored on the  server. POCO classes can be used in typed RESTful client OData services.</Description>
@@ -33,10 +34,16 @@
 		<IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
 	</PropertyGroup>
 
-	
+	<ItemGroup Condition="'$(IsTestProject)' == 'true'">
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+		<PackageReference Include="nunit" Version="3.13.2" />
+		<PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+		<PackageReference Include="FluentAssertions" Version="5.10.3" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<None Include="$(SolutionDir)license.txt" Pack="true" PackagePath=""/>
-		<None Include="$(SolutionDir)art\ODataLogo-128.png" Pack="true" PackagePath="" />
+		<None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\"/>
 	</ItemGroup>
 
 </Project>

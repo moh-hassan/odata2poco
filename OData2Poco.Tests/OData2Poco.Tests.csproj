@@ -1,44 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net461;net5.0</TargetFrameworks>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
-    <Authors>Mohamed Hassan</Authors>
-    <Copyright>Copyright ©  Mohamed Hassan 2016</Copyright>
-    <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
-    <Company>OData2Poco</Company>
-    <Product>OData2Poco</Product>
-    <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="NSubstitute" Version="4.2.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Model\**" />
-    <EmbeddedResource Remove="Model\**" />
-    <None Remove="Model\**" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net45;net5.0</TargetFrameworks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<Authors>Mohamed Hassan</Authors>
+		<Copyright>Copyright ©  Mohamed Hassan 2016</Copyright>
+		<AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
+		<Company>OData2Poco</Company>
+		<Product>OData2Poco</Product>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="NSubstitute" Version="4.2.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Model\**" />
+		<EmbeddedResource Remove="Model\**" />
+		<None Remove="Model\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="..\Fake\CommonTestData.cs" Link="CommonTestData.cs" />
-    <Compile Include="..\Fake\projectTestData.cs" Link="projectTestData.cs" />
-    <Compile Include="..\OData2Poco.CommandLine.Test\Utility\HelpTestExtension.cs" Link="HelpTestExtension.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />
+		<Compile Include="..\Fake\CommonTestData.cs" Link="CommonTestData.cs" />
+		<Compile Include="..\Fake\projectTestData.cs" Link="projectTestData.cs" />
+		<Compile Include="..\OData2Poco.CommandLine.Test\Utility\HelpTestExtension.cs" Link="HelpTestExtension.cs" />
+	</ItemGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net4')) ">
-    <DefineConstants>NET45;NETFULL</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
-    <Reference Include="System.Net.Http" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="nunit" Version="3.13.2" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
-  </ItemGroup>
+	<PropertyGroup Condition="$(TargetFramework.StartsWith('net4')) ">
+		<DefineConstants>NET45;NETFULL</DefineConstants>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
+		<Reference Include="System.Net.Http" />
+	</ItemGroup>
 </Project>
