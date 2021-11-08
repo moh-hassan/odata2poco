@@ -1,5 +1,5 @@
 #nuget version is nly changed by  RELEASE TAG
-version: 4.0.0-ci-{build}
+version: 4.2.0-ci-{build}
 image: Visual Studio 2019
 pull_requests:
   do_not_increment_build_number: false
@@ -68,14 +68,14 @@ deploy:
 - provider: GitHub
   auth_token:
      secure: sB33uLo96nR+LGmYLdPmY/segb6d4O061N2e8Nbz6iyHg82D0RysMxWE5JKnXmU+
-  artifact: /.*(\.|\.s)nupkg/            
+  artifact: /.*(\.|\.s)nupkg|o2p_exe/            
   prerelease: false  
   on:
     APPVEYOR_REPO_TAG: true
 
 - provider: NuGet
   api_key:
-    secure: ZF4tSY1JuxGp6G9ycAf9ColR6ZF/RzF8ZPs1bZWDJxNMle7pvVmkGCC4E/xAK8jQ         
+    secure: iQ+rv1ItQVEDS1ktlQN5onitltpVJzvUxptmigYiqHzBhgWceVl7jvzZx6ysOXm+
   on:
     APPVEYOR_REPO_TAG: true # Deploy on tag push only.
     branch: master          # Release from master branch only.
@@ -83,11 +83,8 @@ deploy:
 
 # myget
 - provider: NuGet
-  server: https://www.myget.org/F/odata2poco/api/v2/package
+  server: https://www.myget.org/F/odata2poco2/api/v2/package
   api_key:
-    secure: hSatieECG8d1qvzcQejfzQH8vQa4W0GbXU10/xVXvL4dloo1vZMlCdHZbpZkLMNW  
-  symbol_server: https://www.myget.org/F/odata2poco/api/v2/package
-  #artifact: /.*(\.|\.s)nupkg/    
-  #on:
-    #APPVEYOR_REPO_TAG: true
-    #branch: /develop|master/  
+    secure: QAHjX2gqddFX2cNhMNqweMTGQ89q++ezKnQvdAcinY5D1rwbj2vkWeFsTykm4koA
+  symbol_server: https://www.myget.org/F/odata2poco2/api/v2/package
+  

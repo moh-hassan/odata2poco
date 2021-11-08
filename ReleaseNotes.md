@@ -1,8 +1,13 @@
-
-
 # OData2Poco.CommandLine 
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
+
+##  Version 4.1.0
+**Release Date:**  Nov 8, 2021 
+
+**What is new in 4.0.0:**
+- Add Name Mapping  of Entities and properties using json file with regex support, thanks to @TikiBill.
+
 
 ##  Version 4.0.0
 **Release Date:**  August 29, 2021 

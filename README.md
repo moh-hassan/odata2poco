@@ -2,6 +2,11 @@
 **OData2Poco** is a code generation tool for generating plain-old CLR objects (POCO) from OData feeds. 
 POCO classes can be used in a typed RESTful client OData services and code generation can be controlled by setting many options.
 
+## What is news
+Odata2Poco v4.1.0 is published with a new feature: Name Mapping  of Entities and properties using json file. Read [wiki](https://github.com/moh-hassan/odata2poco/wiki/NameMapping) for more details and tutorial for how to use.
+
+
+## OData2Poco Packages
 OData2Poco is available in three flavers:
 
 - A Console tool: OData2Poco.CommandLine (a.k.a o2pgen).
@@ -55,7 +60,7 @@ OData2Poco is available in three flavers:
    - Generated class can inherit from a common BaseClass/interface.
    - Define namespace to overwrite the namespace of the model.
    - Filter Entities.
-
+   - Name Mapping  of Entities and properties using json file with regex support.
 - Add primary key/mandatory comments to the properties of the class. 
 - Rename class/properties that have a name match a c# reserved keyword.  
 - Save metadata and generated code to a user defined file name.
