@@ -1,0 +1,11 @@
+{
+  "ClassNameMap": [],
+  "PropertyNameMap": {
+    "City": [
+      {
+        "OldName": "Name",
+        "NewName": "f02_Name"
+      }
+    ]
+  }
+}

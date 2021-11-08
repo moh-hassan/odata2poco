@@ -1,0 +1,17 @@
+{
+  "ClassNameMap": [],
+  "PropertyNameMap": {
+    "City": [
+      {
+        "OldName": "Name",
+        "NewName": "f02_Name"
+      }
+    ],
+    "All": [
+      {
+        "OldName": "^Name$",
+        "NewName": "Short_Name"
+      }
+    ]
+  }
+}
