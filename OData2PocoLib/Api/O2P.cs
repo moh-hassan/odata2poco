@@ -34,7 +34,12 @@ namespace OData2Poco.Api
             MetaData=gen.MetaData;
             return gen;
         }
-       
+        internal async Task<IPocoGenerator> GenerateModel(string xmlContent)
+        {
+            IPocoGenerator gen = await PocoFactory.GenerateModel(xmlContent, Setting);
+            MetaData = gen.MetaData;
+            return gen;
+        }
         public async Task<string> GenerateAsync(OdataConnectionString odataConnString)
         {
             var gen = await GenerateModel(odataConnString);
@@ -43,8 +48,16 @@ namespace OData2Poco.Api
             CodeText = generatorCs.ToString();
             return CodeText;
         }
-      
 
+        //feature request #41
+        public async Task<string> GenerateAsync(string xmlContent)
+        {
+            var gen = await GenerateModel(xmlContent);
+            var generatorCs = PocoClassGeneratorCs.GenerateCsPocoClass(gen, Setting);
+            ClassList = generatorCs.ClassList;
+            CodeText = generatorCs.ToString();
+            return CodeText;
+        }
         public string GenerateProject()
         {
             var proj = new ProjectGenerator(Setting.Attributes);

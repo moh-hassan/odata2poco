@@ -43,6 +43,14 @@ namespace OData2Poco
             return generator;
         }
 
+        internal static async Task<IPocoGenerator> GenerateModel(string xmlContents,
+          PocoSetting setting)
+        {
+            var metaData = await Task.Run (()=> MetaDataReader.LoadMetaDataFromXml(xmlContents));
+            IPocoGenerator generator = Create(metaData, setting);
+            return generator;
+        }
+
         //internal static async Task<IPocoClassGenerator> GeneratePoco(OdataConnectionString connectionString,
         //    PocoSetting setting)
         //{
@@ -62,7 +70,7 @@ namespace OData2Poco
 
         //----------
         //var generatorCs = new PocoClassGeneratorCs(gen, Setting);
-        
+
         //public async Task<string> GenerateAsync(OdataConnectionString odataConnString)
         //{
         //    var gen = await GenerateModel(odataConnString);

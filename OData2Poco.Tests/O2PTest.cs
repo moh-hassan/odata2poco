@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OData2Poco.Api;
@@ -27,7 +28,7 @@ namespace OData2Poco.Tests
             var code = await o2p.GenerateAsync(connString);
             Assert.IsTrue(code.Contains("public partial class Product"));
         }
-
+       
         [Test]
         public async Task GenerateDefaultTestV4()
         {
@@ -59,5 +60,17 @@ namespace OData2Poco.Tests
             var code = await o2p.GenerateAsync(connString);
             Assert.IsTrue(code.Contains("public partial class Product"));
         }
+
+        [Test]         
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task GenerateFromXmlContents(string fileName, string version, int n)
+        {
+            string xml = File.ReadAllText(fileName);
+            var o2p = new O2P();
+            var code = await o2p.GenerateAsync(xml);
+            Console.WriteLine(code);
+            Assert.IsTrue(code.Contains("public partial class Product"));           
+        }
+
     }
 }
