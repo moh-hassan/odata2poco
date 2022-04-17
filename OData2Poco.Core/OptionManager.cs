@@ -35,6 +35,7 @@ namespace OData2Poco.CommandLine
                 AddJsonAttribute = PocoOptions.AddJsonAttribute,
                 Include = PocoOptions.Include.ToList(),
                 EntityNameCase=PocoOptions.EntityNameCase.ToEnum<CaseEnum>(),
+                ReadWrite = PocoOptions.ReadWrite,
             };
         }
 

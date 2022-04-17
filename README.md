@@ -3,8 +3,9 @@
 POCO classes can be used in a typed RESTful client OData services and code generation can be controlled by setting many options.
 
 ## What is news
-Odata2Poco v4.1.0 is published with a new feature: Name Mapping  of Entities and properties using json file. Read [wiki](https://github.com/moh-hassan/odata2poco/wiki/NameMapping) for more details and tutorial for how to use.
-
+Odata2Poco v4.2.0 is published with  new features implemented for request [#41](https://github.com/moh-hassan/odata2poco/issues/41): 
+-A new API to enable reading xml contents directly as string.
+- Enable ignoring read-only properties in metadata and generate read-write properties.
 
 ## OData2Poco Packages
 OData2Poco is available in three flavers:
@@ -27,7 +28,7 @@ OData2Poco is available in three flavers:
 **Features of OData2Poco**
    
 - Generate POCO classes corresponding to the Entities defined in the XML MetaData stored in OData Feeds.     
-- Generation is based on the Metadata of the service stored on the  server/ or EDMX xml files.
+- Generation is based on the Metadata of the service stored on the  server/  EDMX xml files or xml string contents.
 - Support http(s) with/without authentication. The Supported autherizations are: basic, token and Oauth2.
 - Console CommandLine tool Support .NET 4.5 or higher.
 - Class library Support NET5/netstandard2.0/net461/net45.

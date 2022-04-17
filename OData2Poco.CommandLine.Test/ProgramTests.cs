@@ -609,6 +609,28 @@ public enum Feature
             }
         }
 
+        [Test]
+        //feature #41
+        public async Task Model_readonly_but_ignored_by_setting_readwrite_test()
+        {
+            //Arrange
+            string url = TestSample.TripPin4;
+            var a = $"-r {url}  -v --read-write";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            var list = new List<string>
+            {
+                "public int TripId {get;set;} //PrimaryKey not null ReadOnly" ,
+                "public int PlanItemId {get;set;} //PrimaryKey not null ReadOnly",
+                "public string AirlineCode {get;set;} //PrimaryKey not null ReadOnly"
+             };
+            foreach (var s in list)
+            {
+                Assert.IsTrue(output.Contains(s));
+            }
+        }
         #endregion
     }
 

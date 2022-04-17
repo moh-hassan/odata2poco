@@ -87,7 +87,7 @@ namespace OData2Poco
                 .Append(" ")
                 .Append(Name)
                 .Append(" ")
-                .Append(_property.IsReadOnly ? "{get;}" : "{get;set;}")
+                .Append(_property.IsReadOnly && !_setting.ReadWrite ? "{get;}" : "{get;set;}")
                 .Append(" ")
                 .Append(Comment())
                 .ToString();

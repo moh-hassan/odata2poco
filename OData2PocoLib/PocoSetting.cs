@@ -86,6 +86,7 @@ namespace OData2Poco
         public bool AddReference { get; set; }
         public bool GenerateInterface { get; set; }
         public List<string>? Include { get; set; }
+        public bool ReadWrite { get; set; } //all properties are read/write 
         /// <summary>
         /// Initialization
         /// </summary>

@@ -134,7 +134,9 @@ namespace OData2Poco.CommandLine
             HelpText = "Filter the Entities by FullName, case insensitive. Use space delemeted list of entity names. Name may include the special characters * and ?. The char *  represents a string of characters and ? match any single char.")]
         public IEnumerable<string> Include { get; set; }
 
-
+        //feature #41
+        [Option("read-write", HelpText = "All properties are read/write")]
+        public bool ReadWrite { get; set; }
         public List<string> Errors { get; set; }
 
         public Options()

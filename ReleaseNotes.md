@@ -2,6 +2,12 @@
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
 
+##  Version 4.2.0
+**Release Date:**  April 17, 2022
+- New features implemented for request [#41](https://github.com/moh-hassan/odata2poco/issues/41).
+- A new API to enable reading xml contents directly as string.
+- Enable ignoring read-only properties in metadata and generate read-write properties.
+
 ##  Version 4.1.0
 **Release Date:**  Nov 8, 2021 
 
