@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-	<TargetFrameworks>net45;net5.0</TargetFrameworks>
-    <Authors>Mohamed Hassan</Authors>
+  <PropertyGroup>	  
+	  <TargetFrameworks>net5.0</TargetFrameworks>
+	  <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net5.0;net45</TargetFrameworks>
+	  <Authors>Mohamed Hassan</Authors>
     <AssemblyTitle>OData2Poco.Tests</AssemblyTitle>
     <Product>OData2Poco</Product>
     <IsTestProject>true</IsTestProject>

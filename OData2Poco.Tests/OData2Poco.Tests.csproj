@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net45;net5.0</TargetFrameworks>
+	<PropertyGroup>		 	
+		<TargetFrameworks>net5.0</TargetFrameworks>		 
+		<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net5.0;net45</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Authors>Mohamed Hassan</Authors>
 		<Copyright>Copyright ©  Mohamed Hassan 2016</Copyright>

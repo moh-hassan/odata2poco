@@ -7,8 +7,8 @@ namespace OData2Poco.Tests
     class CustomeHttpClientTest
     {
         [Test]
-        [TestCase(TestSample.UrlNorthWindV4)]
-        [TestCase(TestSample.UrlOdataV3)]
+        [TestCase(TestSample.UrlNorthWindV4)]       
+        [TestCase(TestSample.UrlNorthWindV3)]
         public async Task No_auth_ReadMetaDataTest(string url)
         {
             var connection = new OdataConnectionString
