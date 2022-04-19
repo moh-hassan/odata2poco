@@ -6,7 +6,7 @@ using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.Http
 {
-    internal class CustomeHttpClient  :IDisposable
+    internal class CustomeHttpClient : IDisposable
     {
         public static ILog Logger = PocoLogger.Default;
         readonly OdataConnectionString _odataConnectionString;
@@ -76,15 +76,20 @@ namespace OData2Poco.Http
                 await auth.Authenticate(_odataConnectionString);
             }
             _client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-            var agent="OData2Poco";  
+            var agent = "OData2Poco";
             _client.DefaultRequestHeaders.Add("User-Agent", agent);
         }
 
         internal async Task<string> ReadMetaDataAsync()
         {
-            ServicePointManager.SecurityProtocol =_odataConnectionString.TlsProtocol;
+            ServicePointManager.SecurityProtocol = _odataConnectionString.TlsProtocol;
             await SetHttpClient();
-            string url = ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
+            string url = "";
+            //check url is xml file
+            if (ServiceUri.AbsoluteUri.EndsWith(".xml"))
+                url = ServiceUri.AbsoluteUri;
+            else
+                url = ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
             using (HttpResponseMessage response = await _client.GetAsync(url))
             {
                 Response = response;

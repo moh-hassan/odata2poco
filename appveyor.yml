@@ -1,6 +1,6 @@
 #nuget version is nly changed by  RELEASE TAG
-version: 4.2.0-ci-{build}
-image: Visual Studio 2019
+version: 4.3.0-beta-{build}
+image: Visual Studio 2022
 pull_requests:
   do_not_increment_build_number: false
 
@@ -83,8 +83,8 @@ deploy:
 
 # myget
 - provider: NuGet
-  server: https://www.myget.org/F/odata2poco2/api/v2/package
+  server: https://www.myget.org/F/odata2poco/api/v2/package
   api_key:
     secure: QAHjX2gqddFX2cNhMNqweMTGQ89q++ezKnQvdAcinY5D1rwbj2vkWeFsTykm4koA
-  symbol_server: https://www.myget.org/F/odata2poco2/api/v2/package
+  symbol_server: https://www.myget.org/F/odata2poco/api/v2/package
   

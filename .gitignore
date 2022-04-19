@@ -20,6 +20,7 @@ Plugins/
 *.sln.docstates
 *.bat
 *.log
+launchSettings.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
