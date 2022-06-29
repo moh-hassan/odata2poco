@@ -17,7 +17,7 @@
 		<PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128</NoWarn>
-		<LangVersion>9.0</LangVersion>
+		 <LangVersion>latest</LangVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<Version Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)</Version>
 		<Version Condition="'$(VersionSuffix)' == ''">0.0.0</Version>
@@ -35,10 +35,12 @@
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(IsTestProject)' == 'true'">
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-		<PackageReference Include="nunit" Version="3.13.2" />
-		<PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+		<PackageReference Include="nunit" Version="3.13.3" />
+		<!--<PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />-->
+		<PackageReference Include="NUnit3TestAdapter" Version="4.3.0-alpha-net7.4" />
 		<PackageReference Include="FluentAssertions" Version="5.10.3" />
+	    <PackageReference Include="NSubstitute" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>

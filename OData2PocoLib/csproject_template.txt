@@ -7,7 +7,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
  </ItemGroup>  
    <ItemGroup>
-     <PackageReference Include="Newtonsoft.Json" Version="12.0.1 " />
+     <PackageReference Include="Newtonsoft.Json" Version="13.0.1 " />
      <PackageReference Include="Microsoft.Spatial" Version="7.5.4 " />
 	 <PackageReference Include="Microsoft.OData.Edm" Version="6.19.0" />
     <!-- <PackageReference Include="protobuf-net" Version="2.4.0 " /> -->
