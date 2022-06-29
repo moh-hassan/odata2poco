@@ -60,7 +60,7 @@ namespace OData2Poco.Http
 
             if (_delegatingHandler != null)
             {
-                Logger.Trace($"Attaching Delegating Handler");
+               // Logger.Trace($"Attaching Delegating Handler");
                 _delegatingHandler.InnerHandler = handler;
                 _client = new HttpClient(_delegatingHandler);
             }

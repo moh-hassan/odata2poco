@@ -54,8 +54,7 @@ namespace OData2Poco
      public StringBuilder GetReferenceFullNet()
       
         {
-            var packageList = new StringBuilder();
-            //packageList.AppendFormat("<PackageReference Include=\"Microsoft.Spatial\" Version=\"7.5.4\" />\r\n");
+            var packageList = new StringBuilder();           
 
             if (Attributes.Any(x => x == "key" || x=="req"|| x=="tab"|| x=="display"|| x=="db"))
                 packageList.AppendFormat("\t\t\t<Reference Include=\"System.ComponentModel.DataAnnotations\"/>\r\n");
@@ -75,25 +74,3 @@ namespace OData2Poco
     }
 }
 
-/*
- build.cmd
-
- <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-      <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>
-      <!--<TargetFramework>net45</TargetFramework>-->
-  </PropertyGroup>
- <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
-    <Reference Include="System.Runtime.Serialization" />  
-    <Reference Include="System.ComponentModel.DataAnnotations" />
- </ItemGroup>  
-   <ItemGroup>
-     <PackageReference Include="Newtonsoft.Json" Version="12.0.1 " />
-     <PackageReference Include="Microsoft.Spatial" Version="7.5.4 " />
-     <PackageReference Include="protobuf-net" Version="2.4.0 " />
-   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0 " />
-  </ItemGroup>  
-</Project>
- */

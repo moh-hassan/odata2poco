@@ -6,8 +6,8 @@ using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
 
-//todo: file source
-//(c) 2016-2018 Mohamed Hassan
+ 
+//(c) 2016-2022 Mohamed Hassan
 // MIT License
 //project site:https://github.com/moh-hassan/odata2poco
 
@@ -76,8 +76,7 @@ namespace OData2Poco.CommandLine
         }
 
         internal static async Task<int> RunOptionsAsync(string[] args)
-        {
-            // var argumentParser = new ArgumentParser(Logger);
+        {             
             var argumentParser = new ArgumentParser();
             return await argumentParser.RunOptionsAsync(args);
         }

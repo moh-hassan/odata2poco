@@ -51,7 +51,7 @@ namespace OData2Poco.CommandLine.Test
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
-            Console.WriteLine(output);
+            
             //Assert
             Assert.AreEqual(0, tuble.Item1);
 
@@ -389,8 +389,7 @@ public enum Feature
         }
 
         [Test]
-        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]
-        //[TestCaseSource(typeof(TestSample), nameof(TestSample.UrlOdatadCases))]
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]        
         public async Task Url_test(string url, string version, int n)
         {
             //Arrange

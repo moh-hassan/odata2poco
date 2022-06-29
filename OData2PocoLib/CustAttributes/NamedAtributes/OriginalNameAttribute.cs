@@ -19,8 +19,7 @@ namespace OData2Poco.CustAttributes.NamedAtributes
         {
             return new List<string>
             {
-                property.OriginalName != property.PropName
-                    //  ? $"//[OriginalName({property.OriginalName})]"
+                property.OriginalName != property.PropName                    
                     ? $"[JsonProperty(\"{property.OriginalName}\")]"
                     : string.Empty,
             };

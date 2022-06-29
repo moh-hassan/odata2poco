@@ -26,17 +26,17 @@ namespace OData2Poco.Http
                     break;
 
                 case AuthenticationType.Basic:
-                    Logger.Trace("Authenticating with Basic");
+                  //  Logger.Trace("Authenticating with Basic");
                         Authenticate(odataConnString.UserName, odataConnString.Password);
                     break; ;
 
                 case AuthenticationType.Token:
-                    Logger.Trace("Authenticating with Token");
+                  //  Logger.Trace("Authenticating with Token");
                     //token
                         Authenticate(odataConnString.Password);
                     break;
                 case AuthenticationType.Oauth2:
-                    Logger.Trace("Authenticating with OAuth2");
+                //    Logger.Trace("Authenticating with OAuth2");
                     //OAuth2 
                     if (!string.IsNullOrEmpty(odataConnString.TokenUrl))
                     {

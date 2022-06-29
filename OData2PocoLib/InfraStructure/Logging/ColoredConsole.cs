@@ -4,9 +4,7 @@ using System.Text;
 namespace OData2Poco.InfraStructure.Logging
 {
     public class ColoredConsole : ILog
-    {
-        //private static readonly Lazy<ColoredConsole> Lazy = new Lazy<ColoredConsole>(() => new ColoredConsole());
-        //public static ColoredConsole Default => Lazy.Value;
+    {         
         private readonly object _colorLock = new object();
         public ConsoleColor WarningColor = ConsoleColor.Yellow;
         public ConsoleColor InfoColor = ConsoleColor.Cyan;
@@ -36,7 +34,7 @@ namespace OData2Poco.InfraStructure.Logging
 
             lock (_colorLock)
             {
-                Console.ForegroundColor = foreColor; //ConsoleColor.Yellow;
+                Console.ForegroundColor = foreColor;  
                 if (!Silent) Console.WriteLine(msg);
                 Console.ResetColor();
                 Output.AppendLine(msg);
@@ -49,7 +47,7 @@ namespace OData2Poco.InfraStructure.Logging
             lock (_colorLock)
             {
                 Console.BackgroundColor = backColor;
-                Console.ForegroundColor = foreColor; //ConsoleColor.Yellow;
+                Console.ForegroundColor = foreColor;  
                 if (!Silent) Console.WriteLine(msg);
                 Console.ResetColor();
                 Output.AppendLine(msg);

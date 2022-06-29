@@ -47,7 +47,6 @@ public static class TestSample
     public static string GetFullPath(string relative)
     {
         var path = Path.GetFullPath(Path.Combine(BaseDirectory, RelativeFakeFolder, relative));
-        //Console.WriteLine($"path of : {relative} => {path}");
         return path;
     }
 

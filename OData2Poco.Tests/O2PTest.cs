@@ -32,8 +32,7 @@ namespace OData2Poco.Tests
         [Test]
         public async Task GenerateDefaultTestV4()
         {
-            var url = TestSample.TripPin4;
-            Console.WriteLine(url);
+            var url = TestSample.TripPin4;           
             var connString = new OdataConnectionString { ServiceUrl = url };
             var o2p = new O2P();
             var code = await o2p.GenerateAsync(connString);
@@ -67,15 +66,13 @@ namespace OData2Poco.Tests
         {
             string xml = File.ReadAllText(fileName);
             var o2p = new O2P();
-            var code = await o2p.GenerateAsync(xml);
-            Console.WriteLine(code);
+            var code = await o2p.GenerateAsync(xml);           
             Assert.IsTrue(code.Contains("public partial class Product"));           
         }
         [Test]
         public async Task GenerateFromRemoteXmlfile()
         {            
-            var url = "https://raw.githubusercontent.com/moh-hassan/odata2poco/master/Fake/trippinV4.xml";
-            Console.WriteLine(url);
+            var url = "https://raw.githubusercontent.com/moh-hassan/odata2poco/master/Fake/trippinV4.xml";          
             var connString = new OdataConnectionString { ServiceUrl = url };
             var o2p = new O2P();
             var code = await o2p.GenerateAsync(connString);            
@@ -85,8 +82,7 @@ namespace OData2Poco.Tests
         [Test]
         public async Task Enable_read_write_properties_even_for_readonly()
         {
-            var url = "https://raw.githubusercontent.com/moh-hassan/odata2poco/master/Fake/trippinV4.xml";
-            Console.WriteLine(url);
+            var url = "https://raw.githubusercontent.com/moh-hassan/odata2poco/master/Fake/trippinV4.xml";            
             var connString = new OdataConnectionString { ServiceUrl = url };
             var setting = new PocoSetting
             {
