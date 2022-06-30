@@ -151,10 +151,10 @@ namespace OData2Poco.CommandLine
             Include= new List<string>();
         }
 
-#if NETFULL
-        [Usage(ApplicationAlias = "o2pgen")]
+#if NETCOREAPP
+          [Usage(ApplicationAlias = "dotnet-o2pgen")]
 #else
-        [Usage(ApplicationAlias = "dotnet-o2pgen")]
+        [Usage(ApplicationAlias = "o2pgen")]
 #endif
         public static IEnumerable<Example> Examples
         {

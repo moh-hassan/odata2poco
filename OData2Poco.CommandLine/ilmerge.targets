@@ -37,8 +37,8 @@
     
     <Error Condition="!Exists(@(ILMergePackage->'%(FullPath)'))" Text="You are trying to use the ILMerge package, but it is not installed or at the correct location" />
 
-    <!--<MakeDir Directories="$(Merged)"      Condition="!Exists('$(Merged)')" />-->
-    <Exec Command="@(ILMergePackage->'%(fullpath)') /ndebug /target:exe /targetplatform:v4 /log:merge.log /out:$(Merged)\$(AssemblyName).exe /wildcards  /target:exe $(OutputPath)$(AssemblyName).exe $(OutputPath)*.dll" />
+     
+    <Exec Command="@(ILMergePackage->'%(fullpath)') /ndebug /target:exe /targetplatform:v4  /out:$(Merged)\$(AssemblyName).exe /wildcards  /target:exe $(OutputPath)$(AssemblyName).exe $(OutputPath)*.dll" />
 
   </Target>
 </Project>

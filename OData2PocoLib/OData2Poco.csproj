@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net5.0;netstandard2.0;net461;net45</TargetFrameworks>
+		<TargetFrameworks>net6.0;netstandard2.0;net461;net45</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)' == 'unix'">net6.0;netstandard2.0
+		</TargetFrameworks>
 		<RootNamespace>OData2Poco</RootNamespace>
 		<AssemblyName>OData2Poco</AssemblyName>
 		<Authors>Mohamed Hassan</Authors>
@@ -36,15 +38,9 @@
 
 
 	<ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
-
 		<Reference Include="System.Net.Http" />
 		<Reference Include="System.Net" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-	</ItemGroup>
+	</ItemGroup> 
 
 	<PropertyGroup>
 		<PackageId>OData2Poco</PackageId>

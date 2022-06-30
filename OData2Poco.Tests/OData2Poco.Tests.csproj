@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>		 	
-		<TargetFrameworks>net5.0</TargetFrameworks>		 
-		<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net5.0;net45</TargetFrameworks>
+		<TargetFrameworks>net6.0</TargetFrameworks>		 
+		<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net6.0;net45</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Authors>Mohamed Hassan</Authors>
 		<Copyright>Copyright ©  Mohamed Hassan 2016</Copyright>
@@ -25,10 +25,7 @@
 		<Compile Include="..\Fake\projectTestData.cs" Link="projectTestData.cs" />
 		<Compile Include="..\OData2Poco.CommandLine.Test\Utility\HelpTestExtension.cs" Link="HelpTestExtension.cs" />
 	</ItemGroup>
-
-	<PropertyGroup Condition="$(TargetFramework.StartsWith('net4')) ">
-		<DefineConstants>NET45;NETFULL</DefineConstants>
-	</PropertyGroup>
+	 
 	<ItemGroup>
 		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
 	</ItemGroup>
