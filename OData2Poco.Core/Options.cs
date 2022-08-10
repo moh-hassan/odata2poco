@@ -137,6 +137,11 @@ namespace OData2Poco.CommandLine
         //feature #41
         [Option("read-write", HelpText = "All properties are read/write")]
         public bool ReadWrite { get; set; }
+        /// <summary>
+        /// Allow Nulable Reference Type in c#8, feature #43
+        /// </summary>
+        [Option('B', "enable-nullable-reference", HelpText = "Enable nullable for all reference types including option -b for primitive  types by adding ? to types")]
+        public bool EnableNullableReferenceTypes { get; set; } 
         public List<string> Errors { get; set; }
 
         public Options()

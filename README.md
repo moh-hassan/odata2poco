@@ -3,9 +3,10 @@
 POCO classes can be used in a typed RESTful client OData services and code generation can be controlled by setting many options.
 
 ## What is news
-Odata2Poco v4.2.0 is published with  new features implemented for request [#41](https://github.com/moh-hassan/odata2poco/issues/41): 
--A new API to enable reading xml contents directly as string.
-- Enable ignoring read-only properties in metadata and generate read-write properties.
+Odata2Poco v4.3.0 is released with  new features implemented for request [#43](https://github.com/moh-hassan/odata2poco/issues/43): Enable code generation that support nullable reference type of c#8 by adding new option -B/--enable-nullable-reference.
+- Moving to .Net 6.
+- Allow reading remote metadata http(s) xml files.
+ 
 
 ## OData2Poco Packages
 OData2Poco is available in three flavers:

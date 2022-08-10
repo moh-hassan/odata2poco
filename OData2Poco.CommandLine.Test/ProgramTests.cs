@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.TestUtility;
 
@@ -181,6 +182,36 @@ namespace OData2Poco.CommandLine.Test
             Assert.IsTrue(output.Contains("public virtual Supplier Supplier {get;set;}")); //-n
             Assert.IsTrue(output.Contains("int?"));  //-b
 
+        }
+        //feature #43
+        [Test]
+        [TestCase("-B")]
+        [TestCase("--enable-nullable-reference")]
+        [TestCase("-B -b")]
+        public async Task NullableReferencetypeTest(string arg)
+        {
+            //Arrange
+            string url = TestSample.TripPin4;
+            var a = $"-r {url} -v {arg}";
+
+            //Act
+            var tuble = await RunCommand(a);
+
+            //Assert
+            var output = tuble.Item2;
+            // Console.WriteLine(output);            
+            var list = new List<string>
+            {
+                "public partial class Person",
+                "public string UserName {get;} //PrimaryKey not null ReadOnly",
+                "public string FirstName {get;set;} // not null",
+                "public string LastName {get;set;} // not null",
+                "public List<string>? Emails {get;set;}",
+                "public List<Location>? AddressInfo {get;set;}",
+                "public PersonGender? Gender {get;set;}",
+                "public long Concurrency {get;} // not null ReadOnly",
+            };
+            output.Should().ContainAll(list); 
         }
 
         [Test]
@@ -602,10 +633,7 @@ public enum Feature
                 "public int PlanItemId {get;} //PrimaryKey not null ReadOnly",
                 "public string AirlineCode {get;} //PrimaryKey not null ReadOnly"
              };
-            foreach (var s in list)
-            {
-                Assert.IsTrue(output.Contains(s));
-            }
+             output.Should().ContainAll(list);             
         }
 
         [Test]

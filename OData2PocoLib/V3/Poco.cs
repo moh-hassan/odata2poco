@@ -283,7 +283,8 @@ namespace OData2Poco.V4
             var serial = 1;
             var list = properties.Select(property => new PropertyTemplate
             {
-                IsNullable = property.Type.IsNullable,
+                IsNullable = property.Type.IsPrimitive() || property.Type.IsEnum()
+                    ? property.Type.IsNullable : true,
                 PropName = property.Name,
                 PropType = GetClrTypeName(property.Type),
                 Serial = serial++,

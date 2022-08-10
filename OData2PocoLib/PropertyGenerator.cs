@@ -76,14 +76,27 @@ namespace OData2Poco
         /// <summary>
         /// NullableModifier represented by "?" added to type , e.g int?
         /// </summary>
-        public string NullableModifier => _setting.AddNullableDataType && _property.IsNullable ? Helper.GetNullable(_property.PropType) : String.Empty;
+        public string GetNullableModifier()
+        {
+            //support -b option
+            if (_setting.EnableNullableReferenceTypes && _property.IsNullable
+               && !_property.IsKey)
+                return "?";
+
+            if (_setting.AddNullableDataType && _property.IsNullable)
+                return Helper.GetNullable(_property.PropType);
+            //if (_setting.AddNullableDataType )
+            //    return string.Empty;          
+
+            return string.Empty;
+        }
 
         public string Declaration =>
             new StringBuilder()
                 .Append($"public{VirtualModifier}")
                 .Append(" ")
                 .Append(ReducedPropertyTypeName)
-                .Append(NullableModifier)
+                .Append(GetNullableModifier())
                 .Append(" ")
                 .Append(Name)
                 .Append(" ")

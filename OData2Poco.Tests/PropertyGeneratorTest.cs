@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.CustAttributes;
 using OData2Poco.Extensions;
@@ -485,6 +487,37 @@ public int CategoryID {get;set;} ";
             string sut = new PropertyGenerator(null, null);
             // Assert 
             Assert.That(sut, Is.EqualTo(""));
+        }
+
+        
+        //feature #43
+        [Test]
+        [TestCase("Person" ,true, "public Person? ID {get;set;}")]
+        [TestCase("Person",false, "public Person ID {get;set;}")]
+        [TestCase("int", true, "public int? ID {get;set;}")]
+        [TestCase("int", false, "public int ID {get;set;}")]
+        [TestCase("List<Person>", true, "public List<Person>? ID {get;set;}")]
+        [TestCase("List<Person>", false, "public List<Person> ID {get;set;}")]
+        public void NullableReferenceType(string propType, bool isNullable, string expected)
+        {
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                EnableNullableReferenceTypes = true,
+            };
+            _attributeManager.Init(setting);
+
+            var property = new PropertyTemplate
+            {
+                PropName = "ID",
+                PropType = propType,
+                IsNullable = isNullable
+            };
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+
+            // Assert              
+            sut.Declaration.Should().Contain(expected);
         }
     }
 }

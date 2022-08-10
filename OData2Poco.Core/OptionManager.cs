@@ -36,6 +36,7 @@ namespace OData2Poco.CommandLine
                 Include = PocoOptions.Include.ToList(),
                 EntityNameCase=PocoOptions.EntityNameCase.ToEnum<CaseEnum>(),
                 ReadWrite = PocoOptions.ReadWrite,
+                EnableNullableReferenceTypes = PocoOptions.EnableNullableReferenceTypes,
             };
         }
 
