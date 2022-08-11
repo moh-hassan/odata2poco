@@ -2,8 +2,8 @@
 
 ##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
 
-##  Version 4.3.0
-**Release Date:**  August 10, 2022
+##  Version 4.3.1
+**Release Date:**  August 11, 2022
 - New features implemented for request [#43](https://github.com/moh-hassan/odata2poco/issues/43): Enable code generation that support nullable reference type of c#8 by adding new option -B/--enable-nullable-reference.
 - Moving to .Net 6.
 - Allow reading remote metadata http(s) xml files.
