@@ -1,8 +1,12 @@
 #nuget version is nly changed by  RELEASE TAG
-version: 4.3.1-beta-{build}
+version: 4.4.0-beta-{build}
 image: Visual Studio 2022
 pull_requests:
   do_not_increment_build_number: false
+
+environment:
+  api_key:
+    secure: CUR2VQy2d8EeiFJ//LEcn7BJrbXjVhuAi4Te/7Vtn3kpzA2LSHInh21H3Z38H57Q
 
 init:
   - ps: |
@@ -27,6 +31,7 @@ init:
   - ps: |
       Write-Host "APPVEYOR_BUILD_VERSION='$env:APPVEYOR_BUILD_VERSION'" -ForegroundColor Yellow
       Write-Host "APPVEYOR_REPO_TAG_NAME= '$env:APPVEYOR_REPO_TAG_NAME'" -ForegroundColor Yellow
+      Write-Host 'choco version';choco -v
 
 configuration: Release
 
@@ -51,6 +56,10 @@ after_test:
 - cmd: dotnet pack OData2Poco.CommandLine/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  
 - cmd: dotnet pack OData2Poco.dotnet.o2pgen/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  
 - cmd: dotnet pack OData2PocoLib/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  
+- ps: |
+    $version=$env:APPVEYOR_BUILD_VERSION
+    $allow_push=$env:APPVEYOR_REPO_TAG -eq "true"
+    .\scripts\build_choco $version $allow_push
 
  
 artifacts:
@@ -64,6 +73,9 @@ artifacts:
   name: lib
 - path: '.\build\OData2Poco.*.snupkg'
   name: symbol   
+- path: '.\chocolatey\*.nupkg'
+  name: choco_pkg 
+
 deploy:
 - provider: GitHub
   auth_token:

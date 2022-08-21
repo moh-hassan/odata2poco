@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>odata2poco-commandline</id>
+    <version>0.0.0</version>
+    <title>odata2poco commandline</title>
+    <authors>Mohamed Hassan</authors>
+    <owners>Mohamed Hassan</owners>
+    <licenseUrl>https://github.com/moh-hassan/odata2poco/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/moh-hassan/odata2poco</projectUrl>
+    <iconUrl>https://github.com/moh-hassan/odata2poco/blob/master/art/ODataLogo-128.png?raw=true</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds.</description>
+    <releaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md</releaseNotes>
+    <copyright>Copyright  2016-2022, Mohamed Hassan</copyright>
+    <tags>odata charp o2pgen meta-xml web-api</tags>
+    <projectSourceUrl>https://github.com/moh-hassan/odata2poco</projectSourceUrl>
+    <packageSourceUrl>https://github.com/moh-hassan/odata2poco</packageSourceUrl>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="../LICENSE.txt" target="tools" />
+    <file src="../build/O2pgen.exe" target="tools" />
+   <file src="../build/o2pgen.exe.sha256.txt" target="tools" />
+    <file src="./content/VERIFICATION.txt" target="tools" />
+  </files>
+</package>
