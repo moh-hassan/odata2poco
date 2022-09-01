@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\common\IsExternalInit.cs" Link="IsExternalInit.cs" />
     <Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />
     <Compile Include="..\Fake\CommonTestData.cs" Link="Utility\CommonTestData.cs" />
   </ItemGroup>

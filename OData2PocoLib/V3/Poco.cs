@@ -23,7 +23,7 @@ namespace OData2Poco.V3
         private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
         private readonly ILog _logger = PocoLogger.Default;
         private List<string> SchemaErrors { get; set; }
-        private IEdmModel Model { get; set; }
+        internal IEdmModel Model { get; set; }
         internal Poco(MetaDataInfo metaData, PocoSetting setting)
         {
             _setting = setting ?? new PocoSetting();
@@ -320,6 +320,11 @@ namespace OData2Poco.V3
             var elements = Model.SchemaElements.OfType<IEdmSchemaType>();
             return func(elements);
 
+        }
+
+        public string GenerateOpenApi(int openApiVersion = 3)
+        {             
+            throw new InvalidOperationException("Only Odata v4 is allowed for openApi specs");
         }
         #endregion
 

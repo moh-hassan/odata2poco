@@ -7,11 +7,12 @@ using OData2Poco.Api;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
+using OData2Poco.TextTransform;
 /*
-   read parameter file into dictionary
-   recursive resolve macros in dictionary
-   replace options values for: password , tokens ,url
- * */
+read parameter file into dictionary
+recursive resolve macros in dictionary
+replace options values for: password , tokens ,url
+* */
 namespace OData2Poco.CommandLine
 {
     /// <summary>
@@ -46,32 +47,30 @@ namespace OData2Poco.CommandLine
 
         public async Task Execute()
         {
-
             ShowOptions();
-            Console.WriteLine();           
+            Console.WriteLine();
             ArgOptions.Errors.ForEach(x =>
             {
                 _logger.Error(x);
-            });             
+            });
 
             //show warning
             ArgOptions.Errors.ForEach(x =>
                 {
                     _logger.Warn(x);
                 });
-            _logger.Info($"Start processing url: { odataConnectionString.ServiceUrl}");
+            _logger.Info($"Start processing url: {odataConnectionString.ServiceUrl}");
             //show result
             await GenerateCodeCommandAsync();
             ShowWarning(); //warning of model property/class renaming
             GenerateProjectCommand();
             ServiceInfo();
-
             SaveMetaDataCommand();
+            await SaveOpenApiCommandAsync();
             ShowHeaderCommand();
             ListPocoCommand();
             VerboseCommand();
             ShowErrors();
-
         }
         public void ShowOptions(Options option)
         {
@@ -166,7 +165,7 @@ namespace OData2Poco.CommandLine
                 _logger.Normal("Saving generated CSharp code to file : " + ArgOptions.CodeFilename);
                 SaveToFile(ArgOptions.CodeFilename, Code);
                 _logger.Confirm("CSharp code  is generated Successfully.");
-            }            
+            }
             else
             {
                 _logger.Warn($"Lang option: '{ArgOptions.Lang}' isn't valid. Only cs are accepted \r\n No code is generated");
@@ -184,7 +183,16 @@ namespace OData2Poco.CommandLine
             var metaData = O2PGen.MetaDataAsString.FormatXml();
             SaveToFile(ArgOptions.MetaFilename, metaData);
         }
+        private async Task SaveOpenApiCommandAsync()
+        {
 
+            if (string.IsNullOrEmpty(ArgOptions.OpenApiFileName)) return;
+
+            _logger.Normal("");
+            _logger.Normal($"Saving OpenApi Specs to file : {ArgOptions.OpenApiFileName}");
+
+            await O2PGen.GenerateOpenApiAsync(odataConnectionString);
+        }
         private void GenerateProjectCommand()
         {
             //---------   --gen-project, -g

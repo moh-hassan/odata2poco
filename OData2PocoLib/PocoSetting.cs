@@ -88,6 +88,11 @@ namespace OData2Poco
         public List<string>? Include { get; set; }
         public bool ReadWrite { get; set; } //all properties are read/write 
         public bool EnableNullableReferenceTypes { get; set; } //all properties are read/write 
+
+        public bool InitOnly { get; set; }
+        public bool AsRecord { get; set; } //create record type c# 9 feature
+        public string OpenApiFileName { get; set; } = "";
+
         /// <summary>
         /// Initialization
         /// </summary>
@@ -99,6 +104,7 @@ namespace OData2Poco
             NameCase = CaseEnum.None;
             AddJsonAttribute = false;
             Attributes = new List<string>();
+            
         }
 
     }

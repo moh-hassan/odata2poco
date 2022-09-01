@@ -19,14 +19,18 @@
 	
 	<PropertyGroup>
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-	</PropertyGroup> 
+	</PropertyGroup>
+	
+	<ItemGroup>
+	  <Compile Include="..\common\IsExternalInit.cs" Link="IsExternalInit.cs" />
+	</ItemGroup> 
 
 	<ItemGroup>
-		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj"/>		 
+		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />		 
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommandLineParser" Version="2.8.0"/>			
+		<PackageReference Include="CommandLineParser" Version="2.8.0" />			
 	</ItemGroup>
 
 	<ItemGroup>

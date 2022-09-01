@@ -8,6 +8,10 @@ using OData2Poco.InfraStructure.Logging;
 using Microsoft.OData.Edm;
 using Microsoft.OData.Edm.Validation;
 using Microsoft.OData.Edm.Csdl;
+using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.OData;
+using Microsoft.OpenApi;
+using Microsoft.OpenApi.Extensions;
 
 namespace OData2Poco.V4
 {
@@ -15,24 +19,24 @@ namespace OData2Poco.V4
     ///     Process metadataString and generate list of   classes
     /// </summary>
     internal partial class Poco : IPocoGenerator
-    {       
+    {
         public MetaDataInfo MetaData { get; set; }
         public string MetaDataAsString => MetaData.MetaDataAsString;
         private readonly PocoSetting _setting;
         private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
         private readonly ILog _logger = PocoLogger.Default;
         private List<string> SchemaErrors { get; set; }
-        private IEdmModel Model { get; set; }
+        internal IEdmModel Model { get; set; }
         internal Poco(MetaDataInfo metaData, PocoSetting setting)
         {
             _setting = setting ?? new PocoSetting();
             MetaData = metaData;
             SchemaErrors = new List<string>();
             EntitySets = new List<IEdmEntitySet>();
-            Model= LoadModelFromString();
+            Model = LoadModelFromString();
         }
         //support Odata.Edm v7+
-        internal  IEdmModel LoadModelFromString()
+        private IEdmModel LoadModelFromString()
         {
             IEdmModel model;
             //Microsoft.OData.Edm" v7+
@@ -91,7 +95,7 @@ namespace OData2Poco.V4
         /// <returns></returns>
         public List<ClassTemplate> GeneratePocoList()
         {
-            var list = new List<ClassTemplate>();            
+            var list = new List<ClassTemplate>();
             IEnumerable<IEdmSchemaType> schemaElements = GetSchemaElements(Model);
             foreach (var type in schemaElements.ToList())
             {
@@ -196,7 +200,7 @@ namespace OData2Poco.V4
         private List<PropertyTemplate> GetClassProperties(IEdmSchemaType ent)
         {
             //stop here if enum
-            if (ent is IEdmEnumType) return Enumerable.Empty<PropertyTemplate>().ToList(); 
+            if (ent is IEdmEnumType) return Enumerable.Empty<PropertyTemplate>().ToList();
             var structuredType = ent as IEdmStructuredType;
             var properties = structuredType.Properties();
             if (_setting != null && _setting.UseInheritance)
@@ -328,7 +332,29 @@ namespace OData2Poco.V4
             return func(elements);
 
         }
+
         #endregion
 
+        #region openApi         
+        public string GenerateOpenApi(int openApiVersion = 3)
+        {
+            var fileName = _setting.OpenApiFileName;
+            var ext = Path.GetExtension(fileName);
+            OpenApiDocument document = Model.ConvertToOpenApi();
+            OpenApiSpecVersion spec = openApiVersion == 2
+                ? OpenApiSpecVersion.OpenApi2_0
+                : OpenApiSpecVersion.OpenApi3_0;
+            string? text;
+            if (ext == ".yaml" || ext == ".yml")
+                text = document.SerializeAsYaml(spec);
+            else if (ext == ".json")
+                text = document.SerializeAsJson(spec);
+            else
+                throw new InvalidOperationException($"File type: '{ext}' is not supported");
+
+            File.WriteAllText(fileName, text);
+            return text;
+        }       
+        #endregion
     }
 }

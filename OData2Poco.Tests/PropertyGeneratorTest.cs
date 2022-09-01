@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.CustAttributes;
 using OData2Poco.Extensions;
 using OData2Poco.TestUtility;
-//  //todo rename /keyword
+
 namespace OData2Poco.Tests
 {
     [Category("property_generation")]
     [TestFixture]
     class PropertyGeneratorTest
     {
-        private  AttributeFactory _attributeManager ;
+        private AttributeFactory _attributeManager;
         [OneTimeSetUp]
         public void Init()
         {
@@ -29,7 +27,7 @@ namespace OData2Poco.Tests
                 IsKey = true
             };
             var pg = new PropertyGenerator(property, new PocoSetting());
-         
+
             Assert.IsTrue(pg.Declaration.Contains("public int CategoryID {get;set;}"));
         }
         [Test]
@@ -53,7 +51,7 @@ namespace OData2Poco.Tests
 
             // Act 
             var sut = new PropertyGenerator(property, setting);
-      
+
 
             // Assert 
             Assert.IsTrue(sut.ToString().Contains("[Key]") &&
@@ -80,7 +78,7 @@ namespace OData2Poco.Tests
 
             // Act 
             var sut = new PropertyGenerator(property, setting);
-          
+
             // Assert 
             Assert.IsTrue(sut.Declaration.Contains("public int categoryID {get;set;}"));
         }
@@ -102,7 +100,7 @@ namespace OData2Poco.Tests
             };
             // Act 
             var sut = new PropertyGenerator(property, setting);
-           
+
             // Assert 
             Assert.IsTrue(sut.Declaration.Contains("public int CategoryID {get;set;}"));
         }
@@ -123,7 +121,7 @@ namespace OData2Poco.Tests
             };
             // Act 
             var sut = new PropertyGenerator(property, setting);
-         
+
             // Assert 
             Assert.IsTrue(sut.Declaration.Contains("public int Category_ID {get;set;}"));
         }
@@ -144,7 +142,7 @@ namespace OData2Poco.Tests
             };
             // Act 
             var sut = new PropertyGenerator(property, setting);
-            
+
             // Assert 
             var expected = "[JsonProperty(PropertyName = \"CategoryID\")]";
 
@@ -161,7 +159,7 @@ namespace OData2Poco.Tests
                 NameCase = CaseEnum.Camel
             };
             _attributeManager.Init(setting);
-          
+
             PropertyTemplate property = new PropertyTemplate
             {
                 PropName = "CategoryID",
@@ -174,7 +172,7 @@ namespace OData2Poco.Tests
             var expected =
                 $"[JsonProperty(PropertyName = \"CategoryID\")] {Constant.NewLine}public int categoryID {{get;set;}} ";
 
-       
+
             Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
         }
         [Test]
@@ -201,7 +199,7 @@ namespace OData2Poco.Tests
             var expected = @"
 [Key]
 public int CategoryID {get;set;} ";
-        
+
             Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
         }
 
@@ -214,7 +212,7 @@ public int CategoryID {get;set;} ";
                 AddRequiredAttribute = true
             };
             _attributeManager.Init(setting);
-           
+
             PropertyTemplate property = new PropertyTemplate
             {
                 PropName = "CategoryID",
@@ -224,17 +222,17 @@ public int CategoryID {get;set;} ";
             // Act 
             var sut = new PropertyGenerator(property, setting);
             // Assert 
-           
+
             var expected = @"
 [Required]
 public int CategoryID {get;set;} ";
-           
+
             Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
         }
 
         [Test]
         public void IsNullablePropertyDeclaration_test()
-        { 
+        {
             // Arrange 
             var setting = new PocoSetting
             {
@@ -251,7 +249,7 @@ public int CategoryID {get;set;} ";
             // Act 
             var sut = new PropertyGenerator(property, setting);
             // Assert 
-           
+
             Assert.IsTrue(sut.Declaration.Contains("public int? dummy1 {get;set;}"));
         }
 
@@ -282,7 +280,7 @@ public int CategoryID {get;set;} ";
 
         [Test]
         public void LazyirtualPropertyDeclaration_test()
-        { 
+        {
             // Arrange 
             var setting = new PocoSetting
             {
@@ -304,13 +302,13 @@ public int CategoryID {get;set;} ";
         }
         [Test]
         public void Property_declaration_test()
-        { 
+        {
             // Arrange 
             var setting = new PocoSetting
             {
                 AddEager = false,
                 AddNavigation = true,
-                Attributes = new List<string> { "key","json"},
+                Attributes = new List<string> { "key", "json" },
             };
             _attributeManager.Init(setting);
             var property = new PropertyTemplate
@@ -322,13 +320,13 @@ public int CategoryID {get;set;} ";
             };
             // Act 
             string sut = new PropertyGenerator(property, setting);
-            var expected=@"
+            var expected = @"
 [Key]
 [JsonProperty(PropertyName = ""ProductId"")]
         public virtual int ProductId {get;set;}
 ";
             // Assert 
-           Assert.That(sut, Does.Match(expected.GetRegexPattern()));
+            Assert.That(sut, Does.Match(expected.GetRegexPattern()));
         }
 
         [Test]
@@ -341,12 +339,12 @@ public int CategoryID {get;set;} ";
         [TestCase("[Non_named]", "[Non_named]")]
         [TestCase("display", "[Display(Name = \"Product Id\")]")]
         [TestCase("db", "[Key]")]
-        public void Property_attributes_test(string att,string expected)
+        public void Property_attributes_test(string att, string expected)
         {
             // Arrange 
             var setting = new PocoSetting
             {
-                Attributes = new List<string> {att } 
+                Attributes = new List<string> { att }
             };
             _attributeManager.Init(setting);
 
@@ -356,14 +354,14 @@ public int CategoryID {get;set;} ";
                 PropType = "string",
                 Serial = 1,
                 IsKey = true,
-              
+
             };
             // Act 
             string sut = new PropertyGenerator(property, setting);
             // Assert 
-             Assert.IsTrue(sut.Contains(expected));
-          
-           
+            Assert.IsTrue(sut.Contains(expected));
+
+
         }
         [Test]
         public void Property_has_type_in_other_namespac_test()
@@ -379,7 +377,7 @@ public int CategoryID {get;set;} ";
                 PropType = "SP.SimpleDataTable",
                 ClassNameSpace = "SP1",
             };
-            var expected="public SP.SimpleDataTable Table {get;set;}";
+            var expected = "public SP.SimpleDataTable Table {get;set;}";
             // Act 
             string sut = new PropertyGenerator(property, setting);
             // Assert 
@@ -400,7 +398,7 @@ public int CategoryID {get;set;} ";
                 PropType = "SP.SimpleDataTable",
                 ClassNameSpace = "SP",
             };
-            var expected="public SimpleDataTable Table {get;set;}";
+            var expected = "public SimpleDataTable Table {get;set;}";
             // Act 
             string sut = new PropertyGenerator(property, setting);
             // Assert 
@@ -420,7 +418,7 @@ public int CategoryID {get;set;} ";
                 PropType = "SimpleDataTable",
                 ClassNameSpace = "SP",
             };
-            var expected="public SimpleDataTable Table {get;set;}";
+            var expected = "public SimpleDataTable Table {get;set;}";
             // Act 
             string sut = new PropertyGenerator(property, setting);
             // Assert 
@@ -437,7 +435,7 @@ public int CategoryID {get;set;} ";
                 PropType = "List<SP.SimpleDataTable>",
                 ClassNameSpace = "SP",
             };
-            var expected="public List<SimpleDataTable> Table {get;set;}";
+            var expected = "public List<SimpleDataTable> Table {get;set;}";
             // Act 
             string sut = new PropertyGenerator(property, setting);
             // Assert 
@@ -454,7 +452,7 @@ public int CategoryID {get;set;} ";
                 PropType = "List<SP.SimpleDataTable>",
                 ClassNameSpace = "SP1",
             };
-            var expected="public List<SP.SimpleDataTable> Table {get;set;}";
+            var expected = "public List<SP.SimpleDataTable> Table {get;set;}";
             // Act 
             string sut = new PropertyGenerator(property, setting);
             // Assert 
@@ -471,7 +469,7 @@ public int CategoryID {get;set;} ";
                 PropType = "List<SimpleDataTable>",
                 ClassNameSpace = "SP1",
             };
-            var expected="public List<SimpleDataTable> Table {get;set;}";
+            var expected = "public List<SimpleDataTable> Table {get;set;}";
             // Act 
             string sut = new PropertyGenerator(property, setting);
             // Assert 
@@ -481,19 +479,19 @@ public int CategoryID {get;set;} ";
         public void Property_isnull_test()
         {
             // Arrange 
-          
-           
+
+
             // Act 
             string sut = new PropertyGenerator(null, null);
             // Assert 
             Assert.That(sut, Is.EqualTo(""));
         }
 
-        
+
         //feature #43
         [Test]
-        [TestCase("Person" ,true, "public Person? ID {get;set;}")]
-        [TestCase("Person",false, "public Person ID {get;set;}")]
+        [TestCase("Person", true, "public Person? ID {get;set;}")]
+        [TestCase("Person", false, "public Person ID {get;set;}")]
         [TestCase("int", true, "public int? ID {get;set;}")]
         [TestCase("int", false, "public int ID {get;set;}")]
         [TestCase("List<Person>", true, "public List<Person>? ID {get;set;}")]
@@ -518,6 +516,27 @@ public int CategoryID {get;set;} ";
 
             // Assert              
             sut.Declaration.Should().Contain(expected);
+        }
+
+        [Test]
+        public void Property_init_only_test()
+        {
+            // Arrange 
+            var setting = new PocoSetting
+            {
+                InitOnly = true,
+            };
+
+            var property = new PropertyTemplate
+            {
+                PropName = "ID",
+                PropType = "string",
+
+            };
+            // Act 
+            var sut = new PropertyGenerator(property, setting);
+            // Assert 
+            sut.Declaration.Trim().Should().Be("public string ID {get;init;}");             
         }
     }
 }

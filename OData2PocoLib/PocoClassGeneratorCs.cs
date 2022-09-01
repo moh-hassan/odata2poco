@@ -49,7 +49,7 @@ namespace OData2Poco
         {
             List<string> ns = ClassList.Select(x => x.NameSpace).Distinct()
                 .OrderBy(x => x).ToList();
-            var template = new FluentCsTextTemplate {Header = Header};
+            var template = new FluentCsTextTemplate (PocoSetting) {Header = Header};
 
             template.WriteLine(UsingAssembly(ns));
             foreach (var s in ns)
@@ -108,7 +108,7 @@ namespace OData2Poco
         /// <returns></returns>
         internal string ClassToString(ClassTemplate ent, bool includeNamespace = false)
         {
-            var csTemplate = new FluentCsTextTemplate();
+            var csTemplate = new FluentCsTextTemplate(PocoSetting);
 
             ////for enum
             if (ent.IsEnum)
@@ -178,7 +178,7 @@ namespace OData2Poco
             
         private string UsingAssembly(List<string> nameSpaces)
         {
-            var h = new FluentCsTextTemplate();
+            var h = new FluentCsTextTemplate(PocoSetting);
             var assemblyManager = new AssemplyManager(PocoSetting, ClassList);
             var asemplyList = assemblyManager.AssemplyReference;
             foreach (var entry in asemplyList) h.UsingNamespace(entry);

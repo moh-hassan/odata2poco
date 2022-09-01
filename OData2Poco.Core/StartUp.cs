@@ -22,16 +22,25 @@ namespace OData2Poco.CommandLine
         public static int RetCode = (int)ExitCodes.Success;
         public static IPocoFileSystem _pocoFileSystem;
 
+
+        static void SetBufferHeight()
+        {
+#if !NETCOREAPP
+            //only supported in windows
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return;
+            if (!(Console.IsOutputRedirected || Console.IsErrorRedirected))
+                Console.BufferHeight = short.MaxValue - 1;
+#endif
+        }
         public static async Task Run(string[] args)
         {
             var argument = string.Join(" ", args);
             try
             {
                 _pocoFileSystem = new PocoFileSystem();
-   #if !NETCOREAPP             
-                if (!(Console.IsOutputRedirected || Console.IsErrorRedirected)) 
-                        Console.BufferHeight = short.MaxValue - 1; 
-   #endif              
+                SetBufferHeight();
+
                 // Catch all unhandled exceptions in all threads.
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 Sw.Start();
@@ -48,12 +57,12 @@ namespace OData2Poco.CommandLine
                 Logger.Error($"Error in executing the command: o2pgen {argument}");
                 Logger.Error($"Error Message:\n {ex.FullExceptionMessage()}");
 
-#if DEBUG
+                //#if DEBUG
                 Logger.Error("--------------------Exception Details---------------------");
                 Logger.Error($"Error Message:\n {ex.FullExceptionMessage(true)}");
-                Console.ReadKey();
-
-#endif
+                // Console.ReadKey();
+                Console.WriteLine(ex);
+                //#endif
             }
             finally
             {
@@ -74,7 +83,7 @@ namespace OData2Poco.CommandLine
         }
 
         internal static async Task<int> RunOptionsAsync(string[] args)
-        {             
+        {
             var argumentParser = new ArgumentParser();
             return await argumentParser.RunOptionsAsync(args);
         }

@@ -2,7 +2,7 @@
 
 namespace OData2Poco.CommandLine
 {
-    class ApplicationInfo
+    static class ApplicationInfo
     {
         public static string Title = Utility.GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title);
         public static string Author = "Mohamed Hassan";
@@ -37,11 +37,7 @@ namespace OData2Poco.CommandLine
                 return Utility.GetAssemblyAttribute<AssemblyDescriptionAttribute>(a => a.Description);
             }
         }
-
-        public static string HeadingInfo
-        {
-            get { return Product + " " + Version; }
-        }
+        public static string HeadingInfo => $"{Title} Version {Version}";
 
     }
 }

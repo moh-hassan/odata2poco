@@ -91,8 +91,14 @@ namespace OData2Poco
             return string.Empty;
         }
 
-        public string Declaration =>
-            new StringBuilder()
+        public string Declaration
+        {
+            get
+            {
+                var setter = "{get;set;}";
+                if (_setting.InitOnly)
+                    setter = "{get;init;}";
+                return new StringBuilder()
                 .Append($"public{VirtualModifier}")
                 .Append(" ")
                 .Append(ReducedPropertyTypeName)
@@ -100,10 +106,12 @@ namespace OData2Poco
                 .Append(" ")
                 .Append(Name)
                 .Append(" ")
-                .Append(_property.IsReadOnly && !_setting.ReadWrite ? "{get;}" : "{get;set;}")
+                .Append(_property.IsReadOnly && !_setting.ReadWrite ? "{get;}" : setter)
                 .Append(" ")
                 .Append(Comment())
                 .ToString();
+            }
+        }
 
         public override string ToString()
         {

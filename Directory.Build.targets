@@ -1,5 +1,10 @@
 <Project>
-  <PropertyGroup>
-   <AssemblyTitle>$(AssemblyName) ($(TargetFramework))</AssemblyTitle>
-  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyTitle>$(AssemblyName) ($(TargetFramework))</AssemblyTitle>
+	</PropertyGroup>
+	<Target Name="ConvertCommitIdToShort" AfterTargets="InitializeSourceControlInformationFromSourceControlManager">
+		<PropertyGroup Condition="'$(SourceRevisionId)' != ''">
+			<SourceRevisionId>$(SourceRevisionId.Substring(0,9))</SourceRevisionId>
+		</PropertyGroup>
+	</Target>
 </Project>

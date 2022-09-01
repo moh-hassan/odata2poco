@@ -6,5 +6,6 @@ namespace OData2Poco
     {
         MetaDataInfo MetaData { get; set; }
         List<ClassTemplate> GeneratePocoList();
+        string GenerateOpenApi(int openApiVersion = 3);
     }
 }

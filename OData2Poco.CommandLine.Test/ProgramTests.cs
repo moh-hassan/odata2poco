@@ -1,11 +1,12 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+using OData2Poco.Extensions;
 using OData2Poco.TestUtility;
 
 
@@ -52,7 +53,7 @@ namespace OData2Poco.CommandLine.Test
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
-            
+
             //Assert
             Assert.AreEqual(0, tuble.Item1);
 
@@ -419,19 +420,18 @@ public enum Feature
 
         }
 
-        [Test]
-        [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]        
-        public async Task Url_test(string url, string version, int n)
+        [Test]              
+        public async Task Url_test()
         {
             //Arrange
-
+            string url= TestSample.UrlTripPinService;
             var a = $"-r {url} -v ";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
             //Assert
             Assert.AreEqual(0, tuble.Item1);
-            Assert.IsTrue(output.Contains("public partial class Product")); //-v
+            Assert.IsTrue(output.Contains("public partial class Trip")); //-v
 
         }
        
@@ -659,6 +659,68 @@ public enum Feature
             }
         }
         #endregion
+
+        [Test]
+        [Category("record")]
+        public async Task Init_only_property_test()
+        {
+            //Arrange
+            string url = TestSample.TripPin4;
+            var a = $"-r {url}  -v --init-only";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;            
+            //Assert
+            var expected = @"
+public partial class Airline
+{
+    public string AirlineCode {get;} //PrimaryKey not null ReadOnly    
+    public string Name {get;init;} // not null    
+}".ToLines();
+
+            output.Should().ContainAll(expected);
+        }
+        [Test]
+        [Category("record")]
+        public async Task Record_type_cs9_generation_test()
+        {
+            //Arrange
+            string url = TestSample.TripPin4;
+            var a = $"-r {url}  -v --init-only -R";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            var expected = @"
+public partial record Airline
+{
+    public string AirlineCode {get;} //PrimaryKey not null ReadOnly    
+    public string Name {get;init;} // not null    
+}".ToLines();
+
+            output.Should().ContainAll(expected);
+        }
+
+        [Test]
+        [Category("openapi")]
+        public async Task OpenApi_test()
+        {
+            //Arrange
+#if NETCOREAPP
+            var fname = "test_core.yml";
+#else
+      var fname = "test.yml";
+#endif
+            string url = TestSample.TripPin4;
+            var a = $"-r {url}  -v -O {fname}";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            //Assert
+            output.Should().Contain($"Saving OpenApi Specs to file : {fname}");
+            var text = File.ReadAllText(fname);
+            text.Should().Contain("openapi: 3.0.1");
+        }
     }
 
 }

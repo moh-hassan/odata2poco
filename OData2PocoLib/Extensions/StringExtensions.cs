@@ -258,5 +258,10 @@ namespace OData2Poco.Extensions
             return j;
 
         }
+        public static List<string> ToLines(this string text)
+        {
+           return text.Split('\n').Select(a => a.Trim()).ToList();
+
+        }
     }
 }

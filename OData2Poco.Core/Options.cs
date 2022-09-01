@@ -141,7 +141,15 @@ namespace OData2Poco.CommandLine
         /// Allow Nulable Reference Type in c#8, feature #43
         /// </summary>
         [Option('B', "enable-nullable-reference", HelpText = "Enable nullable for all reference types including option -b for primitive  types by adding ? to types")]
-        public bool EnableNullableReferenceTypes { get; set; } 
+        public bool EnableNullableReferenceTypes { get; set; }
+        [Option('I',"init-only", HelpText = "Allow setter of class property to be 'init' instead of 'set' (c# 9 feature)")]
+        public bool InitOnly { get; set; }
+
+        [Option('R', "record", HelpText = "Allow Creation of record type instead of class (c# 9 feature)")]
+        public bool AsRecord { get; set; }
+
+        [Option( 'O',"open-api", HelpText = "Path of file .json /.yml for OpenApi or Swagger Specification version 3.")]
+        public string  OpenApiFileName { get; set; }
         public List<string> Errors { get; set; }
 
         public Options()
@@ -199,7 +207,8 @@ namespace OData2Poco.CommandLine
             //set defaults for null values
             Lang = Lang ?? "cs";
             Authenticate = Authenticate ?? "none";
-            CodeFilename = "poco.cs";
+            if (string.IsNullOrEmpty(CodeFilename))
+                CodeFilename = $"poco.{Lang}";             
             NameCase = NameCase ?? "none";
 
 

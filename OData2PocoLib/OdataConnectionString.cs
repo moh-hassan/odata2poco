@@ -20,6 +20,7 @@ namespace OData2Poco
         public OdataConnectionString()
         {
             TlsProtocol = SecurityProtocolType.Tls12;
+            Authenticate = AuthenticationType.None;
         }
     }
 

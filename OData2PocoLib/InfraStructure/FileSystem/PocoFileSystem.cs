@@ -25,9 +25,9 @@ namespace OData2Poco.InfraStructure.FileSystem
             {
                 var msg = $"Cannot create folder '{folderPath}' because a file with the same name already exists.";
                 Logger.Error(msg);
-                return ;
+                return;
             }
-           
+
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
             foreach (var entry in codeList)
@@ -54,15 +54,18 @@ namespace OData2Poco.InfraStructure.FileSystem
 
         public void SaveToFile(string filePath, string content, Encoding encoding)
         {
-                using (FileStream fileStream = File.Open(filePath, FileMode.Create, FileAccess.Write))
-                using (var streamWriter = new StreamWriter(fileStream, encoding))
-                {
-                    streamWriter.Write(content);
-                    streamWriter.Flush();
-                    streamWriter.Close();
-                    fileStream.Close();
-                }
+            var path = Path.GetFullPath(filePath);            
+            //create directory if not exist
+            new FileInfo(path)?.Directory?.Create();
+            using (FileStream fileStream = File.Open(path, FileMode.Create, FileAccess.Write))
+            using (var streamWriter = new StreamWriter(fileStream, encoding))
+            {
+                streamWriter.Write(content);
+                streamWriter.Flush();
+                streamWriter.Close();
+                fileStream.Close();
+            }
         }
-     
+
     }
 }

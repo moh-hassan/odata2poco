@@ -6,14 +6,14 @@ namespace OData2Poco.Tests
 {
     class CustomeHttpClientTest
     {
-        [Test]
-        [TestCase(TestSample.UrlNorthWindV4)]       
-        [TestCase(TestSample.UrlNorthWindV3)]
-        public async Task No_auth_ReadMetaDataTest(string url)
+        [Test]       
+        public async Task No_auth_ReadMetaDataTest()
         {
+            string url = TestSample.UrlTripPinService;
             var connection = new OdataConnectionString
             {
                 ServiceUrl = url,
+                Authenticate= AuthenticationType.None,
             };
             var cc = new CustomeHttpClient(connection);
             var metadata = await cc.ReadMetaDataAsync();
