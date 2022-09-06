@@ -2,10 +2,31 @@
 **OData2Poco** is a code generation tool for generating plain-old CLR objects (POCO) from OData feeds. 
 POCO classes can be used in a typed RESTful client OData services and code generation can be controlled by setting many options.
 
-## What is news
-Odata2Poco v4.3.1 is released with  new features implemented for request [#43](https://github.com/moh-hassan/odata2poco/issues/43): Enable code generation that support nullable reference type of c#8 by adding new option -B/--enable-nullable-reference.
+# OData2Poco Next
+The new features in the next major pump v5:
+
+- New feature: Generating class with init-only property, the new feature in c# 9.
+- New feature: Generating record type, the new feature in c# 9.
+- New feature: Generating OpenApi specification as json or yaml file.
+- Moving o2pgen cli console tool from net45 to net472, [issue# 44](https://github.com/moh-hassan/odata2poco/issues/44)
+
+How to use the new features: [read wiki](https://github.com/moh-hassan/odata2poco/wiki/OData2Poco-Next)
+
+The nightly packages can be downloaded from myget.org
+
+- [OData2Poco](https://www.myget.org/feed/odata2poco/package/nuget/OData2Poco)
+- [OData2Poco.CommandLine](https://www.myget.org/feed/odata2poco/package/nuget/OData2Poco.CommandLine)
+- [OData2Poco.dotnet.o2pgen](https://www.myget.org/feed/odata2poco/package/nuget/OData2Poco.dotnet.o2pgen)
+ 
+------------
+## Announcing a new release: V4.3.1
+Odata2Poco v4.3.1 is released on 2022-08-11 with  new features implemented for request [#43](https://github.com/moh-hassan/odata2poco/issues/43): Enable code generation that support nullable reference type of c#8 by adding new option -B/--enable-nullable-reference.
 - Allow reading remote metadata http(s) xml files.
 - Moving Solution to .Net 6. 
+
+How to use the new feature: [read wiki](https://github.com/moh-hassan/odata2poco/wiki/Enable-nullable-ref-type)
+
+-------------------
 
 ## OData2Poco Packages
 OData2Poco is available in three flavers:

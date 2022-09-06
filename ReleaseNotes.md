@@ -1,12 +1,22 @@
-# OData2Poco.CommandLine 
+# OData2Poco 
 
-##   (Console: o2pgen / .Net Core: dotnet-o2pgen) 
+## OData2Poco Next
+
+- New feature: Generating class with init-only property, the new feature in c# 9.
+- New feature: Generating record type, the new feature in c# 9.
+- New feature: Generating OpenApi specification as json or yaml file.
+- Moving o2pgen cli console tool from net45 to net472, [issue# 44](https://github.com/moh-hassan/odata2poco/issues/44)
+- Calculate checksum256 for all packages and saved to file with release artifacts.
+
+How to download the new packages and use the new features: [read wiki](https://github.com/moh-hassan/odata2poco/wiki/OData2Poco-Next)
 
 ##  Version 4.3.1
 **Release Date:**  August 11, 2022
 - New features implemented for request [#43](https://github.com/moh-hassan/odata2poco/issues/43): Enable code generation that support nullable reference type of c#8 by adding new option -B/--enable-nullable-reference.
-- Moving to .Net 6.
 - Allow reading remote metadata http(s) xml files.
+- Moving to .Net 6.
+
+How to use the new feature: [read wiki](https://github.com/moh-hassan/odata2poco/wiki/Enable-nullable-ref-type)
 
 ##  Version 4.2.0
 **Release Date:**  April 17, 2022
