@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net45</TargetFramework>		 
+		<TargetFramework>net472</TargetFramework>		 
 		<AssemblyName>O2Pgen</AssemblyName>
 		<Authors>Mohamed Hassan</Authors>
 		<Product>OData2Poco.CommandLine</Product>
@@ -9,27 +9,24 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageId>OData2Poco.CommandLine</PackageId>
-		<AssemblyTitle>OData2Poco.CommandLine</AssemblyTitle>
+		<PackageId>OData2Poco.CommandLine</PackageId>		 
 		<PackageTags>odata;charp;vb.net;o2pgen;meta-xml;web-api</PackageTags>
 	</PropertyGroup>
 
 
 	<Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
-
 	<Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" />
-	 
+	
+	<PropertyGroup>
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+	</PropertyGroup> 
 
 	<ItemGroup>
-		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj">
-			<PrivateAssets>All</PrivateAssets>
-		</ProjectReference>
+		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj"/>		 
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommandLineParser" Version="2.8.0">
-			<PrivateAssets>All</PrivateAssets>
-		</PackageReference>
+		<PackageReference Include="CommandLineParser" Version="2.8.0"/>			
 	</ItemGroup>
 
 	<ItemGroup>

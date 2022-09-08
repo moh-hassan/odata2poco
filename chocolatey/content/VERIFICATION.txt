@@ -3,7 +3,7 @@ Verification is intended to assist the Chocolatey moderators and community
 in verifying that this package's contents are trustworthy.
 
 This package is created by the OData2Poco Project itself at: https://github.com/moh-hassan/odata2poco. 
-Any binaries will be identical to other package types published by the project, in particular
+Any binaries will be identical to other package types published by the project, in particular 
 the odata2poco-commandline NuGet packages and its contents: O2pgen.exe.
 
 The checksum 256 of o2pgen.exe is embeded in the package.

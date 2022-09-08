@@ -1,4 +1,3 @@
-//#define odataV3
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,80 +5,43 @@ using System.Linq;
 using System.Xml;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
-#if odataV3
-using Microsoft.Data.Edm.Validation;
-using Microsoft.Data.Edm.Library.Values;
-using Microsoft.Data.Edm;
-using Microsoft.Data.Edm.Csdl;
-#else
-using Microsoft.OData.Edm.Validation;
 using Microsoft.OData.Edm;
+using Microsoft.OData.Edm.Validation;
 using Microsoft.OData.Edm.Csdl;
-using ISchemaType = Microsoft.OData.Edm.IEdmSchemaType;
 
-
-#if !EDM7
-using Microsoft.OData.Edm.Library.Values;
-#endif
-
-#endif
-
-#if odataV3
-namespace OData2Poco.V3
-#else
 namespace OData2Poco.V4
-#endif
 {
     /// <summary>
     ///     Process metadataString and generate list of   classes
     /// </summary>
     internal partial class Poco : IPocoGenerator
-    {
-        private readonly PocoSetting _setting;
+    {       
         public MetaDataInfo MetaData { get; set; }
         public string MetaDataAsString => MetaData.MetaDataAsString;
+        private readonly PocoSetting _setting;
         private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
         private readonly ILog _logger = PocoLogger.Default;
         private List<string> SchemaErrors { get; set; }
-        private IEdmModel Model { get; set; } = null!;
+        private IEdmModel Model { get; set; }
         internal Poco(MetaDataInfo metaData, PocoSetting setting)
         {
             _setting = setting ?? new PocoSetting();
             MetaData = metaData;
             SchemaErrors = new List<string>();
             EntitySets = new List<IEdmEntitySet>();
+            Model= LoadModelFromString();
         }
-
-
-#if odataV3
-        internal virtual IEdmModel LoadModelFromString()
-        {
-            var tr = new StringReader(MetaDataAsString);
-            Model = EdmxReader.Parse(XmlReader.Create(tr));
-            EntitySets = GetEntitySets(Model);
-            return Model;
-        }
-#else
-
         //support Odata.Edm v7+
-        internal virtual IEdmModel LoadModelFromString()
+        internal  IEdmModel LoadModelFromString()
         {
             IEdmModel model;
             //Microsoft.OData.Edm" v7+
             //breaking change in Odata.Edm in v7+
             var tr = new StringReader(MetaDataAsString);
             var reader = XmlReader.Create(tr);
-
-            //IEnumerable<EdmError> errors = null;
             try
             {
-#if EDM7
-                CsdlReader
-#else
-                EdmxReader
-#endif
-                  .TryParse(reader, true, out model, out _);  // IgnoreUnexpectedElementsAndAttributes
-                //  .TryParse(reader, true, out model2, out errors);
+                CsdlReader.TryParse(reader, true, out model, out _);
                 EntitySets = GetEntitySets(model);
             }
             finally
@@ -88,10 +50,6 @@ namespace OData2Poco.V4
             }
             return model;
         }
-#endif
-
-
-
         private List<string> GetEnumElements(IEdmSchemaType type, out bool isFlags)
         {
             var enumList = new List<string>();
@@ -102,21 +60,8 @@ namespace OData2Poco.V4
             isFlags = enumType.IsFlags;
             foreach (var item in list2)
             {
-
-#if odataV3
-                var enumValue = ((EdmIntegerConstant)item.Value).Value;
-                var enumElement = $"\t\t{item.Name}={enumValue}";
-#else
-#if EDM7
                 //issue12 reserved keyword
                 var enumElement = $"\t\t{item.Name.ChangeReservedWord()}={item.Value.Value}";
-                //var enumElement = $"\t\t{item.Name}={item.Value.Value}";
-#else
-                        var enumValue = ((EdmIntegerConstant)item.Value).Value;
-                        var  enumElement = $"\t\t{item.Name.ChangeReservedWord()}={enumValue}";
-                       //var  enumElement = $"\t\t{item.Name}={enumValue}";
-#endif
-#endif
                 //enumList.Add(item.Name); // v2.3.0
                 enumList.Add(enumElement); //issue #7 complete enum name /value
             }
@@ -128,40 +73,25 @@ namespace OData2Poco.V4
         {
             if (ct.TypeKind != EdmTypeKind.Entity)
                 return string.Empty;
-#if odataV3
-            var entitySet = EntitySets
-                .Where(m => m != null && m.ElementType.FullName() == ct.FullName())
-                .DefaultIfEmpty().First();
-#else
             var entitySet = EntitySets
                 .Where(m => m != null && m.EntityType().FullName() == ct.FullName())
              .DefaultIfEmpty().First();
-#endif
             return entitySet != null ? entitySet.Name : string.Empty;
         }
 
         internal IEnumerable<IEdmEntitySet> GetEntitySets(IEdmModel model)
         {
-#if odataV3
-            var entitySets = model.EntityContainers()
-                .SelectMany(c => c.Elements)
-                .Where(x => x.ContainerElementKind == EdmContainerElementKind.EntitySet)
-                .Select(element => (IEdmEntitySet) element);
-            return entitySets;
-#else
             var entitySets = model.EntityContainer.EntitySets();
             return entitySets;
-#endif
         }
 
         /// <summary>
-        ///     Fill List with class name and properties of corresponding entitie to be used for generating code
+        ///     Fill List from Model with class name and properties of corresponding entitie to be used for generating code
         /// </summary>
         /// <returns></returns>
         public List<ClassTemplate> GeneratePocoList()
         {
-            var list = new List<ClassTemplate>();
-            Model = LoadModelFromString();
+            var list = new List<ClassTemplate>();            
             IEnumerable<IEdmSchemaType> schemaElements = GetSchemaElements(Model);
             foreach (var type in schemaElements.ToList())
             {
@@ -171,7 +101,6 @@ namespace OData2Poco.V4
             }
             return list;
         }
-
 
         internal ClassTemplate? GeneratePocoClass(IEdmSchemaType ent)
         {
@@ -211,7 +140,7 @@ namespace OData2Poco.V4
                         classTemplate.IsComplex = true;
                         classTemplate.IsAbstrct = complexType.IsAbstract;
                         if (complexType.BaseType != null)
-                            classTemplate.BaseType = complexType.BaseType.ToString()??"";
+                            classTemplate.BaseType = complexType.BaseType.ToString() ?? "";
                         break;
                     }
                 default:
@@ -267,25 +196,21 @@ namespace OData2Poco.V4
         private List<PropertyTemplate> GetClassProperties(IEdmSchemaType ent)
         {
             //stop here if enum
-            if (ent is IEdmEnumType) return Enumerable.Empty<PropertyTemplate>().ToList(); //null;
+            if (ent is IEdmEnumType) return Enumerable.Empty<PropertyTemplate>().ToList(); 
             var structuredType = ent as IEdmStructuredType;
             var properties = structuredType.Properties();
             if (_setting != null && _setting.UseInheritance)
             {
-#if odataV3
-                properties = properties.Where(x => ((IEdmSchemaType)x.DeclaringType).FullName() == ent.FullName());
-#else
                 properties = properties.Where(x => x.DeclaringType.FullTypeName() == ent.FullTypeName());
-#endif
             }
-           
+
             //add serial for properties to support protbuf v3.0
             var serial = 1;
             var list = properties.Select(property => new PropertyTemplate
             {
                 //all reference types are null by default (c#8). 
-                IsNullable = property.Type.IsPrimitive() || property.Type.IsEnum() 
-                    ? property.Type.IsNullable : true, 
+                IsNullable = property.Type.IsPrimitive() || property.Type.IsEnum()
+                    ? property.Type.IsNullable : true,
                 PropName = property.Name,
                 PropType = GetClrTypeName(property.Type),
                 Serial = serial++,
@@ -315,11 +240,11 @@ namespace OData2Poco.V4
         private string GetClrTypeName(IEdmTypeReference edmTypeReference)
         {
             CheckError(edmTypeReference);
-            string? clrTypeName = edmTypeReference.ToString()?? "UNDEFINED";
+            string? clrTypeName = edmTypeReference.ToString() ?? "UNDEFINED";
             var edmType = edmTypeReference.Definition;
             if (edmTypeReference.IsPrimitive())
                 if (edmType != null)
-                    return EdmToClr((IEdmPrimitiveType) edmType);
+                    return EdmToClr((IEdmPrimitiveType)edmType);
             if (edmTypeReference.IsEnum())
             {
                 if (edmType is IEdmEnumType ent)
@@ -374,7 +299,7 @@ namespace OData2Poco.V4
         {
             var edmType = edmTypeReference.Definition;
             if (!edmType.Errors().Any()) return false;
-            var error = edmType.Errors().Select(x => $"Location: {x.ErrorLocation}, {x.ErrorMessage }").FirstOrDefault();
+            var error = edmType.Errors().Select(x => $"Location: {x.ErrorLocation}, {x.ErrorMessage}").FirstOrDefault();
             _logger.Trace($"edmTypeReference Error: {error.Dump()}");
             _logger.Warn($"Invalid Type Reference: {edmType}");
             SchemaErrors.Add($"Invalid Type Reference: {edmType}");

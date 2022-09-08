@@ -17,13 +17,13 @@
     <projectSourceUrl>https://github.com/moh-hassan/odata2poco</projectSourceUrl>
     <packageSourceUrl>https://github.com/moh-hassan/odata2poco</packageSourceUrl>
     <dependencies>
-      <group targetFramework=".NETFramework4.5" />
+      <group targetFramework=".NETFramework4.7.2" />
     </dependencies>
   </metadata>
   <files>
     <file src="../LICENSE.txt" target="tools" />
     <file src="../build/O2pgen.exe" target="tools" />
-   <file src="../build/o2pgen.exe.sha256.txt" target="tools" />
+    <file src="../build/o2pgen.exe.sha256.txt" target="tools" />
     <file src="./content/VERIFICATION.txt" target="tools" />
   </files>
 </package>

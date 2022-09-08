@@ -1,0 +1,5 @@
+<Project>
+  <PropertyGroup>
+   <AssemblyTitle>$(AssemblyName) ($(TargetFramework))</AssemblyTitle>
+  </PropertyGroup>
+</Project>

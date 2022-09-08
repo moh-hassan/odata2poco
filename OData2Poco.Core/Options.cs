@@ -196,11 +196,10 @@ namespace OData2Poco.CommandLine
         }
         public void Validate()
         {
-
             //set defaults for null values
             Lang = Lang ?? "cs";
             Authenticate = Authenticate ?? "none";
-            CodeFilename = CodeFilename ?? (Lang == "cs" ? "poco.cs" : "poco.vb");
+            CodeFilename = "poco.cs";
             NameCase = NameCase ?? "none";
 
 

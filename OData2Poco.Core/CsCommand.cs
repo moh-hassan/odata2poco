@@ -166,26 +166,10 @@ namespace OData2Poco.CommandLine
                 _logger.Normal("Saving generated CSharp code to file : " + ArgOptions.CodeFilename);
                 SaveToFile(ArgOptions.CodeFilename, Code);
                 _logger.Confirm("CSharp code  is generated Successfully.");
-            }
-            else if (ArgOptions.Lang == "vb")
-            {
-                //vb.net
-                Code = await VbCodeConvertor.CodeConvert(Code); //convert to vb.net
-                if (!string.IsNullOrEmpty(Code))
-                {
-                    var filename = Path.ChangeExtension(ArgOptions.CodeFilename, ".vb");
-                    _logger.Normal("Saving generated VB.NET code to file : " + ArgOptions.CodeFilename);
-                    SaveToFile(filename, Code);
-                    _logger.Confirm("VB.NET code  is generated Successfully.");
-                }
-                else
-                {
-                    _logger.Warn("Vb Service Converter isn't available.");
-                }
-            }
+            }            
             else
             {
-                _logger.Warn($"Lang option: '{ArgOptions.Lang}' isn't valid. Only cs or vb are accepted \r\n No code is generated");
+                _logger.Warn($"Lang option: '{ArgOptions.Lang}' isn't valid. Only cs are accepted \r\n No code is generated");
                 Code = "";
             }
         }

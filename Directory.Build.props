@@ -3,7 +3,7 @@
 		<SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
 		<PackageOutputPath>$(SolutionDir)build</PackageOutputPath>
 		<Authors>Mohamed Hassan</Authors>
-		<Copyright>Copyright &#169; 2016-2020, Mohamed Hassan </Copyright>
+		<Copyright>Copyright &#169; 2016-2022, Mohamed Hassan </Copyright>
 		<Product>OData2Poco</Product>
 		<PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
 		<PackageLicenseFile>license.txt</PackageLicenseFile>
@@ -24,7 +24,7 @@
 	</PropertyGroup>
 	<!-- Enable building .NET Framework projects on any machine with at least MSBuild or the .NET Core SDK installed.-->
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2">
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
@@ -35,11 +35,11 @@
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(IsTestProject)' == 'true'">
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
 		<PackageReference Include="nunit" Version="3.13.3" />
 		<!--<PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />-->
 		<PackageReference Include="NUnit3TestAdapter" Version="4.3.0-alpha-net7.4" />
-		<PackageReference Include="FluentAssertions" Version="5.10.3" />
+		<PackageReference Include="FluentAssertions" Version="6.7.0" />
 	    <PackageReference Include="NSubstitute" Version="4.4.0" />
 	</ItemGroup>
 

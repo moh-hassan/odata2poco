@@ -12,8 +12,7 @@
 
   <PropertyGroup>
     <PackAsTool>True</PackAsTool>
-    <PackageId>OData2Poco.dotnet.o2pgen</PackageId>
-    <AssemblyTitle>OData2Poco.dotnet.o2pgen</AssemblyTitle>
+    <PackageId>OData2Poco.dotnet.o2pgen</PackageId>    
     <ToolCommandName>dotnet-o2pgen</ToolCommandName>
     <PackageTags>odata;charp;c#;vb.net;mono;netcore;dotnet;dotnet-o2pgen;metaxml</PackageTags>
   </PropertyGroup>

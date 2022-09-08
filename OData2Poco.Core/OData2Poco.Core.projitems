@@ -20,6 +20,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Options.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StartUp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)VbCodeConvertor.cs" />
   </ItemGroup>
 </Project>
