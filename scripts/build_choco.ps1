@@ -15,16 +15,6 @@ Set-Content -Path 'o2pgen.exe.sha256.txt' -v $sha256.Hash
 Set-Location $pkg_dir
 Remove-Item  *.nupkg
 choco pack --version $version
-
-#push package
-
-if ($allow_push) {
-    choco push  --api-key $Env:api_key 
-    Write-Host "choco package $ver is pushed succeffuly" -ForegroundColor Green
-}
-else {
-    choco push  --api-key $Env:api_key -whatif
-}
-
+Write-Host "choco package $ver is created succeffuly" -ForegroundColor Green
 popd
 

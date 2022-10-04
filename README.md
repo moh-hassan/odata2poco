@@ -134,10 +134,6 @@ Can be installed from [Nuget Gallery](https://www.nuget.org/packages/OData2Poco/
 
 Try demo Application in NET5 [Online](https://dotnetfiddle.net/LSSwIS)
 
-## Release Notes
-
-[Changes](https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md)
-
 
  **Try dotnet Global Tool:**
 
@@ -145,6 +141,24 @@ Try demo Application in NET5 [Online](https://dotnetfiddle.net/LSSwIS)
 
        dotnet o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/
 	   For help type: dotnet o2pgen --help
+
+ ### Run the global tool using Msbuild Task
+ You can auto run `dotnet o2pgen` from within MsBuild Task and save code in the project folder.
+
+ Add the next Msbuild target to your project and modify command parameters as needed.
+ When the property `EnableCodeGeneration` is set to `false`, no code is generated.
+ The generated code is saved to file `northwind.cs` in the folder Model in the root of the project.
+
+ ```xml
+<Target Name="GenerateCode" BeforeTargets="Build">
+		<PropertyGroup>
+			<EnableCodeGeneration>true</EnableCodeGeneration>
+		</PropertyGroup>
+		<Exec  Condition="$(EnableCodeGeneration)"
+		  Command="dotnet o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/ -f $(MSBuildProjectDirectory)\Model\northwind.cs -B">
+		</Exec>
+	</Target>
+ ```         
 
 Consol net45 tool:
 
@@ -155,6 +169,12 @@ Consol net45 tool:
 **License**
 
 MIT License.
+
+## Release Notes
+
+[Changes](https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md)
+
+
 
  **Documentation**
 
