@@ -1,39 +1,33 @@
 # Welcome to OData2Poco
-**OData2Poco** is a code generation tool for generating plain-old CLR objects (POCO) from OData feeds. 
-POCO classes can be used in a typed RESTful client OData services and code generation can be controlled by setting many options.
+**OData2Poco** is a code generation tool for generating plain-old CLR objects (POCO/DTO) from OData feeds. 
+POCO classes can be used in a typed RESTful client OData services. Code generation can be controlled by setting many options.
 
-# OData2Poco Next
-The new features in the next major pump v5:
-
+# Announcing new Release: V5.0.0
+ - New feature: generating typescript code as a single file or multi files(modules).
 - New feature: Generating class with init-only property, the new feature in c# 9.
 - New feature: Generating record type, the new feature in c# 9.
-- New feature: Generating OpenApi specification as json or yaml file.
-- Moving o2pgen cli console tool from net45 to net472, [issue# 44](https://github.com/moh-hassan/odata2poco/issues/44)
+- Fix issue [#29](https://github.com/moh-hassan/odata2poco/issues/29) and consider class dependency when filtering model.
+- Moving o2pgen cli console tool from net45 to net472, [#44](https://github.com/moh-hassan/odata2poco/issues/44)
+- Calculate checksum256 for all packages and saved to file hosted in github releases.
+- Auto puplishing the chocolatey package.
 
 How to use the new features: [read wiki](https://github.com/moh-hassan/odata2poco/wiki/OData2Poco-Next)
 
-The nightly packages can be downloaded from myget.org
+## Development packages
+The developed packages can be downloaded from `myget.org`
 
 - [OData2Poco](https://www.myget.org/feed/odata2poco/package/nuget/OData2Poco)
 - [OData2Poco.CommandLine](https://www.myget.org/feed/odata2poco/package/nuget/OData2Poco.CommandLine)
 - [OData2Poco.dotnet.o2pgen](https://www.myget.org/feed/odata2poco/package/nuget/OData2Poco.dotnet.o2pgen)
  
-------------
-## Announcing a new release: V4.3.1
-Odata2Poco v4.3.1 is released on 2022-08-11 with  new features implemented for request [#43](https://github.com/moh-hassan/odata2poco/issues/43): Enable code generation that support nullable reference type of c#8 by adding new option -B/--enable-nullable-reference.
-- Allow reading remote metadata http(s) xml files.
-- Moving Solution to .Net 6. 
-
-How to use the new feature: [read wiki](https://github.com/moh-hassan/odata2poco/wiki/Enable-nullable-ref-type)
-
--------------------
+------------ 
 
 ## OData2Poco Packages
 OData2Poco is available in three flavers:
 
-- A Console tool: OData2Poco.CommandLine (a.k.a o2pgen).
-- A .Net Core Global tool  **dotnet-o2pgen** support NET5.
-- A class library: support NET5/netstandard2.0/net45/net461.
+- A Console tool: OData2Poco.CommandLine support net472 (a.k.a o2pgen).
+- A .Net Core Global tool  **dotnet-o2pgen** support NET6.
+- A class library: support NET6/netstandard2.0/net461.
 
 [![NuGet Version](https://img.shields.io/nuget/v/OData2Poco.CommandLine.svg?label=nuget%20Console&style=flat)](https://www.nuget.org/packages/OData2Poco.CommandLine)
 [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg?label=Chocolatey%20Version)](https://chocolatey.org/packages/odata2poco-commandline)
@@ -48,16 +42,18 @@ OData2Poco is available in three flavers:
 
 **Features of OData2Poco**
    
-- Generate POCO classes corresponding to the Entities defined in the XML MetaData stored in OData Feeds.     
+- Generate POCO classes corresponding to the Entities defined in the XML MetaData stored in OData Feeds. 
+- Generate c# code classes, classes with init-only properties of c#8 and records.
+- Generate typescript code as a single file or multi files(modules).
 - Generation is based on the Metadata of the service stored on the  server/  EDMX xml files or xml string contents.
 - Support http(s) with/without authentication. The Supported autherizations are: basic, token and Oauth2.
-- Console CommandLine tool Support .NET 4.5 or higher.
-- Class library Support NET5/netstandard2.0/net461/net45.
-- Support Windows or Linux /OS fx (net core) 
+- Console CommandLine tool Support .NET472 or higher.
+- Class library Support NET6/netstandard2.0/net461.
+- Support Windows or Linux /OS fx (with mono installed) and NET6 (netcore).
 - Packaged as a nuget package in three different packages:
  -  A Class library full framework/ netstandard2.0 /NET5 for programming.
  - A console CommandLine tool (one executable file o2pgen.exe)
- -  Global net core support NET5 (dotnet-o2pgen).
+ -  Global net core support NET6 (dotnet-o2pgen).
  -  Console tool o2pgen is published as a Chocolatey package. 
 - Generating CSharp POCO classes. Other languages may be added in the near future based on the community needs.
 - Convert Data type of EDMX to the corresponding CLR data types.
@@ -109,7 +105,7 @@ OData2Poco is available in three flavers:
 
 **1) OData2Poco.dotnet.o2pgen**:
 
-NetCore Global tool NET5 named dotnet-o2pgen.
+NetCore Global tool NET6 named dotnet-o2pgen.
 
 Can be installed from [Nuget Gallery](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen):
 
@@ -131,7 +127,7 @@ From [Chocolatey Gallery](https://chocolatey.org/packages/odata2poco-commandline
 
 **3) OData2Poco Class library:** 
 
-Support NET5/netstandard2.0/net461/net45.
+Support NET6/netstandard2.0/net461.
 Can be installed from [Nuget Gallery](https://www.nuget.org/packages/OData2Poco/)
 
          Install-Package OData2Poco

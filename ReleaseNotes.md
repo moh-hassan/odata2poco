@@ -1,14 +1,15 @@
 # OData2Poco 
 
-## OData2Poco Next
+## Version 5.0.0
 
+- New feature: generating typescript code as a single file or multi files(modules).
 - New feature: Generating class with init-only property, the new feature in c# 9.
 - New feature: Generating record type, the new feature in c# 9.
-- New feature: Generating OpenApi specification as json or yaml file.
-- Moving o2pgen cli console tool from net45 to net472, [issue# 44](https://github.com/moh-hassan/odata2poco/issues/44)
-- Calculate checksum256 for all packages and saved to file with release artifacts.
+- Fix issue [#29](https://github.com/moh-hassan/odata2poco/issues/29) and consider class dependency when filtering model.
+- Moving o2pgen cli console tool from net45 to net472, [#44](https://github.com/moh-hassan/odata2poco/issues/44)
+- Calculate checksum256 for all packages and saved to file hosted in github releases.
+- Auto puplishing the chocolatey package.
 
-How to download the new packages and use the new features: [read wiki](https://github.com/moh-hassan/odata2poco/wiki/OData2Poco-Next)
 
 ##  Version 4.3.1
 **Release Date:**  August 11, 2022
