@@ -1,19 +1,29 @@
-﻿using System;
+﻿using OData2Poco.graph;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace OData2Poco
 {
-    class ModelFilter
+    static class ModelFilter
     {
-        public static IEnumerable<ClassTemplate> FilterList(List<ClassTemplate> list1,
+        public static IEnumerable<ClassTemplate> FilterList(this List<ClassTemplate> classList,
             List<string> filter)
         {
-
+            var result = new List<ClassTemplate>();
+            var list = Search(classList, filter);
+            result.AddRange(list);
+            var deps = Dependency.Search(classList, list.ToArray());
+            result.AddRange(deps);
+            return result.Distinct();
+        }
+        static IEnumerable<ClassTemplate> Search(this List<ClassTemplate> classList,
+       List<string> filter)
+        {
             if (filter == null)
             {
-                foreach (var c in list1)
+                foreach (var c in classList)
                     yield return c;
                 yield break;
             }
@@ -28,7 +38,7 @@ namespace OData2Poco
 
             list2 = list2.Select(x => $"\\b{x}\\b");
             var pattern = string.Join("|", list2);
-            foreach (var item in list1)
+            foreach (var item in classList)
             {
                 var name = item.Name;
 
