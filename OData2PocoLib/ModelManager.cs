@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
@@ -20,6 +21,8 @@ namespace OData2Poco
         }
         public static void RenameReservedWords(List<ClassTemplate> list)
         {
+            if (list==null || !list.Any())
+                return;
             list.Update(c => c.Name = RenameClass(c.Name));
             list.ForEach(classTemplate => classTemplate.Properties.Update(RenameProperty));
             ModifyPropertiesType(list);

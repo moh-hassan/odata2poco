@@ -5,14 +5,14 @@
     /// </summary>
     public class FluentCsTextTemplate : FluentTextTemplate<FluentCsTextTemplate>
     {
-        public  string KeyWord { get; set; } 
+        public string KeyWord { get; set; }
         public FluentCsTextTemplate()
         {
-             KeyWord = "class";
+            KeyWord = "class";
         }
         public FluentCsTextTemplate(PocoSetting setting)
         {
-            KeyWord = setting.AsRecord ? "record" : "class";
+            KeyWord = setting.GeneratorType == GeneratorType.Record ? "record" : "class";
         }
         public FluentCsTextTemplate LeftBrace()
         {

@@ -200,7 +200,6 @@ namespace OData2Poco.CommandLine.Test
 
             //Assert
             var output = tuble.Item2;
-            // Console.WriteLine(output);            
             var list = new List<string>
             {
                 "public partial class Person",
@@ -212,7 +211,7 @@ namespace OData2Poco.CommandLine.Test
                 "public PersonGender? Gender {get;set;}",
                 "public long Concurrency {get;} // not null ReadOnly",
             };
-            output.Should().ContainAll(list); 
+            output.Should().ContainAll(list);
         }
 
         [Test]
@@ -259,8 +258,8 @@ namespace OData2Poco.CommandLine.Test
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         public async Task PocoSettingWithJsonAttributeAndCamelCaseTest(string url, string version, int n)
         {
-            //Arrange
-            var a = $"-r {url}  -j -c camel -v";
+            //Arrange            
+            var a = $"-r {url}  -a json -c camel -v";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
@@ -277,7 +276,8 @@ namespace OData2Poco.CommandLine.Test
         public async Task PocoSettingWithJsonAttributePasCaseTest(string url, string version, int n)
         {
             //Arrange
-            var a = $"-r {url}  -jc PAS -v";
+            // var a = $"-r {url}   -jc PAS -v";
+            var a = $"-r {url}   -a json -c PAS -v";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
@@ -420,11 +420,11 @@ public enum Feature
 
         }
 
-        [Test]              
+        [Test]
         public async Task Url_test()
         {
             //Arrange
-            string url= TestSample.UrlTripPinService;
+            string url = TestSample.UrlTripPinService;
             var a = $"-r {url} -v ";
             //Act
             var tuble = await RunCommand(a);
@@ -434,24 +434,24 @@ public enum Feature
             Assert.IsTrue(output.Contains("public partial class Trip")); //-v
 
         }
-       
+
         [Test]
         [Category("code_header")]
         [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
         [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]
-        public async Task CodeHeaderTest(string url, string version, int n)     
+        public async Task CodeHeaderTest(string url, string version, int n)
         {
             //Arrange         
             var a = $"-r {url} -v --include Category";
             //Act
             var tuble = await RunCommand(a);
-            var output = tuble.Item2;           
+            var output = tuble.Item2;
             //Assert  
-            var line = $"//     Service Url: {url}";          
+            var line = $"//     Service Url: {url}";
             Assert.IsTrue(output.Contains(line));
 
             Assert.IsTrue(output.Contains("//     Parameters:"));
-            Assert.IsTrue(output.Contains("// 	-v Verbose= True"));           
+            Assert.IsTrue(output.Contains("// 	-v Verbose= True"));
         }
 
         #region Name Case
@@ -553,14 +553,15 @@ public enum Feature
 
         }
         [Test]
-        public async Task Model_filter_multi_values_test()
+        [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+        public async Task Model_filter_multi_values_for_v3_v4_test(string url, string _, int __)
         {
-            //Arrange
-            string url = TestSample.NorthWindV4;
+            //Arrange          
             var a = $"-r {url} --include *product_*  *customer_* -v ";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
+
             //Assert
             Assert.IsTrue(output.Contains("public partial class Current_Product_List"));
             Assert.IsTrue(output.Contains("public partial class Customer_and_Suppliers_by_City"));
@@ -583,36 +584,57 @@ public enum Feature
 
         }
 
+        //tests for issue #29, considering class dependency
         [Test]
-        public async Task Model_filter_is_auto_prefixed_by_star_test()
+        public async Task Model_filter_is_considering_class_dependency_test()
         {
             //Arrange
             string url = TestSample.NorthWindV4;
-            var a = $"-r {url} --include product  -v "; //like *product
+            var a = $"-r {url} --include product  -v -n";
+            var expected = @"
+public partial class Product
+public partial class Category
+public partial class Order_Detail
+public partial class Order
+public partial class Customer
+public partial class CustomerDemographic
+public partial class Employee
+public partial class Territory
+public partial class Region
+public partial class Shipper
+public partial class Supplier
+";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
-            //Assert
 
-            Assert.IsTrue(output.Contains("public partial class Product"));
-            Assert.IsTrue(!output.Contains("public partial class Product_Sales_for_1997"));
+            //Assert
+            output.ToLines().Where(a => a.StartsWith("public partial class"))
+                .Should().Contain(expected.ToLines());
+            output.Should().NotContain("public partial class Product_Sales_for_1997");
         }
+
         [Test]
-        public async Task Model_filter_is_auto_prefixed_by_star_online_test()
+        public async Task Model_filter_using_star_should_include_all_dependency_test()
         {
             //Arrange
-            string url = TestSample.UrlTripPinService;
-            // string url = TestSample.UrlNorthWindV4; 
-            var a = $"-r {url} --include air*  -v "; //like *product
+            string url = TestSample.TripPin4;
+            var a = $"-r {url} --include air*  -v ";
+            var expected = @"
+public partial class AirportLocation : Location
+public partial class Location
+public partial class City
+public partial class Airline
+public partial class Airport
+";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
+
             //Assert
-            Assert.IsTrue(output.Contains("public partial class AirportLocation"));
-            Assert.IsTrue(output.Contains("public partial class Airline"));
-            Assert.IsTrue(output.Contains("public partial class Airport"));
-            Assert.IsTrue(!output.Contains("public partial class City"));
+            output.ToLines().Should().Contain(expected.ToLines());
         }
+
         #endregion
 
         #region readonly
@@ -633,7 +655,7 @@ public enum Feature
                 "public int PlanItemId {get;} //PrimaryKey not null ReadOnly",
                 "public string AirlineCode {get;} //PrimaryKey not null ReadOnly"
              };
-             output.Should().ContainAll(list);             
+            output.Should().ContainAll(list);
         }
 
         [Test]
@@ -669,7 +691,7 @@ public enum Feature
             var a = $"-r {url}  -v --init-only";
             //Act
             var tuble = await RunCommand(a);
-            var output = tuble.Item2;            
+            var output = tuble.Item2;
             //Assert
             var expected = @"
 public partial class Airline
@@ -686,7 +708,7 @@ public partial class Airline
         {
             //Arrange
             string url = TestSample.TripPin4;
-            var a = $"-r {url}  -v --init-only -R";
+            var a = $"-r {url}  -v --init-only -G record";
             //Act
             var tuble = await RunCommand(a);
             var output = tuble.Item2;
@@ -701,6 +723,31 @@ public partial record Airline
             output.Should().ContainAll(expected);
         }
 
+        [Test]
+        [Category("record")]
+        public async Task Record_type_cs9_with_navigation_has_no_virtual_members_test()
+        {
+            //Arrange
+            string url = TestSample.TripPin4;
+            var a = $"-r {url}  -v --init-only -G record -n";
+            //Act
+            var tuble = await RunCommand(a);
+            var output = tuble.Item2;
+            
+            //Assert
+            var expected = @"
+public partial record Flight : PublicTransportation
+	{
+	    public string FlightNumber {get;init;} // not null
+	    public Airport From {get;init;} 
+	    public Airport To {get;init;} 
+	    public Airline Airline {get;init;} 
+	} 
+}".ToLines();
+
+            output.Should().ContainAll(expected);
+        }
+#if OPENAPI
         [Test]
         [Category("openapi")]
         public async Task OpenApi_test()
@@ -721,6 +768,7 @@ public partial record Airline
             var text = File.ReadAllText(fname);
             text.Should().Contain("openapi: 3.0.1");
         }
+#endif
     }
 
 }

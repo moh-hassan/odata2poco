@@ -22,7 +22,7 @@ namespace OData2Poco
 
         }
 
-        public void AddGenerator(IPocoGenerator pocoGenerator)
+        public void AddGenerator(IPocoGenerator pocoGenerator, PocoSetting setting)
         {
             PocoGenerator = pocoGenerator;
             ClassList = pocoGenerator.GeneratePocoList();

@@ -88,20 +88,25 @@ namespace OData2Poco.V3
         {
             var list = new List<ClassTemplate>();
             IEnumerable<IEdmSchemaType> schemaElements = GetSchemaElements(Model);
+            var id = 1;
             foreach (var type in schemaElements.ToList())
             {
-                var ct = GeneratePocoClass(type);
-                if (ct == null) continue;
+                var ct = GeneratePocoClass(type, id++);
+                if (ct == null) continue;                
                 list.Add(ct);
             }
+            //filter model
+            if (_setting.Include?.Count > 0)
+                list = ModelFilter.FilterList(list, _setting.Include).ToList();
             return list;
         }
-        internal ClassTemplate? GeneratePocoClass(IEdmSchemaType ent)
+        internal ClassTemplate? GeneratePocoClass(IEdmSchemaType ent, int id)
         {
             if (ent == null) return null;
             var className = ent.Name;
             var classTemplate = new ClassTemplate
             {
+                Id = id,
                 Name = className,
                 OriginalName = className,
                 IsEnum = ent is IEdmEnumType,

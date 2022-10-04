@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
+﻿// Copyright 2016-2022 Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CommandLine;
 using CommandLine.Text;
 using Newtonsoft.Json.Linq;
-
-//using OData2Poco.OAuth2;
-
-//(c) 2016-2018 Mohamed Hassan, MIT License
-////Project site: https://github.com/moh-hassan/odata2poco
+using OData2Poco.Http;
+  
 namespace OData2Poco.CommandLine
 {
-    // Define a class to receive parsed values
+    // Options of commandline
     public class Options
     {
 
@@ -37,7 +36,7 @@ namespace OData2Poco.CommandLine
         public string TokenParams { get; set; }
 
 
-        [Option('f', "filename", Default = "poco.cs", HelpText = "filename to save generated c# code.")]
+        [Option('f', "filename",  HelpText = "filename to save generated c# code.")]
         public string CodeFilename { get; set; }
 
 
@@ -70,16 +69,16 @@ namespace OData2Poco.CommandLine
         public string Namespace { get; set; }
 
 
-        [Option('c', "case", Default = "none",
-            HelpText = "Type pas or camel to Convert Property Name to PascalCase or CamelCase")]
-        public string NameCase { get; set; }
-
+        [Option('c', "case", Default = CaseEnum.None,
+            HelpText = "Convert Class Property  case. Allowed values are: pas, camel, kebab, snake or none")]
+        public CaseEnum NameCase { get; set; }
+        
         /// <summary>
-        /// Convert Entity Name to PascalCase or CamelCase by passing  `pas` or `camel`
+        /// Convert case of Entity Name`
         /// </summary>
-        [Option('C', "entity-case", Default = "none",
+        [Option('C', "entity-case", Default = CaseEnum.None,
             HelpText = "Type pas or camel to Convert Entity Name to PascalCase or CamelCase")]
-        public string EntityNameCase { get; set; }
+        public CaseEnum EntityNameCase { get; set; }
 
         [Option("name-map", HelpText = "A JSON file to map class and property names.")]
         public string NameMapFile { get; set; }
@@ -94,38 +93,18 @@ namespace OData2Poco.CommandLine
             HelpText = "Attributes, Allowed values: key, req, json, json3, tab, dm, proto, db, display")]
         public IEnumerable<string> Attributes { get; set; }
 
-       // [Option("lang", Default = "cs", HelpText = "Type cs for CSharp, vb for VB.NET")]
-        public string Lang { get; set; } //v3
+        [Option("lang", Default = Language.CS, HelpText = "Type cs for CSharp, ts for typescript")]
+        public Language Lang { get; set; } //v3
         [Option("param-file", Hidden = true, HelpText = "Path to parameter file (json or text format. Postman Environment is supported)")]
         public string ParamFile { get; set; } //v3.1
-
-        //todo generate csproj/vbproj
+         
         [Option('g', "gen-project", HelpText = "Generate a class library (.Net Stnadard) project csproj/vbproj.")]
         public bool GenerateProject { get; set; }
-        [Option('o', "auth", Default = "none", HelpText = "Authentication type, allowed values: none, basic, token, oauth2.")]
-        public string Authenticate { get; set; }
+        [Option('o', "auth", Default = AuthenticationType.None, HelpText = "Authentication type, allowed values: none, basic, token, oauth2.")]
+        public AuthenticationType Authenticate { get; set; }
 
         [Option("show-warning", HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
-        public bool ShowWarning { get; set; }
-        //TODO--- ---------------------------
-        //following are obsolete and will be removed in the next release
-        //obsolete use -a key
-        [Option('k', "key", Hidden = true, HelpText = "Obsolete, use -a key, Add Key attribute [Key]")]
-        public bool Key { get; set; }
-
-        //obsolete use -a tab
-        [Option('t', "table", Hidden = true, HelpText = "Obsolete, use -a tab, Add Table attribute")]
-        public bool Table { get; set; }
-
-        //obsolete use -a req
-        [Option('q', "required", Hidden = true, HelpText = "Obsolete, use -a req, Add Required attribute")]
-        public bool Required { get; set; }
-
-        //obsolete use -a json
-        [Option('j', "Json", Hidden = true,
-            HelpText =
-                "Obsolete, use -a json, Add JsonProperty Attribute, example:  [JsonProperty(PropertyName = \"email\")]")]
-        public bool AddJsonAttribute { get; set; }
+        public bool ShowWarning { get; set; }        
 
         /// <summary>
         /// Filter the Entities by FullName, case insensitive. Use comma delemeted list of entity names. Name may include the special characters * and ?. The char *  represents a string of characters and ? match any single char.
@@ -142,14 +121,18 @@ namespace OData2Poco.CommandLine
         /// </summary>
         [Option('B', "enable-nullable-reference", HelpText = "Enable nullable for all reference types including option -b for primitive  types by adding ? to types")]
         public bool EnableNullableReferenceTypes { get; set; }
-        [Option('I',"init-only", HelpText = "Allow setter of class property to be 'init' instead of 'set' (c# 9 feature)")]
+        [Option('I', "init-only", HelpText = "Allow setter of class property to be 'init' instead of 'set' (c# 9 feature)")]
         public bool InitOnly { get; set; }
 
-        [Option('R', "record", HelpText = "Allow Creation of record type instead of class (c# 9 feature)")]
-        public bool AsRecord { get; set; }
+        [Option('O', "open-api", Hidden =true, HelpText = "Path of file .json /.yml for OpenApi or Swagger Specification version 3.")]
+        public string OpenApiFileName { get; set; }
+        [Option('G',"generator-type", HelpText = "Generator Type. Allowd values: class or interface or record")]
+        public GeneratorType GeneratorType { get; set; }
 
-        [Option( 'O',"open-api", HelpText = "Path of file .json /.yml for OpenApi or Swagger Specification version 3.")]
-        public string  OpenApiFileName { get; set; }
+        [Option("multi-files", HelpText = "Generate multi files.")]
+        public bool MultiFiles { get; set; }
+        [Option("full-name", HelpText = "Use fullname prfixed by namespace as a name for Poco Class.")]
+        public bool UseFullName { get; set; }
         public List<string> Errors { get; set; }
 
         public Options()
@@ -157,11 +140,10 @@ namespace OData2Poco.CommandLine
             Attributes = new List<string>();
             Errors = new List<string>();
             //set default
-            Authenticate = "none";
-            CodeFilename = "poco.cs";
-            NameCase = "none";
-            Lang = "cs";
-            Include= new List<string>();
+            Authenticate =  AuthenticationType.None;
+            NameCase =  CaseEnum.None;
+            Lang = Language.CS;
+            Include = new List<string>();
         }
 
 #if NETCOREAPP
@@ -179,7 +161,7 @@ namespace OData2Poco.CommandLine
                 {
                     Url = "http://services.odata.org/V4/OData/OData.svc",
                     Attributes = new List<string> { "json", "key" },
-                    NameCase = "camel",
+                    NameCase =  CaseEnum.Camel,
                     AddNullableDataType = true
                 });
             }
@@ -203,39 +185,21 @@ namespace OData2Poco.CommandLine
             return password;
         }
         public void Validate()
-        {
-            //set defaults for null values
-            Lang = Lang ?? "cs";
-            Authenticate = Authenticate ?? "none";
+        {  
             if (string.IsNullOrEmpty(CodeFilename))
-                CodeFilename = $"poco.{Lang}";             
-            NameCase = NameCase ?? "none";
+            {
+                if (MultiFiles)
+                    CodeFilename = "Model";
+                CodeFilename = $"poco.{Lang.ToString().ToLower()}";
+            }
 
-
-            if (Password != null && Password.StartsWith("@"))
+            if (Password != null && Password.StartsWith("@@"))
             {
                 var fname = Password.Substring(1);
                 var text = File.ReadAllText(fname);
                 Password = GetToken(text);
             }
-
-
-            //validating Lang
-            switch (Lang)
-            {
-                case "vb":
-                    CodeFilename = Path.ChangeExtension(CodeFilename, ".vb");
-                    break;
-                case "cs":
-                    CodeFilename = Path.ChangeExtension(CodeFilename, ".cs");
-                    break;
-                default:
-                    Errors.Add($"Invalid Language Option '{ Lang}'. It's set to 'cs'.");
-                    CodeFilename = Path.ChangeExtension(CodeFilename, ".cs");
-                    Lang = "cs";
-                    break;
-                    //return -1;
-            }
+          
 
             //validate Attributes
             foreach (var attribute in Attributes.ToList())
@@ -248,7 +212,7 @@ namespace OData2Poco.CommandLine
                 }
             }
 
-            if(!string.IsNullOrWhiteSpace(NameMapFile))
+            if (!string.IsNullOrWhiteSpace(NameMapFile))
             {
                 if (!File.Exists(NameMapFile))
                 {
@@ -268,20 +232,20 @@ namespace OData2Poco.CommandLine
                         else
                         {
                             // Validate regexes.
-                            foreach(var className in RenameMap.PropertyNameMap.Keys)
+                            foreach (var className in RenameMap.PropertyNameMap.Keys)
                             {
-                                foreach(var map in RenameMap.PropertyNameMap[className])
+                                foreach (var map in RenameMap.PropertyNameMap[className])
                                 {
-                                    if(map.OldName.IndexOf('^') == 0)
+                                    if (map.OldName.IndexOf('^') == 0)
                                     {
                                         // MUST start with ^
-                                        if(className.Equals("ALL", System.StringComparison.InvariantCultureIgnoreCase))
+                                        if (className.Equals("ALL", System.StringComparison.InvariantCultureIgnoreCase))
                                         {
-                                             try
+                                            try
                                             {
                                                 Regex.IsMatch("anything", map.OldName);
                                             }
-                                            catch(System.Exception)
+                                            catch (System.Exception)
                                             {
                                                 Errors.Add("Invalid regex: " + map.OldName);
                                             }
@@ -297,6 +261,7 @@ namespace OData2Poco.CommandLine
                     }
                 }
             }
+            
         }
     }
 

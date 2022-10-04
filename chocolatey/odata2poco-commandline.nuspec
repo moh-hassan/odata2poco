@@ -10,9 +10,9 @@
     <projectUrl>https://github.com/moh-hassan/odata2poco</projectUrl>
     <iconUrl>https://github.com/moh-hassan/odata2poco/blob/master/art/ODataLogo-128.png?raw=true</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>o2gen is a CommandLine tool for generating c# POCO classes from OData feeds.</description>
-    <releaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md</releaseNotes>
-    <copyright>Copyright  2016-2022, Mohamed Hassan</copyright>
+	<description>o2gen is a CommandLine tool for generating c# and typescript POCO (DTO) classes,interfaces and records from OData feeds with lot of configuration parameters.</description>
+	  <releaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md</releaseNotes>
+   
     <tags>odata charp o2pgen meta-xml web-api</tags>
     <projectSourceUrl>https://github.com/moh-hassan/odata2poco</projectSourceUrl>
     <packageSourceUrl>https://github.com/moh-hassan/odata2poco</packageSourceUrl>

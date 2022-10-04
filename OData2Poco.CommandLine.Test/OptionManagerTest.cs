@@ -1,8 +1,6 @@
 ﻿
-using System;
 using NUnit.Framework;
-//using OData2Poco.Exceptions;
-//using OData2Poco.Extensions;
+ 
 
 namespace OData2Poco.CommandLine.Test
 {
@@ -10,16 +8,14 @@ namespace OData2Poco.CommandLine.Test
     {
         [Test]
         [TestCase("pas")]
-        [TestCase("PAS")]
-        [TestCase("cam")]
+        [TestCase("PAS")]        
         [TestCase("camel")]
-        [TestCase("none")]
-        [TestCase("zzz")]
-        public void NameCase_valid_Test(string nameCase)
+        [TestCase("none")]      
+        public void NameCase_valid_Test(CaseEnum nameCase)
         {
             var options = new Options
             {
-                Lang = "cs",
+                Lang =  Language.CS,
                 NameCase = nameCase
             };
             var om = new OptionManager(options);

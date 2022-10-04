@@ -1,11 +1,19 @@
-﻿using System.Collections.Generic;
+﻿// Copyright 2016-2022 Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
+
+using System;
+using System.Collections.Generic;
 
 namespace OData2Poco
 {
+    public interface IValidator
+    {
+        void Validate();
+    }
     /// <summary>
     /// Setting options to control the code generation
     /// </summary>
-    public class PocoSetting
+    public class PocoSetting :IValidator
     {
         /// <summary>
         /// Set nullabable ? to the type of property
@@ -63,35 +71,19 @@ namespace OData2Poco
 
         //add attributes: key,req,dm,tab,json,proto,display and db
         public List<string> Attributes { get; set; }
-
-        /// <summary>
-        /// Add KeyAttribute [Key] to the property of POCO class
-        /// </summary>
-        public bool AddKeyAttribute { get; set; }//obsolete, use Attributes.add("key")
-
-        public bool AddTableAttribute { get; set; } //obsolete, use Attributes.add("tab")
-
-       public bool AddRequiredAttribute { get; set; }//obsolete, use Attributes.add("req")
-       
-        /// <summary>
-        /// Add JsonProperty Attribute
-        ///example:     [JsonProperty(PropertyName = "email")]
-        /// </summary>
-        public bool AddJsonAttribute { get; set; } ////obsolete, use Attributes.add("json")
-
-        public string? Prefix { get; set; }
-        public string? Suffix { get; set; }
         public bool MultiFiles { get; set; }
         public string ModuleName { get; set; } = null!;
-        public bool AddReference { get; set; }
-        public bool GenerateInterface { get; set; }
+        public bool AddReference { get; set; }      
+        public GeneratorType GeneratorType { get; set; }
         public List<string>? Include { get; set; }
         public bool ReadWrite { get; set; } //all properties are read/write 
-        public bool EnableNullableReferenceTypes { get; set; } //all properties are read/write 
-
+        public bool EnableNullableReferenceTypes { get; set; } //all properties are read/write
         public bool InitOnly { get; set; }
-        public bool AsRecord { get; set; } //create record type c# 9 feature
+       // public bool AsRecord { get; set; } //create record type c# 9 feature
         public string OpenApiFileName { get; set; } = "";
+        public string CodeFilename { get; set; }
+        //set name of generated class using FullName vs Name
+        public bool UseFullName { get; set; }
 
         /// <summary>
         /// Initialization
@@ -101,11 +93,33 @@ namespace OData2Poco
             Lang = Language.CS;
             NamespacePrefix = string.Empty;
             Inherit = "";
-            NameCase = CaseEnum.None;
-            AddJsonAttribute = false;
+            NameCase = CaseEnum.None;           
             Attributes = new List<string>();
-            
+            Include = new List<string>();
+            CodeFilename = "UnDefined.txt";
         }
+        public void Validate()
+        {
+            if (Lang == Language.None)
+                Lang = Language.CS;
 
+            if (GeneratorType == GeneratorType.None)
+            {
+                GeneratorType = Lang == Language.CS
+                    ? GeneratorType.Class 
+                    : GeneratorType.Interface;
+            }
+
+            //multi files is not supported in c#, it's planned.
+            if (Lang == Language.CS && MultiFiles)
+            {
+                Console.WriteLine("Multi-files is not supported in c#");
+                MultiFiles=false;
+            }
+
+            //for type script
+            if (string.IsNullOrEmpty(CodeFilename))
+                CodeFilename = MultiFiles? "Model": $"poco.{Lang.ToString().ToLower()}";           
+        }
     }
 }

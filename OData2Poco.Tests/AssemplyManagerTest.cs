@@ -37,7 +37,7 @@ namespace OData2Poco.Tests
           {
               var pocosetting =new PocoSetting
               {
-                  AddKeyAttribute = true
+                  Attributes = new List<string> { "key" },                 
               };
 
               AssemplyManager am = new AssemplyManager(pocosetting,new List<ClassTemplate>());
@@ -48,8 +48,8 @@ namespace OData2Poco.Tests
           {
               var pocosetting = new PocoSetting
               {
-                  AddTableAttribute = true,
-                  AddRequiredAttribute = true
+                  Attributes= new List<string> { "tab","req"},
+                  
               };
 
               AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());
@@ -60,8 +60,7 @@ namespace OData2Poco.Tests
           {
               var pocosetting = new PocoSetting
               {
-                  AddTableAttribute = true,
-                  AddRequiredAttribute = true
+                  Attributes = new List<string> { "tab", "req" },
               };
 
               AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());

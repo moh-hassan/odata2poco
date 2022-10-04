@@ -1,4 +1,4 @@
-﻿using System;
+﻿using OData2Poco.TypeScript;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -30,7 +30,7 @@ namespace OData2Poco.Api
         internal async Task<IPocoGenerator> GenerateModel(OdataConnectionString odataConnString)
         {
             IPocoGenerator gen = await PocoFactory.GenerateModel(odataConnString, Setting);
-            MetaData=gen.MetaData;
+            MetaData = gen.MetaData;
             return gen;
         }
         internal async Task<IPocoGenerator> GenerateModel(string xmlContent)
@@ -63,13 +63,23 @@ namespace OData2Poco.Api
             var proj = new ProjectGenerator(Setting.Attributes);
             return proj.GetProjectCode();
         }
-
+#if OPENAPI
         public async Task<string> GenerateOpenApiAsync(OdataConnectionString odataConnString,
-          int openApiVersion=3)            
-        {            
-            var gen = await GenerateModel(odataConnString);  
-            var apiText= gen.GenerateOpenApi( openApiVersion);           
+          int openApiVersion = 3)
+        {
+            IPocoGenerator gen = await GenerateModel(odataConnString);
+            var apiText = gen.GenerateOpenApi(openApiVersion);
             return apiText;
         }
+#endif         
+        public async Task<PocoStore> GenerateTsAsync(OdataConnectionString odataConnString)
+        {
+            IPocoGenerator gen = await GenerateModel(odataConnString);
+            var ts = new TsPocoGenerator(gen, Setting);
+            var pocoStore = ts.GeneratePoco();
+            ClassList = ts.ClassList;
+            return pocoStore;
+        }
+
     }
 }

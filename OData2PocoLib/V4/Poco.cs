@@ -8,10 +8,7 @@ using OData2Poco.InfraStructure.Logging;
 using Microsoft.OData.Edm;
 using Microsoft.OData.Edm.Validation;
 using Microsoft.OData.Edm.Csdl;
-using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.OData;
-using Microsoft.OpenApi;
-using Microsoft.OpenApi.Extensions;
+
 
 namespace OData2Poco.V4
 {
@@ -97,21 +94,30 @@ namespace OData2Poco.V4
         {
             var list = new List<ClassTemplate>();
             IEnumerable<IEdmSchemaType> schemaElements = GetSchemaElements(Model);
+            var id = 1;
             foreach (var type in schemaElements.ToList())
             {
-                var ct = GeneratePocoClass(type);
-                if (ct == null) continue;
+                var ct = GeneratePocoClass(type,id++);
+                if (ct == null) continue;                 
                 list.Add(ct);
             }
+            //filter model
+            if (_setting.Include?.Count > 0)
+            {
+                list = ModelFilter.FilterList(list, _setting.Include).ToList();
+               // list.Sort();
+            }
+
             return list;
         }
 
-        internal ClassTemplate? GeneratePocoClass(IEdmSchemaType ent)
+        internal ClassTemplate? GeneratePocoClass(IEdmSchemaType ent,int id)
         {
             if (ent == null) return null;
             var className = ent.Name;
             var classTemplate = new ClassTemplate
             {
+                Id = id,
                 Name = className,
                 OriginalName = className,
                 IsEnum = ent is IEdmEnumType,
@@ -335,7 +341,8 @@ namespace OData2Poco.V4
 
         #endregion
 
-        #region openApi         
+#region openApi   
+#if OPENAPI
         public string GenerateOpenApi(int openApiVersion = 3)
         {
             var fileName = _setting.OpenApiFileName;
@@ -354,7 +361,8 @@ namespace OData2Poco.V4
 
             File.WriteAllText(fileName, text);
             return text;
-        }       
-        #endregion
+        }     
+#endif
+#endregion
     }
 }

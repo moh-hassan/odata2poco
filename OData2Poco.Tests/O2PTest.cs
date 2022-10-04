@@ -95,6 +95,7 @@ namespace OData2Poco.Tests
             //TripId is readonly, but overwrite by setting option 
             Assert.IsTrue(code.Contains(" public int TripId {get;set;}"));
         }
+#if OPENAPI
         [Category("openapi")]
         [Test]
         [TestCaseSource(typeof(TestCaseFactory), "TestCases")]
@@ -109,6 +110,7 @@ namespace OData2Poco.Tests
             var text = await o2p.GenerateOpenApiAsync(connString);
             text.Should().Contain(expected);
         }
+#endif
     }
 
     public static class TestCaseFactory

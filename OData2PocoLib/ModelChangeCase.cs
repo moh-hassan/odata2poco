@@ -1,9 +1,10 @@
-﻿using System;
+﻿// Copyright 2016-2022 Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using OData2Poco.Extensions;
-using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco
 {
@@ -28,9 +29,9 @@ namespace OData2Poco
           
             var cc = new ModelChangeCase();
             if (caseEnum == CaseEnum.None && renameMap is null) return cc;
-
-            //rename classes
-            list.Update(c =>
+            if (list== null || !list.Any()) return cc;
+                //rename classes
+                list.Update(c =>
              {
                  c.Name = cc.RenameClass(c.Name, caseEnum, renameMap);
                  return c;
@@ -78,9 +79,12 @@ namespace OData2Poco
 
         private string RenameParent(string className) => GetNewName(className);
 
-        private void RenamePropertiesType(List<ClassTemplate> list) =>
+        private void RenamePropertiesType(List<ClassTemplate> list)
+        {
+            if (list == null || !list.Any())
+                return;
             list.ForEach(ct => ct.Properties.Update(c => c.PropType = RenamePropertyType(c)));
-
+        }
 
         private string GetNewName(string name)
         {

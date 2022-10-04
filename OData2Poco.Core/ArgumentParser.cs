@@ -92,6 +92,7 @@ namespace OData2Poco.CommandLine
                 config.CaseSensitive = true;
                 config.MaximumDisplayWidth = 4000;
                 config.IgnoreUnknownArguments = false;
+                config.CaseInsensitiveEnumValues = true;
             });
 
             var result = parser.ParseArguments<Options>(args);

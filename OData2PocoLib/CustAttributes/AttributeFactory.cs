@@ -28,22 +28,7 @@ namespace OData2Poco.CustAttributes
         public AttributeFactory Init(PocoSetting? setting=null)
         {
             if (setting==null)
-                setting= new PocoSetting();
-
-            //obsolet: -k -q -j -t are replaced by -a <names>
-            var list = setting.Attributes;
-            if (setting.AddKeyAttribute && !list.Contains("key"))
-                list.Add("key");
-
-            if (setting.AddRequiredAttribute && !list.Contains("req"))
-                list.Add("req");
-
-            if (setting.AddTableAttribute && !list.Contains("tab"))
-                list.Add("tab");
-
-            //    case "json":
-            if (setting.AddJsonAttribute && !list.Contains("json"))
-                list.Add("json");
+                setting= new PocoSetting();             
             
             _attributes = new List<string>(setting.Attributes);//add attributes of commandline options
             return this;

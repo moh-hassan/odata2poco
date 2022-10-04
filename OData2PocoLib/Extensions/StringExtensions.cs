@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -52,12 +53,17 @@ namespace OData2Poco.Extensions
             text = ToPascalCase(text);
             return text.Substring(0, 1).ToLower() + text.Substring(1);
         }
+        public static string ToKebabCase(this string text)
+        => Regex.Replace(text, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1-").ToLower();
+
         public static string ChangeCase(this string text, CaseEnum caseEnum)
         {
             return caseEnum switch
             {
                 CaseEnum.Pas => text.ToPascalCase(),
                 CaseEnum.Camel => text.ToCamelCase(),
+                CaseEnum.Kebab => text.ToKebabCase(),
+                CaseEnum.Snake => text.ToSnakeCase(),
                 _ => text
             };
         }
@@ -129,7 +135,7 @@ namespace OData2Poco.Extensions
             }
         }
 
-       
+
         public static string Quote(this string text, char c = '"') => $"{c}{text}{c}";
 
         public static string UnQuote(this string text)
@@ -206,7 +212,7 @@ namespace OData2Poco.Extensions
                 return $"{msg}\nException Details:\n {ex}";
             return msg;
         }
-        //todo: _header implementation 
+        
         /// <summary>
         /// Generte C# code for a given  Entity using FluentCsTextTemplate
         /// </summary>
@@ -259,9 +265,63 @@ namespace OData2Poco.Extensions
 
         }
         public static List<string> ToLines(this string text)
+        {            
+            return text.Trim().Split('\n')
+                .Select(a => a.Trim(new[] {' ','\t','{','}','\r'}))
+                .Where(a => a.Length > 0)
+                .ToList();
+        }
+        public static string EnumToString(this Type t)
         {
-           return text.Split('\n').Select(a => a.Trim()).ToList();
+            if (!t.IsEnum) return "";
+            var values = Enum.GetNames(t);
+            return string.Join(", ", values);
+        }
+        public static string Prefix(this string name, string? prefix)
+        {
+            if (string.IsNullOrEmpty(prefix))
+                return name;
+            return $"{prefix}{name}";
+        }
+        public static string Suffix(this string name, string? suffix)
+        {
+            if (string.IsNullOrEmpty(suffix))
+                return name;
+            return $"{name}{suffix}";
+        }
+        public static Match MatchPattern(this string inputText, string pattern)
+        {
+            var type = inputText.Trim();
+            var type2 = type;
 
+            var option = RegexOptions.IgnoreCase
+                         | RegexOptions.Compiled
+                         | RegexOptions.CultureInvariant
+                         | RegexOptions.IgnorePatternWhitespace;
+
+            Regex MyRegex = new Regex(pattern, option);
+            Match m = MyRegex.Match(inputText);
+
+            return m;
+        }
+        public static string Reduce(this string text, char separator = '.')
+        {
+            return text.Split(separator).Last();
+        }
+        public static string RemoveNamespace(this string text, string ns)
+        {
+            if (string.IsNullOrEmpty(ns))
+                return text;
+            if (text.StartsWith(ns, StringComparison.Ordinal))
+                return text.Replace(ns, "").TrimStart('.');
+            return text;
+        }
+        public static string RemoveDot(this string name) => name.Replace(".", "");
+        public static string NormalizeName(this string name, string ns, bool useFullName)
+        {
+            if (useFullName)
+                return name.RemoveDot();
+            return name.RemoveNamespace(ns);
         }
     }
 }

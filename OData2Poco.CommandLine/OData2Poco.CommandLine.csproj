@@ -5,12 +5,11 @@
 		<AssemblyName>O2Pgen</AssemblyName>
 		<Authors>Mohamed Hassan</Authors>
 		<Product>OData2Poco.CommandLine</Product>
-		<Description>o2gen is a CommandLine tool for generating c# and vb.net POCO classes from OData feeds.</Description>
+		<Description>o2gen is a CommandLine tool for generating c# and typescript POCO (DTO) classes,interfaces and records from OData feeds with lot of configuration parameters.</Description>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageId>OData2Poco.CommandLine</PackageId>		 
-		<PackageTags>odata;charp;vb.net;o2pgen;meta-xml;web-api</PackageTags>
+		<PackageId>OData2Poco.CommandLine</PackageId>	
 	</PropertyGroup>
 
 
@@ -20,11 +19,6 @@
 	<PropertyGroup>
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
 	</PropertyGroup>
-	
-	<ItemGroup>
-	  <Compile Include="..\common\IsExternalInit.cs" Link="IsExternalInit.cs" />
-	</ItemGroup> 
-
 	<ItemGroup>
 		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />		 
 	</ItemGroup>

@@ -7,12 +7,7 @@ using OData2Poco.Api;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
-using OData2Poco.TextTransform;
-/*
-read parameter file into dictionary
-recursive resolve macros in dictionary
-replace options values for: password , tokens ,url
-* */
+
 namespace OData2Poco.CommandLine
 {
     /// <summary>
@@ -27,10 +22,10 @@ namespace OData2Poco.CommandLine
         private readonly ILog _logger = PocoLogger.Default;
         public O2P O2PGen { get; set; }
         public List<string> Errors; //model generation errors
-        private IPocoFileSystem _fileSystem;
-        private OptionManager optionManager;
+        private readonly IPocoFileSystem _fileSystem;        
         public CsCommand(Options options, IPocoFileSystem fileSystem)
         {
+            OptionManager optionManager;
             if (fileSystem == null)
                 _fileSystem = new NullFileSystem();
             else
@@ -66,7 +61,9 @@ namespace OData2Poco.CommandLine
             GenerateProjectCommand();
             ServiceInfo();
             SaveMetaDataCommand();
+#if OPENAPI
             await SaveOpenApiCommandAsync();
+#endif
             ShowHeaderCommand();
             ListPocoCommand();
             VerboseCommand();
@@ -97,7 +94,7 @@ namespace OData2Poco.CommandLine
             _logger.Info($"OData Service Version: {O2PGen.MetaDataVersion} ");
             _logger.Info($"Number of Entities: {O2PGen.ClassList.Count}");
             _logger.Normal(new string('-', 50));
-            _logger.Sucess("Successfully Generated PoCo Models");
+            _logger.Sucess("Successfully Generated Poco Model");
         }
 
         public void ShowOptions()
@@ -139,10 +136,7 @@ namespace OData2Poco.CommandLine
                 _logger.Normal("---------------Code Generated--------------------------------");
                 _logger.Normal(Code);
             }
-            else
-            {
-                _logger.Error("Code not generated");
-            }
+
         }
 
         private void ShowHeaderCommand()
@@ -159,16 +153,36 @@ namespace OData2Poco.CommandLine
 
         private async Task GenerateCodeCommandAsync()
         {
-            Code = await O2PGen.GenerateAsync(odataConnectionString);
-            if (ArgOptions.Lang == "cs")
+
+            if (ArgOptions.Lang == Language.CS)
             {
+                Code = await O2PGen.GenerateAsync(odataConnectionString);
                 _logger.Normal("Saving generated CSharp code to file : " + ArgOptions.CodeFilename);
                 SaveToFile(ArgOptions.CodeFilename, Code);
                 _logger.Confirm("CSharp code  is generated Successfully.");
             }
+            else if (ArgOptions.Lang == Language.TS)
+            {
+                var pocoStore = await O2PGen.GenerateTsAsync(odataConnectionString);
+                pocoStore.Save(ArgOptions.CodeFilename, _fileSystem, ArgOptions.MultiFiles);
+
+                if (ArgOptions.MultiFiles)
+                {
+                    _logger.Normal($"Saving generated typescript code to folder: '{ArgOptions.CodeFilename}'");
+                    _logger.Confirm("typescript code  is generated Successfully.");
+                }
+                else  //single file
+                {
+                    _logger.Normal($"Saving generated typescript code to file: '{ArgOptions.CodeFilename}'");
+                    if (ArgOptions.Verbose)
+                        _logger.Normal(pocoStore.Display().ToString());
+                    _logger.Confirm("typescript code  is generated Successfully.");
+                }
+            }
             else
             {
-                _logger.Warn($"Lang option: '{ArgOptions.Lang}' isn't valid. Only cs are accepted \r\n No code is generated");
+                Console.WriteLine($"!!!!! ArgOptions.Lang {ArgOptions.Lang}");
+                _logger.Warn($"Lang option: '{ArgOptions.Lang}' isn't valid. Only cs/ts are accepted \r\n No code is generated");
                 Code = "";
             }
         }
@@ -183,6 +197,7 @@ namespace OData2Poco.CommandLine
             var metaData = O2PGen.MetaDataAsString.FormatXml();
             SaveToFile(ArgOptions.MetaFilename, metaData);
         }
+#if OPENAPI
         private async Task SaveOpenApiCommandAsync()
         {
 
@@ -193,14 +208,13 @@ namespace OData2Poco.CommandLine
 
             await O2PGen.GenerateOpenApiAsync(odataConnectionString);
         }
+#endif
         private void GenerateProjectCommand()
         {
             //---------   --gen-project, -g
             if (!ArgOptions.GenerateProject) return;
             var fname = "un.proj";
-            if (ArgOptions.Lang == "cs")
-                fname = Path.ChangeExtension(ArgOptions.CodeFilename, ".csproj");
-            if (ArgOptions.Lang == "vb")
+            if (ArgOptions.Lang == Language.CS)
                 fname = Path.ChangeExtension(ArgOptions.CodeFilename, ".csproj");
             var projectCode = O2PGen.GenerateProject();
             _logger.Normal($"Generating project file {fname}");

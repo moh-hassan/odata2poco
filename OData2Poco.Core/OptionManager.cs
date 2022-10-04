@@ -1,45 +1,42 @@
-﻿using System.Linq;
-using OData2Poco.Extensions;
-using OData2Poco.Http;
+﻿// Copyright 2016-2022 Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using System.Linq;
 
 namespace OData2Poco.CommandLine
 {
     public class OptionManager
     {
-        private Options PocoOptions { get; set; }       
-        public OptionManager(Options options) 
+        private Options PocoOptions { get; set; }
+        public OptionManager(Options options)
         {
             PocoOptions = options;
             PocoOptions.Validate();
 
-        }
-
+        }      
         public PocoSetting GetPocoSetting()
-        {
+        {           
             return new PocoSetting
             {
+                Lang = PocoOptions.Lang,
                 AddNavigation = PocoOptions.Navigation,
                 AddNullableDataType = PocoOptions.AddNullableDataType,
                 AddEager = PocoOptions.Eager,
                 Inherit = string.IsNullOrWhiteSpace(PocoOptions.Inherit) ? null : PocoOptions.Inherit,
                 NamespacePrefix = string.IsNullOrEmpty(PocoOptions.Namespace)
                     ? string.Empty : PocoOptions.Namespace,
-                NameCase = PocoOptions.NameCase.ToEnum<CaseEnum>(),
+                NameCase = PocoOptions.NameCase,
                 RenameMap = PocoOptions.RenameMap,
                 Attributes = PocoOptions.Attributes?.ToList(),
-                //obsolete
-                AddKeyAttribute = PocoOptions.Key,
-                AddTableAttribute = PocoOptions.Table,
-                AddRequiredAttribute = PocoOptions.Required,
-                AddJsonAttribute = PocoOptions.AddJsonAttribute,
                 Include = PocoOptions.Include.ToList(),
-                EntityNameCase=PocoOptions.EntityNameCase.ToEnum<CaseEnum>(),
+                EntityNameCase = PocoOptions.EntityNameCase,
                 ReadWrite = PocoOptions.ReadWrite,
                 EnableNullableReferenceTypes = PocoOptions.EnableNullableReferenceTypes,
-                InitOnly = PocoOptions.InitOnly,
-                AsRecord = PocoOptions.AsRecord,
+                InitOnly = PocoOptions.InitOnly,                
                 OpenApiFileName = PocoOptions.OpenApiFileName,
+                GeneratorType = PocoOptions.GeneratorType,
+                MultiFiles = PocoOptions.MultiFiles,
+                CodeFilename = PocoOptions.CodeFilename,
+                UseFullName = PocoOptions.UseFullName,
             };
         }
 
@@ -54,7 +51,7 @@ namespace OData2Poco.CommandLine
                 TokenParams = PocoOptions.TokenParams,
                 ParamFile = PocoOptions.ParamFile,
                 Domain = PocoOptions.Domain,
-                Authenticate = PocoOptions.Authenticate.ToEnum<AuthenticationType>(),
+                Authenticate = PocoOptions.Authenticate,
                 Proxy = PocoOptions.Proxy,
             };
             return connString;

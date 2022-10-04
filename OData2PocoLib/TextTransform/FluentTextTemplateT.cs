@@ -20,7 +20,7 @@ namespace OData2Poco.TextTransform
         /// A list of the lengths of each indent that was added with PushIndent
         /// </summary>
         private List<int> IndentLengths { get; }
-       
+
 
         /// <summary>
         /// Gets the current indent we use when adding lines to the output
@@ -36,7 +36,7 @@ namespace OData2Poco.TextTransform
         /// The string builder that generation-time code is using to assemble generated output
         /// </summary>
         protected StringBuilder GenerationText { get; set; }
-       
+
         public FluentTextTemplate()
         {
             ToStringHelper = new ToStringInstanceHelper();
@@ -46,16 +46,6 @@ namespace OData2Poco.TextTransform
             PopIndentText = "";
         }
 
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(Header))
-                sb.AppendLine(Header);
-            sb.Append(GenerationText);
-            if (!string.IsNullOrEmpty(Footer))
-                sb.AppendLine().AppendLine(Footer);
-            return sb.ToString();
-        }
 
         /// <summary>
         /// Write formatted text directly into the generated output
@@ -249,7 +239,7 @@ namespace OData2Poco.TextTransform
 
         }
 
-      
+
         public T WriteIf(bool condition, string ifTrue)
         {
             if (condition)
@@ -291,7 +281,53 @@ namespace OData2Poco.TextTransform
             return WriteList(list, separator);
         }
 
-
+        public T WriteLineFor(List<string> list, string separator = ",", string indent = "\t")
+        {
+            foreach (var p in list)
+            {
+                var comma = list.IsLast(p) ? "" : separator;
+                PushIndent(indent)
+                    .WriteLine($"{p.Trim()} {comma}")
+                    .PopIndent();
+            }
+            return (T)this;
+        }
+        public T WriteLineFormatFor(List<string> list, string format)
+        {
+            foreach (var p in list)
+            {
+                WriteLine(string.Format(format, p));
+            }
+            return (T)this;
+        }
+        public T SaveToPocoStore(PocoStore ps)
+        {
+            return SaveToPocoStor(ps, "Poco", "", "Poco");
+        }
+        public T SaveToPocoStor(PocoStore ps, 
+            string name,
+            string codenamespace = "",
+            string fullName="" )
+        {
+            ps.Add(new PocoStoreEntry
+            {
+                Name = name,
+                Namespace = codenamespace,
+                FullName = fullName,
+                Code = ToString(),
+            });
+            return (T)this;
+        }
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(Header))
+                sb.AppendLine(Header);
+            sb.Append(GenerationText);
+            if (!string.IsNullOrEmpty(Footer))
+                sb.AppendLine().AppendLine(Footer);
+            return sb.ToString();
+        }
     }
 }
 

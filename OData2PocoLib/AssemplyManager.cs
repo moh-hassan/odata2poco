@@ -83,17 +83,10 @@ namespace OData2Poco
         //initialize AssemplyReference
         private void AddAssemplyReferenceList()
         {
-            //Add required namespace for attributes
-            if (_pocoSetting.AddKeyAttribute) AddAssemplyByKey("key");
-            if (_pocoSetting.Attributes.Contains("key")) AddAssemplyByKey("key");
-
-            if (_pocoSetting.AddRequiredAttribute) AddAssemplyByKey("required");
-            if (_pocoSetting.Attributes.Contains("req")) AddAssemplyByKey("required");
-
-            if (_pocoSetting.AddTableAttribute) AddAssemplyByKey("table");
-            if (_pocoSetting.Attributes.Contains("tab")) AddAssemplyByKey("table");
-
-            if (_pocoSetting.AddJsonAttribute) AddAssemplyByKey("json"); //obsolete
+            //Add required namespace for attributes          
+            if (_pocoSetting.Attributes.Contains("key")) AddAssemplyByKey("key");            
+            if (_pocoSetting.Attributes.Contains("req")) AddAssemplyByKey("required");            
+            if (_pocoSetting.Attributes.Contains("tab")) AddAssemplyByKey("table");           
             if (_pocoSetting.Attributes.Contains("json")) AddAssemplyByKey("json");
              if (_pocoSetting.Attributes.Contains("json3")) AddAssemplyByKey("json3"); //netcore 3
             if (_pocoSetting.Attributes.Contains("dm")) AddAssemplyByKey("DataMember");

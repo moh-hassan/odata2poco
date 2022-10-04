@@ -9,14 +9,13 @@ namespace OData2Poco.CustAttributes
 {
     public class PocoAttributesList : IEnumerable<INamedAttribute>
     {
-        readonly List<INamedAttribute> _namedAttributes; //= new List<ICustomeAttribute>();
+        readonly List<INamedAttribute> _namedAttributes;  
         public INamedAttribute? this[string index] => GetAttributeObject(index);
 
         public PocoAttributesList()
         {
             _namedAttributes = new List<INamedAttribute>();
-            FillNamedAttributes();
-            //LoadPluginAttributes();
+            FillNamedAttributes();           
 
         }
         public List<string> SupportedAttributes()

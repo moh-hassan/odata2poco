@@ -29,6 +29,7 @@ namespace OData2Poco
             ClassList = pocoGen.GeneratePocoList();
             CodeText = "";
             Header = "";
+            PocoSetting.Validate();
         }
 
         public bool BlankSpaceBeforeProperties { get; set; } = true;
@@ -47,6 +48,8 @@ namespace OData2Poco
         /// <returns></returns>
         public string GeneratePoco()
         {
+            if (!ClassList.Any())
+                return "";
             List<string> ns = ClassList.Select(x => x.NameSpace).Distinct()
                 .OrderBy(x => x).ToList();
             var template = new FluentCsTextTemplate (PocoSetting) {Header = Header};
@@ -76,12 +79,8 @@ namespace OData2Poco
             //initialize AttributeFactory to use pocosetting.Attributes
             AttributeFactory.Default.Init(setting);
 
-            var generator = new PocoClassGeneratorCs(pocoGen, setting);
-
-            //filter model
-            var generatorClassList = generator.ClassList;
-            if (setting.Include?.Count > 0)
-                generator.ClassList = ModelFilter.FilterList(generatorClassList, setting.Include).ToList();
+            var generator = new PocoClassGeneratorCs(pocoGen, setting);                      
+            var generatorClassList = generator.ClassList;           
 
             //change case
             if (setting.EntityNameCase != CaseEnum.None || setting.RenameMap is not null)

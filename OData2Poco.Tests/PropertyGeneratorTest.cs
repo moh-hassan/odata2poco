@@ -36,9 +36,7 @@ namespace OData2Poco.Tests
             // Arrange 
             var setting = new PocoSetting
             {
-                AddKeyAttribute = true,
-                AddRequiredAttribute = true,
-                AddJsonAttribute = true
+                Attributes = new List<string> { "key", "req","json" },                
             };
             _attributeManager.Init(setting);
 
@@ -131,7 +129,7 @@ namespace OData2Poco.Tests
             // Arrange 
             var setting = new PocoSetting
             {
-                AddJsonAttribute = true
+                Attributes = new List<string> { "json" },                 
             };
             _attributeManager.Init(setting);
             PropertyTemplate property = new PropertyTemplate
@@ -155,7 +153,7 @@ namespace OData2Poco.Tests
             // Arrange 
             var setting = new PocoSetting
             {
-                AddJsonAttribute = true,
+                Attributes = new List<string> { "json" },                
                 NameCase = CaseEnum.Camel
             };
             _attributeManager.Init(setting);
@@ -181,7 +179,7 @@ namespace OData2Poco.Tests
             // Arrange 
             var setting = new PocoSetting
             {
-                AddKeyAttribute = true
+                Attributes = new List<string> { "key" },               
             };
             _attributeManager.Init(setting);
             PropertyTemplate property = new PropertyTemplate
@@ -193,7 +191,7 @@ namespace OData2Poco.Tests
             // Act 
             var sut = new PropertyGenerator(property, new PocoSetting
             {
-                AddKeyAttribute = true
+                Attributes = new List<string> { "key" },               
             });
             // Assert 
             var expected = @"
@@ -209,7 +207,7 @@ public int CategoryID {get;set;} ";
             // Arrange 
             var setting = new PocoSetting
             {
-                AddRequiredAttribute = true
+                Attributes = new List<string> { "req" },              
             };
             _attributeManager.Init(setting);
 

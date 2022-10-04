@@ -47,7 +47,7 @@ namespace OData2Poco
             get
             {
                 var mappedName = MappedPropertyName();
-                if(mappedName is not null)
+                if (mappedName is not null)
                 {
                     return mappedName;
                 }
@@ -71,7 +71,15 @@ namespace OData2Poco
         /// <summary>
         /// Virtual Modifier
         /// </summary>
-        public string VirtualModifier => _setting.AddNavigation && !_setting.AddEager ? " virtual" : string.Empty;
+        public string VirtualModifier
+        {
+            get
+            {
+                if (_setting.GeneratorType == GeneratorType.Record)
+                    return string.Empty;
+                return _setting.AddNavigation && !_setting.AddEager ? " virtual" : string.Empty;
+            }
+        }
 
         /// <summary>
         /// NullableModifier represented by "?" added to type , e.g int?
@@ -149,7 +157,7 @@ namespace OData2Poco
         }
         private string Comment()
         {
-            var comment = _property?.PropComment + (_property?.IsReadOnly == true?" ReadOnly": "");
+            var comment = _property?.PropComment + (_property?.IsReadOnly == true ? " ReadOnly" : "");
             if (!string.IsNullOrEmpty(comment))
                 comment = $"//{comment}";
             return comment;
@@ -157,7 +165,7 @@ namespace OData2Poco
 
         private string? MappedPropertyName()
         {
-            if(_setting.RenameMap is null)
+            if (_setting.RenameMap is null)
             {
                 return null;
             }
@@ -167,26 +175,26 @@ namespace OData2Poco
                 var map = _setting.RenameMap.PropertyNameMap;
                 foreach (var className in map.Keys)
                 {
-                    if(className.Equals("ALL", StringComparison.InvariantCultureIgnoreCase))
+                    if (className.Equals("ALL", StringComparison.InvariantCultureIgnoreCase))
                     {
                         // The ALL is a last resort.
                         allMap = map[className];
                         continue;
                     }
-                    else if(className.Equals(_property.ClassName, StringComparison.InvariantCultureIgnoreCase))
+                    else if (className.Equals(_property.ClassName, StringComparison.InvariantCultureIgnoreCase))
                     {
                         var n = map[className]
                             .Where(n => n.OldName.Equals(_property.PropName, StringComparison.InvariantCultureIgnoreCase))
                             .FirstOrDefault();
 
-                        if(n is not null)
+                        if (n is not null)
                         {
                             return string.IsNullOrWhiteSpace(n.NewName) ? null : n.NewName;
                         }
                     }
                 }
 
-                if(allMap is not null)
+                if (allMap is not null)
                 {
                     var exactNameMap = allMap
                         .Where(n => n.OldName.Equals(_property.PropName, StringComparison.InvariantCultureIgnoreCase))
@@ -197,12 +205,12 @@ namespace OData2Poco
                         return string.IsNullOrWhiteSpace(exactNameMap.NewName) ? null : exactNameMap.NewName;
                     }
 
-                    foreach(var regexNameMap in allMap)
+                    foreach (var regexNameMap in allMap)
                     {
-                        if(regexNameMap.OldName.IndexOf('^') == 0)
+                        if (regexNameMap.OldName.IndexOf('^') == 0)
                         {
                             //it's a regex. We really should compile it and cache it.
-                            if(Regex.IsMatch(_property.PropName, regexNameMap.OldName, RegexOptions.IgnoreCase))
+                            if (Regex.IsMatch(_property.PropName, regexNameMap.OldName, RegexOptions.IgnoreCase))
                             {
                                 return string.IsNullOrWhiteSpace(regexNameMap.NewName) ? null : regexNameMap.NewName;
                             }

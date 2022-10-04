@@ -1,6 +1,9 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions;
+using NUnit.Framework;
 using OData2Poco.Extensions;
 using OData2Poco.Http;
+using System;
+using System.Linq;
 
 namespace OData2Poco.Tests
 {
@@ -27,7 +30,14 @@ namespace OData2Poco.Tests
             Assert.AreEqual(pascalName, name.ToCamelCase());
         }
 
-
+        [Test]
+        [TestCase("UserName", "user-name")]
+        [TestCase("user_Name", "user_name")]
+        [TestCase("Username", "username")]
+        public void ToKebaCaseTest(string name, string kebabName)
+        {
+            kebabName.Should().Be(name.ToKebabCase());
+        }
 
 
         [Test]
@@ -37,19 +47,19 @@ namespace OData2Poco.Tests
 
 
           and this is     line2";
-           
-            var expected = "this is line1 and this is line2";           
+
+            var expected = "this is line1 and this is line2";
             Assert.AreEqual(text.TrimAllSpace(), expected);
         }
 
         [Test]
         public void TrimAllSpaceAndKeepCrLfTest()
-        { 
+        {
             var text = @"this            is  line1
 
 
           and this is     line2";
-            var expected = "this is line1\nand this is line2\n";           
+            var expected = "this is line1\nand this is line2\n";
             Assert.AreEqual(text.TrimAllSpace(true), expected);
         }
         [Test]
@@ -102,5 +112,14 @@ namespace OData2Poco.Tests
             //Assert
             Assert.That(authType, Is.EqualTo(expected));
         }
+        
+        [Test]
+        [TestCase(typeof(AuthenticationType), "None, Basic, Token, Oauth2, Ntlm, Digest")]
+        [TestCase(typeof(Language),"None, CS, TS")]
+        public void Enum_to_string_values_test(Type t, string expected)
+        {
+            var sut = t.EnumToString();            
+            sut.Should().Be(expected);
+        }       
     }
 }
