@@ -27,16 +27,18 @@ namespace OData2Poco.Api
             MetaData = new MetaDataInfo();
             CodeText = "";
         }
-        internal async Task<IPocoGenerator> GenerateModel(OdataConnectionString odataConnString)
+        public async Task<IPocoGenerator> GenerateModel(OdataConnectionString odataConnString)
         {
             IPocoGenerator gen = await PocoFactory.GenerateModel(odataConnString, Setting);
             MetaData = gen.MetaData;
+            ClassList = gen.GeneratePocoList();
             return gen;
         }
-        internal async Task<IPocoGenerator> GenerateModel(string xmlContent)
+        public async Task<IPocoGenerator> GenerateModel(string xmlContent)
         {
             IPocoGenerator gen = await PocoFactory.GenerateModel(xmlContent, Setting);
             MetaData = gen.MetaData;
+            ClassList = gen.GeneratePocoList();
             return gen;
         }
         //Generate c# code
@@ -44,7 +46,6 @@ namespace OData2Poco.Api
         {
             var gen = await GenerateModel(odataConnString);
             var generatorCs = PocoClassGeneratorCs.GenerateCsPocoClass(gen, Setting);
-            ClassList = generatorCs.ClassList;
             CodeText = generatorCs.ToString();
             return CodeText;
         }
@@ -54,7 +55,6 @@ namespace OData2Poco.Api
         {
             var gen = await GenerateModel(xmlContent);
             var generatorCs = PocoClassGeneratorCs.GenerateCsPocoClass(gen, Setting);
-            ClassList = generatorCs.ClassList;
             CodeText = generatorCs.ToString();
             return CodeText;
         }
@@ -77,7 +77,6 @@ namespace OData2Poco.Api
             IPocoGenerator gen = await GenerateModel(odataConnString);
             var ts = new TsPocoGenerator(gen, Setting);
             var pocoStore = ts.GeneratePoco();
-            ClassList = ts.ClassList;
             return pocoStore;
         }
 
