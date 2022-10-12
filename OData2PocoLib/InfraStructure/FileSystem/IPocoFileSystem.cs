@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco.InfraStructure.FileSystem
+using System.Text;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedMemberInSuper.Global
+
+namespace OData2Poco.InfraStructure.FileSystem;
+
+public interface IPocoFileSystem
 {
-    public interface IPocoFileSystem
-    {
-        void SaveToFile(string fname, string content);
-        void SaveToFile(string filePath, Func<Stream> getStream);
-        void SaveToFolder(string folderPath, Dictionary<string,string> content);
-        void SaveToFile(string filePath, string content, Encoding encoding);
-        
-    }
+    void SaveToFile(string filePath, string content);
+    void SaveToFile(string filePath, Func<Stream> getStream);
+    void SaveToFile(string filePath, string content, Encoding encoding);
+    void SaveToFolder(string folderPath, Dictionary<string, string> content);
 }

@@ -1,21 +1,14 @@
-﻿using System.Linq;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
 using Microsoft.Data.Edm;
-using Microsoft.Data.Edm.Annotations;
 
-namespace OData2Poco.V3
+namespace OData2Poco.V3;
+#pragma warning disable IDE0060
+internal static class VocabularyHelpersV3
 {
-    static class VocabularyHelpersV3
+    //Computed and Permissions Vocabulary are not supported in OData V3
+    internal static bool IsReadOnly(this IEdmModel model, IEdmProperty property)
     {
-        private static IEdmVocabularyAnnotation? FindVocabularyAnnotation(this IEdmModel model, IEdmVocabularyAnnotatable target, IEdmTerm term)
-        {
-            var annotations = model.FindVocabularyAnnotations(target);
-            if (annotations == null) return null;
-            var annotation = annotations.FirstOrDefault(a => a.Term.Namespace == term.Namespace && a.Term.Name == term.Name);
-            var result = annotation;
-
-            return result;
-        }
-        //Computed and Permissions Vocabulary are not supported in OData V3
-        internal static bool IsReadOnly(this IEdmModel model, IEdmProperty property) => false;
+        return false;
     }
 }

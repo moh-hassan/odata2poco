@@ -1,52 +1,54 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
 using NUnit.Framework;
 using OData2Poco.Api;
 using OData2Poco.Extensions;
+using OData2Poco.Fake;
+// ReSharper disable MethodHasAsyncOverload
 
-namespace OData2Poco.Tests
+namespace OData2Poco.Tests;
+
+public class NameMappingTest
 {
-    public class NameMappingTest
+    private readonly string _url = TestSample.TripPin4;
+    private OdataConnectionString _connString;
+
+    [OneTimeSetUp]
+    public void Init()
     {
-        readonly string _url = TestSample.TripPin4;
-        private OdataConnectionString _connString;
+        _connString = new OdataConnectionString { ServiceUrl = _url };
+    }
 
-        [OneTimeSetUp]
-        public void Init()
+    private async Task<string> Generate(string mapFile)
+    {
+        var json = File.ReadAllText(mapFile);
+        var setting = new PocoSetting
         {
-            _connString = new OdataConnectionString { ServiceUrl = _url };
-        }
-        async Task<string> Generate(string mapFile)
-        {
-            var json = File.ReadAllText(mapFile);
-            var setting = new PocoSetting
-            {
-                RenameMap = json.ToObject<RenameMap>(),
-            };
-            var o2P = new O2P(setting);
-            var code = await o2P.GenerateAsync(_connString);
-            return code;
-        }
-        [Test]
-        public async Task Check_NameMapping_for_classes()
-        {
-            var code = await Generate(TestSample.RenameMap);
-            CommonTest.AssertRenameMap(code);
-        }
+            RenameMap = json.ToObject<RenameMap>(),
+        };
+        var o2P = new O2P(setting);
+        var code = await o2P.GenerateAsync(_connString);
+        return code;
+    }
+    [Test]
+    public async Task Check_NameMapping_for_classes()
+    {
+        var code = await Generate(TestSample.RenameMap);
+        CommonTest.AssertRenameMap(code);
+    }
 
-        [Test]
-        public async Task Check_NameMapping_for_class_properties()
-        {
-            var code = await Generate(TestSample.RenameMap2);
-            CommonTest.AssertRenameMap2(code);
-        }
+    [Test]
+    public async Task Check_NameMapping_for_class_properties()
+    {
+        var code = await Generate(TestSample.RenameMap2);
+        CommonTest.AssertRenameMap2(code);
+    }
 
 
-        [Test]
-        public async Task Check_NameMapping_for_class_properties_with_all()
-        {
-            var code = await Generate(TestSample.RenameMap3);
-            CommonTest.AssertRenameMap3(code);
-        }
+    [Test]
+    public async Task Check_NameMapping_for_class_properties_with_all()
+    {
+        var code = await Generate(TestSample.RenameMap3);
+        CommonTest.AssertRenameMap3(code);
     }
 }

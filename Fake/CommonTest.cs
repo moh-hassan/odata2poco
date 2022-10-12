@@ -1,8 +1,11 @@
-using System.Collections.Generic;
+// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
 using System.Text.RegularExpressions;
 using FluentAssertions;
 
-class CommonTest
+namespace OData2Poco.Fake;
+
+internal static class CommonTest
 {
     #region Name Mapping
     public static void AssertRenameMap(string code)

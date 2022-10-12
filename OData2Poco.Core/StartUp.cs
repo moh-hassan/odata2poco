@@ -1,29 +1,23 @@
-﻿using System;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
-
- 
-//(c) 2016-2022 Mohamed Hassan
-// MIT License
-//project site:https://github.com/moh-hassan/odata2poco
-
-
+#if !NETCOREAPP
+using System.Runtime.InteropServices;
+#endif
 namespace OData2Poco.CommandLine
 {
-    public class StartUp
+    public static class StartUp
     {
-        private static readonly Stopwatch Sw = new Stopwatch();
-        public static ILog Logger = PocoLogger.Default;
+        private static readonly Stopwatch Sw = new();
+        public static readonly ILog Logger = PocoLogger.Default;
         public static string OutPut => Logger.Output.ToString();
-        public static int RetCode = (int)ExitCodes.Success;
-        public static IPocoFileSystem _pocoFileSystem;
+        public static int RetCode { get; set; } = (int)ExitCodes.Success;
+        public static IPocoFileSystem FileSystem { get; set; }
 
-
-        static void SetBufferHeight()
+        private static void SetBufferHeight()
         {
 #if !NETCOREAPP
             //only supported in windows
@@ -38,7 +32,7 @@ namespace OData2Poco.CommandLine
             var argument = string.Join(" ", args);
             try
             {
-                _pocoFileSystem = new PocoFileSystem();
+                FileSystem = new PocoFileSystem();
                 SetBufferHeight();
 
                 // Catch all unhandled exceptions in all threads.
@@ -60,7 +54,6 @@ namespace OData2Poco.CommandLine
                 //#if DEBUG
                 Logger.Error("--------------------Exception Details---------------------");
                 Logger.Error($"Error Message:\n {ex.FullExceptionMessage(true)}");
-                // Console.ReadKey();
                 Console.WriteLine(ex);
                 //#endif
             }

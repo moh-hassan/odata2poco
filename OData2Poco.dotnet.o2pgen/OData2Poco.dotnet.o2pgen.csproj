@@ -6,17 +6,15 @@
     <AssemblyName>O2Pgen</AssemblyName>
     <Authors>Mohamed Hassan</Authors>
     <Product>OData2Poco.dotnet.o2pgen</Product>
-	<Description>o2gen is a CommandLine tool for generating c# and typescript POCO (DTO) classes,interfaces and records from OData feeds with lot of configuration parameters.</Description>  
+    <Description>o2gen is a CommandLine tool for generating c# and typescript POCO (DTO) classes,interfaces and records from OData feeds with lot of configuration parameters.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackAsTool>True</PackAsTool>
-    <PackageId>OData2Poco.dotnet.o2pgen</PackageId>    
-    <ToolCommandName>dotnet-o2pgen</ToolCommandName>    
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <PackAsTool>true</PackAsTool>
+    <PackageId>OData2Poco.dotnet.o2pgen</PackageId>
+    <ToolCommandName>dotnet-o2pgen</ToolCommandName>
+    <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+    <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
@@ -26,6 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />    
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
   </ItemGroup>
 </Project>

@@ -1,41 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net472</TargetFramework>		 
-		<AssemblyName>O2Pgen</AssemblyName>
-		<Authors>Mohamed Hassan</Authors>
-		<Product>OData2Poco.CommandLine</Product>
-		<Description>o2gen is a CommandLine tool for generating c# and typescript POCO (DTO) classes,interfaces and records from OData feeds with lot of configuration parameters.</Description>
-	</PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>O2Pgen</AssemblyName>
+    <Authors>Mohamed Hassan</Authors>
+    <Product>OData2Poco.CommandLine</Product>
+    <Description>o2gen is a CommandLine tool for generating c# and typescript POCO (DTO) classes,interfaces and records from OData feeds with lot of configuration parameters.</Description>
+  </PropertyGroup>
 
-	<PropertyGroup>
-		<PackageId>OData2Poco.CommandLine</PackageId>	
-	</PropertyGroup>
+  <PropertyGroup>
+    <PackageId>OData2Poco.CommandLine</PackageId>
+  </PropertyGroup>
 
 
-	<Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
-	<Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" />
-	
-	<PropertyGroup>
-		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-	</PropertyGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />		 
-	</ItemGroup>
+  <Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
+  <Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" />
 
-	<ItemGroup>
-		<PackageReference Include="CommandLineParser" Version="2.8.0" />			
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="ilmerge" Version="3.0.41" Condition="$(TargetFramework.StartsWith('net4'))">
-			<PrivateAssets>All</PrivateAssets>
-		</PackageReference>
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+  </ItemGroup>
 
-	<PropertyGroup>
-		<ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
-		<SignAssembly>false</SignAssembly>
-		<AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
-	</PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ilmerge" Version="3.0.41" Condition="$(TargetFramework.StartsWith('net4'))">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <ApplicationIcon>ODataLogo-32.ico</ApplicationIcon>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
 </Project>

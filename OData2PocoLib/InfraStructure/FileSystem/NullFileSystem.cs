@@ -1,37 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
 using System.Text;
-using OData2Poco.InfraStructure.Logging;
 
-namespace OData2Poco.InfraStructure.FileSystem
+namespace OData2Poco.InfraStructure.FileSystem;
+
+public class NullFileSystem : IPocoFileSystem
 {
-    public class NullFileSystem : IPocoFileSystem
+    public void SaveToFile(string filePath, string content)
     {
-        //static readonly ILog Logger = ColoredConsole.Default;
-        public NullFileSystem()
-        {
-            //Logger.Info($"Creating Null File System for test");
-        }
-        public void SaveToFile(string fname, string content)
-        {
-            //Logger.Info($"Save To Null File System for test {fname} ");
-        }
+        //do nothing
+    }
 
-        public void SaveToFile(string filePath, Func<Stream> getStream)
-        {
+    public void SaveToFile(string filePath, Func<Stream> getStream)
+    {
+        //do nothing
+    }
 
-        }
+    public void SaveToFile(string filePath, string content, Encoding encoding)
+    {
+        //do nothing
+    }
 
-        public void SaveToFolder(string folderPath, Dictionary<string, string> content)
-        {
-            //Logger.Info($"Save To Null Folder System for test {folderPath} ");
-        }
-
-        public void SaveToFile(string filePath, string content, Encoding encoding)
-        {
-             
-        }
-         
+    public void SaveToFolder(string folderPath, Dictionary<string, string> content)
+    {
+        //do nothing
     }
 }

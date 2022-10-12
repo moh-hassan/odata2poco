@@ -1,19 +1,13 @@
-﻿#pragma warning disable  CS0414  
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
+#pragma warning disable  CS0414
 using System.Text;
 
-namespace OData2Poco
-{
-    public class ProjectGenerator
-    {
-        Dictionary<string, string> ReferenceFullNet = new Dictionary<string, string>();
-        Dictionary<string, string> PackageNetStandard = new Dictionary<string, string>();
-        Dictionary<string, string> PackageCommon = new Dictionary<string, string>();
+namespace OData2Poco;
 
-        //0 ReferenceFullNet, 1 PackageCommon , 2 PackageNetStandard
-        string ProjectCode = @"
+public class ProjectGenerator
+{
+    private readonly string _projectCode = @"
 <Project Sdk=""Microsoft.NET.Sdk"">
         <PropertyGroup>
            <TargetFrameworks>net45;net461;netstandard2.0</TargetFrameworks>       
@@ -29,48 +23,51 @@ namespace OData2Poco
         </ItemGroup>  
 </Project>
 ";
-        List<string> Attributes { get; set; }
-        public ProjectGenerator(List<string> attributes)
-        {
-            Attributes = attributes;
-        }
-     public    string GetProjectCode()
-        {
-            var code = string.Format(ProjectCode, GetReferenceFullNet(), GetPackageCommon(), GetPackageNetStandard());
-            return code;
-        }
 
-     public StringBuilder GetPackageCommon()
-     {
-         var packageList = new StringBuilder();
-            packageList.AppendFormat("\t\t\t<PackageReference Include=\"Microsoft.Spatial\" Version=\"7.5.4\" />\r\n");
+    public ProjectGenerator(List<string> attributes)
+    {
+        Attributes = attributes;
+    }
 
-            if (Attributes.Any(x => x == "json"))
-             packageList.AppendFormat("\t\t\t<PackageReference Include=\"Newtonsoft.Json\" Version=\"12.0.1\" />\r\n");
-         if (Attributes.Any(x => x == "proto"))
-             packageList.AppendFormat("\t\t\t<PackageReference Include=\"protobuf-net\" Version=\"2.4.0\" />\r\n");
-         return packageList;
-     }
-     public StringBuilder GetReferenceFullNet()
-      
-        {
-            var packageList = new StringBuilder();           
+    private List<string> Attributes { get; }
 
-            if (Attributes.Any(x => x == "key" || x=="req"|| x=="tab"|| x=="display"|| x=="db"))
-                packageList.AppendFormat("\t\t\t<Reference Include=\"System.ComponentModel.DataAnnotations\"/>\r\n");
-            if (Attributes.Any(x => x == "dm"))
-                packageList.AppendFormat("\t\t\t<Reference Include=\"System.Runtime.Serialization\"/>\r\n");
-            return packageList;
-        }
+    public string GetProjectCode()
+    {
+        var code = string.Format(_projectCode, GetReferenceFullNet(), GetPackageCommon(), GetPackageNetStandard());
+        return code;
+    }
 
-     public StringBuilder GetPackageNetStandard()
-     {
-         var packageList = new StringBuilder();
-         
-         if (Attributes.Any(x => x == "key" || x=="req"|| x=="tab"|| x=="display"|| x=="db"))
-             packageList.AppendFormat("\t\t\t <PackageReference Include=\"System.ComponentModel.Annotations\" Version=\"4.4.0\"/>\r\n");
-         return packageList;
-     }
+    public StringBuilder GetPackageCommon()
+    {
+        var packageList = new StringBuilder();
+        packageList.Append("\t\t\t<PackageReference Include=\"Microsoft.Spatial\" Version=\"7.5.4\" />\r\n");
+
+        if (Attributes.Any(x => x == "json"))
+            packageList.Append("\t\t\t<PackageReference Include=\"Newtonsoft.Json\" Version=\"12.0.1\" />\r\n");
+        if (Attributes.Any(x => x == "proto"))
+            packageList.Append("\t\t\t<PackageReference Include=\"protobuf-net\" Version=\"2.4.0\" />\r\n");
+        return packageList;
+    }
+
+    public StringBuilder GetReferenceFullNet()
+
+    {
+        var packageList = new StringBuilder();
+
+        if (Attributes.Any(x => x == "key" || x == "req" || x == "tab" || x == "display" || x == "db"))
+            packageList.Append("\t\t\t<Reference Include=\"System.ComponentModel.DataAnnotations\"/>\r\n");
+        if (Attributes.Any(x => x == "dm"))
+            packageList.Append("\t\t\t<Reference Include=\"System.Runtime.Serialization\"/>\r\n");
+        return packageList;
+    }
+
+    public StringBuilder GetPackageNetStandard()
+    {
+        var packageList = new StringBuilder();
+
+        if (Attributes.Any(x => x == "key" || x == "req" || x == "tab" || x == "display" || x == "db"))
+            packageList.Append(
+                "\t\t\t <PackageReference Include=\"System.ComponentModel.Annotations\" Version=\"4.4.0\"/>\r\n");
+        return packageList;
     }
 }
-

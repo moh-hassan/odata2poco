@@ -1,12 +1,14 @@
-﻿using System;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
+#if !NETCOREAPP
 using System.Reflection;
-using NUnit.Framework;
+#endif
 
 namespace OData2Poco.CommandLine.Test
 {
     public class BaseTest
     {
-       
+
         public BaseTest()
         {
             //in case multi target project,use #if because no appdomain in netcore

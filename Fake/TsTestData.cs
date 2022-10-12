@@ -1,7 +1,9 @@
-﻿internal static class TsTestData
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+namespace OData2Poco.Fake;
+internal static class TsTestData
 {
     #region data without navigation
-    internal const string ExpectedClass = @"  
+    internal const string Class = @"  
 export class Flight extends PublicTransportation {
 	public FlightNumber: string; //Not null
 	// public From: Airport; //navigator
@@ -9,7 +11,7 @@ export class Flight extends PublicTransportation {
 	// public Airline: Airline; //navigator
 }
 ";
-    internal const string ExpectedInterface = @"
+    internal const string Interface = @"
 export interface Flight extends PublicTransportation {
 	FlightNumber: string; //Not null
 	// From: Airport; //navigator
@@ -17,7 +19,7 @@ export interface Flight extends PublicTransportation {
 	// Airline: Airline; //navigator
 }
 ";
-    internal const string ExpectedClassMultiFiles = @"  
+    internal const string ClassMultiFiles = @"  
 import {Airport} from './Airport';
 import {AirportLocation} from './AirportLocation';
 import {Location} from './Location';
@@ -33,7 +35,7 @@ export class Flight extends PublicTransportation {
 	// public Airline: Airline; //navigator
 }
 ";
-    internal const string ExpectedInterfaceMultiFiles = @"
+    internal const string InterfaceMultiFiles = @"
 import {Airport} from './Airport';
 import {AirportLocation} from './AirportLocation';
 import {Location} from './Location';
@@ -49,11 +51,11 @@ export interface Flight extends PublicTransportation {
 	// Airline: Airline; //navigator
 }
 ";
-	internal const string ImportMultiFile = @"
+    internal const string ImportMultiFile = @"
 
 ";
 
-    internal const string ExpectedClassMultiFilesUsingFullName = @"  
+    internal const string ClassMultiFilesUsingFullName = @"  
 import {MicrosoftODataSampleServiceModelsTripPinAirport} from './MicrosoftODataSampleServiceModelsTripPinAirport';
 import {MicrosoftODataSampleServiceModelsTripPinAirportLocation} from './MicrosoftODataSampleServiceModelsTripPinAirportLocation';
 import {MicrosoftODataSampleServiceModelsTripPinLocation} from './MicrosoftODataSampleServiceModelsTripPinLocation';
@@ -70,7 +72,7 @@ export class MicrosoftODataSampleServiceModelsTripPinFlight extends MicrosoftODa
 	// public Airline: MicrosoftODataSampleServiceModelsTripPinAirline; //navigator
 }
 ";
-    internal const string ExpectedInterfaceMultiFilesUsingFullName = @"
+    internal const string InterfaceMultiFilesUsingFullName = @"
 import {MicrosoftODataSampleServiceModelsTripPinAirport} from './MicrosoftODataSampleServiceModelsTripPinAirport';
 import {MicrosoftODataSampleServiceModelsTripPinAirportLocation} from './MicrosoftODataSampleServiceModelsTripPinAirportLocation';
 import {MicrosoftODataSampleServiceModelsTripPinLocation} from './MicrosoftODataSampleServiceModelsTripPinLocation';
@@ -87,7 +89,7 @@ export interface MicrosoftODataSampleServiceModelsTripPinFlight extends Microsof
 	// Airline: MicrosoftODataSampleServiceModelsTripPinAirline; //navigator
 }
 ";
-    internal const string ExpectedEnum = @"
+    internal const string Enum = @"
 	export enum PersonGender {
 		Male=0 ,
 		Female=1 ,
@@ -97,7 +99,7 @@ export interface MicrosoftODataSampleServiceModelsTripPinFlight extends Microsof
     #endregion
 
     #region data with navigation
-    internal const string ExpectedNavClass = @"  
+    internal const string NavClass = @"  
 export class Flight extends PublicTransportation {
 	public FlightNumber: string; //Not null
 	// public From: Airport; //navigator
@@ -105,7 +107,7 @@ export class Flight extends PublicTransportation {
 	// public Airline: Airline; //navigator
 }
 ";
-    internal const string ExpectedNavInterface = @"
+    internal const string NavInterface = @"
 export interface Flight extends PublicTransportation {
 	FlightNumber: string; //Not null
 	// From: Airport; //navigator
@@ -113,7 +115,7 @@ export interface Flight extends PublicTransportation {
 	// Airline: Airline; //navigator
 }
 ";
-    internal const string ExpectedNavClassMultiFiles = @"  
+    internal const string NavClassMultiFiles = @"  
 import { Airport } from './Airport';
 import { Airline } from './Airline';
 import { PublicTransportation } from './PublicTransportation';
@@ -125,7 +127,7 @@ export class Flight extends PublicTransportation {
 	// public Airline: Airline; //navigator
 }
 ";
-    internal const string ExpectedNavInterfaceMultiFiles = @"
+    internal const string NavInterfaceMultiFiles = @"
 import { Airport } from './Airport';
 import { Airline } from './Airline';
 import { PublicTransportation } from './PublicTransportation';
@@ -136,6 +138,6 @@ export interface Flight extends PublicTransportation {
 	// To: Airport; //navigator
 	// Airline: Airline; //navigator
 }
-";	 
+";
     #endregion
 }

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco.InfraStructure.Logging
+namespace OData2Poco.InfraStructure.Logging;
+
+public class PocoLogger : ColoredConsole
 {
-    public class PocoLogger : ColoredConsole
+    private static readonly Lazy<ILog> Lazy = new(() => new PocoLogger());
+
+    private PocoLogger()
     {
-        private static readonly Lazy<ILog> Lazy = new Lazy<ILog>(() => new PocoLogger());
-        public static ILog Default => Lazy.Value;
-
-        private PocoLogger()
-        {
-
-        }
     }
+
+    public static ILog Default => Lazy.Value;
 }

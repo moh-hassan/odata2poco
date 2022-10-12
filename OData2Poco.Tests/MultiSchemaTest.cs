@@ -1,48 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
 using NUnit.Framework;
 using OData2Poco.Api;
 using OData2Poco.Extensions;
-using OData2Poco.TestUtility;
+using OData2Poco.Fake;
 
-namespace OData2Poco.Tests
+namespace OData2Poco.Tests;
+
+public class MultiSchemaTest
 {
-    public class MultiSchemaTest
+    [Test]
+    public async Task Web_api2_v3_mult_namespace_Test()
     {
-        [Test]
-        public async Task web_api2_v3_mult_namespace_Test()
+        var conn = new OdataConnectionString
         {
-            var conn = new OdataConnectionString
-            {
-                ServiceUrl = TestSample.MultiSchemaV3,
-            };
-            var setting = new PocoSetting
-            {
-                Lang = Language.CS,
-                NameCase = CaseEnum.None,
-            };
-            var o2P = new O2P(setting);
-            var code = await o2P.GenerateAsync(conn);
-            Assert.That(code, Does.Contain("namespace ODataDemo"));
-            Assert.That(code, Does.Contain("namespace ODataDemo2"));
-            Assert.That(code, Does.Contain("namespace ODataDemo3"));
-        }
-        [Test]
-        public async Task web_api2_v3_mult_namespace_class_and_enum_Test()
+            ServiceUrl = TestSample.MultiSchemaV3,
+        };
+        var setting = new PocoSetting
         {
-            var conn = new OdataConnectionString
-            {
-                ServiceUrl = TestSample.MultiSchemaV3,
-            };
-            var setting = new PocoSetting
-            {
-                Lang = Language.CS,
-                NameCase = CaseEnum.None,
-            };
-            var o2P = new O2P(setting);
-            var code = await o2P.GenerateAsync(conn);
-            var expected = @"
+            Lang = Language.CS,
+            NameCase = CaseEnum.None,
+        };
+        var o2P = new O2P(setting);
+        var code = await o2P.GenerateAsync(conn);
+        Assert.That(code, Does.Contain("namespace ODataDemo"));
+        Assert.That(code, Does.Contain("namespace ODataDemo2"));
+        Assert.That(code, Does.Contain("namespace ODataDemo3"));
+    }
+    [Test]
+    public async Task Web_api2_v3_mult_namespace_class_and_enum_Test()
+    {
+        var conn = new OdataConnectionString
+        {
+            ServiceUrl = TestSample.MultiSchemaV3,
+        };
+        var setting = new PocoSetting
+        {
+            Lang = Language.CS,
+            NameCase = CaseEnum.None,
+        };
+        var o2P = new O2P(setting);
+        var code = await o2P.GenerateAsync(conn);
+        var expected = @"
 namespace ODataDemo
 {
 	public partial class Customer
@@ -80,26 +79,26 @@ namespace ODataDemo2
 	}
 }
 ";
-            //Assert
-            Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
+        //Assert
+        Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
 
-        }
-        [Test]
-        public async Task Web_api2_v4_classes_and_enum_test()
+    }
+    [Test]
+    public async Task Web_api2_v4_classes_and_enum_test()
+    {
+        var conn = new OdataConnectionString
         {
-            var conn = new OdataConnectionString
-            {
-                ServiceUrl = TestSample.SampleWebApiV4,
+            ServiceUrl = TestSample.SampleWebApiV4,
 
-            };
-            var setting = new PocoSetting
-            {
-                Lang = Language.CS,
-                NameCase = CaseEnum.None,
-            };
-            var o2P = new O2P(setting);
-            var code = await o2P.GenerateAsync(conn);
-            var expected = @"
+        };
+        var setting = new PocoSetting
+        {
+            Lang = Language.CS,
+            NameCase = CaseEnum.None,
+        };
+        var o2P = new O2P(setting);
+        var code = await o2P.GenerateAsync(conn);
+        var expected = @"
 namespace BookStore
 {
 	public partial class Window
@@ -148,92 +147,91 @@ namespace BookStore
 	}
 }
 ";
-            //Assert
-            Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
+        //Assert
+        Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
 
-        }
-        [Test]
-        [TestCase("key")]
-        [TestCase("req")]
-        [TestCase("tab")]
-        [TestCase("dm")]
-        [TestCase("proto")]
-        public async Task Web_api2_v4_attributes_test(string att)
-        {
-            var conn = new OdataConnectionString
-            {
-                ServiceUrl = TestSample.SampleWebApiV4,
-
-            };
-            var setting = new PocoSetting
-            {
-                Lang = Language.CS,
-                NameCase = CaseEnum.None,
-                Attributes = new List<string> { att }
-            };
-            var o2P = new O2P(setting);
-            var code = await o2P.GenerateAsync(conn);
-            switch (att)
-            {
-                case "key":
-                    Assert.That(code, Does.Contain("[Key]"));
-                    break;
-                case "req":
-                    Assert.That(code, Does.Contain("[Required]"));
-                    break;
-                case "tab":
-                    Assert.That(code, Does.Contain("[Table(\"Windows\")]"));
-                    break;
-                case "dm":
-                    Assert.That(code, Does.Contain("	[DataContract]"));
-                    Assert.That(code, Does.Contain("  [DataMember]"));
-                    break;
-                case "proto":
-                    Assert.That(code, Does.Contain("	[ProtoContract]"));
-                    Assert.That(code, Does.Contain("   [ProtoMember(1)"));
-                    break;
-            }
-        }
-        [Test]
-        public async Task Web_api2_v4_abstract_class_test()
-        {
-            var conn = new OdataConnectionString
-            {
-                ServiceUrl = TestSample.SampleWebApiV4,
-
-            };
-            var setting = new PocoSetting
-            {
-                Lang = Language.CS,
-                NameCase = CaseEnum.None,
-
-            };
-            var o2P = new O2P(setting);
-            var code = await o2P.GenerateAsync(conn);
-            var expected = "public abstract partial class Shape";
-            Assert.That(code, Does.Contain(expected));
-
-        }
-        [Test]
-        public async Task Web_api2_v4_base_class_test()
-        {
-            var conn = new OdataConnectionString
-            {
-                ServiceUrl = TestSample.SampleWebApiV4,
-
-            };
-            var setting = new PocoSetting
-            {
-                Lang = Language.CS,
-                NameCase = CaseEnum.None,
-
-            };
-            var o2P = new O2P(setting);
-            var code = await o2P.GenerateAsync(conn);
-            Assert.That(code, Does.Contain("public partial class Circle : Shape"));
-            Assert.That(code, Does.Contain("public partial class Rectangle : Shape"));
-
-        }
-        
     }
+    [Test]
+    [TestCase("key")]
+    [TestCase("req")]
+    [TestCase("tab")]
+    [TestCase("dm")]
+    [TestCase("proto")]
+    public async Task Web_api2_v4_attributes_test(string att)
+    {
+        var conn = new OdataConnectionString
+        {
+            ServiceUrl = TestSample.SampleWebApiV4,
+
+        };
+        var setting = new PocoSetting
+        {
+            Lang = Language.CS,
+            NameCase = CaseEnum.None,
+            Attributes = new List<string> { att }
+        };
+        var o2P = new O2P(setting);
+        var code = await o2P.GenerateAsync(conn);
+        switch (att)
+        {
+            case "key":
+                Assert.That(code, Does.Contain("[Key]"));
+                break;
+            case "req":
+                Assert.That(code, Does.Contain("[Required]"));
+                break;
+            case "tab":
+                Assert.That(code, Does.Contain("[Table(\"Windows\")]"));
+                break;
+            case "dm":
+                Assert.That(code, Does.Contain("	[DataContract]"));
+                Assert.That(code, Does.Contain("  [DataMember]"));
+                break;
+            case "proto":
+                Assert.That(code, Does.Contain("	[ProtoContract]"));
+                Assert.That(code, Does.Contain("   [ProtoMember(1)"));
+                break;
+        }
+    }
+    [Test]
+    public async Task Web_api2_v4_abstract_class_test()
+    {
+        var conn = new OdataConnectionString
+        {
+            ServiceUrl = TestSample.SampleWebApiV4,
+
+        };
+        var setting = new PocoSetting
+        {
+            Lang = Language.CS,
+            NameCase = CaseEnum.None,
+
+        };
+        var o2P = new O2P(setting);
+        var code = await o2P.GenerateAsync(conn);
+        var expected = "public abstract partial class Shape";
+        Assert.That(code, Does.Contain(expected));
+
+    }
+    [Test]
+    public async Task Web_api2_v4_base_class_test()
+    {
+        var conn = new OdataConnectionString
+        {
+            ServiceUrl = TestSample.SampleWebApiV4,
+
+        };
+        var setting = new PocoSetting
+        {
+            Lang = Language.CS,
+            NameCase = CaseEnum.None,
+
+        };
+        var o2P = new O2P(setting);
+        var code = await o2P.GenerateAsync(conn);
+        Assert.That(code, Does.Contain("public partial class Circle : Shape"));
+        Assert.That(code, Does.Contain("public partial class Rectangle : Shape"));
+
+    }
+
 }

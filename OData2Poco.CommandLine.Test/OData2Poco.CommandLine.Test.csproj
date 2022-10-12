@@ -5,6 +5,9 @@
 		<Authors>Mohamed Hassan</Authors>
 		<Product>OData2Poco</Product>
 		<IsTestProject>true</IsTestProject>
+		<LangVersion>default</LangVersion>
+		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+		<RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
 	</PropertyGroup>	
 
 	<ItemGroup>		

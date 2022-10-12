@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco.CommandLine
+// ReSharper disable UnusedMemberInSuper.Global
+namespace OData2Poco.CommandLine;
+
+internal interface IPocoCommand
 {
-    interface IPocoCommand
-    {
-        Task Execute();
-    }
+    Task Execute();
 }

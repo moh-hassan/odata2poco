@@ -1,62 +1,66 @@
 <Project>
-	<PropertyGroup>
-		<SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
-		<PackageOutputPath>$(SolutionDir)build</PackageOutputPath>
-		<Authors>Mohamed Hassan</Authors>
-		<Copyright>Copyright &#169; 2016-2022, Mohamed Hassan </Copyright>
-		<Product>OData2Poco</Product>
-		<PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
-		<PackageLicenseFile>license.txt</PackageLicenseFile>
-		<PackageIcon>ODataLogo-128.png</PackageIcon>
-		<PackageIconFullPath>$(MSBuildThisFileDirectory)art\ODataLogo-128.png</PackageIconFullPath>
-		<RepositoryUrl>https://github.com/moh-hassan/odata2poco</RepositoryUrl>
-		<PackageTags>OData poco code-generation</PackageTags>
-		<Description>
-			"OData2Poco is a class library supporting netstandard2,net6 and .NET 4.61+ to generate  plain-old CLR objects (POCO/DTO) from OData feeds that implement both V1-3 and V4 OData protocol,based on the metadata of the service stored on the  server. Code generation is controlled with lot of configuration parameters. POCO/DTO  can be used in typed RESTful client OData services"
-		</Description>
-		<IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
-		<Company>OData2Poco</Company>
-		<PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128</NoWarn>
-		 <LangVersion>latest</LangVersion>
-		<IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
-		<Version Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)</Version>
-		<Version Condition="'$(VersionSuffix)' == ''">0.0.0</Version>
-		<PackageTags>code-generation;odata;charp;c#;typescript;ts;dto;poco;AspNetWebApi;WebApi</PackageTags>
-	</PropertyGroup>
-	<!-- Enable building .NET Framework projects on any machine with at least MSBuild or the .NET Core SDK installed.-->
-	<ItemGroup>
-		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-	</ItemGroup>
-	<PropertyGroup>
-		<IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
-	</PropertyGroup>
+  <PropertyGroup>
+    <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
+    <PackageOutputPath>$(SolutionDir)build</PackageOutputPath>
+    <Authors>Mohamed Hassan</Authors>
+    <Copyright>Copyright &#169; 2016-2022, Mohamed Hassan </Copyright>
+    <Product>OData2Poco</Product>
+    <PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
+    <PackageLicenseFile>license.txt</PackageLicenseFile>
+    <PackageIcon>ODataLogo-128.png</PackageIcon>
+    <PackageIconFullPath>$(MSBuildThisFileDirectory)art\ODataLogo-128.png</PackageIconFullPath>
+    <RepositoryUrl>https://github.com/moh-hassan/odata2poco</RepositoryUrl>
+    <PackageTags>OData poco code-generation</PackageTags>
+    <Description>
+      "OData2Poco is a class library supporting netstandard2,net6 and .NET 4.61+ to generate  plain-old CLR objects (POCO/DTO) from OData feeds that implement both V1-3 and V4 OData protocol,based on the metadata of the service stored on the  server. Code generation is controlled with lot of configuration parameters. POCO/DTO  can be used in typed RESTful client OData services"
+    </Description>
+    <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
+    <Company>OData2Poco</Company>
+    <PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128</NoWarn>
+    <LangVersion>latest</LangVersion>
+    <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
+    <Version Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)</Version>
+    <Version Condition="'$(VersionSuffix)' == ''">0.0.0</Version>
+    <PackageTags>code-generation;odata;charp;c#;typescript;ts;dto;poco;AspNetWebApi;WebApi</PackageTags>
+  </PropertyGroup>
+  <!-- Enable building .NET Framework projects on any machine with at least MSBuild or the .NET Core SDK installed.-->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+  </ItemGroup>
+  <PropertyGroup>
+    <IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
+  </PropertyGroup>
 
-	<ItemGroup Condition="'$(IsTestProject)' == 'true'">
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
-		<PackageReference Include="nunit" Version="3.13.3" />
-		<!--<PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />-->
-		<PackageReference Include="NUnit3TestAdapter" Version="4.3.0-alpha-net7.4" />
-		<PackageReference Include="FluentAssertions" Version="6.7.0" />
-	    <PackageReference Include="NSubstitute" Version="4.4.0" />
-		<PackageReference Include="CliWrap" Version="3.5.0" />
-	</ItemGroup>
-	<ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
-		<PackageReference Include="Nullable" Version="1.3.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="$(SolutionDir)license.txt" Pack="true" PackagePath=""/>
-		<None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\"/>
-	</ItemGroup>
-	<ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
-		<Compile Include="..\common\IsExternalInit.cs" Link="IsExternalInit.cs" />
-	</ItemGroup>
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+    <PackageReference Include="nunit" Version="3.13.3" />
+    <!--<PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />-->
+    <PackageReference Include="NUnit3TestAdapter" Version="4.3.0-alpha-net7.4" />
+    <PackageReference Include="FluentAssertions" Version="6.7.0" />
+    <PackageReference Include="NSubstitute" Version="4.4.0" />
+    <PackageReference Include="CliWrap" Version="3.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(SolutionDir)license.txt" Pack="true" PackagePath=""/>
+    <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\common\IsExternalInit.cs" Link="IsExternalInit.cs" />
+  </ItemGroup>
+  <!-- disable the nullable warnings when compiling for .NET Standard 2.0 or net4x -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or $(TargetFramework.StartsWith('net4'))">
+    <NoWarn>$(NoWarn);nullable</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\common\NullAttributes.cs" Link="NullAttributes.cs" />
+    <Compile Include="..\common\Range.cs" Link="Range.cs" />
+    <Compile Include="..\common\GlobalUsings.cs" Link="GlobalUsings.cs" />
+  </ItemGroup>
 </Project>

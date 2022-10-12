@@ -1,45 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net6.0;netstandard2.0;net461</TargetFrameworks>
-		<TargetFrameworks Condition="'$(OS)' == 'unix'">net6.0;netstandard2.0
-		</TargetFrameworks>
-		<RootNamespace>OData2Poco</RootNamespace>
-		<AssemblyName>OData2Poco</AssemblyName>
-		<Authors>Mohamed Hassan</Authors>
-		<Product>OData2Poco</Product>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<Nullable>enable</Nullable>		 
-		<Description>
-			"OData2Poco is a class library supporting netstandard2,net6 and .NET 4.61+ to generate  plain-old CLR objects (POCO/DTO) from OData feeds that implement both V1-3 and V4 OData protocol,based on the metadata of the service stored on the  server. Code generation is controlled with lot of configuration parameters. POCO/DTO  can be used in typed RESTful client OData services"
-		</Description>
-		<TransformOnBuild>true</TransformOnBuild>
-		<OpenApi3>false</OpenApi3>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Data.Edm" Version="5.8.5" />
-		<PackageReference Include="Microsoft.OData.Edm" Version="7.12.3" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	</ItemGroup>	 
-	
-	<ItemGroup Condition="$(OpenApi3)">		
-		<PackageReference Include="Microsoft.OpenApi.OData" Version="1.1.0" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'unix'">
+      net6.0;netstandard2.0
+    </TargetFrameworks>
+    <RootNamespace>OData2Poco</RootNamespace>
+    <AssemblyName>OData2Poco</AssemblyName>
+    <Authors>Mohamed Hassan</Authors>
+    <Product>OData2Poco</Product>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Nullable>enable</Nullable>
+    <Description>
+      "OData2Poco is a class library supporting netstandard2,net6 and .NET 4.61+ to generate  plain-old CLR objects (POCO/DTO) from OData feeds that implement both V1-3 and V4 OData protocol,based on the metadata of the service stored on the  server. Code generation is controlled with lot of configuration parameters. POCO/DTO  can be used in typed RESTful client OData services"
+    </Description>
+    <TransformOnBuild>true</TransformOnBuild>
+    <OpenApi3>false</OpenApi3>
+  </PropertyGroup>
 
-	<ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
-		<Reference Include="System.Net.Http" />
-		<Reference Include="System.Net" />
-	</ItemGroup> 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Edm" Version="5.8.5" />
+    <PackageReference Include="Microsoft.OData.Edm" Version="7.12.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
 
-	<PropertyGroup>
-		<PackageId>OData2Poco</PackageId>		
-	</PropertyGroup>
+  <ItemGroup Condition="$(OpenApi3)">
+    <PackageReference Include="Microsoft.OpenApi.OData" Version="1.1.0" />
+  </ItemGroup>
 
-	<PropertyGroup>		
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<Copyright>Copyright © 2016-2022, Mohamed Hassan</Copyright>
-		<SignAssembly>false</SignAssembly>
-		<AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
-		<DelaySign>false</DelaySign>		 
-	</PropertyGroup>	 
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>OData2Poco</PackageId>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright © 2016-2022, Mohamed Hassan</Copyright>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+    <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
 </Project>

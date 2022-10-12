@@ -1,43 +1,20 @@
-﻿using System.Reflection;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco.CommandLine
+using System.Reflection;
+
+namespace OData2Poco.CommandLine;
+
+internal static class ApplicationInfo
 {
-    static class ApplicationInfo
-    {
-        public static string Title = Utility.GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title);
-        public static string Author = "Mohamed Hassan";
-        public static string Product
-        {
-            get
-            {
-                return Utility.GetAssemblyAttribute<AssemblyProductAttribute>(a => a.Product);
-            }
-        }
+    public static readonly string Title = Utility.GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title);
+    public static readonly string Author = "Mohamed Hassan";
+    public static string Product => Utility.GetAssemblyAttribute<AssemblyProductAttribute>(a => a.Product);
 
-        public static string Copyright
-        {
-            get
-            {
-                return Utility.GetAssemblyAttribute<AssemblyCopyrightAttribute>(a => a.Copyright);
-            }
-        }
+    public static string Copyright => Utility.GetAssemblyAttribute<AssemblyCopyrightAttribute>(a => a.Copyright);
 
-        public static string Version
-        {
-            get
-            {
-                return Utility.GetAssemblyAttribute<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
-            }
-        }
+    public static string Version => Utility.GetAssemblyAttribute<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
 
-        public static string Description
-        {
-            get
-            {
-                return Utility.GetAssemblyAttribute<AssemblyDescriptionAttribute>(a => a.Description);
-            }
-        }
-        public static string HeadingInfo => $"{Title} Version {Version}";
+    public static string Description => Utility.GetAssemblyAttribute<AssemblyDescriptionAttribute>(a => a.Description);
+    public static string HeadingInfo => $"{Title} Version {Version}";
 
-    }
 }

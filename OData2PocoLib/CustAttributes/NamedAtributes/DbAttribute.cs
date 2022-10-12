@@ -1,46 +1,42 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco.CustAttributes.NamedAtributes
+namespace OData2Poco.CustAttributes.NamedAtributes;
+
+public class DbAttribute : INamedAttribute
 {
-    public class DbAttribute : INamedAttribute
+    private readonly List<INamedAttribute> _sharedAttributes;
+
+    public DbAttribute()
     {
-        public string Name { get; } = "db";
-       
-        public List<string> GetAttributes(PropertyTemplate property)
+        _sharedAttributes = new List<INamedAttribute>
         {
-            var att = new List<string>();
-            _sharedAttributes.ForEach(x =>
-            {
-                var a = x.GetAttributes(property);
-                if (a.Any())
-                    att.AddRange( a);
-            });
-            return att;
-        }
+            new KeyAttribute(), new TableAttribute(), new RequiredAttribute()
+        };
+    }
 
-        public List<string> GetAttributes(ClassTemplate property)
+    public string Name { get; } = "db";
+
+    public List<string> GetAttributes(PropertyTemplate property)
+    {
+        var att = new List<string>();
+        _sharedAttributes.ForEach(x =>
         {
+            var a = x.GetAttributes(property);
+            if (a.Any())
+                att.AddRange(a);
+        });
+        return att;
+    }
 
-            var att = new List<string>();
-            _sharedAttributes.ForEach(x =>
-            {
-                var a = x.GetAttributes(property);
-                if (a.Any())
-                    att.AddRange(a);
-            });
-            return att;
-        }
-
-        private readonly List<INamedAttribute> _sharedAttributes;
-        public DbAttribute()
+    public List<string> GetAttributes(ClassTemplate classTemplate)
+    {
+        var att = new List<string>();
+        _sharedAttributes.ForEach(x =>
         {
-            _sharedAttributes = new List<INamedAttribute>
-            {
-               new  KeyAttribute(),
-               new  TableAttribute(),
-               new RequiredAttribute(),
-            };
-        }
+            var a = x.GetAttributes(classTemplate);
+            if (a.Any())
+                att.AddRange(a);
+        });
+        return att;
     }
 }

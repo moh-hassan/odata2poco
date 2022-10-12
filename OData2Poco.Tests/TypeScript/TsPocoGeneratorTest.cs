@@ -1,35 +1,28 @@
-﻿
-using FluentAssertions;
-using FluentAssertions.Equivalency;
-using NUnit.Framework;
-using OData2Poco.Api;
-using OData2Poco.Extensions;
-using OData2Poco.Test.TypeScript;
-using OData2Poco.TypeScript;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using FluentAssertions;
+using NUnit.Framework;
+using OData2Poco.Extensions;
+using OData2Poco.Fake;
+using OData2Poco.TypeScript;
 
-namespace OData2Poco.Tests.TypeScript
+namespace OData2Poco.Tests.TypeScript;
+
+[Category("typescript")]
+public class TsPocoGeneratorTest : BaseTest
 {
-
-    [Category("typescript")]
-    public class TsPocoGeneratorTest : BaseTest
+    [Test]
+    public async Task Ts_generation_is_interface_by_default_test()
     {
-        [Test]        
-        public async Task Ts_generation_is_interface_by_default_test()             
+        //Arrange             
+        PocoSetting setting = new()
         {
-            //Arrange             
-            PocoSetting setting = new()
-            {
-                Lang = Language.TS,                
-            };
+            Lang = Language.TS,
+        };
 
-            var gen = await Moq.TripPin4IgenAsync();
-            var expected = @"  
+        var gen = await Moq.TripPin4IgenAsync();
+        var expected = @"  
 export interface Airline
 export interface Airport
 export interface City
@@ -45,152 +38,152 @@ export interface Flight extends PublicTransportation
 export enum PersonGender
 export interface Trip 
 ";
-            //Act
-            var tsGen = new TsPocoGenerator(gen, setting);
-            string code = tsGen.GeneratePoco()[0].Code;
-            
-            //Assert            
-            code.ShouldContain(expected,false);
-        }
+        //Act
+        var tsGen = new TsPocoGenerator(gen, setting);
+        string code = tsGen.GeneratePoco()[0]?.Code;
 
-        [Test]
-        [TestCase(GeneratorType.Class, TsTestData.ExpectedClass, "export class")]
-        [TestCase(GeneratorType.Interface, TsTestData.ExpectedInterface, "export interface")]
-        public async Task Generate_single_file_test(GeneratorType genType,
-            string expected, string keyWord)
+        //Assert            
+        code.ShouldContain(expected, false);
+    }
+
+    [Test]
+    [TestCase(GeneratorType.Class, TsTestData.Class, "export class")]
+    [TestCase(GeneratorType.Interface, TsTestData.Interface, "export interface")]
+    public async Task Generate_single_file_test(GeneratorType genType,
+        string expected, string keyWord)
+    {
+        //Arrange             
+        PocoSetting setting = new()
         {
-            //Arrange             
-            PocoSetting setting = new()
-            {
-                Lang = Language.TS,
-                GeneratorType = genType
-            };
-            
-            var gen = await Moq.TripPin4IgenAsync(setting);
+            Lang = Language.TS,
+            GeneratorType = genType
+        };
 
-            //Act
-            var tsGen = new TsPocoGenerator(gen, setting);
-            string code = tsGen.GeneratePoco()[0].Code;
-            //Assert
-            code.ShouldContain(expected);
-            code.Should().Contain(keyWord, Exactly.Times(13));
-            code.Should().Contain("export enum", Exactly.Once());
+        var gen = await Moq.TripPin4IgenAsync(setting);
 
-        }
+        //Act
+        var tsGen = new TsPocoGenerator(gen, setting);
+        string code = tsGen.GeneratePoco()[0]?.Code;
+        //Assert
+        code.ShouldContain(expected);
+        code.Should().Contain(keyWord, Exactly.Times(13));
+        code.Should().Contain("export enum", Exactly.Once());
 
-        [Test]
-        [TestCase(GeneratorType.Class, TsTestData.ExpectedClassMultiFiles, "export class")]
-        [TestCase(GeneratorType.Interface, TsTestData.ExpectedInterfaceMultiFiles, "export interface")]
-        public async Task Generate_multi_file_test(GeneratorType genType,
-            string expected, string keyword)
+    }
+
+    [Test]
+    [TestCase(GeneratorType.Class, TsTestData.ClassMultiFiles, "export class")]
+    [TestCase(GeneratorType.Interface, TsTestData.InterfaceMultiFiles, "export interface")]
+    public async Task Generate_multi_file_test(GeneratorType genType,
+        string expected, string keyword)
+    {
+        //Arrange
+        PocoSetting setting = new()
         {
-            //Arrange
-            PocoSetting setting = new()
-            {
-                Lang = Language.TS,
-                MultiFiles = true,
-                GeneratorType = genType
-            };
-            //Act            
-            var gen = await Moq.TripPin4IgenAsync(setting);
-            var tsGen = new TsPocoGenerator(gen, setting);            
-            var pocoStore = tsGen.GeneratePoco();
+            Lang = Language.TS,
+            MultiFiles = true,
+            GeneratorType = genType
+        };
+        //Act            
+        var gen = await Moq.TripPin4IgenAsync(setting);
+        var tsGen = new TsPocoGenerator(gen, setting);
+        var pocoStore = tsGen.GeneratePoco();
 
-            //Assert
-            pocoStore.Should().HaveCount(14);            
+        //Assert
+        pocoStore.Should().HaveCount(14);
 
-            pocoStore["Microsoft.OData.SampleService.Models.TripPin.Flight"]?
-                .Code.ShouldContain(expected);
+        pocoStore["Microsoft.OData.SampleService.Models.TripPin.Flight"]?
+            .Code.ShouldContain(expected);
 
-            pocoStore.Where(a => Regex.IsMatch(a.Code, keyword))
-                .Should().HaveCount(13);
-            pocoStore.Where(a => Regex.IsMatch(a.Code, "export enum"))
-               .Should().HaveCount(1);
-        }
+        pocoStore.Where(a => Regex.IsMatch(a.Code, keyword))
+            .Should().HaveCount(13);
+        pocoStore.Where(a => Regex.IsMatch(a.Code, "export enum"))
+            .Should().HaveCount(1);
+    }
 
-        [Test]
-        [TestCase(GeneratorType.Class, TsTestData.ExpectedClassMultiFilesUsingFullName,
-            "export class")]
-        [TestCase(GeneratorType.Interface, TsTestData.ExpectedInterfaceMultiFilesUsingFullName, "export interface")]
-        public async Task Generate_multi_file_test_using_full_name_test(GeneratorType genType,
-            string expected, string keyword)
+    [Test]
+    [TestCase(GeneratorType.Class, TsTestData.ClassMultiFilesUsingFullName,
+        "export class")]
+    [TestCase(GeneratorType.Interface, TsTestData.InterfaceMultiFilesUsingFullName, "export interface")]
+    public async Task Generate_multi_file_test_using_full_name_test(GeneratorType genType,
+        string expected, string keyword)
+    {
+        //Arrange
+        PocoSetting setting = new()
         {
-            //Arrange
-            PocoSetting setting = new()
-            {
-                Lang = Language.TS,
-                MultiFiles = true,
-                GeneratorType = genType,
-                UseFullName = true
-            };
-            //Act
-            var gen = await Moq.TripPin4IgenAsync(setting);
-            var tsGen = new TsPocoGenerator(gen, setting);            
-            var pocoStore = tsGen.GeneratePoco();
+            Lang = Language.TS,
+            MultiFiles = true,
+            GeneratorType = genType,
+            UseFullName = true
+        };
+        //Act
+        var gen = await Moq.TripPin4IgenAsync(setting);
+        var tsGen = new TsPocoGenerator(gen, setting);
+        var pocoStore = tsGen.GeneratePoco();
 
-            //Assert
-            pocoStore.Should().HaveCount(14);
-            pocoStore["Microsoft.OData.SampleService.Models.TripPin.Flight"]?
-                .Code.ShouldContain(expected);
-            pocoStore.Where(a => Regex.IsMatch(a.Code, keyword))
-                .Should().HaveCount(13);
-            pocoStore.Where(a => Regex.IsMatch(a.Code, "export enum"))
-               .Should().HaveCount(1);
-        }
-        [Test]
-        [TestCase(GeneratorType.Class, TsTestData.ExpectedEnum)]
-        [TestCase(GeneratorType.Interface, TsTestData.ExpectedEnum)]
-        public async Task Generate_enum_test(GeneratorType genType, string expected)
+        //Assert
+        pocoStore.Should().HaveCount(14);
+        pocoStore["Microsoft.OData.SampleService.Models.TripPin.Flight"]?
+            .Code.ShouldContain(expected);
+        pocoStore.Where(a => Regex.IsMatch(a.Code, keyword))
+            .Should().HaveCount(13);
+        pocoStore.Where(a => Regex.IsMatch(a.Code, "export enum"))
+            .Should().HaveCount(1);
+    }
+    [Test]
+    [TestCase(GeneratorType.Class, TsTestData.Enum)]
+    [TestCase(GeneratorType.Interface, TsTestData.Enum)]
+    public async Task Generate_enum_test(GeneratorType genType, string expected)
+    {
+        //Arrange          
+        PocoSetting setting = new()
         {
-            //Arrange          
-            PocoSetting setting = new()
-            {
-                Lang = Language.TS,
-                GeneratorType = genType
-            };
-           
-            var gen = await Moq.TripPin4IgenAsync(setting);
+            Lang = Language.TS,
+            GeneratorType = genType
+        };
 
-            //Act
-            var tsGen = new TsPocoGenerator(gen, setting);
-            string code = tsGen.GeneratePoco()[0].Code;
-            //Assert
-            code.ShouldContain(expected);
-        }
+        var gen = await Moq.TripPin4IgenAsync(setting);
 
-        [Test]
-        public void ClassTemplates_should_be_orderered_bydefault_parent_preceed_child()
-        {          
-            //Arrange
-            var list = ClassList;
-            var expected = "Airline,Airport,City,Location,AirportLocation,EventLocation,Person,Photo,PlanItem,Event,PublicTransportation,Flight,PersonGender,Trip";
+        //Act
+        var tsGen = new TsPocoGenerator(gen, setting);
+        string code = tsGen.GeneratePoco().ToString();
+        //Assert
+        code.ShouldContain(expected);
+    }
 
-            list.Sort();             
-            var  sut = string.Join(",", list.Select(a => a.Name));
-             
-            //Assert
-            sut.Should().Be(expected);
-        }
+    [Test]
+    public void ClassTemplates_should_be_orderered_bydefault_parent_preceed_child()
+    {
+        //Arrange
+        var list = ClassList;
+        var expected = "Airline,Airport,City,Location,AirportLocation,EventLocation,Person,Photo,PlanItem,Event,PublicTransportation,Flight,PersonGender,Trip";
 
-        [Test]
-        [TestCase(true, MembersTrue)]
-        [TestCase(false, MembersFalse)]
-        public void Get_typescript_imports(bool useFullName, string expected)
-        {
-            //Arrange
-            var setting = new PocoSetting() { UseFullName = useFullName };
-            var ct = GetClassTemplateSample("Person");
+        list.Sort();
+        var sut = string.Join(",", list.Select(a => a.Name));
 
-            //Act
-            var sut = ct.GetImports(ClassList, setting).ToString();
+        //Assert
+        sut.Should().Be(expected);
+    }
 
-            //Assert            
-            sut.ShouldContain(expected);
+    [Test]
+    [TestCase(true, MembersTrue)]
+    [TestCase(false, MembersFalse)]
+    public void Get_typescript_imports(bool useFullName, string expected)
+    {
+        //Arrange
+        var setting = new PocoSetting() { UseFullName = useFullName };
+        var ct = GetClassTemplateSample("Person");
 
-        }
+        //Act
+        var sut = ct.GetImports(ClassList, setting).ToString();
 
-        #region Expected Result
-        const string MembersTrue = @"
+        //Assert            
+        sut.ShouldContain(expected);
+
+    }
+
+    #region Expected Result
+    private const string MembersTrue = @"
 import {MicrosoftODataSampleServiceModelsTripPinLocation} from './MicrosoftODataSampleServiceModelsTripPinLocation';
 import {MicrosoftODataSampleServiceModelsTripPinCity} from './MicrosoftODataSampleServiceModelsTripPinCity';
 import {MicrosoftODataSampleServiceModelsTripPinPersonGender} from './MicrosoftODataSampleServiceModelsTripPinPersonGender';
@@ -198,9 +191,10 @@ import {MicrosoftODataSampleServiceModelsTripPinTrip} from './MicrosoftODataSamp
 import {MicrosoftODataSampleServiceModelsTripPinPhoto} from './MicrosoftODataSampleServiceModelsTripPinPhoto';
 import {MicrosoftODataSampleServiceModelsTripPinPlanItem} from './MicrosoftODataSampleServiceModelsTripPinPlanItem';
 ";
-        //members of Person class
-         
-        const string MembersFalse = @"
+
+    //members of Person class
+
+    private const string MembersFalse = @"
 import {Location} from './Location';
 import {City} from './City';
 import {PersonGender} from './PersonGender';
@@ -209,6 +203,5 @@ import {Photo} from './Photo';
 import {PlanItem} from './PlanItem';
 ";
 
-        #endregion
-    }
+    #endregion
 }

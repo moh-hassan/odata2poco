@@ -1,68 +1,66 @@
-﻿using FluentAssertions;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
+using System.Collections;
+using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Extensions;
-using OData2Poco.Test.TypeScript;
 using OData2Poco.TypeScript;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace OData2Poco.Tests.TypeScript
+namespace OData2Poco.Tests.TypeScript;
+
+public class NamingConventionTest : BaseTest
 {
-    public class NamingConventionTest : BaseTest
+    [Test]
+    [TestCaseSource(nameof(TestCases))]
+    public void Naming_convention_for_className_and_baseType_test(bool useFullName,
+        string expectedClassName, string expectedBaseType)
     {
-        [Test]
-        [TestCaseSource(nameof(TestCases))]
-        public void Naming_convention_for_className_and_baseType_test(bool useFullName,
-            string expectedClassName, string expectedBaseType)
-        {
-            //Arrange  
-            var setting = new PocoSetting() { UseFullName = useFullName };
-            var ct = GetClassTemplateSample("Flight");
-            //Act
-            NamingConvention nc = new (ct, setting);
+        //Arrange  
+        var setting = new PocoSetting() { UseFullName = useFullName };
+        var ct = GetClassTemplateSample("Flight");
+        //Act
+        NamingConvention nc = new(ct, setting);
 
-            //Assert
-            nc.ClassName.Should().Be(expectedClassName);
-            nc.BaseType.Should().Be(expectedBaseType);
+        //Assert
+        nc.ClassName.Should().Be(expectedClassName);
+        nc.BaseType.Should().Be(expectedBaseType);
+    }
+    [Test]
+    [TestCaseSource(nameof(PropertyTestCases))]
+    public void Naming_convention_for_proprty_type_test(bool useFullName,
+        string expectedProperties)
+    {
+        //Arrange  
+        var setting = new PocoSetting() { UseFullName = useFullName };
+        var ct = GetClassTemplateSample("Trip");
+        //Act
+        NamingConvention nc = new(ct, setting);
+
+        //Assert
+        ct.Properties.Select(a => nc.GetPropertyType(a.PropType))
+            .Should().BeEquivalentTo(expectedProperties.ToLines());
+
+
+    }
+
+    #region testcaseSource
+    //(bool useFullName, expectedClassName , expectedBasetype)
+    public static IEnumerable TestCases
+    {
+        get
+        {
+            yield return new TestCaseData(false, "Flight", "PublicTransportation");
+            yield return new TestCaseData(true, "MicrosoftODataSampleServiceModelsTripPinFlight",
+                "MicrosoftODataSampleServiceModelsTripPinPublicTransportation");
         }
-        [Test]
-        [TestCaseSource(nameof(PropertyTestCases))]
-        public void Naming_convention_for_proprty_type_test(bool useFullName,
-           string expectedProperties)
+    }
+
+    //(bool useFullName, string expectedProperties)
+    public static IEnumerable PropertyTestCases
+    {
+        get
         {
-            //Arrange  
-            var setting = new PocoSetting() { UseFullName = useFullName };
-            var ct = GetClassTemplateSample("Trip");
-            //Act
-            NamingConvention nc = new (ct, setting);
-
-            //Assert
-            ct.Properties.Select(a => nc.GetPropertyType(a.PropType))
-                .Should().BeEquivalentTo(expectedProperties.ToLines());
-
-
-        }
-
-        #region testcaseSource
-        //(bool useFullName, expectedClassName , expectedBasetype)
-        public static IEnumerable TestCases
-        {
-            get
-            {
-                yield return new TestCaseData(false, "Flight", "PublicTransportation");
-                yield return new TestCaseData(true, "MicrosoftODataSampleServiceModelsTripPinFlight",
-                    "MicrosoftODataSampleServiceModelsTripPinPublicTransportation");
-            }
-        }
-
-        //(bool useFullName, string expectedProperties)
-        public static IEnumerable PropertyTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(false, @"
+            yield return new TestCaseData(false, @"
 number
 string
 string
@@ -73,8 +71,8 @@ Date
 string[]
 Photo[]
 PlanItem[]"
-.Trim());
-                yield return new TestCaseData(true, @"
+                .Trim());
+            yield return new TestCaseData(true, @"
 number
 string
 string
@@ -85,9 +83,8 @@ Date
 string[]
 MicrosoftODataSampleServiceModelsTripPinPhoto[]
 MicrosoftODataSampleServiceModelsTripPinPlanItem[]"
-.Trim());
-            }
+                .Trim());
         }
-        #endregion
     }
+    #endregion
 }

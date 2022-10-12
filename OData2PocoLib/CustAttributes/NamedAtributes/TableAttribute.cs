@@ -1,19 +1,22 @@
-using System.Collections.Generic;
+// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco.CustAttributes.NamedAtributes
+#pragma warning disable S125
+
+namespace OData2Poco.CustAttributes.NamedAtributes;
+
+public class TableAttribute : INamedAttribute
 {
-    public class TableAttribute : INamedAttribute
+    public string Name { get; set; } = "tab"; //"table";
+
+    public List<string> GetAttributes(PropertyTemplate property)
     {
-        public string Name { get; set; } = "tab"; //"table";
+        return new();
+    }
 
-        public List<string> GetAttributes(PropertyTemplate property) => new List<string>();
-
-        public List<string> GetAttributes(ClassTemplate property)
-        {
-            
-            return !string.IsNullOrEmpty(property.EntitySetName)
-                ? new List<string> {$"[Table(\"{property.EntitySetName}\")]"}
-                : new List<string>();
-        }
+    public List<string> GetAttributes(ClassTemplate classTemplate)
+    {
+        return !string.IsNullOrEmpty(classTemplate.EntitySetName)
+            ? new List<string> { $"[Table(\"{classTemplate.EntitySetName}\")]" }
+            : new List<string>();
     }
 }

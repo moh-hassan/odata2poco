@@ -1,11 +1,12 @@
-// Copyright 2016-2022 Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco
+
+// ReSharper disable InconsistentNaming
+namespace OData2Poco;
+
+public enum Language
 {
-    public enum Language
-    {
-        None,
-        CS,      
-        TS       
-    }
+    None,
+    CS,
+    TS
 }

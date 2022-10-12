@@ -4,6 +4,7 @@
 #myignores
 .gitignore
 .nuget/
+.sonarqube/
 OData2PocoConsole
 temp/
 MyTester/

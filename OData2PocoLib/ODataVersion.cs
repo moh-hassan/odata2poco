@@ -1,13 +1,13 @@
-﻿
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco
+
+namespace OData2Poco;
+
+public static class ODataVersion
 {
-    public static class ODataVersion
-    {
-        public const string V1 = "1.0";
-        public const string V2 = "2.0";
-        public const string V3 = "3.0";
-        public const string V4 = "4.0"; //default
-        public const string VNa = "UnKnown"; 
-    }
+    public const string V1 = "1.0";
+    public const string V2 = "2.0";
+    public const string V3 = "3.0";
+    public const string V4 = "4.0"; //default
+    public const string VNa = "UnKnown";
 }

@@ -1,14 +1,14 @@
-﻿
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco.Http
+
+namespace OData2Poco.Http;
+
+public enum AuthenticationType
 {
-    public enum AuthenticationType
-    {
-        None, 
-        Basic, 
-        Token, 
-        Oauth2,
-        Ntlm,
-        Digest
-    }
+    None,
+    Basic,
+    Token,
+    Oauth2,
+    Ntlm,
+    Digest
 }

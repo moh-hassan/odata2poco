@@ -1,12 +1,12 @@
-﻿// Copyright 2016-2022 Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco
+
+namespace OData2Poco;
+
+public enum GeneratorType
 {
-    public enum GeneratorType
-    {
-        None,
-        Class,
-        Interface,
-        Record        
-    }
+    None,
+    Class,
+    Interface,
+    Record
 }

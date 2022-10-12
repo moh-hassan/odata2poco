@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
- 
-   
-    // Licensed to the .NET Foundation under one or more agreements.
-    // The .NET Foundation licenses this file to you under the MIT license.
-    // See the LICENSE file in the project root for more information.
+﻿#pragma warning disable IDE0073
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 
 #if NETSTANDARD2_0 || NET6 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
-    
 namespace System.Runtime.CompilerServices
 {
     /// <summary>
@@ -25,5 +17,3 @@ namespace System.Runtime.CompilerServices
 }
 
 #endif
-
-

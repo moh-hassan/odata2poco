@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using System.Reflection;
+namespace OData2Poco.Fake;
 public static class TestSample
 {
     public static string BaseDirectory
@@ -10,7 +10,7 @@ public static class TestSample
         {
             var assembly = Assembly.GetExecutingAssembly();
             var codebase = new Uri(assembly.Location);
-             var path = codebase.LocalPath;
+            var path = codebase.LocalPath;
             return Path.GetDirectoryName(path);
         }
     }
@@ -23,7 +23,7 @@ public static class TestSample
     public static string NorthWindV3 => GetFullPath("northwindV3.xml");
     public static string TripPin4Flag => GetFullPath("trippinV4Flags.xml");
     public static string TripPin4 => GetFullPath("trippinV4.xml");
-    public static string TripPin4RW => GetFullPath("trippin4rw.xml");
+    public static string TripPin4Rw => GetFullPath("trippin4rw.xml");
     public const string UrlNorthWindV4 = "https://services.odata.org/V4/Northwind/Northwind.svc";
     public const string UrlNorthWindV3 = "https://services.odata.org/V3/Northwind/Northwind.svc";
     public const string UrlNorthWindV2 = "https://services.odata.org/V2/Northwind/Northwind.svc";

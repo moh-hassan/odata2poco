@@ -1,75 +1,65 @@
-﻿using System;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 
-namespace OData2Poco.CustAttributes
+// ReSharper disable UnusedMember.Global
+
+namespace OData2Poco.CustAttributes;
+
+public class PocoAttributesList : IEnumerable<INamedAttribute>
 {
-    public class PocoAttributesList : IEnumerable<INamedAttribute>
+    private readonly List<INamedAttribute> _namedAttributes;
+
+    public PocoAttributesList()
     {
-        readonly List<INamedAttribute> _namedAttributes;  
-        public INamedAttribute? this[string index] => GetAttributeObject(index);
+        _namedAttributes = new List<INamedAttribute>();
+        FillNamedAttributes();
+    }
 
-        public PocoAttributesList()
-        {
-            _namedAttributes = new List<INamedAttribute>();
-            FillNamedAttributes();           
+    public INamedAttribute? this[string index] => GetAttributeObject(index);
 
-        }
-        public List<string> SupportedAttributes()
-        {
-            return _namedAttributes.Select(x => x.Name).ToList();
-        }
-        public IEnumerator<INamedAttribute> GetEnumerator()
-        {
-            return _namedAttributes.GetEnumerator();
-        }
+    public IEnumerator<INamedAttribute> GetEnumerator()
+    {
+        return _namedAttributes.GetEnumerator();
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
-        public INamedAttribute? GetAttributeObject(string attName)
-        {
-            return _namedAttributes.FirstOrDefault(x => x.Name == attName);
-        }
+    public List<string> SupportedAttributes()
+    {
+        return _namedAttributes.Select(x => x.Name).ToList();
+    }
 
-        private void FillNamedAttributes()
-        {
+    public INamedAttribute? GetAttributeObject(string attName)
+    {
+        return _namedAttributes.FirstOrDefault(x => x.Name == attName);
+    }
 
-            var asm = typeof(INamedAttribute).GetTypeInfo().Assembly;
-            var types = asm.DefinedTypes
-                  .Where(x => x.ImplementedInterfaces.Contains(typeof(INamedAttribute)));
+    private void FillNamedAttributes()
+    {
+        var asm = typeof(INamedAttribute).GetTypeInfo().Assembly;
+        var types = asm.DefinedTypes
+            .Where(x => x.ImplementedInterfaces.Contains(typeof(INamedAttribute)));
 
-            foreach (var type in types)
-            {
-                if (Activator.CreateInstance(type) is INamedAttribute item) _namedAttributes.Add(item);
-            }
+        foreach (var type in types)
+            if (Activator.CreateInstance(type) is INamedAttribute item)
+                _namedAttributes.Add(item);
+    }
 
-        }
+    public void LoadPluginAttributes()
+    {
+        var foldr = "plugin";
+        foldr = Path.GetFullPath(foldr);
+        if (!Directory.Exists(foldr)) return;
 
-        public void LoadPluginAttributes()
-        {
-
-            string foldr = "plugin";
-            foldr = Path.GetFullPath(foldr);
-            if (!Directory.Exists(foldr)) return;
-
-            var pluginList = Helper.LoadPlugin<INamedAttribute>(foldr)
-                .Cast<INamedAttribute>().ToList();
+        var pluginList = Helper.LoadPlugin<INamedAttribute>(foldr)
+            .Cast<INamedAttribute>().ToList();
 
 
-            if (pluginList.Any())
-            {
-
-
-                _namedAttributes.AddRange(pluginList);
-            }
-
-        }
-
+        if (pluginList.Any()) _namedAttributes.AddRange(pluginList);
     }
 }

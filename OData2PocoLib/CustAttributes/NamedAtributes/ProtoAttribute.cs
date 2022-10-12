@@ -1,14 +1,22 @@
-using System.Collections.Generic;
+// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-namespace OData2Poco.CustAttributes.NamedAtributes
+
+
+// ReSharper disable UnusedMember.Global
+
+namespace OData2Poco.CustAttributes.NamedAtributes;
+
+public class ProtoAttribute : INamedAttribute
 {
-    public class ProtoAttribute : INamedAttribute
+    public string Name { get; } = "proto";
+
+    public List<string> GetAttributes(PropertyTemplate property)
     {
-        public string Name { get; } = "proto";
+        return new() { $"[ProtoMember({property.Serial})]" };
+    }
 
-        public List<string> GetAttributes(PropertyTemplate property) => 
-            new List<string> { $"[ProtoMember({property.Serial})]"};
-
-        public List<string> GetAttributes(ClassTemplate property) => new List<string> { "[ProtoContract]"};
+    public List<string> GetAttributes(ClassTemplate classTemplate)
+    {
+        return new() { "[ProtoContract]" };
     }
 }
