@@ -36,6 +36,7 @@
     <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
+    <DevelopmentDependency>true</DevelopmentDependency>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 </Project>

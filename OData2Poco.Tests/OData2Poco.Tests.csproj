@@ -9,9 +9,8 @@
 		<Product>OData2Poco</Product>
 		<IsTestProject>true</IsTestProject>
 		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
-		<RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
-		<LangVersion>default</LangVersion>
-	</PropertyGroup>
+		<!--<RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>LangVersioLangVersiLangVersLangVerLangVeLangVLangLanLaL		<LangVersion>preview</LangVersion>-->
+  </PropertyGroup>
 
   <ItemGroup>		 
 		<Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />

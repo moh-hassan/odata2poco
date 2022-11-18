@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Collections;
+using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Api;
+using OData2Poco.Extensions;
 using OData2Poco.Fake;
 // ReSharper disable MethodHasAsyncOverload
 #pragma warning disable IDE0060
@@ -92,6 +94,53 @@ public class O2PTest
         //TripId is readonly, but overwrite by setting option 
         Assert.IsTrue(code.Contains(" public int TripId {get;set;}"));
     }
+
+    [Test]
+    public async Task o2p_call_static_method_test()
+    {
+        //Arrange
+        OdataConnectionString cs = new OdataConnectionString { ServiceUrl = TestSample.NorthWindV4 };
+        //Act
+        PocoSetting ps = new PocoSetting();
+        var code = await O2P.GeneratePocoAsync(cs, ps);
+
+        //Assert
+        code.Should().ContainAll("public partial class Category",
+            "public partial class CustomerDemographic");
+    }
+
+    [Test]
+    public async Task O2p_call_static_using_json_test()
+    {
+        //Arrange
+        var config = new Configuration
+        {
+            ConnectionString = new OdataConnectionString { ServiceUrl = TestSample.NorthWindV4 },
+            Setting = new PocoSetting { NameCase = CaseEnum.Camel }
+        };
+        var json = config.ToJson();
+
+        //Act
+        var code = await O2P.GeneratePocoAsync(json);
+
+        //Assert
+        code.Should().ContainAll("public partial class Category",
+            "public partial class CustomerDemographic");
+    }
+
+    [Test]
+    public async Task O2p_call_static_using_json_test2()
+    {
+        //Arrange
+        var json = TestCaseFactory.Northwind;
+
+        //Act
+        var code = await O2P.GeneratePocoAsync(json);
+        //Assert
+        code.Should().ContainAll("public partial class Category",
+            "public partial class CustomerDemographic");
+    }
+
 #if OPENAPI
         [Category("openapi")]
         [Test]
@@ -112,6 +161,10 @@ public class O2PTest
 
 public static class TestCaseFactory
 {
+    static string Path2Json(string path)
+    {
+        return path.Replace(@"\", @"\\");
+    }
     public static IEnumerable TestCases
     {
         get
@@ -126,4 +179,44 @@ public static class TestCaseFactory
                 "openapi: 3.0.1");
         }
     }
+
+    public static string Northwind = @$"
+       {{'ConnectionString': {{
+            'ServiceUrl': '{Path2Json(TestSample.NorthWindV4)}',
+            'UserName': null,
+            'Password': null,
+            'Domain': null,
+            'Proxy': null,
+            'TokenUrl': null,
+            'TokenParams': null,
+            'ParamFile': null,
+            'Authenticate': 0,
+            'TlsProtocol': 3072
+          }},
+          'Setting': {{
+            'AddNullableDataType': false,
+            'AddNavigation': false,
+            'AddEager': false,
+            'Lang': 1,
+            'Inherit': '',
+            'UseInheritance': true,
+            'NamespacePrefix': '',
+            'NameCase': 2,
+            'EntityNameCase': 0,
+            'RenameMap': null,
+            'Attributes': [],
+            'MultiFiles': false,
+            'ModuleName': null,
+            'AddReference': false,
+            'GeneratorType': 0,
+            'Include': [],
+            'ReadWrite': false,
+            'EnableNullableReferenceTypes': false,
+            'InitOnly': false,
+            'OpenApiFileName': '',
+            'CodeFilename': 'UnDefined.txt',
+            'UseFullName': false          
+        }}  
+     }}
+";
 }

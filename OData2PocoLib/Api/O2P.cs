@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using OData2Poco.Extensions;
 using OData2Poco.TypeScript;
 
 namespace OData2Poco.Api;
@@ -48,13 +49,18 @@ public class O2P
     //Generate c# code
     public async Task<string> GenerateAsync(OdataConnectionString odataConnString)
     {
-        var gen = await GenerateModel(odataConnString);
-        var generatorCs = PocoClassGeneratorCs.GenerateCsPocoClass(gen, Setting);
-        CodeText = generatorCs.ToString();
-        return CodeText;
+        return Setting.Lang switch
+        {
+            Language.CS => await GenerateCsAsync(odataConnString).ConfigureAwait(false),
+#pragma warning disable CS0618
+            Language.TS => (await GenerateTsAsync(odataConnString).ConfigureAwait(false)).ToString(),
+#pragma warning restore CS0618
+            _ => ""
+        };
     }
 
     //feature request #41
+    //Generate c# using xml string.
     public async Task<string> GenerateAsync(string xmlContent)
     {
         var gen = await GenerateModel(xmlContent);
@@ -62,7 +68,13 @@ public class O2P
         CodeText = generatorCs.ToString();
         return CodeText;
     }
-
+    public async Task<string> GenerateCsAsync(OdataConnectionString odataConnString)
+    {
+        var gen = await GenerateModel(odataConnString);
+        var generatorCs = PocoClassGeneratorCs.GenerateCsPocoClass(gen, Setting);
+        CodeText = generatorCs.ToString();
+        return CodeText;
+    }
     public string GenerateProject()
     {
         var proj = new ProjectGenerator(Setting.Attributes);
@@ -77,11 +89,26 @@ public class O2P
             return apiText;
         }
 #endif
+
+    //generate typescript
+    [Obsolete("Use GenerateAsync method for both cs and ts. This method will be dropped.")]
     public async Task<PocoStore> GenerateTsAsync(OdataConnectionString odataConnString)
     {
         var gen = await GenerateModel(odataConnString);
         var ts = new TsPocoGenerator(gen, Setting);
         var pocoStore = ts.GeneratePoco();
         return pocoStore;
+    }
+
+    public static async Task<string> GeneratePocoAsync(OdataConnectionString connection, PocoSetting setting)
+    {
+        var o2P = new O2P(setting);
+        return await o2P.GenerateAsync(connection);
+    }
+
+    public static async Task<string> GeneratePocoAsync(string json)
+    {
+        var config = json.ToObject<Configuration>();
+        return await GeneratePocoAsync(config.ConnectionString, config.Setting);
     }
 }
