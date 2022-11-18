@@ -2,30 +2,12 @@
 
 namespace OData2Poco;
 
-public interface IValidator
-{
-    // ReSharper disable once UnusedMemberInSuper.Global
-    void Validate();
-}
 
 /// <summary>
 ///     Setting options to control the code generation
 /// </summary>
 public class PocoSetting : IValidator
 {
-    /// <summary>
-    ///     Initialization
-    /// </summary>
-    public PocoSetting()
-    {
-        Lang = Language.CS;
-        NamespacePrefix = string.Empty;
-        Inherit = "";
-        NameCase = CaseEnum.None;
-        Attributes = new List<string>();
-        Include = new List<string>();
-        CodeFilename = "UnDefined.txt";
-    }
 
     /// <summary>
     ///     Set nullabable ? to the type of property
@@ -105,7 +87,19 @@ public class PocoSetting : IValidator
 
     //set name of generated class using FullName vs Name
     public bool UseFullName { get; set; }
-
+    /// <summary>
+    ///     Initialization
+    /// </summary>
+    public PocoSetting()
+    {
+        Lang = Language.CS;
+        NamespacePrefix = string.Empty;
+        Inherit = "";
+        NameCase = CaseEnum.None;
+        Attributes = new List<string>();
+        Include = new List<string>();
+        CodeFilename = "UnDefined.txt";
+    }
     public void Validate()
     {
         if (Lang == Language.None)
@@ -127,4 +121,11 @@ public class PocoSetting : IValidator
         if (string.IsNullOrEmpty(CodeFilename))
             CodeFilename = MultiFiles ? "Model" : $"poco.{Lang.ToString().ToLower()}";
     }
+}
+
+
+public interface IValidator
+{
+    // ReSharper disable once UnusedMemberInSuper.Global
+    void Validate();
 }

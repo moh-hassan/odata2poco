@@ -22,12 +22,11 @@ internal class CsCommand : IPocoCommand
     private readonly IPocoFileSystem _fileSystem;
     public CsCommand(Options options, IPocoFileSystem fileSystem)
     {
-        OptionManager optionManager;
         _fileSystem = fileSystem ?? new NullFileSystem();
         Errors = new List<string>();
-        ArgOptions = optionManager = new OptionManager(options);
-        OdataConnectionString = optionManager.GetOdataConnectionString();
-        PocoSettingOptions = optionManager.GetPocoSetting();
+        OptionManager optionManager = new(options);
+        ArgOptions = optionManager.PocoOptions;
+        (OdataConnectionString, PocoSettingOptions) = optionManager;
         O2PGen = new O2P(PocoSettingOptions);
     }
 
@@ -35,10 +34,7 @@ internal class CsCommand : IPocoCommand
     {
         ShowOptions();
         Console.WriteLine();
-        ArgOptions.Errors.ForEach(x =>
-        {
-            _logger.Error(x);
-        });
+        ArgOptions.Errors.ForEach(_logger.Error);
 
         //show warning
         ArgOptions.Errors.ForEach(x =>
@@ -219,10 +215,7 @@ internal class CsCommand : IPocoCommand
     {
         if (ArgOptions.ShowWarning)
         {
-            O2PGen.ModelWarning.ForEach(x =>
-            {
-                _logger.Normal(x);
-            });
+            O2PGen.ModelWarning.ForEach(_logger.Normal);
         }
     }
     #endregion
