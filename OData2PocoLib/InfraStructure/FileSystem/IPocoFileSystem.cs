@@ -12,4 +12,6 @@ public interface IPocoFileSystem
     void SaveToFile(string filePath, Func<Stream> getStream);
     void SaveToFile(string filePath, string content, Encoding encoding);
     void SaveToFolder(string folderPath, Dictionary<string, string> content);
+    bool Exists(string? filePath);
+    string ReadAllText(string? filePath);
 }

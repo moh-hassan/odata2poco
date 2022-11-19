@@ -8,7 +8,6 @@ namespace OData2Poco.InfraStructure.FileSystem;
 public class PocoFileSystem : IPocoFileSystem
 {
     private static readonly ILog Logger = PocoLogger.Default;
-
     public void SaveToFile(string filePath, Func<Stream> getStream)
     {
         using var incomingStream = getStream();
@@ -61,5 +60,17 @@ public class PocoFileSystem : IPocoFileSystem
             var code = entry.Value;
             SaveToFile(fname, code);
         }
+    }
+
+    public bool Exists(string? filePath)
+    {
+        return File.Exists(filePath);
+    }
+
+    public string ReadAllText(string? filePath)
+    {
+        if (!Exists(filePath))
+            return "";
+        return File.ReadAllText(filePath!);
     }
 }

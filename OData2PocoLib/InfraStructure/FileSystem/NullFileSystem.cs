@@ -6,6 +6,9 @@ namespace OData2Poco.InfraStructure.FileSystem;
 
 public class NullFileSystem : IPocoFileSystem
 {
+    public NullFileSystem()
+    {
+    }
     public void SaveToFile(string filePath, string content)
     {
         //do nothing
@@ -24,5 +27,18 @@ public class NullFileSystem : IPocoFileSystem
     public void SaveToFolder(string folderPath, Dictionary<string, string> content)
     {
         //do nothing
+    }
+
+    public bool Exists(string? filePath)
+    {
+        return Fakes.Exists(filePath);
+
+    }
+
+    public string ReadAllText(string? filePath)
+    {
+        if (!Exists(filePath))
+            return "";
+        return Fakes.Get(filePath!);
     }
 }
