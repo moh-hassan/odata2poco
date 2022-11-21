@@ -1,6 +1,21 @@
 # Welcome to OData2Poco
-**OData2Poco** is a code generation tool for generating plain-old CLR objects (POCO/DTO) from OData feeds. 
+**OData2Poco** is a code generation tool for generating plain-old CLR objects (POCO/DTO) in c# and typescript from OData feeds. 
 POCO classes can be used in a typed RESTful client OData services. Code generation can be controlled by setting many options.
+
+-----
+
+[![NuGet Version](https://img.shields.io/nuget/v/OData2Poco.CommandLine.svg?label=nuget%20ClassLibrary&style=flat)](https://www.nuget.org/packages/OData2Poco) </p>
+[![NuGet Version](https://img.shields.io/nuget/v/OData2Poco.CommandLine.svg?label=nuget%20Console&style=flat)](https://www.nuget.org/packages/OData2Poco.CommandLine) </p>
+[![Global Tool NuGet Version](https://img.shields.io/nuget/v/OData2Poco.dotnet.o2pgen.svg?label=dotnet%20Global%20Tool&style=flat)](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen) </p>
+[![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg?label=Chocolatey%20Console)](https://chocolatey.org/packages/odata2poco-commandline)
+
+## Continuous integration
+|Build server                |Platform     |Build status                                                |
+|----------------------------|-------------|------------------------------------------------------------|
+|AppVeyor                    |Windows      |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
+|Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
+
+-----------
 
 # Announcing new Release: V5.0.0
  - New feature: generating typescript code as a single file or multi files(modules).
@@ -13,33 +28,21 @@ POCO classes can be used in a typed RESTful client OData services. Code generati
 
 How to use the new features: [read wiki](https://github.com/moh-hassan/odata2poco/wiki/OData2Poco-Next)
 
+------------ 
+
 ## Development packages
 The developed packages can be downloaded from `myget.org`
 
 - [OData2Poco](https://www.myget.org/feed/odata2poco/package/nuget/OData2Poco)
 - [OData2Poco.CommandLine](https://www.myget.org/feed/odata2poco/package/nuget/OData2Poco.CommandLine)
 - [OData2Poco.dotnet.o2pgen](https://www.myget.org/feed/odata2poco/package/nuget/OData2Poco.dotnet.o2pgen)
- 
------------- 
+--------- 
 
-## OData2Poco Packages
-OData2Poco is available in three flavers:
+## Give a Star! :star:
 
-- A Console tool: OData2Poco.CommandLine support net472 (a.k.a o2pgen).
-- A .Net Core Global tool  **dotnet-o2pgen** support NET6.
-- A class library: support NET6/netstandard2.0/net461.
+If you are using this project, please show your support by giving this project a star!. Thanks!
 
-[![NuGet Version](https://img.shields.io/nuget/v/OData2Poco.CommandLine.svg?label=nuget%20Console&style=flat)](https://www.nuget.org/packages/OData2Poco.CommandLine)
-[![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg?label=Chocolatey%20Version)](https://chocolatey.org/packages/odata2poco-commandline)
-[![Global Tool NuGet Version](https://img.shields.io/nuget/v/OData2Poco.dotnet.o2pgen.svg?label=dotnet%20Global%20Tool&style=flat)](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen)
-
-## Continuous integration
-|Build server                |Platform     |Build status                                                |
-|----------------------------|-------------|------------------------------------------------------------|
-|AppVeyor                    |Windows      |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
-|Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
-
-
+-----------
 **Features of OData2Poco**
    
 - Generate POCO classes corresponding to the Entities defined in the XML MetaData stored in OData Feeds. 
@@ -100,57 +103,82 @@ OData2Poco is available in three flavers:
 - Support multi schema.
 - Support multi containers in OData  v3.
 
- 
-## Install
+ -------------
+ ## OData2Poco Packages
+OData2Poco is available in three flavers:
+- A class library: support NET6/netstandard2.0/net461,[download](https://www.nuget.org/packages/OData2Poco).
+- A Console tool: OData2Poco.CommandLine support net472 (a.k.a o2pgen), [download](https://www.nuget.org/packages/OData2Poco.CommandLine).
+- A .Net Core Global tool  `dotnet-o2pgen` support NET6, [download](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen).
+- Checolatey Console tool, [download](https://community.chocolatey.org/packages/odata2poco-commandline).
 
-**1) OData2Poco.dotnet.o2pgen**:
+----------
 
-NetCore Global tool NET6 named dotnet-o2pgen.
+## Install and Usage
 
-Can be installed from [Nuget Gallery](https://www.nuget.org/packages/OData2Poco.dotnet.o2pgen):
+## 1) OData2Poco.CommandLine o2pgen Console Cli
 
-       dotnet tool install --global OData2Poco.dotnet.o2pgen  
+OData2Poco.CommandLine is a Console application (net472) named o2pgen.
 
-
-**2) OData2Poco.CommandLine:**
-
-Console application named o2pgen.
-
-Can be installed from [Nuget Gallery](https://www.nuget.org/packages/OData2Poco.CommandLine):
+It Can be installed from [Nuget Gallery](https://www.nuget.org/packages/OData2Poco.CommandLine):
 
        Install-Package OData2Poco.CommandLine 
 
-From [Chocolatey Gallery](https://chocolatey.org/packages/odata2poco-commandline):
 
-     choco install odata2poco-commandline
+### Executing o2pgen as MsBuild Target
 
+Add the next xml code to the project.csproj:
 
-**3) OData2Poco Class library:** 
+```xml
+<Target Name="Odata2PocoRun" BeforeTargets="CoreCompile">
+         <PropertyGroup>
+			<EnableCodeGeneration>true</EnableCodeGeneration>
+               <o2pgen>$(PkgOData2Poco_CommandLine)\tools\o2pgen.exe</o2pgen>
+               <options>-r http://services.odata.org/V4/Northwind/Northwind.svc/ -f Model\north.cs</options>
+		</PropertyGroup>
+		<Message Text="Executing o2pgen.exe" Importance="High" />
+		<Exec Condition="$(EnableCodeGeneration)
+             Command="$(o2pgen)  $(options)" />
+</Target>
+```
 
-Support NET6/netstandard2.0/net461.
-Can be installed from [Nuget Gallery](https://www.nuget.org/packages/OData2Poco/)
+The attribute `Options` is the commandLine arguments. Modify the commandline options as you want.
+For more details read [Getting Start](https://github.com/moh-hassan/odata2poco/wiki/getting-start).
 
-         Install-Package OData2Poco
+### Excuting o2pgen from Package Console Manager (PCM):
+In visual studio 2019 and higher, o2pgen can be run directly from PowerShell Console (PCM). Its path is set during installation.
 
-Try demo Application in NET5 [Online](https://dotnetfiddle.net/LSSwIS)
+Check application is installed:
+```
+PM> o2pgen --version
+```
+### Linux and Mac/OS x support
+O2pgen cli can run on Linux and Mac/OS if Mono is installed.
 
-
- **Try dotnet Global Tool:**
+-------------
+## 2) OData2Poco global Console Cli (net6.0)
 
  Install from nuget gallary, run the command:
+```
+dotnet tool install --global OData2Poco.dotnet.o2pgen
+```
+### How to use:
+Run the command:
 
        dotnet o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/
-	   For help type: dotnet o2pgen --help
+	   
+For help type: `dotnet o2pgen --help`
 
- ### Run the global tool using Msbuild Task
- You can auto run `dotnet o2pgen` from within MsBuild Task and save code in the project folder.
+Review [Commandline option](https://github.com/moh-hassan/odata2poco/wiki/CommandLine-Reference).
+ ### Executing the global tool as Msbuild Target
+
+ You can auto run `dotnet o2pgen` from within MsBuild Target and save code in the project folder.
 
  Add the next Msbuild target to your project and modify command parameters as needed.
  When the property `EnableCodeGeneration` is set to `false`, no code is generated.
  The generated code is saved to file `northwind.cs` in the folder Model in the root of the project.
 
  ```xml
-<Target Name="GenerateCode" BeforeTargets="Build">
+<Target Name="GenerateCode" BeforeTargets="CoreCompile">
 		<PropertyGroup>
 			<EnableCodeGeneration>true</EnableCodeGeneration>
 		</PropertyGroup>
@@ -159,27 +187,40 @@ Try demo Application in NET5 [Online](https://dotnetfiddle.net/LSSwIS)
 		</Exec>
 	</Target>
  ```         
-
-Consol net45 tool:
-
-       o2pgen -r http://services.odata.org/V4/Northwind/Northwind.svc/
  
- Note: The same options are available for dotnet Global tool or Console tool
+## 3) OData2Poco Class library
 
+Support NET6/netstandard2.0/net461.
+It can be installed from [Nuget Gallery](https://www.nuget.org/packages/OData2Poco/)
+
+         Install-Package OData2Poco
+
+Try demo Application in NET6 [Online](https://dotnetfiddle.net/LSSwIS)
+
+
+-------
+## 4) Checolatey Package
+ 
+From [Chocolatey Gallery](https://chocolatey.org/packages/odata2poco-commandline):
+
+     choco install odata2poco-commandline
+
+------
+ ## Documentation
+
+Read the:[Wiki](https://github.com/moh-hassan/odata2poco/wiki)
+
+-------
 **License**
 
 MIT License.
 
+----------
 ## Release Notes
 
 [Changes](https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md)
 
-
-
- **Documentation**
-
-Read the:[Wiki](https://github.com/moh-hassan/odata2poco/wiki)
-
+-------
 ## Acknowledgements: 
 
 **Thank you [JetBrains](https://www.jetbrains.com "JetBrain") for [Resharper](https://www.jetbrains.com/resharper/ "Resharper") open source license**
