@@ -36,7 +36,7 @@ public static class LinqExtensions
     }
     public static bool IsNullOrEmpty<T>(this IEnumerable<T>? enumerable) =>
         enumerable == null || !enumerable.Any();
-    //todo return empty not null
+
     public static void Deconstruct<T>(this IList<T> list, out T? head, out IList<T> tail)
     {
         if (!list.Any())

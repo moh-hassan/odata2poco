@@ -67,7 +67,7 @@ export interface Location  {
     }
 
     [Test]
-    public async Task Generate_typescribt_interface_as_single_file_test()
+    public async Task Generate_typescript_interface_as_single_file_test()
     {
         //Arrange
         GeneratorType type = GeneratorType.Interface;

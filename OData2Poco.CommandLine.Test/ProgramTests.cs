@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Extensions;
 using OData2Poco.Fake;
+using OData2Poco.InfraStructure.Logging;
 using OData2Poco.TestUtility;
 #pragma warning disable IDE0060
 
@@ -414,6 +415,24 @@ public enum Feature
         Assert.IsTrue(output.Contains("public partial class Trip")); //-v
 
     }
+
+    [Test]
+    public async Task Retry_with_not_existing_url_test()
+    {
+        //Arrange
+        string url = "http://mysite.com";
+        var a = $"-r {url} -v ";
+
+        //Act
+        var action = async () => await RunCommand(a);
+        await action.Should().ThrowAsync<System.Net.Http.HttpRequestException>();
+        var logs = PocoLogger.Default.Output.ToString();
+
+        //Assert
+        logs.Should()
+            .Contain("Information: Retry: 2 Response status code does not indicate success: 404 (Not Found).");
+    }
+
 
     [Test]
     [Category("code_header")]

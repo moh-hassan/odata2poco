@@ -2,8 +2,10 @@
 
 #pragma warning disable S3881
 
+using System;
 using System.Net;
 using System.Net.Http;
+using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.Http;
@@ -14,7 +16,7 @@ internal class CustomHttpClient : IDisposable
     private readonly DelegatingHandler? _delegatingHandler;
     private readonly OdataConnectionString _odataConnectionString;
     private HttpClient _client;
-    public HttpResponseMessage? Response;
+    public HttpResponseMessage Response = null!;
 
     public CustomHttpClient(OdataConnectionString odataConnectionString)
     {
@@ -104,15 +106,23 @@ internal class CustomHttpClient : IDisposable
             url = ServiceUri.AbsoluteUri;
         else
             url = ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
-        using var response = await _client.GetAsync(url);
-        Response = response;
-        if (!response.IsSuccessStatusCode)
+
+        await Policy.RetryAsync(async () =>
+        {
+            Response = await _client.GetAsync(url);
+            Response.EnsureSuccessStatusCode();
+        });
+
+        if (Response is { IsSuccessStatusCode: false })
             throw new HttpRequestException(
-                $"Http Error {(int)response.StatusCode}: {response.ReasonPhrase}");
-        var content = await response.Content.ReadAsStringAsync();
+                $"Http Error {(int)Response.StatusCode}: {Response.ReasonPhrase}");
+
+
+        var content = await Response.Content.ReadAsStringAsync();
         if (string.IsNullOrEmpty(content))
             throw new HttpRequestException(
-                $"Http Error {(int)response.StatusCode}: {response.ReasonPhrase}");
+                $"Http Error {(int)Response.StatusCode}: {Response.ReasonPhrase}");
         return content;
+
     }
 }

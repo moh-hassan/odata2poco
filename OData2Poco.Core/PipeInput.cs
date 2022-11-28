@@ -6,12 +6,12 @@ internal static class Pipes
 {
     public static string ReadPipe()
     {
-        if (!Console.IsInputRedirected) return "";
+       // if (!Console.IsInputRedirected) return "";
         string input = "";
         // if nothing is being piped in, then exit
         if (!IsPipedInput())
             return input;
-
+        Console.WriteLine($"Redirecting: read password");
         while (Console.In.Peek() != -1)
             input = Console.In.ReadLine();
         return input;

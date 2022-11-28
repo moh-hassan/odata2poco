@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>O2Pgen</AssemblyName>
+    <AssemblyName>o2pgen</AssemblyName>
     <Authors>Mohamed Hassan</Authors>
     <Product>OData2Poco.dotnet.o2pgen</Product>
     <Description>o2gen is a CommandLine tool for generating c# and typescript POCO (DTO) classes,interfaces and records from OData feeds with lot of configuration parameters.</Description>

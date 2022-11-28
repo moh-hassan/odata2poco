@@ -52,9 +52,7 @@ public class O2P
         return Setting.Lang switch
         {
             Language.CS => await GenerateCsAsync(odataConnString).ConfigureAwait(false),
-#pragma warning disable CS0618
             Language.TS => (await GenerateTsAsync(odataConnString).ConfigureAwait(false)).ToString(),
-#pragma warning restore CS0618
             _ => ""
         };
     }
@@ -91,7 +89,7 @@ public class O2P
 #endif
 
     //generate typescript
-    [Obsolete("Use GenerateAsync method for both cs and ts. This method will be dropped.")]
+    //[Obsolete("Use GenerateAsync method for both cs and ts. This method will be dropped.")]
     public async Task<PocoStore> GenerateTsAsync(OdataConnectionString odataConnString)
     {
         var gen = await GenerateModel(odataConnString);
@@ -109,6 +107,7 @@ public class O2P
     public static async Task<string> GeneratePocoAsync(string json)
     {
         var config = json.ToObject<Configuration>();
+        if (config == null) return "";
         return await GeneratePocoAsync(config.ConnectionString, config.Setting);
     }
 }

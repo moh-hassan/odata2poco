@@ -4,7 +4,11 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+=======
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.1"/>
+>>>>>>> 21eb675 (Support commandLine PipeLine.)
     <PackageVersion Include="Microsoft.Data.Edm" Version="5.8.5" />
     <PackageVersion Include="Microsoft.OData.Edm" Version="7.15.0" />
     <PackageVersion Include="Mapster" Version="7.3.0" />

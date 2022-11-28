@@ -3,14 +3,14 @@
 using System.Collections;
 using OData2Poco.InfraStructure.Logging;
 
-//namespace OData2Poco.CommandLine;
+
 namespace OData2Poco;
 
 public class ErrorCollection : IEnumerable<OptionError>
 {
-    private const int INFO = 0;
-    private const int WARNING = 1;
-    private const int ERROR = 2;
+    private const int Info = 0;
+    private const int Warning = 1;
+    private const int Error = 2;
 
     private readonly List<OptionError> _errors = new();
     private readonly ILog _logger = PocoLogger.Default;
@@ -23,8 +23,8 @@ public class ErrorCollection : IEnumerable<OptionError>
         var error = new OptionError(message, level);
         Add(error);
     }
-    public void AddError(string message) => Add(message, ERROR);
-    public void AddWarning(string message) => Add(message, WARNING);
+    public void AddError(string message) => Add(message, Error);
+    public void AddWarning(string message) => Add(message, Warning);
     public void AddInfo(string message) => Add(message);
 
     public int ShowErrors()
