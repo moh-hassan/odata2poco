@@ -2,7 +2,6 @@
 
 #pragma warning disable S3881
 
-using System;
 using System.Net;
 using System.Net.Http;
 using OData2Poco.Extensions;

@@ -28,7 +28,9 @@ public class OptionConfiguration
     /// <returns>true: Have a config file, false: no config file</returns>
     public bool TryGetConfigurationFile(string[] args, out string[] commandLine)
     {
+        //Configuration file is uses as o2pgen @myConfig
         commandLine = args;
+        if (args.Length > 1) return false;
         var (head, _) = args; //ignore tail
         if (!TryFindFile(head, out string? fileName))
             return false;
@@ -66,21 +68,33 @@ public class OptionConfiguration
     }
     internal bool TryFindFile(string? head, [NotNullWhen(true)] out string? fileName)
     {
-        fileName = "o2pgen.txt";
-        var hasConfig = false;
         if (head?.StartsWith("@") ?? false)
         {
-            hasConfig = true;
+            var hasConfig = true;
             fileName = head.Substring(1);
-        }
 
-        if (!_fileSystem.Exists(fileName))
-        {
-            if (hasConfig)
-                Errors.AddWarning($"Configuration file: {fileName} is not existing");
-            return false;
+
+            if (!_fileSystem.Exists(fileName))
+            {
+                if (hasConfig)
+                    Errors.AddWarning($"Configuration file: {fileName} is not existing");
+                return false;
+            }
+
+            Errors.AddInfo($"Reading configuration file: {fileName}");
+            return true;
         }
-        Errors.AddInfo($"Reading configuration file: {fileName}");
-        return true;
+        //check if default config. file o2pge.txt is existing, use it
+        if (string.IsNullOrEmpty(head))
+        {
+            if (_fileSystem.Exists("o2pgen.txt"))
+            {
+                fileName = "o2pgen.txt";
+                Errors.AddInfo($"Reading configuration file: {fileName}");
+                return true;
+            }
+        }
+        fileName = "";
+        return false;
     }
 }

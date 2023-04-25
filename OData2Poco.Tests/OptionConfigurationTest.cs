@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using CliWrap;
 using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.InfraStructure.FileSystem;
@@ -77,28 +76,43 @@ public class OptionConfigurationTest
     }
 
     [Test]
-    public void Args_without_configuration_but_has_default_config_test()
+    public void More_args_without_configuration_has_no_default_config_test()
     {
         //Arrange
-        string[] expected = { "-r", "localhost", "-v" };
         var args = new[] { "-r", "localhost" };
         //Act
         var flag = cfg.TryGetConfigurationFile(args, out var cli);
-        //Assert
-        flag.Should().BeTrue();
-        cli.Should().BeEquivalentTo(expected);
-    }
-    [Test]
-    public void Args_without_configuration_and_has_no_default_config_test()
-    {
-        //Arrange
-        _fileSystem.Rename("o2pgen.txt", "temp"); //to remove temporary the default config file
-        var args = new[] { "-r", "localhost" };
-        //Act
-        var flag = cfg.TryGetConfigurationFile(args, out var cli);
-        _fileSystem.Rename("temp", "o2pgen.txt"); //restore file
         //Assert
         flag.Should().BeFalse();
-        cli.Should().BeEquivalentTo(args);
+        
+    }
+    [Test]
+    public void Empty_args_with_existing_default_config_o2pgen_txt_test()
+    {
+        //Arrange
+        var args = Array.Empty<string>();
+        //Act
+        //read default configuration file o2pgen.txt
+        var flag = cfg.TryGetConfigurationFile(args, out var cli);
+       
+        //Assert
+        flag.Should().BeTrue();
+        cli.Should().NotBeEmpty();
+    }
+    [Test]
+    public void Empty_args_without_existing_default_config_o2pgen_txt_test()
+    {
+        //Arrange
+        var args = Array.Empty<string>();
+        _fileSystem.Rename("o2pgen.txt","_");
+        //Act
+        //read default configuration file o2pgen.txt
+        var flag = cfg.TryGetConfigurationFile(args, out var cli);
+
+        //Assert
+        flag.Should().BeFalse();
+        cli.Should().BeEmpty();
+
+        _fileSystem.Rename("","o2pgen.txt");
     }
 }
