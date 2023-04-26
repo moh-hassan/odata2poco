@@ -62,19 +62,20 @@ internal partial class Poco : IPocoGenerator
     {
         var tr = new StringReader(MetaDataAsString);
         var xmlReader = XmlReader.Create(tr);
-        var result = EdmxReader.TryParse(xmlReader, out Model, out var errors);
-        if (!result)
-            throw new InvalidOperationException("Model can't be created due to Parser errors");
-        EntitySets = GetEntitySets(Model);
-        if (_setting.ShowWarning)
+        var flag = EdmxReader.TryParse(xmlReader, out Model, out var errors);
+        List<string> messages = errors
+            .Select(a => $"{a.ErrorCode}: {a.ErrorMessage} {a.ErrorLocation}").ToList();
+        string errorText = messages.Any()
+            ? $"Encountered the following errors (total: {messages.Count}) when parsing the EDMX document:\n" + string.Join(Environment.NewLine, messages)
+            : string.Empty;
+        if (!flag)
         {
-            List<string> messages = errors
-                .Select(a => $"{a.ErrorCode}: {a.ErrorMessage} {a.ErrorLocation}").ToList();
-            string errorText = messages.Any()
-                ? $"Encountered the following errors (total: {messages.Count}) when parsing the EDMX document:\n" + string.Join(Environment.NewLine, messages)
-                : string.Empty;
-            _logger.Info($"{errorText}\nXml Parser errors are ignored.");
+            throw new InvalidOperationException($"Model can't be generated.\n{errorText}\n");
         }
+
+        EntitySets = GetEntitySets(Model);
+        if (_setting.ShowWarning && errors.Any())
+            _logger.Info($"{errorText}\nXml Parser errors are ignored.");
         return Model;
     }
 
@@ -106,7 +107,7 @@ internal partial class Poco : IPocoGenerator
         var entitySet = EntitySets
             .Where(m => m.ElementType.FullName() == ct.FullName())
             .DefaultIfEmpty().First();
-        return entitySet != null ? entitySet.Name : string.Empty;
+        return entitySet != null ? entitySet.Name : ct.Name;
     }
 
     internal IEnumerable<IEdmEntitySet> GetEntitySets(IEdmModel model)

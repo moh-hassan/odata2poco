@@ -15,7 +15,7 @@ internal class TokenEndpoint
     private static readonly ILog Logger = PocoLogger.Default;
     public TokenEndpoint(OdataConnectionString odataConnectionString)
     {
-        TokenUrl = odataConnectionString.TokenUrl;
+        if (odataConnectionString.TokenUrl != null) TokenUrl = odataConnectionString.TokenUrl;
         TokenParams = SetTokenParams(odataConnectionString);
         TokenParamsCollection = TokenParamsAsDictionary();
     }
@@ -49,11 +49,10 @@ internal class TokenEndpoint
     private string SetTokenParams(OdataConnectionString odataConnectionString)
     {
         var clientParams =
-            $"grant_type=client_credentials&client_id={odataConnectionString.UserName}&client_secret={odataConnectionString.Password}";
+            $"grant_type=client_credentials&client_id={odataConnectionString.UserName}&client_secret={odataConnectionString.Password.Password}";
         var tokenParams = string.IsNullOrEmpty(odataConnectionString.TokenParams)
             ? clientParams
             : $"{clientParams}&{odataConnectionString.TokenParams}";
-
         return tokenParams;
     }
 

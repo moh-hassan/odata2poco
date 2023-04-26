@@ -25,12 +25,12 @@ internal class Authenticator
                 break;
 
             case AuthenticationType.Basic:
-                Authenticate(odataConnString.UserName, odataConnString.Password);
+                Authenticate(odataConnString.UserName, odataConnString.Password.Password);
                 break;
 
             case AuthenticationType.Token:
                 //token
-                Authenticate(odataConnString.Password);
+                Authenticate(odataConnString.Password.Password);
                 break;
             case AuthenticationType.Oauth2:
                 //OAuth2 
@@ -44,10 +44,10 @@ internal class Authenticator
         }
     }
 
-    private void Authenticate(string user, string password)
+    private void Authenticate(string? user, string? password)
     {
         //credintial
-        if (string.IsNullOrEmpty(user)) return;
+        if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(password)) return;
         var token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user}:{password}"));
         var headerValue = new AuthenticationHeaderValue("Basic", token);
         _client.DefaultRequestHeaders.Authorization = headerValue;

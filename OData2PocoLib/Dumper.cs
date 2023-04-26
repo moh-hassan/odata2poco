@@ -16,8 +16,7 @@ internal static class Dumper
                 //  PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 MaxDepth = 2
             });
-        if (!string.IsNullOrEmpty(title))
-            Console.WriteLine($"{title}\n{json}\n");
+        Console.WriteLine($"{title}\n{json}\n");
         return json;
     }
 }

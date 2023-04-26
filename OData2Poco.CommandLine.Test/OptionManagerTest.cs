@@ -44,8 +44,6 @@ public class OptionManagerTest
         //Assert
         cs.ServiceUrl.Should().Be(options.ServiceUrl);
         cs.UserName.Should().Be(options.UserName);
-        Console.Write(cs.Password);
-        // cs.Password.Should().Be(options.Password);
         cs.Password.Should().BeEquivalentTo(options.Password);
         ps.Lang.Should().Be(options.Lang);
         ps.NameCase.Should().Be(options.NameCase);

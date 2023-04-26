@@ -9,35 +9,47 @@ namespace OData2Poco;
 public class OptionConfiguration
 {
     private readonly IPocoFileSystem _fileSystem;
-    public ErrorCollection Errors { get; set; }
+  
     public OptionConfiguration(IPocoFileSystem fs)
     {
         _fileSystem = fs;
-        Errors = new ErrorCollection();
+        
     }
     public OptionConfiguration() : this(new PocoFileSystem())
     {
     }
 
 
-    /// <summary>
-    /// read args from a configuration file.
-    /// </summary>
-    /// <param name="args">Commandline arguments</param>
-    /// <param name="commandLine">args array in the configuration file</param>
-    /// <returns>true: Have a config file, false: no config file</returns>
-    public bool TryGetConfigurationFile(string[] args, out string[] commandLine)
+
+    public bool TryGetConfigurationFile(string[] args, out string[] commandLine,
+        out string? error, out string? fileName)
     {
-        //Configuration file is uses as o2pgen @myConfig
+        error = null;
+        fileName = null;
+        if (args.Length == 0 && _fileSystem.Exists("o2pgen.txt"))
+        {
+            fileName = "o2pgen.txt";
+            commandLine = ReadConfig(fileName);
+            return true;
+        }
+
+        if (args.Length == 1 && args[0].StartsWith("@"))
+        {
+            fileName = args[0].TrimStart('@');
+            if (!_fileSystem.Exists(fileName))
+            {
+                error = $"Configuration file {fileName} is not existing";
+                commandLine = args;
+                return false;
+            }
+            commandLine = ReadConfig(fileName);
+            return true;
+        }
+
         commandLine = args;
-        if (args.Length > 1) return false;
-        var (head, _) = args; //ignore tail
-        if (!TryFindFile(head, out string? fileName))
-            return false;
-        commandLine = ReadConfig(fileName);
-        return true;
+        return false;
     }
-    [SuppressMessage("Style", "IDE0062:Make local function 'static'", Justification = "<Pending>")]
+
     internal string[] ReadConfig(string fileName)
     {
         var sb = new StringBuilder();
@@ -63,38 +75,7 @@ public class OptionConfiguration
             var pos = line.IndexOf("#", StringComparison.Ordinal);
             if (pos > 0)
                 line = line[..pos];
-            return line;
+            return line.Trim();
         }
-    }
-    internal bool TryFindFile(string? head, [NotNullWhen(true)] out string? fileName)
-    {
-        if (head?.StartsWith("@") ?? false)
-        {
-            var hasConfig = true;
-            fileName = head.Substring(1);
-
-
-            if (!_fileSystem.Exists(fileName))
-            {
-                if (hasConfig)
-                    Errors.AddWarning($"Configuration file: {fileName} is not existing");
-                return false;
-            }
-
-            Errors.AddInfo($"Reading configuration file: {fileName}");
-            return true;
-        }
-        //check if default config. file o2pge.txt is existing, use it
-        if (string.IsNullOrEmpty(head))
-        {
-            if (_fileSystem.Exists("o2pgen.txt"))
-            {
-                fileName = "o2pgen.txt";
-                Errors.AddInfo($"Reading configuration file: {fileName}");
-                return true;
-            }
-        }
-        fileName = "";
-        return false;
     }
 }

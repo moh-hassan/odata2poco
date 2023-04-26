@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OData2Poco.InfraStructure.FileSystem;
 
 namespace OData2Poco.Extensions;
 
@@ -343,30 +344,5 @@ public static class StringExtensions
             .Select(x => keepQuote ? x : x.Trim('"'))
             .Where(x => !string.IsNullOrWhiteSpace(x))
             .ToArray();
-    }
-
-    public static IEnumerable<string> ReadEnvironment(this string[] args)
-    {
-        if (args.Length == 0)
-            yield break;
-        foreach (var arg in args)
-        {
-            if (arg.StartsWith("$"))
-            {
-                var envVar = arg.TrimStart('$');
-                var value = Environment.GetEnvironmentVariable(envVar);
-                yield return string.IsNullOrEmpty(value) ? arg : value;
-            }
-            else if (arg.StartsWith("%") && arg.EndsWith("%"))
-            {
-                var envVar = arg.Trim('%');
-                var value = Environment.GetEnvironmentVariable(envVar);
-                yield return string.IsNullOrEmpty(value) ? arg : value;
-            }
-            else
-            {
-                yield return arg;
-            }
-        }
     }
 }

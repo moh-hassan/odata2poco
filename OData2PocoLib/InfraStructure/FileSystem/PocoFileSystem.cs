@@ -73,6 +73,12 @@ public class PocoFileSystem : IPocoFileSystem
             return "";
         return File.ReadAllText(filePath!);
     }
+
+    public void WriteAllText(string filePath, string content)
+    {
+        File.WriteAllText(filePath, content);
+    }
+
     public void Delete(string path)
     {
         File.Delete(path);

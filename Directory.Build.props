@@ -3,7 +3,7 @@
     <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
     <PackageOutputPath>$(SolutionDir)build</PackageOutputPath>
     <Authors>Mohamed Hassan</Authors>
-    <Copyright>Copyright &#169; 2016-2022, Mohamed Hassan </Copyright>
+    <Copyright>Copyright &#169; 2016-2023, Mohamed Hassan &#038; Contributers </Copyright>
     <Product>OData2Poco</Product>
     <PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
     <PackageLicenseFile>license.txt</PackageLicenseFile>

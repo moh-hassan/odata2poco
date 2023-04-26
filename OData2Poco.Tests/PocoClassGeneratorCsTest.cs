@@ -311,7 +311,6 @@ public enum Feature
         //Act
         var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
         var code = sut.GeneratePoco();
-
         //Assert
         var expected = @"
 using SP;
@@ -345,26 +344,31 @@ namespace SP2
         var setting = new PocoSetting();
         var list = new List<ClassTemplate>
         {
-            new (1) { Name = "Shape", NameSpace = "BookStore"},
+            new (1) { Name = "Shape", NameSpace = "BookStore", IsComplex = true},
             new (2) { Name = "Circle", NameSpace = "BookStore",BaseType = "BookStore.Shape", IsComplex = true},
-            new (3) { Name = "Rectangle", NameSpace = "BookStore",BaseType = "BookStore.Shape",IsEntity = true},
+            new (3) { Name = "Rectangle", NameSpace = "BookStore",BaseType = "BookStore.Shape",
+                IsEntity = true, EntitySetName = "Rectangle"},
         };
         var gen = Moq.Moq4IPocoGenerator(list);
 
         //Act
         var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
         var code = sut.GeneratePoco();
-
         //Assert
         var expected = @"
 namespace BookStore
 {
+	// Complex Entity
 	public partial class Shape
 	{
 	}
+
+	// Complex Entity
 	public partial class Circle : Shape
 	{
 	}
+
+	// EntitySetName: Rectangle
 	public partial class Rectangle : Shape
 	{
 	}
@@ -383,7 +387,7 @@ namespace BookStore
         {
             new (1) { Name = "Shape", NameSpace = "BookStore"},
             new (2) { Name = "Circle", NameSpace = "BookStore",BaseType = "Shape", IsComplex = true},
-            new (3) { Name = "Rectangle", NameSpace = "BookStore",BaseType = "Shape",IsEntity = true},
+            new (3) { Name = "Rectangle", NameSpace = "BookStore",BaseType = "Shape",IsEntity = true, EntitySetName = "Rectangle"},
 
         };
         var gen = Moq.Moq4IPocoGenerator(list);
@@ -391,7 +395,6 @@ namespace BookStore
         //Act
         var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
         var code = sut.GeneratePoco();
-
         //Assert
         var expected = @"
 namespace BookStore
@@ -399,12 +402,17 @@ namespace BookStore
 	public partial class Shape
 	{
 	}
+
+	// Complex Entity
 	public partial class Circle : Shape
 	{
 	}
+
+	// EntitySetName: Rectangle
 	public partial class Rectangle : Shape
 	{
 	}
+
 }
 ";
         Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));

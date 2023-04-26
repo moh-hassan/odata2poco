@@ -44,6 +44,11 @@ public class NullFileSystem : IPocoFileSystem
         return Fakes.Get(filePath!);
     }
 
+    public void WriteAllText(string filePath, string content)
+    {
+        Fakes.Mock(filePath, content);
+    }
+
     public void Delete(string path)
     {
         Fakes.Remove(path);

@@ -7,7 +7,7 @@ namespace OData2Poco.CommandLine;
 internal static class ApplicationInfo
 {
     public static readonly string Title = Utility.GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title);
-    public static readonly string Author = "Mohamed Hassan";
+    public static readonly string Author = "Mohamed Hassan & Contributers";
     public static string Product => Utility.GetAssemblyAttribute<AssemblyProductAttribute>(a => a.Product);
 
     public static string Copyright => Utility.GetAssemblyAttribute<AssemblyCopyrightAttribute>(a => a.Copyright);

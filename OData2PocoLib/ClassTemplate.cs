@@ -66,7 +66,7 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
         var entityType = IsEntity ? $"EntitySetName: {EntitySetName}" : "";
         var comments = new[] { openType, entityType, complex }.Where(a => a.Length > 0);
 
-        return "// " + string.Join(", ", comments);
+        return string.Join(", ", comments);
     }
     public override string ToString()
     {

@@ -83,7 +83,7 @@ internal partial class Poco : IPocoGenerator
         var entitySet = EntitySets
             .Where(m => m.EntityType().FullName() == ct.FullName())
             .DefaultIfEmpty().First();
-        return entitySet != null ? entitySet.Name : string.Empty;
+        return entitySet != null ? entitySet.Name : ct.Name;
     }
 
     internal IEnumerable<IEdmEntitySet> GetEntitySets(IEdmModel model)

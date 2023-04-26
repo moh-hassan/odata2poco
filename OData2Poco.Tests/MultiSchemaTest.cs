@@ -44,38 +44,57 @@ public class MultiSchemaTest
         var expected = @"
 namespace ODataDemo
 {
+	// EntitySetName: Customer
 	public partial class Customer
 	{
 	    public int ID {get;set;} //PrimaryKey not null
+
 	    public string CustomerName {get;set;} 
+
 	    public string Address {get;set;} 
+
 	}
+
+	// Complex Entity
 	public partial class Location
 	{
 	    public string Address {get;set;} 
-	    public string City {get;set;}
+
+	    public string City {get;set;} 
+
 	}
+
 }
 namespace ODataDemo2
 {
+	// EntitySetName: Customers
 	public partial class Customer
 	{
-    public int ID {get;set;} //PrimaryKey not null
+	    public int ID {get;set;} //PrimaryKey not null
+
 	    public string CustomerName {get;set;} 
+
 	    public string Address {get;set;} 
+
 	}
+
+	// EntitySetName: Customer2
 	public partial class Customer2
 	{
 	    public int ID {get;set;} //PrimaryKey not null
+
 	    public string CustomerName {get;set;} 
+
 	    public string Address {get;set;} 
+
 	}
+
 	public enum Feature
 	 {
  		Feature1=0,
- 		Feature2=1,
- 		Feature3=2,
- 		Feature4=3 
+		Feature2=1,
+		Feature3=2,
+		Feature4=3 
 	}
 }
 ";
@@ -83,6 +102,7 @@ namespace ODataDemo2
         Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
 
     }
+
     [Test]
     public async Task Web_api2_v4_classes_and_enum_test()
     {
@@ -101,49 +121,79 @@ namespace ODataDemo2
         var expected = @"
 namespace BookStore
 {
+	// EntitySetName: Windows
 	public partial class Window
 	{
 	    public int Id {get;set;} //PrimaryKey not null
+
 	    public string Title {get;set;} 
+
 	    public Shape Shape {get;set;} 
+
 	}
+
+	// Complex Entity
 	public abstract partial class Shape
 	{
 	    public bool HasBorder {get;set;} // not null
+
 	    public Color Color {get;set;} // not null
+
 	}
+
+	// Complex Entity
 	public partial class Circle : Shape
 	{
 	    public Point Center {get;set;} 
+
 	    public int Radius {get;set;} // not null
+
 	}
+
+	// Complex Entity
 	public partial class Point
 	{
 	    public int X {get;set;} // not null
+
 	    public int Y {get;set;} // not null
+
 	}
+
+	// Complex Entity
 	public partial class Rectangle : Shape
 	{
 	    public Point LeftTop {get;set;} 
+
 	    public int Height {get;set;} // not null
+
 	    public int Weight {get;set;} // not null
+
 	}
+
+	// Complex Entity
 	public partial class RoundRectangle : Rectangle
 	{
 	    public double Round {get;set;} // not null
+
 	}
+
+	// Complex Entity
 	public partial class Triangle : Shape
 	{
 	    public Point P1 {get;set;} 
+
 	    public Point P2 {get;set;} 
+
 	    public Point P3 {get;set;} 
+
 	}
+
 	public enum Color
 	 {
  		Red=0,
- 		Blue=1,
- 		Green=2,
- 		Yellow=3 
+		Blue=1,
+		Green=2,
+		Yellow=3 
 	}
 }
 ";

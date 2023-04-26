@@ -15,7 +15,7 @@ namespace OData2Poco.CommandLine
         public static readonly ILog Logger = PocoLogger.Default;
         public static string OutPut => Logger.Output.ToString();
         public static int RetCode { get; set; } = (int)ExitCodes.Success;
-        public static IPocoFileSystem FileSystem { get; set; }
+        public static IPocoFileSystem FileSystem { get; set; } = new PocoFileSystem();
 
         private static void SetBufferHeight()
         {
@@ -27,6 +27,7 @@ namespace OData2Poco.CommandLine
                 Console.BufferHeight = short.MaxValue - 1;
 #endif
         }
+
         public static async Task Run(string[] args)
         {
             Logger.Success(ApplicationInfo.HeadingInfo);
@@ -38,13 +39,34 @@ namespace OData2Poco.CommandLine
                 args = args.Concat(new[] { "-p", pw.Trim() }).ToArray();
 
             //read configuration file if available
-            var cfg = new OptionConfiguration();
-            var flag = cfg.TryGetConfigurationFile(args, out var cli);
-            if (flag) args = cli;
-            cfg.Errors.ShowErrors();
+            if ((args.Length == 0) || (args.Length == 1 && args[0].StartsWith("@")))
+            {
+                var cfg = new OptionConfiguration(FileSystem);
+                var flag = cfg.TryGetConfigurationFile(args, out var cli, out string error,
+                    out string fileName);
+                if (flag)
+                {
+                    Logger.Info($"Reading configuration file: {fileName}");
+                    args = cli;
+                }
+
+                if (!string.IsNullOrEmpty(error))
+                {
+                    Logger.Error(error);
+                }
+            }
 
             //read environment variables
-            args = args.ReadEnvironment().ToArray();
+            args = new EnvReader(FileSystem).ResolveArgEnv(args, out var errors);
+
+            if (errors.Any())
+            {
+                foreach (var error in errors)
+                {
+                    Logger.Warn(error);
+                }
+            }
+
             var argument = string.Join(" ", args);
             try
             {
