@@ -4,7 +4,6 @@ using System.Xml;
 using Microsoft.OData.Edm;
 using Microsoft.OData.Edm.Csdl;
 using Microsoft.OData.Edm.Validation;
-using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
 // ReSharper disable CollectionNeverQueried.Local
 
@@ -39,17 +38,22 @@ internal partial class Poco : IPocoGenerator
         //Microsoft.OData.Edm" v7+
         //breaking change in Odata.Edm in v7+
         var tr = new StringReader(MetaDataAsString);
-        var reader = XmlReader.Create(tr);
-        try
+        using var reader = XmlReader.Create(tr);
+        var flag = CsdlReader.TryParse(reader, true, out model, out var errors);
+        List<string> messages = errors
+            .Select(a => $"{a.ErrorCode}: {a.ErrorMessage} {a.ErrorLocation}").ToList();
+        string errorText = messages.Any()
+            ? $"Encountered the following errors (total: {messages.Count}) when parsing the EDMX document:\n" + string.Join(Environment.NewLine, messages)
+            : string.Empty;
+
+        if (!flag)
         {
-            CsdlReader.TryParse(reader, true, out model, out _);
-            EntitySets = GetEntitySets(model);
-        }
-        finally
-        {
-            ((IDisposable)reader).Dispose();
+            throw new InvalidOperationException($"Model can't be generated.\n{errorText}\n");
         }
 
+        EntitySets = GetEntitySets(model);
+        if (_setting.ShowWarning && errors.Any())
+            _logger.Info($"{errorText}\nXml Parser errors are ignored.");
         return model;
     }
 
@@ -246,7 +250,8 @@ internal partial class Poco : IPocoGenerator
     //fill all properties/name of the class template
     private string GetClrTypeName(IEdmTypeReference edmTypeReference)
     {
-        CheckError(edmTypeReference);
+        if (_setting.ShowWarning)
+            CheckError(edmTypeReference);
         var clrTypeName = edmTypeReference.ToString() ?? "UNDEFINED";
         var edmType = edmTypeReference.Definition;
         if (edmTypeReference.IsPrimitive() && edmType != null)

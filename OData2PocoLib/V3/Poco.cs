@@ -5,7 +5,6 @@ using Microsoft.Data.Edm;
 using Microsoft.Data.Edm.Csdl;
 using Microsoft.Data.Edm.Library.Values;
 using Microsoft.Data.Edm.Validation;
-using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
 // ReSharper disable CollectionNeverQueried.Local
 #if !NETCOREAPP
@@ -34,7 +33,7 @@ internal partial class Poco : IPocoGenerator
     public string MetaDataAsString => MetaData.MetaDataAsString;
     private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
     private List<string> SchemaErrors { get; }
-    internal IEdmModel Model { get; set; }
+    internal IEdmModel Model;
     public MetaDataInfo MetaData { get; set; }
 
     /// <summary>
@@ -62,8 +61,20 @@ internal partial class Poco : IPocoGenerator
     private IEdmModel LoadModelFromString()
     {
         var tr = new StringReader(MetaDataAsString);
-        Model = EdmxReader.Parse(XmlReader.Create(tr));
+        var xmlReader = XmlReader.Create(tr);
+        var result = EdmxReader.TryParse(xmlReader, out Model, out var errors);
+        if (!result)
+            throw new InvalidOperationException("Model can't be created due to Parser errors");
         EntitySets = GetEntitySets(Model);
+        if (_setting.ShowWarning)
+        {
+            List<string> messages = errors
+                .Select(a => $"{a.ErrorCode}: {a.ErrorMessage} {a.ErrorLocation}").ToList();
+            string errorText = messages.Any()
+                ? $"Encountered the following errors (total: {messages.Count}) when parsing the EDMX document:\n" + string.Join(Environment.NewLine, messages)
+                : string.Empty;
+            _logger.Info($"{errorText}\nXml Parser errors are ignored.");
+        }
         return Model;
     }
 
@@ -243,7 +254,8 @@ internal partial class Poco : IPocoGenerator
     //fill all properties/name of the class template
     private string GetClrTypeName(IEdmTypeReference edmTypeReference)
     {
-        CheckError(edmTypeReference);
+        if (_setting.ShowWarning)
+            CheckError(edmTypeReference);
         var clrTypeName = edmTypeReference.ToString() ?? "UNDEFINED";
         var edmType = edmTypeReference.Definition;
         if (edmTypeReference.IsPrimitive() && edmType != null)

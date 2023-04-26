@@ -89,7 +89,7 @@ public partial class Options
     [Option('g', "gen-project", HelpText = "Generate a class library (.Net Stnadard) project csproj/vbproj.")]
     public bool GenerateProject { get; set; }
 
-    [Option("show-warning", HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
+    [Option('w',"show-warning", HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
     public bool ShowWarning { get; set; }
 
     /// <summary>
