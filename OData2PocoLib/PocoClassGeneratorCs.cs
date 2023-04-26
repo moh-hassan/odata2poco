@@ -122,7 +122,7 @@ internal class PocoClassGeneratorCs : IPocoClassGenerator
             ? ReducedBaseTyp(ent) //ent.BaseType 
             : PocoSetting.Inherit;
 
-        csTemplate.StartClass(ent.Name, baseClass, abstractClass: ent.IsAbstrct);
+        csTemplate.StartClass(ent.Name,ent.GetComment(), baseClass, abstractClass: ent.IsAbstrct);
 
         foreach (var p in ent.Properties)
         {

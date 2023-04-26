@@ -95,13 +95,20 @@ internal class CsCommand : IPocoCommand
         var items = O2PGen.ClassList.OrderBy(m => m.NameSpace).ThenBy(x => x.Name).ToList();
         items.ForEach(m =>
         {
+            var complex = m.IsComplex ? " Is Complex Entity" : "";
+            var enumType = m.IsEnum ? " Is Enum Type" : "";
+            var openType = m.IsOpen ? " (OpenType)" : "";
+            var note = complex + enumType + openType;
+            var url = OdataConnectionString.ServiceUrl.StartsWith("http")
+                ? OdataConnectionString.ServiceUrl.TrimEnd('/') : "";
             var index = items.IndexOf(m);
             var remoteUrl = string.IsNullOrEmpty(m.EntitySetName)
-                ? string.Empty
-                : OdataConnectionString.ServiceUrl + @"/" + m.EntitySetName;
+                ? ""
+                : url + @"/" + m.EntitySetName;
+
             _logger.Normal(!string.IsNullOrEmpty(remoteUrl)
-                ? $"{index + 1}: {m.NameSpace}.{m.Name} | {remoteUrl}"
-                : $"{index + 1}: {m.NameSpace}.{m.Name}");
+                ? $"{index + 1}: {m.NameSpace}.{m.Name} {openType}| {remoteUrl}"
+                : $"{index + 1}: {m.NameSpace}.{m.Name} | {note}");
         });
     }
 

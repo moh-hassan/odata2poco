@@ -137,6 +137,7 @@ internal partial class Poco : IPocoGenerator
 
             case IEdmEntityType entityType:
                 {
+                    classTemplate.IsOpen = entityType.IsOpen;
                     classTemplate.IsEntity = true;
                     classTemplate.IsAbstrct = entityType.IsAbstract;
                     // Set base type by default
@@ -148,6 +149,7 @@ internal partial class Poco : IPocoGenerator
             //parent of complex types
             case IEdmComplexType complexType:
                 {
+                    classTemplate.IsOpen = complexType.IsOpen;
                     classTemplate.IsComplex = true;
                     classTemplate.IsAbstrct = complexType.IsAbstract;
                     if (complexType.BaseType != null)

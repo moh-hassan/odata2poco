@@ -53,12 +53,21 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
     public bool IsComplex { get; set; }
     public bool IsEntity { get; set; }
     public bool IsAbstrct { get; set; }
-
+    public bool IsOpen { get; set; }
     public List<string> GetAllAttributes()
     {
         return _attributeFactory.GetAllAttributes(this);
     }
 
+    public string GetComment()
+    {
+        var complex = IsComplex ? "Complex Entity" : "";
+        var openType = IsOpen ? "OpenType" : "";
+        var entityType = IsEntity ? $"EntitySetName: {EntitySetName}" : "";
+        var comments = new[] { openType, entityType, complex }.Where(a => a.Length > 0);
+
+        return "// " + string.Join(", ", comments);
+    }
     public override string ToString()
     {
         // 'id:name(parent)'

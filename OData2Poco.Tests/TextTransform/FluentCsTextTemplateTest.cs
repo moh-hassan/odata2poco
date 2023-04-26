@@ -12,7 +12,7 @@ public class TemplateClassTest
     public void Class_declare_default_Test()
     {
         FluentCsTextTemplate ft = new FluentCsTextTemplate();
-        string result = ft.StartClass("Circle");
+        string result = ft.StartClass("Circle","");
         var expected = @"
     public partial class Circle
     {";
@@ -22,7 +22,7 @@ public class TemplateClassTest
     public void Class_inherit_Test()
     {
         FluentCsTextTemplate ft = new FluentCsTextTemplate();
-        string result = ft.StartClass("Circle", inherit: "Shape");
+        string result = ft.StartClass("Circle","", inherit: "Shape");
         var expected = @"
     public partial class Circle : Shape
     {
@@ -35,7 +35,7 @@ public class TemplateClassTest
     public void Class_abstract_Test()
     {
         FluentCsTextTemplate ft = new FluentCsTextTemplate();
-        string result = ft.StartClass("Circle", abstractClass: true);
+        string result = ft.StartClass("Circle","", abstractClass: true);
         var expected = @"
     public abstract partial class Circle
     {
@@ -46,7 +46,7 @@ public class TemplateClassTest
     public void Class_inherit_abstarct_Test()
     {
         FluentCsTextTemplate ft = new FluentCsTextTemplate();
-        string result = ft.StartClass("Circle", inherit: "Shape", abstractClass: true);
+        string result = ft.StartClass("Circle","", inherit: "Shape", abstractClass: true);
         var expected = @"
 public abstract partial class Circle : Shape
     {

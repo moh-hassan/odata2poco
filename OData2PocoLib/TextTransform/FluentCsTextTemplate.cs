@@ -74,11 +74,12 @@ internal class FluentCsTextTemplate : FluentTextTemplate<FluentCsTextTemplate>
         return $"{visibility}{abstractKeyword}{partialKeyword} {KeyWord} {name}{baseClass}";
     }
 
-    internal FluentCsTextTemplate StartClass(string name, string inherit = "", string visibility = "public",
+    internal FluentCsTextTemplate StartClass(string name,string comment, string inherit = "", string visibility = "public",
         bool abstractClass = false)
     {
         //syntax: 'public abstract partial class MyClass : parent'
         PushTabIndent() // ident one tab
+            .WriteLine(comment)
             .Write(DeclareClass(name, inherit, visibility, abstractClass))
             .NewLine()
             .LeftBrace()
@@ -88,7 +89,7 @@ internal class FluentCsTextTemplate : FluentTextTemplate<FluentCsTextTemplate>
 
     public FluentCsTextTemplate StartClass(ClassTemplate ct)
     {
-        return StartClass(ct.Name, ct.BaseType, abstractClass: ct.IsAbstrct);
+        return StartClass(ct.Name,ct.GetComment(), ct.BaseType, abstractClass: ct.IsAbstrct);
     }
 
     public FluentCsTextTemplate EndClass()
