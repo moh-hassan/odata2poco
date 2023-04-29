@@ -68,4 +68,9 @@
     <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
     <SonarQubeExclude>True</SonarQubeExclude>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
 </Project>

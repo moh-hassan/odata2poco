@@ -8,7 +8,7 @@ namespace OData2Poco;
 
 public class OdataConnectionString
 {
-    private string? _ServiceUrl;
+    private string? _serviceUrl;
 
     public OdataConnectionString()
     {
@@ -18,8 +18,8 @@ public class OdataConnectionString
     }
     public string ServiceUrl
     {
-        set => _ServiceUrl = value;
-        get => _ServiceUrl
+        set => _serviceUrl = value;
+        get => _serviceUrl
                ?? throw new InvalidOperationException("Uninitialized property: " + nameof(ServiceUrl));
     }
 
@@ -32,10 +32,13 @@ public class OdataConnectionString
     public string? ParamFile { get; set; }
     public AuthenticationType Authenticate { get; set; }
     public SecurityProtocolType TlsProtocol { get; set; }
-
+    public List<string>? HttpHeader { get; set; }
     public static OdataConnectionString Create(string url)
     {
-        return new OdataConnectionString { ServiceUrl = url };
+        return new OdataConnectionString
+        {
+            ServiceUrl = url,
+        };
     }
 }
 

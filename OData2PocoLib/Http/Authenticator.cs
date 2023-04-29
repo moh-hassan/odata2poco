@@ -25,12 +25,12 @@ internal class Authenticator
                 break;
 
             case AuthenticationType.Basic:
-                Authenticate(odataConnString.UserName, odataConnString.Password.Password);
+                Authenticate(odataConnString.UserName, odataConnString.Password);
                 break;
 
             case AuthenticationType.Token:
                 //token
-                Authenticate(odataConnString.Password.Password);
+                Authenticate(odataConnString.Password);
                 break;
             case AuthenticationType.Oauth2:
                 //OAuth2 

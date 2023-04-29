@@ -38,6 +38,8 @@ public partial class Options
 
     [Option('o', "auth", Default = AuthenticationType.None, HelpText = "Authentication type, allowed values: none, basic, token, oauth2.")]
     public AuthenticationType Authenticate { get; set; }
+    [Option("http-header",Separator = ';',HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1=value1;ky2=value2.")]
+    public IEnumerable<string> HttpHeader { get; set; }
 
     //-----------pocoSetting-----------------
 
@@ -89,7 +91,7 @@ public partial class Options
     [Option('g', "gen-project", HelpText = "Generate a class library (.Net Stnadard) project csproj/vbproj.")]
     public bool GenerateProject { get; set; }
 
-    [Option('w',"show-warning", HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
+    [Option('w', "show-warning", HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
     public bool ShowWarning { get; set; }
 
     /// <summary>
@@ -144,6 +146,7 @@ public partial class Options
         Lang = Language.CS;
         Include = new List<string>();
         Password = new SecuredPassword();
+        HttpHeader = new List<string>();
     }
 
 #if NETCOREAPP

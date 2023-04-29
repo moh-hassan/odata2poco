@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Fake;
 using OData2Poco.Http;
@@ -68,5 +69,29 @@ internal class CustomeHttpClientTest
             Assert.AreEqual("Basic dXNlcjE6c2VjcmV0", r.Headers.Authorization.ToString());
         }));
         await client.ReadMetaDataAsync();
+    }
+    [Test]
+    public async Task Custom_header_test()
+    {
+        var list = new List<string>()
+         {
+             "ky1=123",
+             "Authorization=Bearer abc.123"
+        };
+
+        var connection = new OdataConnectionString
+        {
+            ServiceUrl = "https://localhost/odata/v1",
+            HttpHeader = list,
+        };
+        var client = new CustomHttpClient(connection, new CustomeHandler(r =>
+        {
+            Console.WriteLine(r.Headers.Count());
+            r.Headers.Count().Should().Be(3);
+            Assert.IsNotNull(r.Headers.Authorization);
+            Assert.AreEqual("Bearer abc.123", r.Headers.Authorization.ToString());
+        }));
+        await client.ReadMetaDataAsync();
+
     }
 }

@@ -13,6 +13,7 @@ namespace OData2Poco.Http;
 internal class TokenEndpoint
 {
     private static readonly ILog Logger = PocoLogger.Default;
+    private string? _tokenUrl;
     public TokenEndpoint(OdataConnectionString odataConnectionString)
     {
         if (odataConnectionString.TokenUrl != null) TokenUrl = odataConnectionString.TokenUrl;
@@ -20,7 +21,13 @@ internal class TokenEndpoint
         TokenParamsCollection = TokenParamsAsDictionary();
     }
 
-    public string TokenUrl { get; set; }
+    public string TokenUrl
+    {
+        set => _tokenUrl = value;
+        get => _tokenUrl
+               ?? throw new InvalidOperationException("Uninitialized property: " + nameof(TokenUrl));
+    }
+
     public string TokenParams { get; set; }
 
     public Dictionary<string, string> TokenParamsCollection { get; set; }

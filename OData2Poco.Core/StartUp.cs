@@ -4,6 +4,7 @@ using System.Diagnostics;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
+using System.Xml.Linq;
 #if !NETCOREAPP
 using System.Runtime.InteropServices;
 #endif
@@ -86,11 +87,13 @@ namespace OData2Poco.CommandLine
             catch (Exception ex)
             {
                 RetCode = (int)ExitCodes.HandledException;
-                Logger.Error($"Error in executing the command: o2pgen {argument}");
+                Logger.Error("Error in executing o2pgen");
 #if DEBUG
-                Logger.Error($"{ex.FullExceptionMessage()}");
+               Logger.Error($"{ex.FullExceptionMessage(true)}");
 #else
-                Logger.Error($"{ex.Message}");
+                Logger.Error($"{ex.FullExceptionMessage()}");
+                FileSystem.WriteAllText("error.txt", $"{ex.FullExceptionMessage(true)}");
+                Logger.Info($"Error details with Stack trace are written to the file: '{Path.GetFullPath("error.txt")}'");
 #endif
             }
             finally

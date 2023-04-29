@@ -26,15 +26,11 @@ public class EnvReaderTest : BaseTest
         DelEnv("aa", "myToken", "key1", "user", "password", "zone", "client_id", "client_secret");
     }
     #endregion
-#if IsWindows
+
     [Test]
-    [TestCase("USERPROFILE")]
-    [TestCase("Path")]
-    [TestCase("TEMP")]
-#else
-    [TestCase("PATH")]
-    [TestCase("HOME")]
-#endif
+    [TestCase("client_secret")]
+    [TestCase("myToken")]
+    [TestCase("client_id")]
     public void Arg_with_existing_env_test(string arg)
     {
         //Arrange
@@ -49,12 +45,13 @@ public class EnvReaderTest : BaseTest
 
     [Test]
 #if IsWindows
-    [TestCase("%USERPROFILE%")]
-    [TestCase("%Path%")]
-    [TestCase("%TEMP%")]
+    [TestCase("%client_secret%")]
+    [TestCase("%myToken%")]
+    [TestCase("%client_id%")]
 #else
-    [TestCase("$PATH")]
-    [TestCase("$HOME")]
+    [TestCase("$client_secret")]
+    [TestCase("$myToken")]
+    [TestCase("$client_id")]
 #endif
     public void ResolveEnv_with_existing_env_test(string arg)
     {
@@ -135,7 +132,7 @@ public class EnvReaderTest : BaseTest
         //Arrange
         string text = "abc.123.xyz";
         Fakes.Mock("myFile.txt", text);
-        string arg = "@@myFile.txt" ;
+        string arg = "@@myFile.txt";
         //Act
         var flag = new EnvReader(_fileSystem)
             .TryResolveFile(arg, out var value, out var error);
@@ -310,6 +307,6 @@ public class EnvReaderTest : BaseTest
         flag.Should().BeTrue();
         newArgs2.Should().BeEquivalentTo(expected);
         errors.Should().BeEmpty();
-       
+
     }
 }

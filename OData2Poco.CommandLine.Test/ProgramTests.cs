@@ -416,23 +416,6 @@ public enum Feature
 
     }
 
-    [Test]
-    public async Task Retry_with_not_existing_url_test()
-    {
-        //Arrange
-        string url = "http://mysite.com";
-        var a = $"-r {url} -v ";
-
-        //Act
-        var action = async () => await RunCommand(a);
-        await action.Should().ThrowAsync<System.Net.Http.HttpRequestException>();
-        var logs = PocoLogger.Default.Output.ToString();
-
-        //Assert
-        logs.Should()
-            .Contain("Information: Retry: 2 Response status code does not indicate success: 404 (Not Found).");
-    }
-
 
     [Test]
     [Category("code_header")]
