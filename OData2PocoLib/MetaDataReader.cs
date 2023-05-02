@@ -9,8 +9,6 @@ internal static class MetaDataReader
 {
     public static async Task<MetaDataInfo> LoadMetaDataHttpAsync(OdataConnectionString odataConnString)
     {
-        // to avoid the Error Message://An error occurred while sending the request.-->
-        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         var client = new CustomHttpClient(odataConnString);
         var content = await client.ReadMetaDataAsync();
 

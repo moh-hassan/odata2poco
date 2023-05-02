@@ -41,6 +41,10 @@ public partial class Options
     [Option("http-header",Separator = ';',HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1=value1;ky2=value2.")]
     public IEnumerable<string> HttpHeader { get; set; }
 
+    //This option is not secure and is not recommended. This switch is only intended to be used for hosts using a self-signed certificate for testing purposes.
+    [Option('S', "skip-check", HelpText = "Skips certificate validation checks that include all validations such as trusted root authority, expiration, ... . Better use for self-signed certificate for testing purposes")]
+    public bool SkipCertificationCheck { get; set; }
+
     //-----------pocoSetting-----------------
 
     [Option('f', "filename", HelpText = "filename to save generated c# code.")]

@@ -33,6 +33,7 @@ public class OdataConnectionString
     public AuthenticationType Authenticate { get; set; }
     public SecurityProtocolType TlsProtocol { get; set; }
     public List<string>? HttpHeader { get; set; }
+    public bool SkipCertificationCheck { get; set; }
     public static OdataConnectionString Create(string url)
     {
         return new OdataConnectionString

@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-#pragma warning disable S3881
+#pragma warning disable S4830
 
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.Http;
@@ -15,29 +14,20 @@ internal class CustomHttpClient : IDisposable
     private readonly DelegatingHandler? _delegatingHandler;
     private readonly OdataConnectionString _odataConnectionString;
     internal HttpClient _client;
-    public HttpResponseMessage Response = null!;
+    public HttpResponseMessage? Response;
+    public Uri ServiceUri { get; set; }
 
     public CustomHttpClient(OdataConnectionString odataConnectionString)
     {
         _odataConnectionString = odataConnectionString;
         ServiceUri = new Uri(_odataConnectionString.ServiceUrl);
         _client = new HttpClient();
-
     }
 
     public CustomHttpClient(OdataConnectionString odataConnectionString, DelegatingHandler dh)
         : this(odataConnectionString)
     {
         _delegatingHandler = dh;
-    }
-
-    public Uri ServiceUri { get; set; }
-
-    public void Dispose()
-    {
-        _delegatingHandler?.Dispose();
-        Response?.Dispose();
-        _client.Dispose();
     }
 
     private void SetupHeader()
@@ -59,6 +49,8 @@ internal class CustomHttpClient : IDisposable
     {
         //UseDefaultCredentials for NTLM support in windows
         var handler = new HttpClientHandler { UseDefaultCredentials = true };
+        if (_odataConnectionString.SkipCertificationCheck)
+            handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
 
         CredentialCache credentials = new();
         switch (_odataConnectionString.Authenticate)
@@ -106,7 +98,8 @@ internal class CustomHttpClient : IDisposable
             await auth.Authenticate(_odataConnectionString);
         }
 
-        _client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
+        _client.DefaultRequestHeaders
+            .TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
         var agent = "OData2Poco";
         _client.DefaultRequestHeaders.Add("User-Agent", agent);
         SetupHeader();
@@ -114,10 +107,9 @@ internal class CustomHttpClient : IDisposable
 
     internal async Task<string> ReadMetaDataAsync()
     {
-        ServicePointManager.SecurityProtocol = _odataConnectionString.TlsProtocol;
         await SetHttpClient();
         string url;
-        //check url is xml file
+        //check url is remote xml file
         if (ServiceUri.AbsoluteUri.EndsWith(".xml"))
             url = ServiceUri.AbsoluteUri;
         else
@@ -135,19 +127,22 @@ internal class CustomHttpClient : IDisposable
             throw new HttpRequestException(
                 $"Http Error {(int)Response.StatusCode}: {Response.ReasonPhrase}");
         return content;
-
     }
-}
-
-internal static class HttpExtension
-{
-    internal static string Headr2String(this HttpRequestMessage request)
+    public void Dispose()
     {
-        var sb = new StringBuilder();
-        foreach (var h in request.Headers)
-        {
-            sb.AppendLine($"{h.Key}={string.Join(",", h.Value)}");
-        }
-        return sb.ToString();
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    protected virtual void Dispose(bool disposing)
+    {
+        // Cleanup
+        _delegatingHandler?.Dispose();
+        Response?.Dispose();
+        _client.Dispose();
+    }
+
+    ~CustomHttpClient()
+    {
+        Dispose(false);
     }
 }
