@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Fake;
@@ -86,7 +87,6 @@ internal class CustomeHttpClientTest
         };
         var client = new CustomHttpClient(connection, new CustomeHandler(r =>
         {
-            Console.WriteLine(r.Headers.Count());
             r.Headers.Count().Should().Be(3);
             Assert.IsNotNull(r.Headers.Authorization);
             Assert.AreEqual("Bearer abc.123", r.Headers.Authorization.ToString());
@@ -94,4 +94,5 @@ internal class CustomeHttpClientTest
         await client.ReadMetaDataAsync();
 
     }
+
 }

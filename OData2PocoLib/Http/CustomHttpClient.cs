@@ -49,8 +49,14 @@ internal class CustomHttpClient : IDisposable
     {
         //UseDefaultCredentials for NTLM support in windows
         var handler = new HttpClientHandler { UseDefaultCredentials = true };
+
+        //setup SkipCertificationCheck
         if (_odataConnectionString.SkipCertificationCheck)
             handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+
+        //setup SecurityProtocol
+        if (_odataConnectionString.TlsProtocol > 0)
+            ServicePointManager.SecurityProtocol |= _odataConnectionString.TlsProtocol;
 
         CredentialCache credentials = new();
         switch (_odataConnectionString.Authenticate)

@@ -12,7 +12,6 @@ public class OdataConnectionString
 
     public OdataConnectionString()
     {
-        TlsProtocol = SecurityProtocolType.Tls12;
         Authenticate = AuthenticationType.None;
         Password = new SecuredPassword();
     }

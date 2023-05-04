@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using System.Net;
 using CommandLine;
 using CommandLine.Text;
 using OData2Poco.Http;
@@ -38,12 +39,15 @@ public partial class Options
 
     [Option('o', "auth", Default = AuthenticationType.None, HelpText = "Authentication type, allowed values: none, basic, token, oauth2.")]
     public AuthenticationType Authenticate { get; set; }
-    [Option("http-header",Separator = ';',HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1=value1;ky2=value2.")]
+    [Option('H', "http-header", Separator = ';', HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1=value1;ky2=value2.")]
     public IEnumerable<string> HttpHeader { get; set; }
 
     //This option is not secure and is not recommended. This switch is only intended to be used for hosts using a self-signed certificate for testing purposes.
-    [Option('S', "skip-check", HelpText = "Skips certificate validation checks that include all validations such as trusted root authority, expiration, ... . Better use for self-signed certificate for testing purposes")]
+    [Option('S', "skip-check", HelpText = "Skips certificate validation checks that include all validations such as trusted root authority, expiration, ... .")]
     public bool SkipCertificationCheck { get; set; }
+
+    [Option("ssl", HelpText = "Sets the SSL/TSL protocols. Allowed values: tls, tls11, tls12,tls13. Multiple values separated by comma are allowed,e.g, tls11,tls12.")]
+    public SecurityProtocolType TlsProtocol { get; set; }
 
     //-----------pocoSetting-----------------
 
@@ -151,6 +155,8 @@ public partial class Options
         Include = new List<string>();
         Password = new SecuredPassword();
         HttpHeader = new List<string>();
+        //TlsProtocol = new List<SecurityProtocolType>(){ }
+        //  Tls = new List<SecurityProtocolType>();
     }
 
 #if NETCOREAPP
