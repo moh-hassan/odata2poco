@@ -66,7 +66,7 @@ public class ParserTest : BaseTest
         var help = result.Item2;
         var retCode = result.Item1;
 
-        Assert.That(retCode, Is.EqualTo(-1));
+        Assert.That(retCode, Is.EqualTo(1));
         Assert.That(help, Does.Contain("ERROR(S)"));
         Assert.That(help, Does.Contain("Option 'v, verbose' is defined multiple times"));
 
@@ -81,7 +81,7 @@ public class ParserTest : BaseTest
         var result = await RunCommand(args);
         var help = result.Item2;
         var retCode = result.Item1;
-        Assert.That(retCode, Is.EqualTo(-1));
+        Assert.That(retCode, Is.EqualTo(1));
         Assert.That(help, Does.Contain("ERROR(S)"));
         Assert.That(help, Does.Contain("Required option 'r, url' is missing."));
 
@@ -97,7 +97,7 @@ public class ParserTest : BaseTest
         var result = await RunCommand(args);
         var help = result.Item2;
         var retCode = result.Item1;
-        Assert.That(retCode, Is.EqualTo(-1));
+        Assert.That(retCode, Is.EqualTo(1));
         Assert.That(help.Split('\n').Length, Is.GreaterThan(1));
         Assert.That(help, Does.Contain("-r, --url"));
         Assert.That(help, Does.Contain("ERROR(S)"));

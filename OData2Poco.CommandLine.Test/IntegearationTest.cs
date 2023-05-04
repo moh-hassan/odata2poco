@@ -62,7 +62,7 @@ internal class IntegrationTest
         {
             var url = TestSample.UrlTripPinService;
             yield return new TestCaseData($"-r {url} -v", 0, "public partial class Airline");
-            yield return new TestCaseData($"-r {url} -v -Y", -1, "ERROR(S)");
+            yield return new TestCaseData($"-r {url} -v -Y", 1, "ERROR(S)");
             yield return new TestCaseData($"-r {url} -v -G record -I", 0, "public partial record Airline");
         }
     }
