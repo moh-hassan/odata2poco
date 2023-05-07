@@ -40,7 +40,7 @@ public class NullFileSystem : IPocoFileSystem
     public string ReadAllText(string? filePath)
     {
         if (!Exists(filePath))
-            return "";
+            throw new InvalidOperationException($"could not read file {filePath}");
         return Fakes.Get(filePath!);
     }
 

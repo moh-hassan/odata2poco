@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using System.Text.RegularExpressions;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 
@@ -9,11 +9,11 @@ namespace OData2Poco;
 public class OptionConfiguration
 {
     private readonly IPocoFileSystem _fileSystem;
-  
+
     public OptionConfiguration(IPocoFileSystem fs)
     {
         _fileSystem = fs;
-        
+
     }
     public OptionConfiguration() : this(new PocoFileSystem())
     {
@@ -53,7 +53,7 @@ public class OptionConfiguration
     internal string[] ReadConfig(string fileName)
     {
         var sb = new StringBuilder();
-        var text = _fileSystem.ReadAllText(fileName);
+        var text = LoadWithIncludeFile(fileName, out var errors).Trim();
         if (string.IsNullOrEmpty(text))
             return Array.Empty<string>();
 
@@ -77,5 +77,30 @@ public class OptionConfiguration
                 line = line[..pos];
             return line.Trim();
         }
+    }
+
+    internal string LoadWithIncludeFile(string fname, out string[] errors)
+    {
+        var errorsList = new List<string>();
+        var text = _fileSystem.ReadAllText(fname);
+        var pattern = @"^\#include\s+(.*)$";
+        var matches = Regex.Matches(text, pattern,
+            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        foreach (Match m in matches)
+        {
+            try
+            {
+                var fileName2 = m.Groups[1].Value.Trim();
+                var data = _fileSystem.ReadAllText(fileName2);
+                text = text.Replace(m.Value.TrimEnd(), data);
+            }
+            catch (Exception e)
+            {
+                errorsList.Add(e.Message);
+            }
+
+        }
+        errors = errorsList.ToArray();
+        return text;
     }
 }

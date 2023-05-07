@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using System.Text;
 using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.InfraStructure.FileSystem;
 
 namespace OData2Poco.Tests;
-public class OptionConfigurationTest
+public class OptionConfigurationTest : BaseTest
 {
-    private IPocoFileSystem _fileSystem;
     private OptionConfiguration cfg;
     readonly string config = "config.txt";
     string content = @"
@@ -110,5 +110,36 @@ public class OptionConfigurationTest
         flag.Should().BeFalse();
         cli.Should().BeEmpty();
     }
+    [Test]
+    public void ConfigurationFile_with_include()
+    {
+        //Arrange
+        var text2 = @"
+-b bb
+#comment
+".Trim();
 
+        var text1 = @"
+-a aa
+#include f2.txt
+#include aa.txt
+#comment2
+
+".Trim();
+        var expected = @"
+-a aa
+-b bb
+#comment
+#include aa.txt
+#comment2
+".Trim();
+
+        Fakes.Mock("f2.txt", text2);
+        Fakes.Mock("f1.txt", text1);
+        //Act
+        var text3 = cfg.LoadWithIncludeFile("f1.txt", out var errors);
+        //Assert
+        errors.Length.Should().Be(1);
+        text3.Trim().Should().BeEquivalentTo(expected.Trim());
+    }
 }
