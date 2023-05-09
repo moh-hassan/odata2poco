@@ -21,11 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="CommandLineParser"/>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ilmerge" Version="3.0.41" Condition="$(TargetFramework.StartsWith('net4'))">
+    <PackageReference Include="ilmerge" Condition="$(TargetFramework.StartsWith('net4'))">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
