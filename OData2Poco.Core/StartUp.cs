@@ -33,7 +33,7 @@ namespace OData2Poco.CommandLine
         {
             Logger.Success(ApplicationInfo.HeadingInfo);
             Logger.Normal(ApplicationInfo.Copyright);
-
+           
             //read password from Input pipline if available
             var pw = Pipes.ReadPipe();
             if (!string.IsNullOrWhiteSpace(pw))
@@ -56,6 +56,8 @@ namespace OData2Poco.CommandLine
                     Logger.Error(error);
                 }
             }
+            //merge repeating args
+            args = args.MergeRepeatingArgs();
 
             //read environment variables
             args = new EnvReader(FileSystem).ResolveArgEnv(args, out var errors);

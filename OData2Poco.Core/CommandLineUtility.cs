@@ -37,7 +37,11 @@ internal static class CommandLineUtility
             if (!string.IsNullOrEmpty(val?.ToString()))
             {
                 var text = $"{shortName} {p1.p.Name}= {val} ";
-                if (shortName.Equals("-p") || shortName.Equals("--password")) //hide password for security reason
+                //hide password for security reason
+                if (shortName.Equals("-p") || shortName.Equals("--password"))
+                    text = $"{shortName} {p1.p.Name}= ***** ";
+                //hide http header for security reason
+                if (shortName.Equals("-H") || shortName.Equals("--http-header "))
                     text = $"{shortName} {p1.p.Name}= ***** ";
                 list.Add(text);
             }
