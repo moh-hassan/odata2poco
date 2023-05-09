@@ -20,7 +20,7 @@ public partial class Options
     public string UserName { get; set; }
 
     [Option('p', "password", HelpText = "password or/token Or access_token /Or client_secret in oauth2.")]
-    public string Password { get; set; }
+    public SecuredPassword Password { get; set; }
     [Option("domain", HelpText = "Domain in Active Directory.")]
     public string Domain { get; set; }
     [Option("proxy", HelpText = "Http Proxy in the form: 'server:port'.")]
@@ -143,6 +143,7 @@ public partial class Options
         NameCase = CaseEnum.None;
         Lang = Language.CS;
         Include = new List<string>();
+        Password = new SecuredPassword();
     }
 
 #if NETCOREAPP
