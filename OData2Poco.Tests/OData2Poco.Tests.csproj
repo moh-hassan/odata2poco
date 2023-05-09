@@ -9,7 +9,6 @@
 		<Product>OData2Poco</Product>
 		<IsTestProject>true</IsTestProject>
 		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
-		<!--<RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>LangVersioLangVersiLangVersLangVerLangVeLangVLangLanLaL		<LangVersion>preview</LangVersion>-->
   </PropertyGroup>
 
   <ItemGroup>		 

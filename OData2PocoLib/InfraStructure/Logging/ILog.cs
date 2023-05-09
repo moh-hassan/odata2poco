@@ -17,7 +17,7 @@ public interface ILog
     void Error(string msg);
     void Error(Func<string> message);
     void Fatal(string msg);
-    void Sucess(string msg);
+    void Success(string msg);
     void Confirm(string msg);
     void Normal(string msg);
     void Clear();

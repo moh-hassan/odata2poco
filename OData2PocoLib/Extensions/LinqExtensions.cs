@@ -34,4 +34,33 @@ public static class LinqExtensions
     {
         return list.IndexOf(item) == list.Count - 1;
     }
+    public static bool IsNullOrEmpty<T>(this IEnumerable<T>? enumerable) =>
+        enumerable == null || !enumerable.Any();
+    //todo return empty not null
+    public static void Deconstruct<T>(this IList<T> list, out T? head, out IList<T> tail)
+    {
+        if (!list.Any())
+        {
+            head = default;
+            tail = new List<T>();
+            return;
+        }
+        head = list.Count > 0 ? list[0] : default;
+        tail = list.Skip(1).ToList();
+    }
+
+    public static void Deconstruct<T>(this IList<T> list, out T? first, out T? second, out IList<T> rest)
+    {
+        if (!list.Any())
+        {
+            first = second = default;
+            rest = new List<T>();
+            return;
+        }
+        first = list.Count > 0 ? list[0] : default;
+        second = list.Count > 1 ? list[1] : default;
+        rest = list.Skip(2).ToList();
+    }
+
+
 }

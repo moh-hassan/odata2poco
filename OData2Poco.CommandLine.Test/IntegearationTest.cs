@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Collections;
+using System.Runtime.InteropServices;
 using System.Text;
 using CliWrap;
 using FluentAssertions;
@@ -18,20 +19,17 @@ internal class IntegrationTest
     [OneTimeSetUp]
     public void Setup()
     {
-#if DEBUG
         _workingDirectory = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory));
         _o2Pgen = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory, "o2pgen.exe"));
-#else
-        //release
+
+
+        //release and windows only
+#if !DEBUG
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
         _workingDirectory = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory,
             "..", "..", "..", "..", "build"));
         _o2Pgen = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory,
             "..", "..", "..", "..", "build", "o2pgen.exe"));
-#endif
-
-        //o2pgen.exe is only FullFramework
-#if !DEBUG && NETCOREAPP
-        Assert.Ignore("ignore test o2pgen.exe in NETCOREAPP");
 #endif
     }
 
@@ -40,6 +38,12 @@ internal class IntegrationTest
     [TestCaseSource(nameof(TestCases))]
     public async Task Integration_test_using_executable_exe_file(string options, int exitCode, string expected)
     {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            Assert.Ignore("ignore test o2pgen.exe in non windows OS");
+            return;
+        }
+
         var stdOutBuffer = new StringBuilder();
         var result = await Cli.Wrap(_o2Pgen)
             .WithArguments(options)
@@ -50,7 +54,6 @@ internal class IntegrationTest
 
         stdOutBuffer.ToString().Should().Contain(expected);
         result.ExitCode.Should().Be(exitCode);
-
     }
 
     public static IEnumerable TestCases

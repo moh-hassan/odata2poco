@@ -14,4 +14,6 @@ public interface IPocoFileSystem
     void SaveToFolder(string folderPath, Dictionary<string, string> content);
     bool Exists(string? filePath);
     string ReadAllText(string? filePath);
+    void Delete(string path);
+    void Rename(string fromName, string toName);
 }

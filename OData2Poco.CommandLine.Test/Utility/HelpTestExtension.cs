@@ -7,11 +7,6 @@ namespace OData2Poco.TestUtility;
 
 public static class HelpTestExtension
 {
-    public static string[] SplitArgs(this string args)
-    {
-        return args.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-    }
-
     public static string[] HelpToLines(this string help)
     {
         return Regex.Split(help, "\r\n|\r|\n");

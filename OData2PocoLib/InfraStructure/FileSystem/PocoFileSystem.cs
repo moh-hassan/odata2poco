@@ -73,4 +73,12 @@ public class PocoFileSystem : IPocoFileSystem
             return "";
         return File.ReadAllText(filePath!);
     }
+    public void Delete(string path)
+    {
+        File.Delete(path);
+    }
+    public void Rename(string fromName, string toName)
+    {
+        File.Move(fromName, toName);
+    }
 }

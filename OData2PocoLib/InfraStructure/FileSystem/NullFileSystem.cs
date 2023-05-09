@@ -31,6 +31,8 @@ public class NullFileSystem : IPocoFileSystem
 
     public bool Exists(string? filePath)
     {
+        if (string.IsNullOrWhiteSpace(filePath))
+            return false;
         return Fakes.Exists(filePath);
 
     }
@@ -40,5 +42,15 @@ public class NullFileSystem : IPocoFileSystem
         if (!Exists(filePath))
             return "";
         return Fakes.Get(filePath!);
+    }
+
+    public void Delete(string path)
+    {
+        Fakes.Remove(path);
+    }
+
+    public void Rename(string fromName, string toName)
+    {
+        Fakes.Rename(fromName, toName);
     }
 }

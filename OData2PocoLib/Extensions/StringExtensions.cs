@@ -2,6 +2,7 @@
 
 #pragma warning disable S1643
 
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -169,17 +170,7 @@ public static class StringExtensions
         return text;
     }
 
-    public static string Dump<T>(this T obj, int level = 1)
-    {
-        return JsonConvert.SerializeObject(obj, Formatting.Indented,
-            new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                MaxDepth = level
-            });
-    }
+
 
     public static string RemoveEmptyLines(this string input)
     {
@@ -333,5 +324,49 @@ public static class StringExtensions
         if (useFullName)
             return name.RemoveDot();
         return name.RemoveNamespace(ns);
+    }
+
+    public static string[] SplitArgs(this string? command, bool keepQuote = false)
+    {
+        if (string.IsNullOrEmpty(command))
+            return new string[0];
+
+        var inQuote = false;
+        var chars = command.ToCharArray().Select(v =>
+        {
+            if (v == '"')
+                inQuote = !inQuote;
+            return !inQuote && v == ' ' ? '\n' : v;
+        }).ToArray();
+
+        return new string(chars).Split('\n')
+            .Select(x => keepQuote ? x : x.Trim('"'))
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .ToArray();
+    }
+
+    public static IEnumerable<string> ReadEnvironment(this string[] args)
+    {
+        if (args.Length == 0)
+            yield break;
+        foreach (var arg in args)
+        {
+            if (arg.StartsWith("$"))
+            {
+                var envVar = arg.TrimStart('$');
+                var value = Environment.GetEnvironmentVariable(envVar);
+                yield return string.IsNullOrEmpty(value) ? arg : value;
+            }
+            else if (arg.StartsWith("%") && arg.EndsWith("%"))
+            {
+                var envVar = arg.Trim('%');
+                var value = Environment.GetEnvironmentVariable(envVar);
+                yield return string.IsNullOrEmpty(value) ? arg : value;
+            }
+            else
+            {
+                yield return arg;
+            }
+        }
     }
 }

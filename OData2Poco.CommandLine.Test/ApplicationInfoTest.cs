@@ -11,16 +11,18 @@ internal class ApplicationInfoTest
     public void ApplicationInfo_test()
     {
         var versionPattern = @"[0-9a-z.-]+\+[0-9a-z]{9}";
-        var titlePattern = @"O2Pgen\s\(.+\)";
+        var titlePattern = @"o2pgen\s\(.+\)";
         var headingPattern = $@"^{titlePattern}\sVersion\s{versionPattern}$";
 
         var version = ApplicationInfo.Version;   //1.2.3+3bbb56990
+        Console.Write(version);
         version.Should().MatchRegex($"^{versionPattern}$");
 
         var title = ApplicationInfo.Title; //O2Pgen (net472)
         title.Should().MatchRegex(titlePattern);
 
         var hi = ApplicationInfo.HeadingInfo;//O2Pgen (net472) Version 1.2.3+3bbb56990
+        Console.Write(hi);
         hi.Should().MatchRegex(headingPattern);
     }
 }

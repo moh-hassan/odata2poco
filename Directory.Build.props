@@ -18,7 +18,7 @@
     <Company>OData2Poco</Company>
     <PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128</NoWarn>
+    <NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128;NU1507</NoWarn>
     <LangVersion>preview</LangVersion>
     <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
     <Version Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)</Version>
@@ -62,4 +62,10 @@
     <Compile Include="..\common\Range.cs" Link="Range.cs" />
     <Compile Include="..\common\GlobalUsings.cs" Link="GlobalUsings.cs" />
   </ItemGroup>
+
+  <PropertyGroup Label="analysis">
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+    <SonarQubeExclude>True</SonarQubeExclude>
+  </PropertyGroup>
 </Project>

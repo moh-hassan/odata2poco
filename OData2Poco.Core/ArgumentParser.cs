@@ -43,12 +43,8 @@ public class ArgumentParser
         return await RunOptionsAsync(args, RunCommandAsync);
     }
 
-    private async Task RunCommandAsync(Options options)
-    {
-        Logger.Info(ApplicationInfo.HeadingInfo);
-        Logger.Normal(ApplicationInfo.Copyright);
+    private async Task RunCommandAsync(Options options) =>
         await new CsCommand(options, StartUp.FileSystem).Execute().ConfigureAwait(false);
-    }
 
     private int GetHelp(IEnumerable<Error> errors)
     {

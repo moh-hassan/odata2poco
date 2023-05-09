@@ -38,12 +38,13 @@ public partial class Options
             CodeFilename = $"poco.{Lang.ToString().ToLower()}";
         }
 
-        if (Password != null && Password.StartsWith("@@"))
-        {
-            var fname = Password.Substring(1);
-            var text = File.ReadAllText(fname);
-            Password = GetToken(text);
-        }
+        //todo 
+        //if (Password != null && Password.StartsWith("@@"))
+        //{
+        //    var fname = Password.Substring(1);
+        //    var text = File.ReadAllText(fname);
+        //    Password = GetToken(text);
+        //}
 
 
         //validate Attributes

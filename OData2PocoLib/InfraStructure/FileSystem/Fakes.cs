@@ -33,4 +33,16 @@ internal static class Fakes
     {
         return key != null && Data.ContainsKey(key);
     }
+    public static void Remove(string? key)
+    {
+        if (!Exists(key)) return;
+        Data.Remove(key!);
+    }
+    public static void Rename(string fromName, string toName)
+    {
+        if (!Exists(fromName)) return;
+        var value = Data[fromName];
+        Data.Remove(fromName);
+        Data[toName] = value;
+    }
 }

@@ -121,4 +121,21 @@ internal class StringExtensionsTest
         var sut = t.EnumToString();
         sut.Should().Be(expected);
     }
+
+    [Test]
+    [TestCase("$password", "secret")]
+    [TestCase("%password%", "secret")]
+    [TestCase("password%", "password%")]
+    [TestCase("password", "password")]
+    public void If_arg_is_environment_variable_it_should_be_resolved(string arg, string expected)
+    {
+        //Arrange
+        Environment.SetEnvironmentVariable("password", "secret");
+        string[] args = { "-p", arg };
+        //Act
+        var sut = args.ReadEnvironment().ToArray();
+        //Assert
+        sut[0].Should().Be("-p");
+        sut[1].Should().Be(expected);
+    }
 }

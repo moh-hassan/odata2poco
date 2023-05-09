@@ -29,6 +29,22 @@ namespace OData2Poco.CommandLine
         }
         public static async Task Run(string[] args)
         {
+            Logger.Success(ApplicationInfo.HeadingInfo);
+            Logger.Normal(ApplicationInfo.Copyright);
+
+            //read password from Input pipline if available
+            var pw = Pipes.ReadPipe();
+            if (!string.IsNullOrWhiteSpace(pw))
+                args = args.Concat(new[] { "-p", pw.Trim() }).ToArray();
+
+            //read configuration file if available
+            var cfg = new OptionConfiguration();
+            var flag = cfg.TryGetConfigurationFile(args, out var cli);
+            if (flag) args = cli;
+            cfg.Errors.ShowErrors();
+
+            //read environment variables
+            args = args.ReadEnvironment().ToArray();
             var argument = string.Join(" ", args);
             try
             {
@@ -42,20 +58,18 @@ namespace OData2Poco.CommandLine
                 Sw.Stop();
                 Console.WriteLine();
                 if (!ArgumentParser.ShowVersionOrHelp)
-                    Logger.Sucess($"Total processing time: {Sw.ElapsedMilliseconds / 1000.0} sec");
+                    Logger.Success($"Total processing time: {Sw.ElapsedMilliseconds / 1000.0} sec");
 
             }
             catch (Exception ex)
             {
                 RetCode = (int)ExitCodes.HandledException;
                 Logger.Error($"Error in executing the command: o2pgen {argument}");
-                Logger.Error($"Error Message:\n {ex.FullExceptionMessage()}");
-
-                //#if DEBUG
-                Logger.Error("--------------------Exception Details---------------------");
-                Logger.Error($"Error Message:\n {ex.FullExceptionMessage(true)}");
-                Console.WriteLine(ex);
-                //#endif
+#if DEBUG
+                Logger.Error($"{ex.FullExceptionMessage()}");
+#else
+                Logger.Error($"{ex.Message}");
+#endif
             }
             finally
             {

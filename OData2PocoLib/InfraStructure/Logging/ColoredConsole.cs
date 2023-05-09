@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Text;
-
 namespace OData2Poco.InfraStructure.Logging;
 
 public class ColoredConsole : ILog
@@ -9,7 +8,7 @@ public class ColoredConsole : ILog
     private readonly object _colorLock = new();
     public ConsoleColor ErrorColor { get; }
     public ConsoleColor InfoColor { get; }
-    public ConsoleColor SucessColor { get; }
+    public ConsoleColor SuccessColor { get; }
     public ConsoleColor TraceColor { get; }
     public ConsoleColor WarningColor { get; }
 
@@ -18,7 +17,7 @@ public class ColoredConsole : ILog
         Output = new StringBuilder();
         ErrorColor = ConsoleColor.Red;
         InfoColor = ConsoleColor.Cyan;
-        SucessColor = ConsoleColor.Green;
+        SuccessColor = ConsoleColor.Green;
         TraceColor = ConsoleColor.DarkGray;
         WarningColor = ConsoleColor.Yellow;
     }
@@ -32,17 +31,17 @@ public class ColoredConsole : ILog
 
     public void Debug(string msg)
     {
-        //do nothing
+        Log(TraceColor, $"Debug: {msg}");
     }
 
     public void Trace(string msg)
     {
-        Log(TraceColor, msg);
+        Log(TraceColor, $"Trace: {msg}");
     }
 
     public void Warn(string msg)
     {
-        Log(WarningColor, msg);
+        Log(WarningColor, $"Warning: {msg}");
     }
 
     public void Warn(Func<string> message)
@@ -52,7 +51,7 @@ public class ColoredConsole : ILog
 
     public void Info(string msg)
     {
-        Log(InfoColor, msg);
+        Log(InfoColor, $"Information: {msg}");
     }
 
     public void Info(Func<string> message)
@@ -62,7 +61,7 @@ public class ColoredConsole : ILog
 
     public void Error(string msg)
     {
-        Log(ErrorColor, msg);
+        Log(ErrorColor, $"Error: {msg}");
     }
 
     public void Error(Func<string> message)
@@ -72,12 +71,12 @@ public class ColoredConsole : ILog
 
     public void Fatal(string msg)
     {
-        //<highlight-row condition="level == LogLevel.Fatal" foregroundColor="Red" backgroundColor="White" />
+        Log(ErrorColor, $"Fatal Error: {msg}");
     }
 
-    public void Sucess(string msg)
+    public void Success(string msg)
     {
-        Log(SucessColor, msg);
+        Log(SuccessColor, msg);
     }
 
     public void Confirm(string msg)

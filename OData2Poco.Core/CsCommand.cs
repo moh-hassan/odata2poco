@@ -37,10 +37,7 @@ internal class CsCommand : IPocoCommand
         ArgOptions.Errors.ForEach(_logger.Error);
 
         //show warning
-        ArgOptions.Errors.ForEach(x =>
-        {
-            _logger.Warn(x);
-        });
+        ArgOptions.Errors.ForEach(_logger.Warn);
         _logger.Info($"Start processing url: {OdataConnectionString.ServiceUrl}");
         //show result
         await GenerateCodeCommandAsync();
@@ -65,7 +62,7 @@ internal class CsCommand : IPocoCommand
         //format option as: -n Navigation= True
         _logger.Normal("************* CommandLine Options***********");
         var list = CommandLineUtility.GetOptions(option);
-        list.ForEach(x => _logger.Normal(x));
+        list.ForEach(_logger.Normal);
         _logger.Normal("********************************************");
     }
     //errors of invalid commandline options
@@ -73,10 +70,7 @@ internal class CsCommand : IPocoCommand
     {
         if (Errors.Count == 0) return;
         _logger.Error("--------- Errors--------");
-        Errors.ForEach(x =>
-        {
-            _logger.Error(x);
-        });
+        Errors.ForEach(_logger.Error);
     }
     public void ServiceInfo()
     {
@@ -85,7 +79,7 @@ internal class CsCommand : IPocoCommand
         _logger.Info($"OData Service Version: {O2PGen.MetaDataVersion} ");
         _logger.Info($"Number of Entities: {O2PGen.ClassList.Count}");
         _logger.Normal(new string('-', 50));
-        _logger.Sucess("Successfully Generated Poco Model");
+        _logger.Success("Successfully Generated Poco Model");
     }
 
     #region commands
