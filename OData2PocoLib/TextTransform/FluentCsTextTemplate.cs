@@ -88,7 +88,7 @@ internal class FluentCsTextTemplate : FluentTextTemplate<FluentCsTextTemplate>
 
     public FluentCsTextTemplate StartClass(ClassTemplate ct)
     {
-        return StartClass(ct.Name,ct.GetComment(), ct.BaseType, abstractClass: ct.IsAbstrct);
+        return StartClass(ct.Name, ct.GetComment(), ct.BaseType, abstractClass: ct.IsAbstrct);
     }
 
     public FluentCsTextTemplate EndClass()

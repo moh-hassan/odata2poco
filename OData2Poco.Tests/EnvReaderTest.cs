@@ -307,6 +307,7 @@ public class EnvReaderTest : BaseTest
         flag.Should().BeTrue();
         newArgs2.Should().BeEquivalentTo(expected);
         errors.Should().BeEmpty();
-
+        error.Should().BeNull();
+        fileName.Should().Be("myFile.txt");
     }
 }

@@ -3,7 +3,6 @@
 using NUnit.Framework;
 using OData2Poco.Extensions;
 using OData2Poco.Fake;
-using OData2Poco.TestUtility;
 
 namespace OData2Poco.CommandLine.Test;
 

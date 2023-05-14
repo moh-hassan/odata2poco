@@ -22,7 +22,7 @@ public class TemplateClassTest
     public void Class_inherit_Test()
     {
         FluentCsTextTemplate ft = new FluentCsTextTemplate();
-        string result = ft.StartClass("Circle",  inherit: "Shape");
+        string result = ft.StartClass("Circle", inherit: "Shape");
         var expected = @"
     public partial class Circle : Shape
     {

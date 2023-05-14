@@ -1,9 +1,6 @@
 // Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 
-
-// ReSharper disable UnusedMember.Global
-
 namespace OData2Poco.CustAttributes.NamedAtributes;
 
 public class ProtoAttribute : INamedAttribute

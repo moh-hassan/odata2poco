@@ -1,18 +1,15 @@
 #pragma warning disable IDE0073
-// ReSharper disable RedundantAttributeUsageProperty
-#pragma warning disable IDE0073, S3261
-// https://github.com/dotnet/runtime/blob/527f9ae88a0ee216b44d556f9bdc84037fe0ebda/src/libraries/System.Private.CoreLib/src/System/Diagnostics/CodeAnalysis/NullableAttributes.cs
-
-// ReSharper disable once EmptyNamespace
-#define INTERNAL_NULLABLE_ATTRIBUTES
 
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+// https://github.com/dotnet/runtime/blob/527f9ae88a0ee216b44d556f9bdc84037fe0ebda/src/libraries/System.Private.CoreLib/src/System/Diagnostics/CodeAnalysis/NullableAttributes.cs
 
-namespace System.Diagnostics.CodeAnalysis;
+#define INTERNAL_NULLABLE_ATTRIBUTES
 
 #if NETSTANDARD2_0 || NETCOREAPP2_0 || NETCOREAPP2_1 || NETCOREAPP2_2 || NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+
+namespace System.Diagnostics.CodeAnalysis;
 /// <summary>Specifies that null is allowed as an input even if the corresponding type disallows it.</summary>
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property, Inherited = false)]
 #if SYSTEM_PRIVATE_CORELIB

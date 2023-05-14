@@ -6,7 +6,7 @@ namespace OData2Poco;
 
 internal static class Fakes
 {
-    private static Dictionary<string, string> Data = new()
+    private static readonly Dictionary<string, string> Data = new()
     {
         ["data1.txt"] = @"
  aaa

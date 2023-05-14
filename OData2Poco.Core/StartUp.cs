@@ -4,7 +4,6 @@ using System.Diagnostics;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
-using System.Xml.Linq;
 #if !NETCOREAPP
 using System.Runtime.InteropServices;
 #endif
@@ -33,7 +32,6 @@ namespace OData2Poco.CommandLine
         {
             Logger.Success(ApplicationInfo.HeadingInfo);
             Logger.Normal(ApplicationInfo.Copyright);
-           
             //read password from Input pipline if available
             var pw = Pipes.ReadPipe();
             if (!string.IsNullOrWhiteSpace(pw))
@@ -70,7 +68,6 @@ namespace OData2Poco.CommandLine
                 }
             }
 
-            var argument = string.Join(" ", args);
             try
             {
                 FileSystem = new PocoFileSystem();
@@ -91,7 +88,7 @@ namespace OData2Poco.CommandLine
                 RetCode = (int)ExitCodes.HandledException;
                 Logger.Error("Error in executing o2pgen");
 #if DEBUG
-               Logger.Error($"{ex.FullExceptionMessage(true)}");
+                Logger.Error($"{ex.FullExceptionMessage(true)}");
 #else
                 Logger.Error($"{ex.FullExceptionMessage()}");
                 FileSystem.WriteAllText("error.txt", $"{ex.FullExceptionMessage(true)}");

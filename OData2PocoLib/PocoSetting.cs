@@ -88,7 +88,6 @@ public class PocoSetting : IValidator
     //set name of generated class using FullName vs Name
     public bool UseFullName { get; set; }
     public bool ShowWarning { get; set; }
-  
     /// <summary>
     ///     Initialization
     /// </summary>

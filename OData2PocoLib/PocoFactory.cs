@@ -19,19 +19,14 @@ internal static class PocoFactory
             throw new InvalidOperationException("No Metadata available");
 
         var metaDataVersion = metadata.MetaDataVersion;
-        switch (metaDataVersion)
+        return metaDataVersion switch
         {
-            case ODataVersion.V4:
-                return new Poco(metadata, setting);
-
-            case ODataVersion.V1:
-            case ODataVersion.V2:
-            case ODataVersion.V3:
-                return new V3.Poco(metadata, setting);
-
-            default:
-                throw new NotSupportedException($"OData Version '{metaDataVersion}' is not supported");
-        }
+            ODataVersion.V4 => new Poco(metadata, setting),
+            ODataVersion.V1 => new V3.Poco(metadata, setting),
+            ODataVersion.V2 => new V3.Poco(metadata, setting),
+            ODataVersion.V3 => new V3.Poco(metadata, setting),
+            _ => throw new NotSupportedException($"OData Version '{metaDataVersion}' is not supported")
+        };
     }
 
     internal static async Task<IPocoGenerator> GenerateModel(OdataConnectionString connectionString,

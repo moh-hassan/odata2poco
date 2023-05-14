@@ -96,7 +96,7 @@ public class O2PTest
     }
 
     [Test]
-    public async Task o2p_call_static_method_test()
+    public async Task O2p_call_static_method_test()
     {
         //Arrange
         OdataConnectionString cs = new OdataConnectionString { ServiceUrl = TestSample.NorthWindV4 };
@@ -161,7 +161,7 @@ public class O2PTest
 
 public static class TestCaseFactory
 {
-    static string Path2Json(string path)
+    private static string Path2Json(string path)
     {
         return path.Replace(@"\", @"\\");
     }

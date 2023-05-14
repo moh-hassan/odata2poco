@@ -1,9 +1,7 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
 
-// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 #pragma warning disable S3267
 
 namespace OData2Poco.CommandLine;
@@ -11,24 +9,6 @@ namespace OData2Poco.CommandLine;
 // Options of commandline
 public partial class Options
 {
-
-    private string GetToken(string text)
-    {
-        if (string.IsNullOrEmpty(text)) return "";
-        string password;
-        if (text.Trim().StartsWith("{"))
-        {
-            //do json
-            var jobject = JObject.Parse(text);
-            password = jobject.ContainsKey("acces_token")
-                ? jobject["acces_token"]?.ToString()
-                : string.Empty;
-        }
-        else
-            password = text;
-
-        return password;
-    }
     public void Validate()
     {
         if (string.IsNullOrEmpty(CodeFilename))
@@ -37,15 +17,6 @@ public partial class Options
                 CodeFilename = "Model";
             CodeFilename = $"poco.{Lang.ToString().ToLower()}";
         }
-
-        //todo 
-        //if (Password != null && Password.StartsWith("@@"))
-        //{
-        //    var fname = Password.Substring(1);
-        //    var text = File.ReadAllText(fname);
-        //    Password = GetToken(text);
-        //}
-
 
         //validate Attributes
         foreach (var attribute in Attributes.ToList())

@@ -40,19 +40,13 @@ public class PropertyGenerator
             var mappedName = MappedPropertyName();
             if (mappedName is not null) return mappedName;
 
-            switch (_setting.NameCase)
+            return _setting.NameCase switch
             {
-                case CaseEnum.Pas:
-                    return _property.PropName.ToPascalCase();
-
-                case CaseEnum.Camel:
-                    return _property.PropName.ToCamelCase();
-
-                case CaseEnum.None:
-                    return _property.PropName;
-                default:
-                    return _property.PropName;
-            }
+                CaseEnum.Pas => _property.PropName.ToPascalCase(),
+                CaseEnum.Camel => _property.PropName.ToCamelCase(),
+                CaseEnum.None => _property.PropName,
+                _ => _property.PropName
+            };
         }
     }
 
@@ -131,8 +125,7 @@ public class PropertyGenerator
         //not prefixed with namespace
         if (!reducedName.Contains(".")) return reducedName;
 
-        var ns = $"{pt.ClassNameSpace}."; //
-
+        var ns = $"{pt.ClassNameSpace}.";
         if (pt.PropType.StartsWith(ns))
             reducedName = pt.PropType.Replace(ns, "");
         //collection

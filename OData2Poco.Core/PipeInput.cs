@@ -6,7 +6,6 @@ internal static class Pipes
 {
     public static string ReadPipe()
     {
-       // if (!Console.IsInputRedirected) return "";
         string input = "";
         // if nothing is being piped in, then exit
         if (!IsPipedInput())

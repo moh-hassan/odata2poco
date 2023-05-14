@@ -4,8 +4,6 @@ using System.Net;
 using CommandLine;
 using CommandLine.Text;
 using OData2Poco.Http;
-// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
-#pragma warning disable S3267
 
 namespace OData2Poco.CommandLine;
 
@@ -158,8 +156,6 @@ public partial class Options
         Include = new List<string>();
         Password = SecuredContainer.Empty;
         HttpHeader = new List<string>();
-        //TlsProtocol = new List<SecurityProtocolType>(){ }
-        //  Tls = new List<SecurityProtocolType>();
     }
 
 #if NETCOREAPP

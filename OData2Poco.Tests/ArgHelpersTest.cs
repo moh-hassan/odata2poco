@@ -5,7 +5,7 @@ using NUnit.Framework;
 using OData2Poco.Extensions;
 
 namespace OData2Poco.Tests;
-
+#pragma warning disable IDE0055
 public class ArgHelpersTest
 {
     [Test, TestCaseSource(nameof(RepeatingArgsTestData))]
@@ -17,7 +17,7 @@ public class ArgHelpersTest
         //Assert
         result.Should().BeEquivalentTo(expected);
     }
-    
+
     private static IEnumerable<TestCaseData> RepeatingArgsTestData
     {
         //args,expected
@@ -49,13 +49,13 @@ public class ArgHelpersTest
                 .SetName("5-empty args");
 
             //args with two args
-            yield return new TestCaseData(new[] { "-r", "http://localhost.com" }, 
+            yield return new TestCaseData(new[] { "-r", "http://localhost.com" },
                     new[] { "-r", "http://localhost.com" })
                 .SetName("6-args with two args");
 
             //args with two args
-            yield return new TestCaseData(new[] { "-r", "http://localhost.com","-H","key1=123;key2=abc" }, 
-                    new[] { "-r", "http://localhost.com","-H", "key1=123;key2=abc" })
+            yield return new TestCaseData(new[] { "-r", "http://localhost.com", "-H", "key1=123;key2=abc" },
+                    new[] { "-r", "http://localhost.com", "-H", "key1=123;key2=abc" })
                 .SetName("7-args have multi-value  arg");
         }
     }

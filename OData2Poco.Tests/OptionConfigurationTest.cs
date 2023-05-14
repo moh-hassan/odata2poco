@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text;
 using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.InfraStructure.FileSystem;
@@ -9,20 +8,21 @@ namespace OData2Poco.Tests;
 public class OptionConfigurationTest : BaseTest
 {
     private OptionConfiguration cfg;
-    readonly string config = "config.txt";
-    string content = @"
+    private const string Config = "config.txt";
+    private const string Content = @"
 # -r mysite.com
 -r localhost
 
 -v  #verbose
    
 ";
+
     [SetUp]
     public void SetUp()
     {
         _fileSystem = new NullFileSystem();
         cfg = new OptionConfiguration(_fileSystem);
-        Fakes.Mock(config, content);
+        Fakes.Mock(Config, Content);
     }
 
     [Test]
@@ -31,7 +31,7 @@ public class OptionConfigurationTest : BaseTest
         //Arrange
         string[] expected = { "-r", "localhost", "-v" };
         //Act
-        var sut = cfg.ReadConfig(config);
+        var sut = cfg.ReadConfig(Config);
         //Assert
         sut.Should().BeEquivalentTo(expected);
     }
@@ -42,7 +42,7 @@ public class OptionConfigurationTest : BaseTest
         //Arrange
         var args = new[] { "@config.txt" };
         string[] expected = { "-r", "localhost", "-v" };
-        Fakes.Mock("o2pgen.txt", content);
+        Fakes.Mock("o2pgen.txt", Content);
         //Act
         var flag = cfg.TryGetConfigurationFile(args, out var cli, out var error,
             out string fileName);
@@ -64,6 +64,7 @@ public class OptionConfigurationTest : BaseTest
         //Assert
         flag.Should().BeFalse();
         cli.Should().BeEquivalentTo(args);
+        error.Should().NotBeNull();
     }
 
     [Test]
@@ -72,7 +73,7 @@ public class OptionConfigurationTest : BaseTest
         //Arrange
         string[] expected = { "-r", "localhost", "-v" };
         var args = Array.Empty<string>();
-        Fakes.Mock("o2pgen.txt", content);
+        Fakes.Mock("o2pgen.txt", Content);
         //Act
         var flag = cfg.TryGetConfigurationFile(args, out var cli, out var error,
             out string fileName);
@@ -96,6 +97,8 @@ public class OptionConfigurationTest : BaseTest
         //Assert
         flag.Should().BeFalse();
         cli.Should().BeEquivalentTo(args);
+        Console.WriteLine(error);
+        error.Should().BeNull();
     }
 
     [Test]
@@ -109,6 +112,7 @@ public class OptionConfigurationTest : BaseTest
         //Assert
         flag.Should().BeFalse();
         cli.Should().BeEmpty();
+        error.Should().BeNull();
     }
     [Test]
     public void ConfigurationFile_with_include()

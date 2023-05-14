@@ -4,7 +4,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Extensions;
 using OData2Poco.Fake;
-using OData2Poco.InfraStructure.Logging;
 using OData2Poco.TestUtility;
 #pragma warning disable IDE0060
 

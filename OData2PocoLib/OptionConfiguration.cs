@@ -5,7 +5,9 @@ using System.Text.RegularExpressions;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 
+
 namespace OData2Poco;
+#pragma warning disable IDE0059
 public class OptionConfiguration
 {
     private readonly IPocoFileSystem _fileSystem;

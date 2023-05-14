@@ -5,7 +5,7 @@ using OData2Poco.InfraStructure.Logging;
 
 
 namespace OData2Poco;
-
+#pragma warning disable S1144, IDE0051
 public class ErrorCollection : IEnumerable<OptionError>
 {
     private const int Info = 0;

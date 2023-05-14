@@ -5,9 +5,9 @@ using Microsoft.OData.Edm;
 using Microsoft.OData.Edm.Csdl;
 using Microsoft.OData.Edm.Validation;
 using OData2Poco.InfraStructure.Logging;
-// ReSharper disable CollectionNeverQueried.Local
 
 namespace OData2Poco.V4;
+#pragma warning disable CA1822
 
 /// <summary>
 ///     Process metadataString and generate list of   classes
@@ -34,12 +34,11 @@ internal partial class Poco : IPocoGenerator
     //support Odata.Edm v7+
     private IEdmModel LoadModelFromString()
     {
-        IEdmModel model;
         //Microsoft.OData.Edm" v7+
         //breaking change in Odata.Edm in v7+
         var tr = new StringReader(MetaDataAsString);
         using var reader = XmlReader.Create(tr);
-        var flag = CsdlReader.TryParse(reader, true, out model, out var errors);
+        var flag = CsdlReader.TryParse(reader, true, out var model, out var errors);
         List<string> messages = errors
             .Select(a => $"{a.ErrorCode}: {a.ErrorMessage} {a.ErrorLocation}").ToList();
         string errorText = messages.Any()

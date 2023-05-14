@@ -106,10 +106,10 @@ internal class PocoClassGeneratorCs : IPocoClassGenerator
     {
         var csTemplate = new FluentCsTextTemplate(PocoSetting);
         var comment = ent.GetComment();
-        if (comment.Length >0)
-            csTemplate.PushIndent("\t").WriteLine("// "+ent.GetComment()).PopIndent();
+        if (comment.Length > 0)
+            csTemplate.PushIndent("\t").WriteLine("// " + ent.GetComment()).PopIndent();
 
-        ////for enum
+        //for enum
         if (ent.IsEnum)
         {
             var elements = string.Join($",{_nl}", ent.EnumElements.ToArray());
@@ -162,7 +162,7 @@ internal class PocoClassGeneratorCs : IPocoClassGenerator
 
     internal string ReducedBaseTyp(ClassTemplate ct)
     {
-        var ns = $"{ct.NameSpace}."; //
+        var ns = $"{ct.NameSpace}.";
         var reducedName = ct.BaseType;
         if (ct.BaseType.StartsWith(ns))
             reducedName = ct.BaseType.Replace(ns, "");

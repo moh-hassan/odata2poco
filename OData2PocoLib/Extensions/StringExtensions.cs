@@ -2,13 +2,11 @@
 
 #pragma warning disable S1643
 
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OData2Poco.InfraStructure.FileSystem;
 
 namespace OData2Poco.Extensions;
 
