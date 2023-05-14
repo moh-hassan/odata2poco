@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Fake;
@@ -58,16 +57,17 @@ internal class CustomeHttpClientTest
             ServiceUrl = "http://localhost/odata2/api/northwind",
             UserName = "user1",
             Password = "secret",
-            Authenticate = AuthenticationType.Basic
+            Authenticate = AuthenticationType.Basic,
+            Domain = "localhost",
         };
+
         var client = new CustomHttpClient(connection, new CustomeHandler(r =>
         {
-            Assert.AreEqual("http://localhost/odata2/api/northwind/$metadata",
-                r.RequestUri?.ToString());
-            Assert.IsNotNull(r.Headers.UserAgent);
-            Assert.AreEqual("OData2Poco", r.Headers.UserAgent.ToString());
-            Assert.IsNotNull(r.Headers.Authorization);
-            Assert.AreEqual("Basic dXNlcjE6c2VjcmV0", r.Headers.Authorization.ToString());
+            r.RequestUri?.ToString().Should().Be("http://localhost/odata2/api/northwind/$metadata");
+            r.Headers.UserAgent.Should().NotBeNull();
+            r.Headers.UserAgent.ToString().Should().Be("OData2Poco");
+            r.Headers.Authorization.Should().NotBeNull();
+            r.Headers?.Authorization?.ToString().Should().Be("Basic dXNlcjE6c2VjcmV0");
         }));
         await client.ReadMetaDataAsync();
     }
@@ -92,7 +92,6 @@ internal class CustomeHttpClientTest
             Assert.AreEqual("Bearer abc.123", r.Headers.Authorization.ToString());
         }));
         await client.ReadMetaDataAsync();
-
     }
 
 }

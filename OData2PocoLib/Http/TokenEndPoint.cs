@@ -52,14 +52,13 @@ internal class TokenEndpoint
         var value = arg[(index + 1)..].Trim();
         return new KeyValuePair<string, string>(key, value);
     }
-
-    private string SetTokenParams(OdataConnectionString odataConnectionString)
+    private string SetTokenParams(OdataConnectionString ocs)
     {
         var clientParams =
-            $"grant_type=client_credentials&client_id={odataConnectionString.UserName}&client_secret={odataConnectionString.Password.Password}";
-        var tokenParams = string.IsNullOrEmpty(odataConnectionString.TokenParams)
+            $"grant_type=client_credentials&client_id={ocs.UserName}&client_secret={ocs.Password.Credential.Password}";
+        var tokenParams = string.IsNullOrEmpty(ocs.TokenParams)
             ? clientParams
-            : $"{clientParams}&{odataConnectionString.TokenParams}";
+            : $"{clientParams}&{ocs.TokenParams}";
         return tokenParams;
     }
 

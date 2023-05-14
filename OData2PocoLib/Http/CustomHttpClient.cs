@@ -12,8 +12,9 @@ internal class CustomHttpClient : IDisposable
 {
     private static readonly ILog Logger = PocoLogger.Default;
     private readonly DelegatingHandler? _delegatingHandler;
-    private readonly OdataConnectionString _odataConnectionString;
+    internal readonly OdataConnectionString _odataConnectionString;
     internal HttpClient _client;
+    internal HttpClientHandler handler;
     public HttpResponseMessage? Response;
     public Uri ServiceUri { get; set; }
 
@@ -21,13 +22,20 @@ internal class CustomHttpClient : IDisposable
     {
         _odataConnectionString = odataConnectionString;
         ServiceUri = new Uri(_odataConnectionString.ServiceUrl);
-        _client = new HttpClient();
+        handler = new HttpClientHandler
+        {
+            UseDefaultCredentials = true,
+            AllowAutoRedirect = true,
+        };
+        _client = new HttpClient(handler);
     }
 
-    public CustomHttpClient(OdataConnectionString odataConnectionString, DelegatingHandler dh)
-        : this(odataConnectionString)
+    public CustomHttpClient(OdataConnectionString odataConnectionString,
+        DelegatingHandler dh) : this(odataConnectionString)
     {
         _delegatingHandler = dh;
+        _delegatingHandler.InnerHandler = handler;
+        _client = new HttpClient(_delegatingHandler);
     }
 
     private void SetupHeader()
@@ -47,36 +55,20 @@ internal class CustomHttpClient : IDisposable
 
     private async Task SetHttpClient()
     {
-        //UseDefaultCredentials for NTLM support in windows
-        var handler = new HttpClientHandler { UseDefaultCredentials = true };
-
-        //setup SkipCertificationCheck
+        //setup SkipCertificationCheck.
+        //Use in development environment, but is not recommended in production 
         if (_odataConnectionString.SkipCertificationCheck)
+        {
             handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+            Logger.Warn("Skip Certification Check is set to true. This is not recommended in production environment");
+        }
 
         //setup SecurityProtocol
         if (_odataConnectionString.TlsProtocol > 0)
-            ServicePointManager.SecurityProtocol |= _odataConnectionString.TlsProtocol;
-
-        CredentialCache credentials = new();
-        switch (_odataConnectionString.Authenticate)
         {
-            case AuthenticationType.Ntlm:
-                Logger.Trace("Authenticating with NTLM");
-                credentials.Add(ServiceUri, "NTLM",
-                    new NetworkCredential(_odataConnectionString.UserName, _odataConnectionString.Password,
-                        _odataConnectionString.Domain));
-                handler.Credentials = credentials;
-                break;
-            case AuthenticationType.Digest:
-                Logger.Trace("Authenticating with Digest");
-                credentials.Add(ServiceUri, "Digest",
-                    new NetworkCredential(_odataConnectionString.UserName, _odataConnectionString.Password,
-                        _odataConnectionString.Domain));
-                handler.Credentials = credentials;
-                break;
+            ServicePointManager.SecurityProtocol |= _odataConnectionString.TlsProtocol;
+            Logger.Info($"Setting the SSL/TLS protocols to: {_odataConnectionString.TlsProtocol}");
         }
-
 
         if (!string.IsNullOrEmpty(_odataConnectionString.Proxy))
         {
@@ -85,35 +77,26 @@ internal class CustomHttpClient : IDisposable
             handler.Proxy = new WebProxy(_odataConnectionString.Proxy);
         }
 
-        if (_delegatingHandler != null)
-        {
-            _delegatingHandler.InnerHandler = handler;
-            _client = new HttpClient(_delegatingHandler);
-        }
-        else
-        {
-            _client = new HttpClient(handler);
-        }
-
-        if (_odataConnectionString.Authenticate == AuthenticationType.Basic ||
-            _odataConnectionString.Authenticate == AuthenticationType.Token ||
-            _odataConnectionString.Authenticate == AuthenticationType.Oauth2)
-        {
-            Authenticator auth = new(_client);
-            //authenticate
-            await auth.Authenticate(_odataConnectionString);
-        }
-
         _client.DefaultRequestHeaders
             .TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
         var agent = "OData2Poco";
         _client.DefaultRequestHeaders.Add("User-Agent", agent);
         SetupHeader();
+
+        if (_odataConnectionString.Authenticate != AuthenticationType.None)
+        {
+            Authenticator auth = new(this);
+            await auth.Authenticate();
+        }
+    }
+    internal virtual async Task<HttpResponseMessage> GetAsync(string? requestUri)
+    {
+        await SetHttpClient();
+        return await _client.GetAsync(requestUri);
     }
 
     internal async Task<string> ReadMetaDataAsync()
     {
-        await SetHttpClient();
         string url;
         //check url is remote xml file
         if (ServiceUri.AbsoluteUri.EndsWith(".xml"))
@@ -121,7 +104,7 @@ internal class CustomHttpClient : IDisposable
         else
             url = ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
 
-        Response = await _client.GetAsync(url);
+        Response = await GetAsync(url);
         Response.EnsureSuccessStatusCode();
 
         if (Response is { IsSuccessStatusCode: false })
@@ -141,12 +124,11 @@ internal class CustomHttpClient : IDisposable
     }
     protected virtual void Dispose(bool disposing)
     {
-        // Cleanup
+        _odataConnectionString.Password.Dispose();
         _delegatingHandler?.Dispose();
         Response?.Dispose();
         _client.Dispose();
     }
-
     ~CustomHttpClient()
     {
         Dispose(false);

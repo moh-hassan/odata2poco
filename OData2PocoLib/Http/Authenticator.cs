@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Net.Http;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -8,56 +8,54 @@ namespace OData2Poco.Http;
 
 internal class Authenticator
 {
-    private readonly HttpClient _client;
-
-    public Authenticator(HttpClient client)
+    private readonly CustomHttpClient _customClient;
+    public Authenticator(CustomHttpClient customClient)
     {
-        _client = client;
+        _customClient = customClient;
     }
 
-    public async Task Authenticate(OdataConnectionString odataConnString)
+    public async Task Authenticate()
     {
-        switch (odataConnString.Authenticate)
+        var ocs = _customClient._odataConnectionString;
+        if (ocs.Authenticate == AuthenticationType.None) return;
+        var client = _customClient._client;
+        var handler = _customClient.handler;
+        CredentialCache credentials = new();
+        NetworkCredential nc = ocs.ToCredential();
+        switch (ocs.Authenticate)
         {
-            case AuthenticationType.None:
-            case AuthenticationType.Ntlm:
-            case AuthenticationType.Digest:
-                break;
-
             case AuthenticationType.Basic:
-                Authenticate(odataConnString.UserName, odataConnString.Password);
+                var token = Convert.ToBase64String(Encoding.UTF8
+                    .GetBytes($"{ocs.UserName}:{ocs.ToCredential().Password}"));
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Basic", token);
                 break;
 
             case AuthenticationType.Token:
-                //token
-                Authenticate(odataConnString.Password);
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", ocs.ToCredential().Password);
                 break;
+
             case AuthenticationType.Oauth2:
-                //OAuth2 
-                if (!string.IsNullOrEmpty(odataConnString.TokenUrl))
+                if (!string.IsNullOrEmpty(ocs.TokenUrl))
                 {
-                    var accessToken = await new TokenEndpoint(odataConnString).GetAccessTokenAsync();
-                    Authenticate(accessToken);
+                    var accessToken = await new TokenEndpoint(ocs).GetAccessTokenAsync();
+                    if (string.IsNullOrEmpty(accessToken)) return;
+                    var headerValue = new AuthenticationHeaderValue("Bearer", accessToken);
+                    client.DefaultRequestHeaders.Authorization = headerValue;
                 }
-
                 break;
+
+            case AuthenticationType.Ntlm:
+                credentials.Add(new Uri(ocs.ServiceUrl), "NTLM", nc);
+                handler.Credentials = credentials;
+                break;
+
+            case AuthenticationType.Digest:
+                credentials.Add(new Uri(ocs.ServiceUrl), "Digest", nc);
+                handler.Credentials = credentials;
+                break;
+
         }
-    }
-
-    private void Authenticate(string? user, string? password)
-    {
-        //credintial
-        if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(password)) return;
-        var token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user}:{password}"));
-        var headerValue = new AuthenticationHeaderValue("Basic", token);
-        _client.DefaultRequestHeaders.Authorization = headerValue;
-    }
-
-    private void Authenticate(string? token)
-    {
-        //credintial
-        if (string.IsNullOrEmpty(token)) return;
-        var headerValue = new AuthenticationHeaderValue("Bearer", token);
-        _client.DefaultRequestHeaders.Authorization = headerValue;
     }
 }

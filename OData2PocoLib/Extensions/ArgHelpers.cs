@@ -15,6 +15,7 @@ public static class ArgHelper
         for (var i = 0; i < args.Length; i++)
         {
             var arg = args[i];
+            if (arg == "-") arg = "?";
             if (regex.IsMatch(arg))
             {
                 if (!dict.TryGetValue(arg, out var values))

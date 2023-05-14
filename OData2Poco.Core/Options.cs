@@ -21,7 +21,7 @@ public partial class Options
     public string UserName { get; set; }
 
     [Option('p', "password", HelpText = "password or/token Or access_token /Or client_secret in oauth2.")]
-    public SecuredPassword Password { get; set; }
+    public SecuredContainer Password { get; set; }
     [Option("domain", HelpText = "Domain in Active Directory.")]
     public string Domain { get; set; }
     [Option("proxy", HelpText = "Http Proxy in the form: 'server:port'.")]
@@ -42,7 +42,10 @@ public partial class Options
     [Option('H', "http-header", Separator = ';', HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1=value1;ky2=value2.")]
     public IEnumerable<string> HttpHeader { get; set; }
 
-    //This option is not secure and is not recommended. This switch is only intended to be used for hosts using a self-signed certificate for testing purposes.
+   
+    /// <summary>
+    /// Skip Certification Check. This switch is only intended to be used for hosts using a self-signed certificate for testing purposes. This is not recommended in production environment
+    /// </summary>
     [Option('S', "skip-check", HelpText = "Skips certificate validation checks that include all validations such as trusted root authority, expiration, ... .")]
     public bool SkipCertificationCheck { get; set; }
 
@@ -153,7 +156,7 @@ public partial class Options
         NameCase = CaseEnum.None;
         Lang = Language.CS;
         Include = new List<string>();
-        Password = new SecuredPassword();
+        Password = SecuredContainer.Empty;
         HttpHeader = new List<string>();
         //TlsProtocol = new List<SecurityProtocolType>(){ }
         //  Tls = new List<SecurityProtocolType>();

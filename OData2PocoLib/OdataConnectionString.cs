@@ -9,11 +9,10 @@ namespace OData2Poco;
 public class OdataConnectionString
 {
     private string? _serviceUrl;
-
     public OdataConnectionString()
     {
         Authenticate = AuthenticationType.None;
-        Password = new SecuredPassword();
+        Password = SecuredContainer.Empty;
     }
     public string ServiceUrl
     {
@@ -23,7 +22,7 @@ public class OdataConnectionString
     }
 
     public string? UserName { get; set; }
-    public SecuredPassword Password { get; set; }
+    public SecuredContainer Password { get; set; }
     public string? Domain { get; set; }
     public string? Proxy { get; set; }
     public string? TokenUrl { get; set; }
@@ -31,8 +30,9 @@ public class OdataConnectionString
     public string? ParamFile { get; set; }
     public AuthenticationType Authenticate { get; set; }
     public SecurityProtocolType TlsProtocol { get; set; }
-    public List<string>? HttpHeader { get; set; }
+    public IEnumerable<string>? HttpHeader { get; set; }
     public bool SkipCertificationCheck { get; set; }
+    public NetworkCredential ToCredential() => Password.SetUpCredential(UserName, Domain);
     public static OdataConnectionString Create(string url)
     {
         return new OdataConnectionString

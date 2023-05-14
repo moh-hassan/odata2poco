@@ -1,7 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Net;
-using System.Security;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -10,40 +8,44 @@ namespace OData2Poco.Tests;
 public class SecuredPasswordTest
 {
     [Test]
-    public void NetworkCredential_to_from_securedString()
+    [TestCase("secret")]
+    [TestCase("")]
+    [TestCase(null)]
+    public void Credential_securedString_test(string password)
     {
-        var password = "abc123";
+        //Arrange
+        var secret = SecuredContainer.ToSecureString(password);
+        //Act
+        var sp = new SecuredContainer(secret);
 
-        // 1.String to SecureString
-        SecureString theSecureString = new NetworkCredential("", password).SecurePassword;
-
-        //  2.SecureString to String
-        string theString = new NetworkCredential("", theSecureString).Password;
-        theString.Should().Be(password);
-
-        var secret = password.ConvertToSecureString();
-        secret.Should().BeEquivalentTo(theSecureString);
-        var nonSecret = secret.ToUnsecureString();
-        nonSecret.Should().Be(password);
+        //Assert
+        sp.Credential.SecurePassword.Length.Should().Be(secret.Length);
+        sp.Credential.SecurePassword.Should().BeEquivalentTo(secret);
+    }
+    [Test]
+    [TestCase("secret", "secret")]
+    [TestCase("", "")]
+    [TestCase(null, "")]
+    public void Credential_password_test(string password, string expected)
+    {
+        //Arrange
+        //Act
+        var sp = new SecuredContainer(password);
+        //Assert
+        sp.Credential.Password.Should().Be(expected);
+        sp.Credential.SecurePassword.Length.Should().Be(expected.Length);
     }
 
     [Test]
-    public void NetworkCredential_with_secured_password()
+    [TestCase("pass123")]
+    public void Round_trip_password(string password)
     {
-        var password = "abc123";
-        var user = "user1";
-        var cred = password.ToNetworkCredential(user);
-        var securePassword = cred.SecurePassword;
-        var cred2 = securePassword.ToNetworkCredential(user);
-        cred2.Should().BeEquivalentTo(cred);
+        //Arrange
+        var secret = SecuredContainer.ToSecureString(password);
+        //Act
+        var sp = new SecuredContainer(secret);
+        //Assert
+        sp.Credential.Password.Should().Be(password);
     }
 
-    [Test]
-    public void Round_trip_password()
-    {
-        var password = "abc123";
-        var secret = password.ConvertToSecureString();
-        var unSecure = secret.ToUnsecureString();
-        password.Should().Be(unSecure);
-    }
 }
