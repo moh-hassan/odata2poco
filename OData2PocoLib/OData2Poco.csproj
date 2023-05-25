@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>net6.0;netstandard2.0;net461;net472</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'unix'">
       net6.0;netstandard2.0
     </TargetFrameworks>
@@ -19,9 +19,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Edm"/>
-    <PackageReference Include="Microsoft.OData.Edm"/>
-    <PackageReference Include="Newtonsoft.Json"/>
+    <PackageReference Include="Microsoft.Data.Edm" />
+    <PackageReference Include="Microsoft.OData.Edm" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup Condition="$(OpenApi3)">

@@ -4,6 +4,7 @@
 
 using System.Net;
 using System.Net.Http;
+using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.Http;
@@ -11,7 +12,7 @@ namespace OData2Poco.Http;
 internal class CustomHttpClient : IDisposable
 {
     private static readonly ILog Logger = PocoLogger.Default;
-    private readonly DelegatingHandler? _delegatingHandler;
+    internal DelegatingHandler? _delegatingHandler;
     internal readonly OdataConnectionString _odataConnectionString;
     internal HttpClient _client;
     internal HttpClientHandler handler;
@@ -20,6 +21,7 @@ internal class CustomHttpClient : IDisposable
 
     public CustomHttpClient(OdataConnectionString odataConnectionString)
     {
+
         _odataConnectionString = odataConnectionString;
         ServiceUri = new Uri(_odataConnectionString.ServiceUrl);
         handler = new HttpClientHandler
@@ -38,17 +40,22 @@ internal class CustomHttpClient : IDisposable
         _client = new HttpClient(_delegatingHandler);
     }
 
+
+
     private void SetupHeader()
     {
+
         if (_odataConnectionString.HttpHeader == null || !_odataConnectionString.HttpHeader.Any()) return;
         foreach (var header in _odataConnectionString.HttpHeader)
         {
-            var pair = header.Split('=');
+            header.TryReplaceToBase64(out var header2);
+
+            var pair = header2.Split(new[] { ':', '=' }, 2);
             if (pair.Length == 2)
             {
                 var key = pair[0].Trim().Trim('"');
                 var value = pair[1].Trim().Trim('"');
-                _client.DefaultRequestHeaders.Add(key, value);
+                _client.DefaultRequestHeaders.TryAddWithoutValidation(key, value);
             }
         }
     }

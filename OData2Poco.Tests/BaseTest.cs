@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using System.Diagnostics;
 using NUnit.Framework;
 using OData2Poco.InfraStructure.FileSystem;
 
@@ -9,13 +10,15 @@ public abstract class BaseTest
 {
     protected List<ClassTemplate> ClassList;
     protected IPocoFileSystem _fileSystem;
+   
 
     [OneTimeSetUp]
-    public void Setup()
+    public void BaseOneTimeSetup()
     {
         ClassList = Moq.TripPinModel;
         Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
         _fileSystem = new NullFileSystem();
+        Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
     }
     public ClassTemplate GetClassTemplateSample(string name)
     {

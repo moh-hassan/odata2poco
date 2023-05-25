@@ -55,7 +55,7 @@ internal class TokenEndpoint
     private string SetTokenParams(OdataConnectionString ocs)
     {
         var clientParams =
-            $"grant_type=client_credentials&client_id={ocs.UserName}&client_secret={ocs.Password.Credential.Password}";
+            $"grant_type=client_credentials&client_id={ocs.UserName}&client_secret={ocs.Password.GetToken()}";
         var tokenParams = string.IsNullOrEmpty(ocs.TokenParams)
             ? clientParams
             : $"{clientParams}&{ocs.TokenParams}";

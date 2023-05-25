@@ -750,4 +750,19 @@ public partial record Flight : PublicTransportation
             text.Should().Contain("openapi: 3.0.1");
         }
 #endif
+
+    [Test]
+    public async Task Http_header_test()
+    {
+        //Arrange
+        string url = TestSample.UrlTripPinService;
+        var a = $"-r {url} -v ";
+        //Act
+        var tuble = await RunCommand(a);
+        var output = tuble.Item2;
+        //Assert
+        Assert.AreEqual(0, tuble.Item1);
+        Assert.IsTrue(output.Contains("public partial class Trip")); //-v
+
+    }
 }

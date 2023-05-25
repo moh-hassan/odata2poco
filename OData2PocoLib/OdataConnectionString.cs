@@ -2,6 +2,8 @@
 
 
 using System.Net;
+using System.Text;
+using OData2Poco.Extensions;
 using OData2Poco.Http;
 
 namespace OData2Poco;
@@ -12,7 +14,7 @@ public class OdataConnectionString
     public OdataConnectionString()
     {
         Authenticate = AuthenticationType.None;
-        Password = SecuredContainer.Empty;
+        Password = SecurityContainer.Empty;
     }
     public string ServiceUrl
     {
@@ -20,9 +22,8 @@ public class OdataConnectionString
         get => _serviceUrl
                ?? throw new InvalidOperationException("Uninitialized property: " + nameof(ServiceUrl));
     }
-
     public string? UserName { get; set; }
-    public SecuredContainer Password { get; set; }
+    public SecurityContainer Password { get; set; }
     public string? Domain { get; set; }
     public string? Proxy { get; set; }
     public string? TokenUrl { get; set; }
@@ -32,7 +33,7 @@ public class OdataConnectionString
     public SecurityProtocolType TlsProtocol { get; set; }
     public IEnumerable<string>? HttpHeader { get; set; }
     public bool SkipCertificationCheck { get; set; }
-    public NetworkCredential ToCredential() => Password.SetUpCredential(UserName, Domain);
+
     public static OdataConnectionString Create(string url)
     {
         return new OdataConnectionString

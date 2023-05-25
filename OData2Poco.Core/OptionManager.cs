@@ -18,7 +18,7 @@ public class OptionManager
     {
         if (!options.Password.IsKeyBoardEntry) return;
         var pw = PasswordReader.ReadPassword("Enter Password/token: ");
-        options.Password = new SecuredContainer(pw);
+        options.Password = new SecurityContainer(pw);
     }
     public void Deconstruct(out OdataConnectionString connectionString, out PocoSetting pocoSetting)
     {

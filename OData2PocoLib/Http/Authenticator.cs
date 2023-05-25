@@ -2,7 +2,7 @@
 
 using System.Net;
 using System.Net.Http.Headers;
-using System.Text;
+using OData2Poco.Extensions;
 
 namespace OData2Poco.Http;
 
@@ -21,19 +21,17 @@ internal class Authenticator
         var client = _customClient._client;
         var handler = _customClient.handler;
         CredentialCache credentials = new();
-        NetworkCredential nc = ocs.ToCredential();
+        NetworkCredential nc = ocs.Password.GetCredential(ocs.UserName,ocs.Domain); 
         switch (ocs.Authenticate)
         {
             case AuthenticationType.Basic:
-                var token = Convert.ToBase64String(Encoding.UTF8
-                    .GetBytes($"{ocs.UserName}:{ocs.ToCredential().Password}"));
                 client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Basic", token);
+                    new AuthenticationHeaderValue("Basic", ocs.Password.GetBasicAuth(ocs.UserName));
                 break;
 
             case AuthenticationType.Token:
                 client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", ocs.ToCredential().Password);
+                    new AuthenticationHeaderValue("Bearer", ocs.Password.GetToken());
                 break;
 
             case AuthenticationType.Oauth2:

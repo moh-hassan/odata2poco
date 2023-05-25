@@ -101,7 +101,6 @@ namespace OData2Poco.CommandLine
                     Logger.Info($"Application Exit code: {RetCode}");
                 Environment.Exit(RetCode);
             }
-
         }
 
 

@@ -343,4 +343,43 @@ public static class StringExtensions
             .Where(x => !string.IsNullOrWhiteSpace(x))
             .ToArray();
     }
+
+    /// <summary>
+    /// Convert string to base64
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    public static string ToBase64(this string input)
+    {
+        byte[] bytes = Encoding.UTF8.GetBytes(input);
+        string base64 = Convert.ToBase64String(bytes);
+        return base64;
+    }
+    /// <summary>
+    /// convert base64 to string
+    /// </summary>
+    /// <param name="base64"></param>
+    /// <returns></returns>
+    public static string FromBase64(this string base64)
+    {
+        byte[] bytes = Convert.FromBase64String(base64);
+        string input = Encoding.UTF8.GetString(bytes);
+        return input;
+    }
+    /// <summary>
+    /// Any string that ends with {xxx} will be replaced with base64 of xxx
+    /// </summary>
+    /// <param name="header"></param>
+    /// <param name="header2">header in base64 if contained in {..}</param>
+    /// <returns></returns>
+    public static bool TryReplaceToBase64(this string header, out string header2)
+    {
+        header2 = header;
+        var pattern = @"^.+?(\{[^}]+\})$";
+        var m = Regex.Match(header, pattern);
+        if (!m.Success) return false;
+        var base64 = m.Groups[1].Value.Trim().Trim('{', '}').ToBase64();
+        header2 = header.Replace(m.Groups[1].Value, base64);
+        return true;
+    }
 }

@@ -6,7 +6,9 @@ using System.Text;
 using CliWrap;
 using FluentAssertions;
 using NUnit.Framework;
+
 using OData2Poco.Fake;
+using OData2Poco.InfraStructure;
 
 namespace OData2Poco.CommandLine.Test;
 

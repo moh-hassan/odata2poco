@@ -19,7 +19,7 @@ public partial class Options
     public string UserName { get; set; }
 
     [Option('p', "password", HelpText = "password or/token Or access_token /Or client_secret in oauth2.")]
-    public SecuredContainer Password { get; set; }
+    public SecurityContainer Password { get; set; }
     [Option("domain", HelpText = "Domain in Active Directory.")]
     public string Domain { get; set; }
     [Option("proxy", HelpText = "Http Proxy in the form: 'server:port'.")]
@@ -37,7 +37,7 @@ public partial class Options
 
     [Option('o', "auth", Default = AuthenticationType.None, HelpText = "Authentication type, allowed values: none, basic, token, oauth2.")]
     public AuthenticationType Authenticate { get; set; }
-    [Option('H', "http-header", Separator = ';', HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1=value1;ky2=value2.")]
+    [Option('H', "http-header", Separator = ';', HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1:value1;ky2:value2.")]
     public IEnumerable<string> HttpHeader { get; set; }
 
    
@@ -154,7 +154,7 @@ public partial class Options
         NameCase = CaseEnum.None;
         Lang = Language.CS;
         Include = new List<string>();
-        Password = SecuredContainer.Empty;
+        Password = SecurityContainer.Empty;
         HttpHeader = new List<string>();
     }
 
