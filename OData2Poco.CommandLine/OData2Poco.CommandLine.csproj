@@ -11,18 +11,13 @@
   <PropertyGroup>
     <PackageId>OData2Poco.CommandLine</PackageId>
   </PropertyGroup>
-
-
-  <Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" />
 
   <ItemGroup>
-    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
+    <ProjectReference Include="..\OData2Poco.Cli\OData2Poco.Cli.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser"/>
-  </ItemGroup>
+  
 
   <ItemGroup>
     <PackageReference Include="ilmerge" Condition="$(TargetFramework.StartsWith('net4'))">

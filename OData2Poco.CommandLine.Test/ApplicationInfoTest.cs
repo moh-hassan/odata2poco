@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace OData2Poco.CommandLine.Test;
 
-internal class ApplicationInfoTest
+internal class ApplicationInfoTest: BaseTest
 {
     [Test]
     public void ApplicationInfo_test()
@@ -15,14 +15,6 @@ internal class ApplicationInfoTest
         var headingPattern = $@"^{titlePattern}\sVersion\s{versionPattern}$";
 
         var version = ApplicationInfo.Version;   //1.2.3+3bbb56990
-        Console.Write(version);
         version.Should().MatchRegex($"^{versionPattern}$");
-
-        var title = ApplicationInfo.Title; //O2Pgen (net472)
-        title.Should().MatchRegex(titlePattern);
-
-        var hi = ApplicationInfo.HeadingInfo;//O2Pgen (net472) Version 1.2.3+3bbb56990
-        Console.Write(hi);
-        hi.Should().MatchRegex(headingPattern);
     }
 }

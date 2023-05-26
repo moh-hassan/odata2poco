@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Net.Sockets;
 using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Extensions;
@@ -67,17 +66,10 @@ public class OptionManagerTest
         //Act
         var (cs, _) = new OptionManager(options);
         //Assert
-        Console.WriteLine($"cs user: {cs.UserName} | pw: {cs.Domain}");
-        cs.Password.Should().BeEquivalentTo(options.Password);
-        cs.UserName.Should().Be(options.UserName);
-        
-        //set user, domain
-       // cs.ToCredential().Should().BeEquivalentTo(cs.Password.Credential);
-        cs.Password.GetBasicAuth(cs.UserName).Should().Be("dXNlcjE6c2VjcmV0");
-        //cs.UserName.Should().Be(cs.GetCredential().UserName);
-        //cs.Password.Credential.Password.Should().HaveLength(6)
-        //    .And.BeEquivalentTo(options.Password.Credential.Password);
-        //cs.Password.GetSecurePassword().Should().BeEquivalentTo(options.Password.GetSecurePassword());
+        cs?.Password.Should().BeEquivalentTo(options.Password);
+        cs?.UserName.Should().Be(options.UserName);
+        cs?.Password.GetBasicAuth(cs.UserName).Should().Be("dXNlcjE6c2VjcmV0");
+        cs?.GetToken().Should().Be(options.Password.GetRawPassword());
     }
 
     [Test]
@@ -101,8 +93,7 @@ public class OptionManagerTest
         var client = cs.ToCustomHttpClient(dh);
         await client.GetAsync("http://localhost2");
         //Assert
-        Console.WriteLine($"scheme: {dh.Scheme} parameter: {dh.Parameter}");
         dh.AuthHeader.Should().NotBeNull();
-        dh.AuthHeader.ToString().Should().BeEquivalentTo(expected);
+        dh.AuthHeader?.ToString().Should().BeEquivalentTo(expected);
     }
 }

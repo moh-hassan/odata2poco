@@ -15,9 +15,11 @@
 		<Compile Include="..\Fake\CommonTestData.cs" Link="Utility\CommonTestData.cs" />
 		<Compile Include="..\Fake\TestExtensions.cs" Link="TestExtensions.cs" />
 	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" Condition="$(TargetFramework.StartsWith('net4')) " />
-		<ProjectReference Include="..\OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj" Condition="$(TargetFramework.StartsWith('net6')) " />
-		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
-	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" Condition="$(TargetFramework.StartsWith('net4')) " />
+    <ProjectReference Include="..\OData2Poco.dotnet.o2pgen\OData2Poco.dotnet.o2pgen.csproj" Condition="$(TargetFramework.StartsWith('net6')) " />
+    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
+  </ItemGroup>
+
 </Project>

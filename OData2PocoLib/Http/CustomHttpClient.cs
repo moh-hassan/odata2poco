@@ -13,31 +13,31 @@ internal class CustomHttpClient : IDisposable
 {
     private static readonly ILog Logger = PocoLogger.Default;
     internal DelegatingHandler? _delegatingHandler;
-    internal readonly OdataConnectionString _odataConnectionString;
-    internal HttpClient _client;
-    internal HttpClientHandler handler;
-    public HttpResponseMessage? Response;
+    internal readonly OdataConnectionString OdataConnection;
+    internal HttpClient Client;
+    internal HttpClientHandler HttpHandler;
+    public HttpResponseMessage Response = new();
     public Uri ServiceUri { get; set; }
 
     public CustomHttpClient(OdataConnectionString odataConnectionString)
     {
 
-        _odataConnectionString = odataConnectionString;
-        ServiceUri = new Uri(_odataConnectionString.ServiceUrl);
-        handler = new HttpClientHandler
+        OdataConnection = odataConnectionString;
+        ServiceUri = new Uri(OdataConnection.ServiceUrl);
+        HttpHandler = new HttpClientHandler
         {
             UseDefaultCredentials = true,
             AllowAutoRedirect = true,
         };
-        _client = new HttpClient(handler);
+        Client = new HttpClient(HttpHandler);
     }
 
     public CustomHttpClient(OdataConnectionString odataConnectionString,
         DelegatingHandler dh) : this(odataConnectionString)
     {
         _delegatingHandler = dh;
-        _delegatingHandler.InnerHandler = handler;
-        _client = new HttpClient(_delegatingHandler);
+        _delegatingHandler.InnerHandler = HttpHandler;
+        Client = new HttpClient(_delegatingHandler);
     }
 
 
@@ -45,8 +45,8 @@ internal class CustomHttpClient : IDisposable
     private void SetupHeader()
     {
 
-        if (_odataConnectionString.HttpHeader == null || !_odataConnectionString.HttpHeader.Any()) return;
-        foreach (var header in _odataConnectionString.HttpHeader)
+        if (OdataConnection.HttpHeader == null || !OdataConnection.HttpHeader.Any()) return;
+        foreach (var header in OdataConnection.HttpHeader)
         {
             header.TryReplaceToBase64(out var header2);
 
@@ -55,42 +55,42 @@ internal class CustomHttpClient : IDisposable
             {
                 var key = pair[0].Trim().Trim('"');
                 var value = pair[1].Trim().Trim('"');
-                _client.DefaultRequestHeaders.TryAddWithoutValidation(key, value);
+                Client.DefaultRequestHeaders.TryAddWithoutValidation(key, value);
             }
         }
     }
 
     private async Task SetHttpClient()
     {
-        //setup SkipCertificationCheck.
+        //setup Skip Certification Check.
         //Use in development environment, but is not recommended in production 
-        if (_odataConnectionString.SkipCertificationCheck)
+        if (OdataConnection.SkipCertificationCheck)
         {
-            handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
-            Logger.Warn("Skip Certification Check is set to true. This is not recommended in production environment");
+            HttpHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+            Logger.Warn("Skip Certification Check is set to true.");
         }
 
         //setup SecurityProtocol
-        if (_odataConnectionString.TlsProtocol > 0)
+        if (OdataConnection.TlsProtocol > 0)
         {
-            ServicePointManager.SecurityProtocol |= _odataConnectionString.TlsProtocol;
-            Logger.Info($"Setting the SSL/TLS protocols to: {_odataConnectionString.TlsProtocol}");
+            ServicePointManager.SecurityProtocol |= OdataConnection.TlsProtocol;
+            Logger.Info($"Setting the SSL/TLS protocols to: {OdataConnection.TlsProtocol}");
         }
 
-        if (!string.IsNullOrEmpty(_odataConnectionString.Proxy))
+        if (!string.IsNullOrEmpty(OdataConnection.Proxy))
         {
-            Logger.Trace($"Using Proxy: '{_odataConnectionString.Proxy}'");
-            handler.UseProxy = true;
-            handler.Proxy = new WebProxy(_odataConnectionString.Proxy);
+            Logger.Trace($"Using Proxy: '{OdataConnection.Proxy}'");
+            HttpHandler.UseProxy = true;
+            HttpHandler.Proxy = new WebProxy(OdataConnection.Proxy);
         }
 
-        _client.DefaultRequestHeaders
+        Client.DefaultRequestHeaders
             .TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
         var agent = "OData2Poco";
-        _client.DefaultRequestHeaders.Add("User-Agent", agent);
+        Client.DefaultRequestHeaders.Add("User-Agent", agent);
         SetupHeader();
 
-        if (_odataConnectionString.Authenticate != AuthenticationType.None)
+        if (OdataConnection.Authenticate != AuthenticationType.None)
         {
             Authenticator auth = new(this);
             await auth.Authenticate();
@@ -99,7 +99,8 @@ internal class CustomHttpClient : IDisposable
     internal virtual async Task<HttpResponseMessage> GetAsync(string? requestUri)
     {
         await SetHttpClient();
-        return await _client.GetAsync(requestUri);
+        var response = await Client.GetAsync(requestUri);
+        return response ?? throw new ODataException("Response is null");
     }
 
     internal async Task<string> ReadMetaDataAsync()
@@ -110,20 +111,21 @@ internal class CustomHttpClient : IDisposable
             url = ServiceUri.AbsoluteUri;
         else
             url = ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
-
-        Response = await GetAsync(url);
-        Response.EnsureSuccessStatusCode();
-
-        if (Response is { IsSuccessStatusCode: false })
-            throw new HttpRequestException(
-                $"Http Error {(int)Response.StatusCode}: {Response.ReasonPhrase}");
-
-        var content = await Response.Content.ReadAsStringAsync();
-        if (string.IsNullOrEmpty(content))
-            throw new HttpRequestException(
-                $"Http Error {(int)Response.StatusCode}: {Response.ReasonPhrase}");
-        return content;
+        try
+        {
+            Response = await GetAsync(url);
+            Response.EnsureSuccessStatusCode();
+            var content = await Response.Content.ReadAsStringAsync();
+            return content;
+        }
+        catch (Exception)
+        {
+            if (Response.StatusCode != HttpStatusCode.Unauthorized) throw;
+            var wwwAuthenticate = Response.Headers.WwwAuthenticate.ToString();
+            throw new ODataException($"HTTP {Response.StatusCode} ({(int)Response.StatusCode}): {wwwAuthenticate}");
+        }
     }
+
     public void Dispose()
     {
         Dispose(true);
@@ -131,10 +133,10 @@ internal class CustomHttpClient : IDisposable
     }
     protected virtual void Dispose(bool disposing)
     {
-        _odataConnectionString.Password.Dispose();
+        OdataConnection.Password.Dispose();
         _delegatingHandler?.Dispose();
         Response?.Dispose();
-        _client.Dispose();
+        Client.Dispose();
     }
     ~CustomHttpClient()
     {

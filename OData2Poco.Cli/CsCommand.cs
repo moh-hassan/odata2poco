@@ -6,7 +6,7 @@ using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.CommandLine;
-
+#nullable disable
 /// <summary>
 ///     Command Pattern to manage all options of commandline
 /// </summary>
@@ -221,3 +221,4 @@ internal class CsCommand : IPocoCommand
     }
     #endregion
 }
+#nullable restore

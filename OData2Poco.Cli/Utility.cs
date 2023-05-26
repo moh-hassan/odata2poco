@@ -3,7 +3,7 @@
 using System.Reflection;
 
 namespace OData2Poco.CommandLine;
-
+#nullable disable
 public static class Utility
 {
     //http://stackoverflow.com/questions/3127288/how-can-i-retrieve-the-assemblycompany-setting-in-assemblyinfo-cs
@@ -14,3 +14,4 @@ public static class Utility
         return value.Invoke(attribute);
     }
 }
+#nullable restore

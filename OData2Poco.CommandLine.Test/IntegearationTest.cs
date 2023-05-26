@@ -1,17 +1,15 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
-
+#if !DEBUG
+//release and windows only
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Text;
 using CliWrap;
 using FluentAssertions;
 using NUnit.Framework;
-
 using OData2Poco.Fake;
-using OData2Poco.InfraStructure;
 
 namespace OData2Poco.CommandLine.Test;
-
 internal class IntegrationTest
 {
     //release
@@ -24,15 +22,11 @@ internal class IntegrationTest
         _workingDirectory = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory));
         _o2Pgen = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory, "o2pgen.exe"));
 
-
-        //release and windows only
-#if !DEBUG
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
         _workingDirectory = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory,
             "..", "..", "..", "..", "build"));
         _o2Pgen = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory,
             "..", "..", "..", "..", "build", "o2pgen.exe"));
-#endif
     }
 
     [Test]
@@ -45,7 +39,7 @@ internal class IntegrationTest
             Assert.Ignore("ignore test o2pgen.exe in non windows OS");
             return;
         }
-
+        Console.WriteLine($"BaseDirectory: {SystemConst.BaseDirectory}");
         var stdOutBuffer = new StringBuilder();
         var result = await Cli.Wrap(_o2Pgen)
             .WithArguments(options)
@@ -58,7 +52,7 @@ internal class IntegrationTest
         result.ExitCode.Should().Be(exitCode);
     }
 
-    public static IEnumerable TestCases
+public static IEnumerable TestCases
     {
         get
         {
@@ -69,3 +63,5 @@ internal class IntegrationTest
         }
     }
 }
+
+#endif

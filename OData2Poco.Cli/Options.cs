@@ -6,7 +6,7 @@ using CommandLine.Text;
 using OData2Poco.Http;
 
 namespace OData2Poco.CommandLine;
-
+#nullable disable
 // Options of commandline
 public partial class Options
 {
@@ -180,3 +180,4 @@ public partial class Options
     }
 
 }
+#nullable restore

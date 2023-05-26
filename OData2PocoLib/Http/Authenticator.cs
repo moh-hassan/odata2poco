@@ -2,7 +2,6 @@
 
 using System.Net;
 using System.Net.Http.Headers;
-using OData2Poco.Extensions;
 
 namespace OData2Poco.Http;
 
@@ -16,12 +15,12 @@ internal class Authenticator
 
     public async Task Authenticate()
     {
-        var ocs = _customClient._odataConnectionString;
+        var ocs = _customClient.OdataConnection;
         if (ocs.Authenticate == AuthenticationType.None) return;
-        var client = _customClient._client;
-        var handler = _customClient.handler;
+        var client = _customClient.Client;
+        var handler = _customClient.HttpHandler;
         CredentialCache credentials = new();
-        NetworkCredential nc = ocs.Password.GetCredential(ocs.UserName,ocs.Domain); 
+        NetworkCredential nc = ocs.Password.GetCredential(ocs.UserName, ocs.Domain);
         switch (ocs.Authenticate)
         {
             case AuthenticationType.Basic:

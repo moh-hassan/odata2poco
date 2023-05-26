@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 
 namespace OData2Poco;
-
+#pragma warning disable IDE0060
 public class AuthHandler : DelegatingHandler
 {
     public HttpRequestMessage? Request { get; set; }
@@ -34,19 +34,21 @@ public class AuthHandler : DelegatingHandler
         _tracer.WriteLine($"Scheme: {Scheme}, Parameter: {Parameter}");
         _tracer.WriteLine($"Request:\n {request}");
 
-        if (_isLive)
-            try
-            {
-                Response = await base.SendAsync(request, cancellationToken);
-                _tracer.WriteLine($"Response:\n {Response}");
-                return Response;
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Delegation Exception {ex.Message}");
-                throw;
-            }
-        return new HttpResponseMessage(HttpStatusCode.OK);
+        if (!_isLive) return new HttpResponseMessage(HttpStatusCode.OK);
+
+        try
+        {
+            Response = await base.SendAsync(request, cancellationToken);
+            Response.EnsureSuccessStatusCode();
+            _tracer.WriteLine($"Response:\n {Response}");
+            return Response;
+        }
+        catch (HttpRequestException ex)
+        {
+            if (Response != null) _tracer.WriteLine($"Response:\n {Response}");
+            _tracer.WriteLine($"DelegationHandler Exception:\n {ex.Message}");
+            throw;
+        }
     }
     public void Dump()
     {

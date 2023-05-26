@@ -17,13 +17,8 @@
     <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
-  <Import Project="..\OData2Poco.Core\OData2Poco.Core.projitems" Label="Shared" />
-
   <ItemGroup>
-    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
+    <ProjectReference Include="..\OData2Poco.Cli\OData2Poco.Cli.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser"/>
-  </ItemGroup>
 </Project>

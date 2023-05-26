@@ -31,7 +31,7 @@ internal static class CommandLineUtility
                     break;
             }
 
-            var att = (OptionAttribute)p1.attrs.FirstOrDefault();
+            var att = (OptionAttribute?)p1.attrs.FirstOrDefault();
             if (att == null) continue;
             var shortName = att.ShortName == null ? $"--{att.LongName}" : $"-{att.ShortName}";
             if (!string.IsNullOrEmpty(val?.ToString()))

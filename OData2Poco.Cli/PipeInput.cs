@@ -4,9 +4,9 @@ namespace OData2Poco.CommandLine;
 
 internal static class Pipes
 {
-    public static string ReadPipe()
+    public static string? ReadPipe()
     {
-        string input = "";
+        var input = "";
         // if nothing is being piped in, then exit
         if (!IsPipedInput())
             return input;

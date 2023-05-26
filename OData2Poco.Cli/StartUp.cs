@@ -41,8 +41,8 @@ namespace OData2Poco.CommandLine
             if ((args.Length == 0) || (args.Length == 1 && args[0].StartsWith("@")))
             {
                 var cfg = new OptionConfiguration(FileSystem);
-                var flag = cfg.TryGetConfigurationFile(args, out var cli, out string error,
-                    out string fileName);
+                var flag = cfg.TryGetConfigurationFile(args, out var cli, out var error,
+                    out var fileName);
                 if (flag)
                 {
                     Logger.Info($"Reading configuration file: {fileName}");

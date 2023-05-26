@@ -18,8 +18,8 @@
     <Company>OData2Poco</Company>
     <PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128;NU1507</NoWarn>
-    <LangVersion>preview</LangVersion>
+    <NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128;NU1507;S3925</NoWarn>
+    <LangVersion>11</LangVersion>
     <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
     <Version Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)</Version>
     <Version Condition="'$(VersionSuffix)' == ''">0.0.0</Version>

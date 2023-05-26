@@ -24,10 +24,6 @@
     <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(OpenApi3)">
-    <PackageReference Include="Microsoft.OpenApi.OData" />
-  </ItemGroup>
-
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net" />

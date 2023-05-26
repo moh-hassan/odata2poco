@@ -11,6 +11,7 @@ namespace OData2Poco.CommandLine.Test
 
         public BaseTest()
         {
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
             //in case multi target project,use #if because no appdomain in netcore
 #if !NETCOREAPP
             /* Preparing test start */

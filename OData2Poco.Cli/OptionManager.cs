@@ -20,7 +20,7 @@ public class OptionManager
         var pw = PasswordReader.ReadPassword("Enter Password/token: ");
         options.Password = new SecurityContainer(pw);
     }
-    public void Deconstruct(out OdataConnectionString connectionString, out PocoSetting pocoSetting)
+    public void Deconstruct(out OdataConnectionString? connectionString, out PocoSetting? pocoSetting)
     {
         var json = PocoOptions.ToJson();
         connectionString = json.ToObject<OdataConnectionString>();

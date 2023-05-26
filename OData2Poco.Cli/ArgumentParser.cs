@@ -5,7 +5,7 @@ using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.CommandLine;
-
+#nullable disable
 public class ArgumentParser
 {
     public static bool ShowVersionOrHelp { get; set; }
@@ -84,3 +84,4 @@ public class ArgumentParser
         return result;
     }
 }
+#nullable restore
