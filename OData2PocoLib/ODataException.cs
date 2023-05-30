@@ -4,18 +4,18 @@
 namespace OData2Poco;
 
 [Serializable]
-public class ODataException : Exception
+public class OData2PocoException : Exception
 {
-    public ODataException()
+    public OData2PocoException()
     {
     }
 
-    public ODataException(string message)
+    public OData2PocoException(string message)
         : base(message)
     {
     }
 
-    public ODataException(string message, Exception inner)
+    public OData2PocoException(string message, Exception inner)
         : base(message, inner)
     {
     }

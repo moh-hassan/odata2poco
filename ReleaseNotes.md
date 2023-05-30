@@ -1,6 +1,38 @@
 # OData2Poco 
 
-## Version 5.0.0
+## Version 6.0.0
+**Release Date:**  May 30, 2023
+
+**Security**
+
+- Password/secret token  are encrypted when read from commandLine/file and it's stored in a SecuredContainer.
+- Reading password from keyboard and Encrypted then stored in a SecuredContainer.
+
+**User Experience**
+
+- Load option and arguments of commandLine from a text configuration File.
+- Reading value of any option in the commandLine from file.
+- Support repeating options in the commandLine for sequence args.
+
+**Http Connection**
+
+- New Option: Allow setting of SSL/TLS protocols.
+- New option: Allow to Skip Certification Check in http connection.  
+- New Option: Allow to specify Http header in Odata http connection with the computing of base64.
+
+**Code Generation**
+- Add comments to the header of c# class to mark the openType classes or Entity/Complex type.
+
+**Enhancement**
+- Set exit codes to be positive number to match Linux standard.
+- Centeralizing packages and update all packages to the last version including Newtonsoft.Json to 13.0.3
+
+Try the new version and let me know your feedback. 
+
+[How to use the new v6.0](https://github.com/moh-hassan/odata2poco/wiki/v6_0_0_how_to)
+
+## Version 5.0.1
+**Release Date:**  oct 4, 2022
 
 - New feature: generating typescript code as a single file or multi files(modules).
 - New feature: Generating class with init-only property, the new feature in c# 9.

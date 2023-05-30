@@ -39,7 +39,6 @@ public class AuthHandler : DelegatingHandler
         try
         {
             Response = await base.SendAsync(request, cancellationToken);
-            Response.EnsureSuccessStatusCode();
             _tracer.WriteLine($"Response:\n {Response}");
             return Response;
         }
@@ -47,6 +46,7 @@ public class AuthHandler : DelegatingHandler
         {
             if (Response != null) _tracer.WriteLine($"Response:\n {Response}");
             _tracer.WriteLine($"DelegationHandler Exception:\n {ex.Message}");
+            //  return Response ?? throw ex;
             throw;
         }
     }

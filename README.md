@@ -10,23 +10,43 @@ POCO classes can be used in a typed RESTful client OData services. Code generati
 [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg?label=Chocolatey%20Console)](https://chocolatey.org/packages/odata2poco-commandline)
 
 ## Continuous integration
-|Build server                |Platform     |Build status                                                |
-|----------------------------|-------------|------------------------------------------------------------|
-|AppVeyor                    |Windows      |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
-|Travis                      |Linux / OS X |[![Build Status](https://travis-ci.org/moh-hassan/odata2poco.svg?branch=master)](https://travis-ci.org/moh-hassan/odata2poco)|
+|Build server                |Build status                                                |
+|----------------------------|------------------------------------------------------------|
+|AppVeyor                    |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
 
 -----------
 
-# Announcing new Release: V5.0.0
- - New feature: generating typescript code as a single file or multi files(modules).
-- New feature: Generating class with init-only property, the new feature in c# 9.
-- New feature: Generating record type, the new feature in c# 9.
-- Fix issue [#29](https://github.com/moh-hassan/odata2poco/issues/29) and consider class dependency when filtering model.
-- Moving o2pgen cli console tool from net45 to net472, [#44](https://github.com/moh-hassan/odata2poco/issues/44)
-- Calculate checksum256 for all packages and saved to file hosted in github releases.
-- Auto puplishing the chocolatey package.
+# Announcing new Release: V6.0.0
 
-How to use the new features: [read wiki](https://github.com/moh-hassan/odata2poco/wiki/OData2Poco-Next)
+## What’s New in v6.0.0:
+
+**Security**
+
+- Password/secret token  are encrypted when read from commandLine/file and it's stored in a SecuredContainer.
+- Reading password from keyboard and Encrypted then stored in a SecuredContainer.
+
+**User Experience**
+
+- Load option and arguments of commandLine from a text configuration File.
+- Reading value of any option in the commandLine from file.
+- Support repeating options in the commandLine for sequence args.
+
+**Http Connection**
+
+- New Option: Allow setting of SSL/TLS protocols.
+- New option: Allow to Skip Certification Check in http connection.  
+- New Option: Allow to specify Http header in Odata http connection with the computing of base64.
+
+**Code Generation**
+- Add comments to the header of c# class to mark the openType classes or Entity/Complex type.
+
+**Enhancement**
+- Set exit codes to be positive number to match Linux standard.
+- Centeralizing packages and update all packages to the last version including Newtonsoft.Json to 13.0.3
+
+Try the new version and let me know your feedback. 
+
+[How to use the new v6.0](https://github.com/moh-hassan/odata2poco/wiki/v6_0_0_how_to)
 
 ------------ 
 

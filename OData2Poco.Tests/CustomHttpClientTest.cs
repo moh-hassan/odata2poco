@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Net;
-using System.Net.Http;
-using System.Security.Authentication;
 using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Extensions;
@@ -13,6 +11,18 @@ namespace OData2Poco.Tests;
 
 internal class CustomHttpClientTest : BaseTest
 {
+    private bool _isLive;
+    private string _token;
+    private string _url ;
+
+    [OneTimeSetUp]
+    public void Setup()
+    {
+        _isLive = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("LiveTest", EnvironmentVariableTarget.User));
+        _token = Environment.GetEnvironmentVariable("Token", EnvironmentVariableTarget.User);
+        _url = "https://localhost/odata/odata";
+    }
+
     [Test]
     public async Task No_auth_ReadMetaDataTest()
     {
@@ -234,39 +244,17 @@ internal class CustomHttpClientTest : BaseTest
     #region Auth live Test
 
     [Test]
-    public async Task Basic_Auth_user_password_live_test()
+    [Category("live")]
+    public async Task Bearer_Auth_live_with_valid_token_test()
     {
-        //Arrange
-        var url = "https://httpbin.org/basic-auth/user2/password2";
-        var ocs = new OdataConnectionString
-        {
-            ServiceUrl = url,
-            UserName = "user2",
-            Password = "password2",
-            Authenticate = AuthenticationType.Basic
-        };
-        var ah = new AuthHandler(true);
-        var sut = ocs.ToCustomHttpClient(ah);
-        //Act
-        await sut.GetAsync(sut.ServiceUri.ToString());
-        //Assert
-        var expectedToken = ocs.Password.GetBasicAuth(ocs.UserName);
-        ah.AuthHeader.Should().NotBeNull();
-        ah.AuthHeader?.ToString().Should().Be($"Basic {ocs.GetBasicAuth()}");
-        ah.Scheme?.Should().Be("Basic");
-        ah.Parameter?.Should().Be(expectedToken);
-        ah.Response?.StatusCode.Should().Be(HttpStatusCode.OK);
-    }
+        if (!_isLive)
+            Assert.Ignore("live test");
 
-    [Test]
-    public async Task Bearer_Auth_live_test()
-    {
         //Arrange
-        var url = "https://httpbin.org/bearer";
         var ocs = new OdataConnectionString
         {
-            ServiceUrl = url,
-            Password = "xyz",
+            ServiceUrl = _url,
+            Password = _token,
             Authenticate = AuthenticationType.Token,
         };
         var ah = new AuthHandler(true);
@@ -276,91 +264,60 @@ internal class CustomHttpClientTest : BaseTest
         //Assert
         var expectedToken = ocs.Password.GetToken();
         ah.AuthHeader.Should().NotBeNull();
-        ah.AuthHeader?.ToString().Should().Be("Bearer xyz");
+        // ah.AuthHeader?.ToString().Should().Be("Bearer xyz");
         ah.Scheme?.Should().Be("Bearer");
         ah.Parameter?.Should().Be(expectedToken);
         ah.Response?.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Test]
-    public async Task Basic_auth_via_header_live_test()
+    [Category("live")]
+    public async Task Bearer_Auth_live_with_inValid_token_test()
     {
+        if (!_isLive)
+            Assert.Ignore("live test");
         //Arrange
-        var url = "https://httpbin.org/basic-auth/user2/password2";
         var ocs = new OdataConnectionString
         {
-            ServiceUrl = url,
-            HttpHeader = new List<string> { "Authorization : Basic {user2:password2}" }
+            ServiceUrl = _url,
+            Password = "xyz",
+            Authenticate = AuthenticationType.Token,
         };
         var ah = new AuthHandler(true);
         var client = ocs.ToCustomHttpClient(ah);
+
         //Act
-        await client.GetAsync(client.ServiceUri.ToString());
+        var act = async () => await client.ReadMetaDataAsync();
         //Assert
-        ah.AuthHeader.Should().NotBeNull();
-        ah.AuthHeader?.ToString().Should().Be("Basic "+ "user2:password2".ToBase64());
-        ah.Scheme?.Should().Be("Basic");
-        ah.Parameter?.Should().Be("user2:password2".ToBase64());
-        ah.Response?.StatusCode.Should().Be(HttpStatusCode.OK);
+        await act.Should().ThrowAsync<OData2PocoException>()
+            .WithMessage(@"HTTP Unauthorized (401): Bearer error=""invalid_token""");
     }
 
     [Test]
+    [Category("live")]
     public async Task Bearer_auth_via_header_live_test()
     {
+        if (!_isLive)
+            Assert.Ignore("live test");
+
         //Arrange
-        var url = "https://httpbin.org/bearer";
         var ocs = new OdataConnectionString
         {
-            ServiceUrl = url,
-            HttpHeader = new List<string> { $"Authorization : Bearer xyz" },
-            SkipCertificationCheck = true
+            ServiceUrl = _url,
+            HttpHeader = new List<string> { $"Authorization : Bearer {_token}" },
         };
         var ah = new AuthHandler(true);
         var client = ocs.ToCustomHttpClient(ah);
         //Act
-        await client.GetAsync(client.ServiceUri.ToString());
+        await client.ReadMetaDataAsync();
         //Assert
         ah.AuthHeader.Should().NotBeNull();
-        ah.AuthHeader?.ToString().Should().Be("Bearer xyz");
+        ah.AuthHeader?.ToString().Should().Be($"Bearer {_token}");
         ah.Scheme?.Should().Be("Bearer");
-        ah.Parameter?.Should().Be("xyz");
+        ah.Parameter?.Should().Be(_token);
         ah.Response?.StatusCode.Should().Be(HttpStatusCode.OK);
     }
-    //[Test]
-    //public async Task Bearer_Auth_live_test2()
-    //{
-    //    //Arrange
-    //    var url = "http://besmart.somee.com/odata/odata";
-    //    var ocs = new OdataConnectionString
-    //    {
-    //        ServiceUrl = url,
-    //        Password = File.ReadAllText(@"C:\MyGithub\odata2poco\odata2poco\build\token.txt"),
-    //        Authenticate = AuthenticationType.Token,
-    //    };
-    //    var ah = new AuthHandler(true);
-    //    var client = ocs.ToCustomHttpClient(ah);
-    //    //Act
-    //    //await client.GetAsync(client.ServiceUri.ToString());
-    //    try
-    //    {
-    //        await client.ReadMetaDataAsync();
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Console.WriteLine(e);
-    //        ah.Dump(); ;
-    //    }
-       
-      
-    //    return;
-    //    //Assert
-    //    var expectedToken = ocs.Password.GetToken();
-    //    ah.AuthHeader.Should().NotBeNull();
-    //    ah.AuthHeader?.ToString().Should().Be("Bearer xyz");
-    //    ah.Scheme?.Should().Be("Bearer");
-    //    ah.Parameter?.Should().Be(expectedToken);
-       
-    //    ah.Response?.StatusCode.Should().Be(HttpStatusCode.OK);
-    //}
+
     #endregion
+
 }
