@@ -2,6 +2,7 @@
 
 using NSubstitute;
 using OData2Poco.Api;
+using OData2Poco.Extensions;
 using OData2Poco.Fake;
 
 namespace OData2Poco.Tests;
@@ -54,9 +55,9 @@ public static class Moq
     {
         get
         {
-            var gen = TripPin4IgenAsync(new PocoSetting()).Result;
-            var list = gen.GeneratePocoList();
-            return list;
+            var jsonFile = Path.Combine(TestSample.FakeFolder, "TripPinModel.json");
+            var classList = File.ReadAllText(jsonFile).ToObject<List<ClassTemplate>>();
+            return classList;
         }
     }
 
