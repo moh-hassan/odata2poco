@@ -9,7 +9,8 @@ namespace OData2Poco.CustAttributes.NamedAtributes;
 public class Json3Attribute : INamedAttribute
 {
     public string Name { get; } = "json3";
-
+    public string Scope { get; } = "property";
+    public bool IsUserDefined { get; } = false;
     public List<string> GetAttributes(PropertyTemplate property)
     {
         return string.IsNullOrEmpty(property.OriginalName) || property.OriginalName == property.PropName

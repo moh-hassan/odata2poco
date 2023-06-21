@@ -7,7 +7,8 @@ namespace OData2Poco.CustAttributes.NamedAtributes;
 public class TableAttribute : INamedAttribute
 {
     public string Name { get; set; } = "tab"; //"table";
-
+    public string Scope { get; } = "class";
+    public bool IsUserDefined { get; } = false;
     public List<string> GetAttributes(PropertyTemplate property)
     {
         return new();

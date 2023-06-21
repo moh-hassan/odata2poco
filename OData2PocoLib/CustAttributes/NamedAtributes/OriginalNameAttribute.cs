@@ -18,7 +18,8 @@ namespace OData2Poco.CustAttributes.NamedAtributes;
 public class OriginalNameAttribute : INamedAttribute
 {
     public string Name { get; } = "original";
-
+    public string Scope { get; } = "property";
+    public bool IsUserDefined { get; } = false;
     public List<string> GetAttributes(PropertyTemplate property)
     {
         return new List<string>

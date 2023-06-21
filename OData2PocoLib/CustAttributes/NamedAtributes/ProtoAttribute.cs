@@ -6,7 +6,8 @@ namespace OData2Poco.CustAttributes.NamedAtributes;
 public class ProtoAttribute : INamedAttribute
 {
     public string Name { get; } = "proto";
-
+    public string Scope { get; } = "dual";
+    public bool IsUserDefined { get; } = false;
     public List<string> GetAttributes(PropertyTemplate property)
     {
         return new() { $"[ProtoMember({property.Serial})]" };

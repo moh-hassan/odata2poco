@@ -9,6 +9,8 @@ namespace OData2Poco.CustAttributes.NamedAtributes;
 public class DisplayAttribute : INamedAttribute
 {
     public string Name { get; } = "display";
+    public string Scope { get; } = "property";
+    public bool IsUserDefined { get; } = false;
 
     public List<string> GetAttributes(PropertyTemplate property)
     {
