@@ -124,7 +124,7 @@ internal class StringExtensionsTest : BaseTest
     }
 
     [Test]
-    [TestCase("Authorization=Basic {user1:password1}", "Authorization=Basic dXNlcjE6cGFzc3dvcmQx",true)]
+    [TestCase("Authorization=Basic {user1:password1}", "Authorization=Basic dXNlcjE6cGFzc3dvcmQx", true)]
     [TestCase("Authorization=Basic abc123", "Authorization=Basic abc123", false)]
     public void ReplaceToBase64_test(string header, string expectedHeader, bool expectedFlag)
     {
@@ -132,5 +132,57 @@ internal class StringExtensionsTest : BaseTest
         flag.Should().Be(expectedFlag);
         header2.Should().Be(expectedHeader);
 
+    }
+
+    [Test]
+    [TestCase("a*", true)]
+    [TestCase("a*c", true)]
+    [TestCase("a?c", true)]
+    [TestCase("a?c*", true)]
+    [TestCase("a?c*", true)]
+    [TestCase("?a?c", false)]
+    [TestCase("a[b]c", true)]
+    [TestCase("a[^d]c", true)]
+    [TestCase("*c", true)]
+    public void Like_test(string value, bool expected)
+    {
+        var flag = "abc".Like(value);
+        flag.Should().Be(expected);
+    }
+    [Test]
+    [TestCase("a*", false)]
+    [TestCase("a*c", false)]
+    [TestCase("a?c", false)]
+    [TestCase("a?c*", false)]
+    [TestCase("a?c*", false)]
+    [TestCase("?a?c", true)]
+    [TestCase("a[b]c", false)]
+    [TestCase("a[^d]c", false)]
+    [TestCase("*c", false)]
+    public void NotLike_test(string value, bool expected)
+    {
+        var flag = "abc".NotLike(value);
+        flag.Should().Be(expected);
+    }
+
+    [Test]
+    [TestCase("city", true)]
+    [TestCase("trip", true)]
+    [TestCase("book", true)]
+    [TestCase("product", false)]
+    public void In_test(string value, bool expected)
+    {
+        var flag = value.In("city", "trip", "book");
+        flag.Should().Be(expected);
+    }
+    [Test]
+    [TestCase("city", false)]
+    [TestCase("trip", false)]
+    [TestCase("book", false)]
+    [TestCase("product", true)]
+    public void NotIn_test(string value, bool expected)
+    {
+        var flag = value.NotIn("city", "trip", "book");
+        flag.Should().Be(expected);
     }
 }

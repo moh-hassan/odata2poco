@@ -1,13 +1,14 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using OData2Poco.CustAttributes.UserAttributes;
+
 namespace OData2Poco.CustAttributes;
 
 public class AttributeFactory
 {
     private static readonly Lazy<AttributeFactory> Lazy = new(() => new AttributeFactory());
     private readonly PocoAttributesList _pocoAttributesList;
-    private List<string> _attributes;
-
+    private List<string> _attributes; //attributes from commandline options
     private AttributeFactory()
     {
         _pocoAttributesList = new PocoAttributesList();
@@ -28,18 +29,17 @@ public class AttributeFactory
         return this;
     }
 
-    private INamedAttribute? GetAttributeObject(string attName)
+    private INamedAttribute? GetAttribute(string attName)
     {
         return _pocoAttributesList[attName];
     }
-
 
     public List<string> GetAttributes(object property, string attName)
     {
         if (attName.StartsWith("[") && property is PropertyTemplate)
             return new List<string> { attName };
 
-        var attributeObject = GetAttributeObject(attName);
+        var attributeObject = GetAttribute(attName);
         return property switch
         {
             PropertyTemplate p => attributeObject != null ? attributeObject.GetAttributes(p) : new List<string>(),
@@ -68,4 +68,19 @@ public class AttributeFactory
     {
         return GetAttributes(property, _attributes);
     }
+    public PocoAttributesList GetAllAttributes()
+    {
+        return _pocoAttributesList;
+    }
+    #region User Attributes
+    public void AddUserAttributes(string json)
+    {
+        var atts = AttDefinition.ToNamedAttributes(json);
+        _pocoAttributesList.AddRange(atts);
+    }
+    public void AddUserAttribute(AttDefinition ad) => _pocoAttributesList.Add(ad);
+
+    public PocoAttributesList GetAttributeList() => _pocoAttributesList;
+    public bool IsExists(string attName) => _pocoAttributesList[attName] is not null;
+    #endregion
 }

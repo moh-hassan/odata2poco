@@ -7,6 +7,7 @@ public interface INamedAttribute
 {
     string Name { get; }
     string Scope { get; }
+    bool IsUserDefined { get; }
     List<string> GetAttributes(PropertyTemplate property);
     List<string> GetAttributes(ClassTemplate classTemplate);
 }

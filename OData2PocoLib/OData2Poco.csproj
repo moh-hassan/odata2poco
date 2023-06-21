@@ -19,6 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DynamicExpresso.Core" />
     <PackageReference Include="Microsoft.Data.Edm" />
     <PackageReference Include="Microsoft.OData.Edm" />
     <PackageReference Include="Newtonsoft.Json" />

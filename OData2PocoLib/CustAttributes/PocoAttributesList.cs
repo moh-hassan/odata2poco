@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Reflection;
+using OData2Poco.CustAttributes.UserAttributes;
 
 // ReSharper disable UnusedMember.Global
 
@@ -15,6 +16,7 @@ public class PocoAttributesList : IEnumerable<INamedAttribute>
     {
         _namedAttributes = new List<INamedAttribute>();
         FillNamedAttributes();
+        // FillUserAttributes();
     }
 
     public INamedAttribute? this[string index] => GetAttributeObject(index);
@@ -43,13 +45,13 @@ public class PocoAttributesList : IEnumerable<INamedAttribute>
     {
         var asm = typeof(INamedAttribute).GetTypeInfo().Assembly;
         var types = asm.DefinedTypes
-            .Where(x => x.ImplementedInterfaces.Contains(typeof(INamedAttribute)));
+            .Where(x => x.ImplementedInterfaces.Contains(typeof(INamedAttribute)))
+            .Where(x => !x.Name.Contains("UserAttribute"));
 
         foreach (var type in types)
             if (Activator.CreateInstance(type) is INamedAttribute item)
                 _namedAttributes.Add(item);
     }
-
     public void LoadPluginAttributes()
     {
         var foldr = "plugin";
@@ -61,5 +63,17 @@ public class PocoAttributesList : IEnumerable<INamedAttribute>
 
 
         if (pluginList.Any()) _namedAttributes.AddRange(pluginList);
+    }
+    public void Add(AttDefinition ad)
+    {
+        _namedAttributes.Add(ad.ToNamedAttribute());
+    }
+    public void Add(INamedAttribute att)
+    {
+        _namedAttributes.Add(att);
+    }
+    public void AddRange(IEnumerable<INamedAttribute> atts)
+    {
+        _namedAttributes.AddRange(atts);
     }
 }
