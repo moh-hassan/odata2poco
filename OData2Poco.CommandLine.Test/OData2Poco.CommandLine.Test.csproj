@@ -8,13 +8,21 @@
 		<LangVersion>default</LangVersion>
 		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
 		<RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+    <DefineConstants>$(DefineConstants);Test_Cli</DefineConstants>
 	</PropertyGroup>	
 
-	<ItemGroup>		
+	<ItemGroup Label="FakeData">		
 		<Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />
 		<Compile Include="..\Fake\CommonTestData.cs" Link="Utility\CommonTestData.cs" />
-		<Compile Include="..\Fake\TestExtensions.cs" Link="TestExtensions.cs" />
+    <Compile Include="..\Fake\TestExtensions.cs" Link="TestExtensions.cs" />
 	</ItemGroup>
+
+  <ItemGroup Label="mocks">
+    <Compile Include="..\Fake\Common\MockBuilder.cs" Link="HttpMock\MockBuilder.cs" />
+    <Compile Include="..\Fake\Common\Mocks.cs" Link="HttpMock\Mocks.cs" />
+    <Compile Include="..\Fake\Common\MockSetup.cs" Link="HttpMock\MockSetup.cs" />
+    <Compile Include="..\Fake\Common\Site.cs" Link="HttpMock\Site.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OData2Poco.CommandLine\OData2Poco.CommandLine.csproj" Condition="$(TargetFramework.StartsWith('net4')) " />
@@ -22,4 +30,8 @@
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <PackageReference Include="WireMock.Net" />
+  </ItemGroup>
 </Project>

@@ -2,7 +2,6 @@
 
 #pragma warning disable S4830
 
-using System;
 using System.Net;
 using System.Net.Http;
 using OData2Poco.Extensions;
@@ -100,8 +99,12 @@ internal class CustomHttpClient : IDisposable
     internal virtual async Task<HttpResponseMessage> GetAsync(string? requestUri)
     {
         await SetHttpClient();
-          var response = await Policy.RetryAsync(() => Client.GetAsync(requestUri), 3);
-      //  var response = await Client.GetAsync(requestUri);
+        var response = await Client.GetAsync(requestUri);
+        if (response.StatusCode == HttpStatusCode.ServiceUnavailable ||
+            response.StatusCode == HttpStatusCode.GatewayTimeout)
+        {
+            response = await Policy.RetryAsync(() => Client.GetAsync(requestUri), 2);
+        }
         return response ?? throw new OData2PocoException("Response is null");
     }
 

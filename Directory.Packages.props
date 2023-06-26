@@ -4,7 +4,6 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Microsoft.Data.Edm" Version="5.8.5" />
     <PackageVersion Include="Microsoft.OData.Edm" Version="7.15.0" />
@@ -20,5 +19,6 @@
     <PackageVersion Include="NSubstitute" Version="5.0.0" />
     <PackageVersion Include="CliWrap" Version="3.6.1" />
     <PackageVersion Include="coverlet.collector" Version="3.2.0" />
+    <PackageVersion Include="WireMock.Net" Version="1.5.27" />
   </ItemGroup>
 </Project>

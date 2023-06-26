@@ -4,19 +4,21 @@ using System.Net.Http;
 using System.Net;
 using OData2Poco.InfraStructure.Logging;
 
-namespace OData2Poco.Extensions;
+namespace OData2Poco.Http;
 
 internal static class Policy
 {
     private static readonly ILog Logger = PocoLogger.Default;
-   public static async Task<HttpResponseMessage> RetryAsync(Func<Task<HttpResponseMessage>> action, int maxRetries, int delay = 2)
+    public static async Task<HttpResponseMessage?> RetryAsync(Func<Task<HttpResponseMessage>> action, int maxRetries, int delay = 2)
     {
-        int retryCount = 0;
+        var retryCount = 0;
         HttpResponseMessage? response = null;
-        int delaySeconds = delay;
+        var delaySeconds = delay;
 
         while (retryCount < maxRetries)
         {
+            if (retryCount > 0)
+                Logger.Info($"Retry http connection: {retryCount}");
             try
             {
                 response = await action();
@@ -31,6 +33,7 @@ internal static class Policy
                     if (retryCount < maxRetries)
                     {
                         Logger.Info($"Retry: {retryCount}, StatusCode: {response.StatusCode}");
+                        Console.WriteLine($"Retry: {retryCount}, StatusCode: {response.StatusCode}");
                         await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
                         delaySeconds++;
                     }
@@ -44,6 +47,7 @@ internal static class Policy
                 if (retryCount < maxRetries)
                 {
                     Logger.Info($"Retry: {retryCount}, Error: {ex.Message}");
+                    Console.WriteLine($"Retry: {retryCount}, StatusCode: {response?.StatusCode}");
                     await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
                     delaySeconds++;
                 }

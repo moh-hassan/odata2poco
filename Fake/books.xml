@@ -1,0 +1,59 @@
+﻿<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:DataServices>
+    <Schema Namespace="Lab01Sample01.Models" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityType Name="book">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.String" Nullable="false" />
+        <Property Name="isbn" Type="Edm.String" />
+        <Property Name="title" Type="Edm.String" />
+        <Property Name="year" Type="Edm.Int32" />
+        <Property Name="forKids" Type="Edm.Boolean" DefaultValue="True" />
+        <NavigationProperty Name="mainAuthor" Type="Lab01Sample01.Models.author" />
+        <NavigationProperty Name="authors" Type="Collection(Lab01Sample01.Models.author)" />
+        <NavigationProperty Name="translators" Type="Collection(Lab01Sample01.Models.Translator)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="author">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.String" Nullable="false" />
+        <Property Name="authorName" Type="Edm.String" />
+        <Property Name="addresses" Type="Collection(Lab01Sample01.Models.address)" />
+      </EntityType>
+      <EntityType Name="publisher">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.String" Nullable="false" />
+        <Property Name="publisherName" Type="Edm.String" />
+        <Property Name="address" Type="Lab01Sample01.Models.address" />
+        <NavigationProperty Name="authors" Type="Collection(Lab01Sample01.Models.author)" />
+      </EntityType>
+      <ComplexType Name="address">
+        <Property Name="town" Type="Edm.String" />
+        <Property Name="county" Type="Edm.String" />
+      </ComplexType>
+      <EntityType Name="Translator">
+        <Key>
+          <PropertyRef Name="translatorId" />
+        </Key>
+        <Property Name="translatorId" Type="Edm.String" Nullable="false" />
+        <Property Name="translatorName" Type="Edm.String" />
+      </EntityType>
+    </Schema>
+    <Schema Namespace="Default" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityContainer Name="Container">
+        <EntitySet Name="books" EntityType="Lab01Sample01.Models.book">
+          <NavigationPropertyBinding Path="authors" Target="authors" />
+          <NavigationPropertyBinding Path="mainAuthor" Target="authors" />
+        </EntitySet>
+        <EntitySet Name="authors" EntityType="Lab01Sample01.Models.author" />
+        <EntitySet Name="publishers" EntityType="Lab01Sample01.Models.publisher">
+          <NavigationPropertyBinding Path="authors" Target="authors" />
+        </EntitySet>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

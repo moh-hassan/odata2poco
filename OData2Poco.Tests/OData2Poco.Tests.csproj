@@ -11,14 +11,25 @@
 		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
-  <ItemGroup>		 
-		<Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />
+  <ItemGroup Label="FakeData">
+    <Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />
 		<Compile Include="..\Fake\CommonTestData.cs" Link="CommonTestData.cs" />
-		<Compile Include="..\Fake\projectTestData.cs" Link="projectTestData.cs" />
+    <Compile Include="..\Fake\projectTestData.cs" Link="projectTestData.cs" />
 		<Compile Include="..\Fake\TestExtensions.cs" Link="TestExtensions.cs" />
 		<Compile Include="..\Fake\TsTestData.cs" Link="TsTestData.cs" />
 		<Compile Include="..\OData2Poco.CommandLine.Test\Utility\HelpTestExtension.cs" Link="HelpTestExtension.cs" />
 	</ItemGroup>
+
+  <ItemGroup Label="mocks">
+    <Compile Include="..\Fake\Common\MockBuilder.cs" Link="HttpMock\MockBuilder.cs" />
+    <Compile Include="..\Fake\Common\Mocks.cs" Link="HttpMock\Mocks.cs" />
+    <Compile Include="..\Fake\Common\MockSetup.cs" Link="HttpMock\MockSetup.cs" />
+    <Compile Include="..\Fake\Common\Site.cs" Link="HttpMock\Site.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WireMock.Net" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
@@ -26,5 +37,23 @@
 
 	<ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
 		<Reference Include="System.Net.Http" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="books.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="northwind3.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="northwind4.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="odata3.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="tripPin.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>
