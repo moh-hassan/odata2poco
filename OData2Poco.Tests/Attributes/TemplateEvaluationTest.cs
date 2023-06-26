@@ -6,7 +6,7 @@ namespace OData2Poco.Tests.Attributes
 {
     internal class TemplateEvaluationTest
     {
-        PropertyTemplate prop = new PropertyTemplate
+        PropertyTemplate prop = new()
         {
             PropName = "ProductId",
             PropType = "int",
@@ -39,7 +39,7 @@ namespace OData2Poco.Tests.Attributes
 
         public void EvaluateConditionExpression_test(string condition, bool expected)
         {
-            var result = condition.EvaluateConditionExpression(prop, out var error);
+            var result = condition.EvaluateCondition(prop, out var error);
             //Assert
             Assert.AreEqual(expected, result);
             Assert.IsEmpty(error);

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using OData2Poco.CustAttributes.UserAttributes;
+using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.CustAttributes;
 
@@ -9,6 +10,7 @@ public class AttributeFactory
     private static readonly Lazy<AttributeFactory> Lazy = new(() => new AttributeFactory());
     private readonly PocoAttributesList _pocoAttributesList;
     private List<string> _attributes; //attributes from commandline options
+    private readonly ILog _logger = PocoLogger.Default;
     private AttributeFactory()
     {
         _pocoAttributesList = new PocoAttributesList();
@@ -26,9 +28,23 @@ public class AttributeFactory
     {
         setting ??= new PocoSetting();
         _attributes = new List<string>(setting.Attributes); //add attributes of commandline options
+        //load user attributes
+        if (!string.IsNullOrEmpty(setting.AtributeDefs))
+        {
+            if (File.Exists(setting.AtributeDefs))
+            {
+                var text = File.ReadAllText(setting.AtributeDefs);
+                AddUserAttributes(text);
+            }
+            else
+            {
+                _logger.Warn($"User attributes file {setting.AtributeDefs} doesn't exist");
+            }
+        }
+
+
         return this;
     }
-
     private INamedAttribute? GetAttribute(string attName)
     {
         return _pocoAttributesList[attName];
@@ -72,13 +88,28 @@ public class AttributeFactory
     {
         return _pocoAttributesList;
     }
+
     #region User Attributes
-    public void AddUserAttributes(string json)
+
+    private void AddUserAttributes(string text)
     {
-        var atts = AttDefinition.ToNamedAttributes(json);
-        _pocoAttributesList.AddRange(atts);
+        var attDefs = AttDefinition.Import(text);
+        foreach (var ad in attDefs)
+        {
+            AddUserAttribute(ad);
+        }
     }
-    public void AddUserAttribute(AttDefinition ad) => _pocoAttributesList.Add(ad);
+    public void AddUserAttribute(AttDefinition ad)
+    {
+        try
+        {
+            _pocoAttributesList.Add(ad);
+        }
+        catch (Exception e)
+        {
+            _logger.Warn($"{e.Message}");
+        }
+    }
 
     public PocoAttributesList GetAttributeList() => _pocoAttributesList;
     public bool IsExists(string attName) => _pocoAttributesList[attName] is not null;

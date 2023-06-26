@@ -18,17 +18,6 @@ public partial class Options
             CodeFilename = $"poco.{Lang.ToString().ToLower()}";
         }
 
-        //validate Attributes
-        foreach (var attribute in Attributes.ToList())
-        {
-            if (attribute.Trim().StartsWith("[")) continue;
-            if (!Regex.IsMatch(attribute.Trim().ToLower(), "key|req|tab|table|json|db|proto|dm|display|original|max", RegexOptions.IgnoreCase))
-            {
-                Errors.Add($"Attribute '{attribute}' isn't valid. It will be  droped.");//warning
-
-            }
-        }
-
         if (!string.IsNullOrWhiteSpace(NameMapFile))
         {
             if (!File.Exists(NameMapFile))

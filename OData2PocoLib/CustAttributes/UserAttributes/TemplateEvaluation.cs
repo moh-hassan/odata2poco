@@ -1,4 +1,6 @@
-﻿using DynamicExpresso;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
+using DynamicExpresso;
 using System.Text.RegularExpressions;
 using OData2Poco.Extensions;
 
@@ -6,7 +8,8 @@ namespace OData2Poco;
 
 internal static class TemplateEvaluation
 {
-    public static string EvaluateTemplate(this string template, object inputObject, out string[] errors)
+    public static string EvaluateTemplate(this string template, object inputObject,
+        out string[] errors)
     {
         errors = Array.Empty<string>();
         if (string.IsNullOrEmpty(template))
@@ -22,7 +25,7 @@ internal static class TemplateEvaluation
             string? result = null;
             try
             {
-                result = EvaluateExpression(expression, inputObject, out _).ToString();
+                result = EvaluateExpression(expression, inputObject, out _)?.ToString();
             }
             catch
             {
@@ -35,34 +38,42 @@ internal static class TemplateEvaluation
         return outputString;
     }
 
-    public static object EvaluateExpression(this string expression, object inputObject,
+    public static object? EvaluateExpression(this string expression, object? inputObject,
         out string error)
     {
+        if (string.IsNullOrEmpty(expression))
+        {
+            error = "Empty Expression";
+            return null;
+        }
+
+        if (inputObject == null)
+        {
+            error = "Null input object";
+            return null;
+        }
         error = string.Empty;
         Interpreter interpreter = new Interpreter();
 
         interpreter
             .Reference(typeof(StringExtensions))
             .SetVariable("this", inputObject);
-        object result;
         try
         {
             return interpreter.Eval(expression);
         }
         catch (Exception ex)
         {
-            error = ex.Message;
-            result = expression;
-            return result;
+            throw new ODataException($"Expression '{expression}' is not valid. {ex.Message}");
         }
     }
 
-    public static bool EvaluateConditionExpression(this string expression, object inputObject,
+    public static bool EvaluateCondition(this string expression, object inputObject,
         out string error)
     {
         var result = EvaluateExpression(expression, inputObject, out error);
         if (result is bool b)
             return b;
-        return false;
+        throw new ODataException($"Expression '{expression}' is not a valid condition");
     }
 }

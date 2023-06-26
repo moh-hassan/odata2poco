@@ -7,24 +7,11 @@ namespace OData2Poco.CustAttributes.UserAttributes;
 
 public class AttDefinition
 {
-    private string? _name;
-    private string? _format;
     private string _scope = "property";
 
-    public string Name
-    {
-        get => _name
-               ?? throw new ODataException($"AttDefinition, Uninitialized property: {nameof(Name)}");
-        set => _name = value;
-    }
+    public string Name { get; set; } = null!;
 
-    public string Format
-    {
-        get => _format
-               ?? throw new ODataException($"AttDefinition, Uninitialized property: {nameof(Format)}");
-        set => _format = value;
-    }
-
+    public string Format { get; set; } = null!;
     public string Scope
     {
         get => _scope;
@@ -107,6 +94,6 @@ public class AttDefinition
 
     public override string ToString()
     {
-        return Export().ToString();
+        return Export().ToString().Trim();
     }
 }

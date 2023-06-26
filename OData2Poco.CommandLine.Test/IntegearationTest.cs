@@ -39,7 +39,6 @@ internal class IntegrationTest
             Assert.Ignore("ignore test o2pgen.exe in non windows OS");
             return;
         }
-        Console.WriteLine($"BaseDirectory: {SystemConst.BaseDirectory}");
         var stdOutBuffer = new StringBuilder();
         var result = await Cli.Wrap(_o2Pgen)
             .WithArguments(options)

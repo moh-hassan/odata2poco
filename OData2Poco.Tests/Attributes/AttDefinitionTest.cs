@@ -52,7 +52,6 @@ public class AttDefinitionTest : BaseTest
         };
         var att = ad.ToAttribute(p);
         att.FirstOrDefault().Should().Be(expected);
-        att.Dump();
     }
 
     [TestCase("book", "[DataMember]")]
@@ -76,7 +75,6 @@ public class AttDefinitionTest : BaseTest
         };
         var att = ad.ToAttribute(p);
         att.FirstOrDefault().Should().Be(expected);
-        att.Dump();
     }
     [Test]
     public void AttDefinition_import_text_test()
@@ -146,24 +144,6 @@ public class AttDefinitionTest : BaseTest
         //Assert
         attDefinition.Select(x => af.IsExists(x.Name)).Should().NotContain(false);
         AssertAttributes(af, prop, ct);
-    }
-
-
-    [Test]
-    public void AttDefinition_Name_should_have_value_test()
-    {
-        var ad = new AttDefinition { Format = "[aa]" };
-        ad.Invoking(a => a.Name).Should().Throw<ODataException>()
-            .WithMessage("AttDefinition, Uninitialized property: Name"
-            );
-    }
-    [Test]
-    public void AttDefinition_Format_should_have_value_test()
-    {
-        var ad = new AttDefinition { Name = "key" };
-        ad.Invoking(a => a.Format).Should().Throw<ODataException>()
-            .WithMessage("AttDefinition, Uninitialized property: Format"
-            );
     }
 
     [Test]
