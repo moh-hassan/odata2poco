@@ -8,9 +8,10 @@ namespace OData2Poco.CustAttributes.NamedAtributes;
 
 public class MaxLengthAttribute : INamedAttribute
 {
-    public string Name { get; } = "max";
-    public string Scope { get; } = "property";
-    public bool IsUserDefined { get; } = false;
+    public string Name { get; set; } = "max";
+    public string Scope { get; set; } = "property";
+    public bool IsUserDefined { get; set; } = false;
+    public bool IsValid { get; set; } = true;
     public List<string> GetAttributes(PropertyTemplate property)
     {
         return property.MaxLength > 0 ? new List<string> { $"[MaxLength({property.MaxLength})]" } : new List<string>();
