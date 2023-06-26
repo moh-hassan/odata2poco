@@ -6,7 +6,7 @@ namespace OData2Poco.Tests.Attributes
 {
     internal class TemplateEvaluationTest
     {
-        PropertyTemplate prop = new()
+        private readonly PropertyTemplate _prop = new()
         {
             PropName = "ProductId",
             PropType = "int",
@@ -16,12 +16,12 @@ namespace OData2Poco.Tests.Attributes
         };
 
         [Test]
-        [TestCase("[Key]","[Key]")]
+        [TestCase("[Key]", "[Key]")]
         [TestCase("[Required]", "[Required]")]
         [TestCase("[JsonPropertyName({{PropName.Quote()}})]", "[JsonPropertyName(\"ProductId\")]")]
         public void EvaluateTemplate_test(string template, string expected)
         {
-            var result = template.EvaluateTemplate(prop, out var errors);
+            var result = template.EvaluateTemplate(_prop, out var errors);
             //Assert
             Assert.AreEqual(expected, result);
             Assert.IsEmpty(errors);
@@ -39,7 +39,7 @@ namespace OData2Poco.Tests.Attributes
 
         public void EvaluateConditionExpression_test(string condition, bool expected)
         {
-            var result = condition.EvaluateCondition(prop, out var error);
+            var result = condition.EvaluateCondition(_prop, out var error);
             //Assert
             Assert.AreEqual(expected, result);
             Assert.IsEmpty(error);

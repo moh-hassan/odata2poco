@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Diagnostics;
 using NUnit.Framework;
 using OData2Poco.InfraStructure.FileSystem;
 
@@ -10,7 +9,7 @@ public abstract class BaseTest
 {
     protected List<ClassTemplate> ClassList;
     protected IPocoFileSystem _fileSystem;
-   
+
 
     [OneTimeSetUp]
     public void BaseOneTimeSetup()

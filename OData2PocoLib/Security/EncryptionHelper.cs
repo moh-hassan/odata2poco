@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 
 namespace OData2Poco;
-
+#pragma warning disable S3963
 public static class EncryptionHelper
 {
     // A Session 256-bit encryption key

@@ -1,9 +1,7 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
 
 namespace OData2Poco;
 #pragma warning disable IDE0060
@@ -46,7 +44,6 @@ public class AuthHandler : DelegatingHandler
         {
             if (Response != null) _tracer.WriteLine($"Response:\n {Response}");
             _tracer.WriteLine($"DelegationHandler Exception:\n {ex.Message}");
-            //  return Response ?? throw ex;
             throw;
         }
     }

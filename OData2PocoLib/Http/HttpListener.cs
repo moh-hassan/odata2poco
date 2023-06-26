@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Diagnostics;
+
 
 namespace OData2Poco;
 public class HttpTracer : IDisposable

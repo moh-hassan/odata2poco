@@ -2,8 +2,6 @@
 
 
 using System.Net;
-using System.Text;
-using OData2Poco.Extensions;
 using OData2Poco.Http;
 
 namespace OData2Poco;

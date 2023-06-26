@@ -40,7 +40,7 @@ public partial class Options
     [Option('H', "http-header", Separator = ';', HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1:value1;ky2:value2.")]
     public IEnumerable<string> HttpHeader { get; set; }
 
-   
+
     /// <summary>
     /// Skip Certification Check. This switch is only intended to be used for hosts using a self-signed certificate for testing purposes. This is not recommended in production environment
     /// </summary>

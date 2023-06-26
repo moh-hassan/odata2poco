@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using OData2Poco.Fake;
-using WireMock;
 using WireMock.Server;
 
 namespace OData2Poco.HttpMock;
-
+#pragma warning disable S3963
 internal static class Mocks
 {
 #if Test_Cli
@@ -57,7 +56,6 @@ internal static class Mocks
             XmlFile = TestSample.NorthWindV3
         };
 
-        //todo
         ODataV3 = new()
         {
             Name = "odataV3",
@@ -68,7 +66,6 @@ internal static class Mocks
             XmlFile = TestSample.TripPin4
         };
 
-        //todo
         Books = new()
         {
             Name = "books",
@@ -81,22 +78,5 @@ internal static class Mocks
 
 
     }
-    public static void Check(string url)
-    {
-        IMapping aa = Server.Mappings.FirstOrDefault(a => a.Description == url);
-        if (aa == null) return;
-        aa.Dump($"mapping {aa.Title}");
-        // Console.WriteLine($"{Mocks.Server.LogEntries.Count()}");
-        //S.Server.Urls.Dump("urls");
-        //S.Server.Url.Dump("url");
-        //S.Server.Consumer.Dump("Consumer");
-        //foreach (var entry in S.Server.LogEntries)
-        //{
-        //    entry.Dump($"entry: {entry.RequestMessage.AbsoluteUrl}");
-        //}
-        //foreach (var entry in S.Server.Mappings)
-        //{
-        //    entry.Dump($"mapping{entry.Guid}");
-        //}
-    }
+
 }

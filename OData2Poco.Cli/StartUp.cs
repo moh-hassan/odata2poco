@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Diagnostics;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;

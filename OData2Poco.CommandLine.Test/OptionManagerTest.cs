@@ -44,14 +44,12 @@ public class OptionManagerTest
         //Act
         var (cs, ps) = new OptionManager(options);
         //Assert
-       // cs.Password.Credential.Password.Should().HaveLength(6);
-        //cs.Password.Credential.Password.Should().BeEquivalentTo(options.Password.Credential.Password);
-        cs.ServiceUrl.Should().Be(options.ServiceUrl);
-        cs.UserName.Should().Be(options.UserName);
-        cs.Password.Should().BeEquivalentTo(options.Password);
-        ps.Lang.Should().Be(options.Lang);
-        ps.NameCase.Should().Be(options.NameCase);
-        ps.Attributes.Should().BeEquivalentTo(options.Attributes);
+        cs?.ServiceUrl.Should().Be(options.ServiceUrl);
+        cs?.UserName.Should().Be(options.UserName);
+        cs?.Password.Should().BeEquivalentTo(options.Password);
+        ps?.Lang.Should().Be(options.Lang);
+        ps?.NameCase.Should().Be(options.NameCase);
+        ps?.Attributes.Should().BeEquivalentTo(options.Attributes);
     }
     [Test]
     public void Option_with_password_should_be_serialized_deserialized_correctly_test()

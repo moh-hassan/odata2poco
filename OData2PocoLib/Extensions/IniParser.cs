@@ -1,5 +1,6 @@
-﻿using System.Text.RegularExpressions;
-using OData2Poco.Extensions;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
+using System.Text.RegularExpressions;
 
 namespace OData2Poco;
 
@@ -45,8 +46,7 @@ public static class IniParser
             }
             else
             {
-                config[currentSection][currentKey] = 
-                    $"{config[currentSection][currentKey]}\n{currentLine}";
+                config[currentSection][currentKey] = $"{config[currentSection][currentKey]}\n{currentLine}";
             }
         }
         return config;

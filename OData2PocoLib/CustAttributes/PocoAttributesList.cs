@@ -16,7 +16,6 @@ public class PocoAttributesList : IEnumerable<INamedAttribute>
     {
         _namedAttributes = new List<INamedAttribute>();
         FillNamedAttributes();
-        // FillUserAttributes();
     }
 
     public INamedAttribute? this[string index] => GetAttributeObject(index);

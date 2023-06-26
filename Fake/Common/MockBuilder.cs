@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using WireMock;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -10,11 +9,11 @@ namespace OData2Poco.HttpMock;
 
 internal class MockBuilder
 {
-    private int _port { get; }
+    private int Port { get; }
     private WireMockServer _server;
     public MockBuilder(int port)
     {
-        this._port = port;
+        this.Port = port;
     }
     public void Start()
     {
@@ -22,7 +21,7 @@ internal class MockBuilder
         {
             StartAdminInterface = true,
             //  Logger = new WireMockConsoleLogger(),
-            Port = _port,
+            Port = Port,
         };
         _server = WireMockServer.Start(serverSettings);
         CreateStubs();
@@ -68,20 +67,4 @@ internal class MockBuilder
         _server.Stop();
     }
 
-    public void Check(string name)
-    {
-        IMapping aa = _server.Mappings.FirstOrDefault(a => a.Title == name);
-        // Console.WriteLine($"{Mocks.Server.LogEntries.Count()}");
-        //S.Server.Urls.Dump("urls");
-        //S.Server.Url.Dump("url");
-        //S.Server.Consumer.Dump("Consumer");
-        //foreach (var entry in S.Server.LogEntries)
-        //{
-        //    entry.Dump($"entry: {entry.RequestMessage.AbsoluteUrl}");
-        //}
-        //foreach (var entry in S.Server.Mappings)
-        //{
-        //    entry.Dump($"mapping{entry.Guid}");
-        //}
-    }
 }

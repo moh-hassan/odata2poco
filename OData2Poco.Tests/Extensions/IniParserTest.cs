@@ -20,7 +20,7 @@ public class IniParserTest
       Filter= IsKey;
   """;
 
-        var result=iniData.ParseIni();
+        var result = iniData.ParseIni();
         result.Should().NotBeEmpty();
         result.Should().ContainKey("json");
         result.Should().ContainKey("_key_");

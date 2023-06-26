@@ -6,6 +6,7 @@ using NUnit.Framework;
 using OData2Poco.Extensions;
 using OData2Poco.Fake;
 using OData2Poco.Http;
+#pragma warning disable IDE0200
 
 namespace OData2Poco.Tests;
 
@@ -13,7 +14,7 @@ internal class CustomHttpClientTest : BaseTest
 {
     private bool _isLive;
     private string _token;
-    private string _url ;
+    private string _url;
 
     [OneTimeSetUp]
     public void Setup()
@@ -265,7 +266,6 @@ internal class CustomHttpClientTest : BaseTest
         //Assert
         var expectedToken = ocs.Password.GetToken();
         ah.AuthHeader.Should().NotBeNull();
-        // ah.AuthHeader?.ToString().Should().Be("Bearer xyz");
         ah.Scheme?.Should().Be("Bearer");
         ah.Parameter?.Should().Be(expectedToken);
         ah.Response?.StatusCode.Should().Be(HttpStatusCode.OK);

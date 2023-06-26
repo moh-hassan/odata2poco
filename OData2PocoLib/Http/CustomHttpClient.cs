@@ -3,7 +3,6 @@
 #pragma warning disable S4830
 
 using System.Net;
-using System.Net.Http;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.Logging;
 

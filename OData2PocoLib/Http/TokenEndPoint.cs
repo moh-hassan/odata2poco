@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Net;
-using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using OData2Poco.InfraStructure.Logging;
 
