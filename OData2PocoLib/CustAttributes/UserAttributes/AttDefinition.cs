@@ -48,7 +48,7 @@ public class AttDefinition
         {
             PropertyTemplate prop => new UserAttribute(this).GetAttributes(prop),
             ClassTemplate ct => new UserAttribute(this).GetAttributes(ct),
-            _ => throw new ODataException("AttDefinition: Invalid object type. Allowed types are: PropertyTemplate, ClassTemplate")
+            _ => throw new OData2PocoException("AttDefinition: Invalid object type. Allowed types are: PropertyTemplate, ClassTemplate")
         };
     }
 

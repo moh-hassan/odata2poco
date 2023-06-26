@@ -64,7 +64,7 @@ internal static class TemplateEvaluation
         }
         catch (Exception ex)
         {
-            throw new ODataException($"Expression '{expression}' is not valid. {ex.Message}");
+            throw new OData2PocoException($"Expression '{expression}' is not valid. {ex.Message}");
         }
     }
 
@@ -74,6 +74,6 @@ internal static class TemplateEvaluation
         var result = EvaluateExpression(expression, inputObject, out error);
         if (result is bool b)
             return b;
-        throw new ODataException($"Expression '{expression}' is not a valid condition");
+        throw new OData2PocoException($"Expression '{expression}' is not a valid condition");
     }
 }
