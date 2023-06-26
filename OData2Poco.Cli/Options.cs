@@ -94,7 +94,7 @@ public partial class Options
     public RenameMap RenameMap { get; set; }
 
     [Option('a', "attribute",
-        HelpText = "Attributes, Allowed values: key, req, json, json3, tab, dm, proto, db, display")]
+        HelpText = "Attributes that are built-in or user defined by option 'att-defs'.")]
     public IEnumerable<string> Attributes { get; set; }
 
     [Option('g', "gen-project", HelpText = "Generate a class library (.Net Stnadard) project csproj/vbproj.")]
@@ -130,6 +130,9 @@ public partial class Options
     public bool MultiFiles { get; set; }
     [Option("full-name", HelpText = "Use fullname prfixed by namespace as a name for Poco Class.")]
     public bool UseFullName { get; set; }
+
+    [Option("att-defs", HelpText = "Path of user defined attributes. File is a json format.")]
+    public string AtributeDefs { get; set; }
 
     //----------------------Action options
     [Option('x', "metafile", HelpText = "Xml filename to save metadata.")]

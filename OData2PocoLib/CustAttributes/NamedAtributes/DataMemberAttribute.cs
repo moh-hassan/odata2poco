@@ -8,7 +8,10 @@ namespace OData2Poco.CustAttributes.NamedAtributes;
 
 public class DataMemberAttribute : INamedAttribute
 {
-    public string Name { get; } = "dm"; //"datamember";
+    public string Name { get; set; } = "dm"; //"datamember";
+    public string Scope { get; set; } = "dual";
+    public bool IsUserDefined { get; set; }= false;
+    public bool IsValid { get; set; }= true;
 
     public List<string> GetAttributes(PropertyTemplate property)
     {

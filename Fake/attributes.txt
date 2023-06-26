@@ -1,0 +1,24 @@
+  [_json_]
+  Format= "[JsonProperty(PropertyName = {{PropName.Quote()}})]"
+
+  [_json3_]
+  Format= [JsonPropertyName({{PropName.Quote()}})]
+
+  [_key_]
+  Format= [Key]
+  Filter= IsKey
+
+  [_Required_]
+  Format= [Required]
+  Filter= !IsNullable
+
+  [_dm_]
+  Format= [DataMember]
+ 
+  [_dm2_]
+  Scope= class
+  Format= [DataContract]
+
+  [_tab_]
+  Scope= class
+  Format= [Table({{EntitySetName.Quote()}})]

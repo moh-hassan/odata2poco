@@ -765,4 +765,67 @@ public partial record Flight : PublicTransportation
         Assert.IsTrue(output.Contains("public partial class Trip")); //-v
 
     }
+
+#region att-defs test v6.0
+    [Test]
+    public async Task Att_def_test()
+    {
+        //Arrange
+        var text = """
+#class attributes definitions
+
+# applied to all classes
+[map]
+Scope=class
+Format= [AdaptTo("[name]Dto"]
+
+#property attribute
+    [dm3]
+ Format= [DataMember]
+ # Filter is c# expression evaluated to boolean value. If true, the attribute is added to the property
+ Filter= ClassName.In("City")
+
+ [json33]
+ # applied to all properties 
+ Format= [JsonPropertyName([{{PropName.ToCamelCase().Quote()}}])]
+
+""";
+        var path = NewTempFile(text);
+        string url = TestSample.UrlTripPinService;
+        var a = $"-r {url} -v -a  map dm3 json33 --att-defs {path}";
+        var expected = """
+            // Complex Entity
+            [AdaptTo("[name]Dto"]
+            public partial class City
+            {
+                [DataMember]
+                [JsonPropertyName(["name"])]
+                public string Name {get;set;} 
+
+                [DataMember]
+                [JsonPropertyName(["countryRegion"])]
+                public string CountryRegion {get;set;} 
+
+                [DataMember]
+                [JsonPropertyName(["region"])]
+                public string Region {get;set;} 
+
+            }
+
+            // Complex Entity
+            [AdaptTo("[name]Dto"]
+            public partial class AirportLocation : Location
+            {
+                [JsonPropertyName(["loc"])]
+                public GeographyPoint Loc {get;set;} 
+
+            }
+            """;
+        //Act
+        var tuple = await RunCommand(a);
+        var output = tuple.Item2;
+        //Assert
+        output.Should().ContainAll(expected.ToLines());
+    }
+    #endregion
 }

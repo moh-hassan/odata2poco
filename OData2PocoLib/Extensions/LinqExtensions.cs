@@ -61,6 +61,10 @@ public static class LinqExtensions
         second = list.Count > 1 ? list[1] : default;
         rest = list.Skip(2).ToList();
     }
-
-
+    public static void Deconstruct<TKey, TValue>(
+            this KeyValuePair<TKey, TValue> kvp, out TKey key, out TValue value)
+    {
+        key = kvp.Key;
+        value = kvp.Value;
+    }
 }

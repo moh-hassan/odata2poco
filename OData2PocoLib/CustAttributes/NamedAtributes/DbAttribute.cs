@@ -4,6 +4,10 @@ namespace OData2Poco.CustAttributes.NamedAtributes;
 
 public class DbAttribute : INamedAttribute
 {
+    public string Name { get; set; } = "db";
+    public string Scope { get; set; } = "dual";
+    public bool IsUserDefined { get; set; } = false;
+    public bool IsValid { get; set; } = true;
     private readonly List<INamedAttribute> _sharedAttributes;
 
     public DbAttribute()
@@ -13,9 +17,6 @@ public class DbAttribute : INamedAttribute
             new KeyAttribute(), new TableAttribute(), new RequiredAttribute()
         };
     }
-
-    public string Name { get; } = "db";
-
     public List<string> GetAttributes(PropertyTemplate property)
     {
         var att = new List<string>();

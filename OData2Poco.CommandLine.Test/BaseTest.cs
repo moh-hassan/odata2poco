@@ -29,5 +29,25 @@ namespace OData2Poco.CommandLine.Test
             /* Preparing test end */
 #endif
         }
+
+        /// <summary>
+        /// create temp file in user temp folder
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="extension"> extension w/o . like .txt or txt</param>
+        /// <returns></returns>
+        //extension ".txt"
+        protected string NewTempFile(string content, string extension = null)
+        {
+            string filepath = Path.GetTempFileName();
+            if (!string.IsNullOrEmpty(extension))
+            {
+                extension = extension.TrimStart('.');
+                filepath = Path.ChangeExtension(Path.GetTempFileName(), $".{extension}");
+            }
+
+            File.WriteAllText(filepath, content);
+            return filepath;
+        }
     }
 }

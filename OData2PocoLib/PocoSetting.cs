@@ -88,6 +88,8 @@ public class PocoSetting : IValidator
     //set name of generated class using FullName vs Name
     public bool UseFullName { get; set; }
     public bool ShowWarning { get; set; }
+    public string AtributeDefs { get; set; }
+
     /// <summary>
     ///     Initialization
     /// </summary>
@@ -100,6 +102,7 @@ public class PocoSetting : IValidator
         Attributes = new List<string>();
         Include = new List<string>();
         CodeFilename = "UnDefined.txt";
+        AtributeDefs = string.Empty;
     }
     public void Validate()
     {

@@ -13,7 +13,7 @@ namespace OData2Poco.Extensions;
 /// <summary>
 ///     Utility for CamelCase/PascalCase Conversion
 /// </summary>
-public static class StringExtensions
+public static partial class StringExtensions
 {
     /// <summary>
     ///     onvert the string to Pascal case.
