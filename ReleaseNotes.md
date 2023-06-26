@@ -1,11 +1,16 @@
 # OData2Poco 
 
 ## Version 6.0.0
-**Release Date:**  May 30, 2023
+**Release Date:**  June 27, 2023
+
+**Code Generation**
+- A new powerful option ```--att-defs``` allows you to dynamically generate attributes for c# classes and properties using a simple text file that contains your template with expressions. These expressions are valid C# code that can utilize C# string functions and other built-in extension methods. You can also filter on classes and properties to apply the attributes selectively.
+
+- Add comments to the header of c# class to mark the openType classes or Entity Types: EntitySet or Complex type.
 
 **Security**
 
-- Password/secret token  are encrypted when read from commandLine/file and it's stored in a SecuredContainer.
+- Password/secret token are encrypted when read from commandLine/file and it's stored in a SecuredContainer.
 - Reading password from keyboard and Encrypted then stored in a SecuredContainer.
 
 **User Experience**
@@ -19,9 +24,6 @@
 - New Option: Allow setting of SSL/TLS protocols.
 - New option: Allow to Skip Certification Check in http connection.  
 - New Option: Allow to specify Http header in Odata http connection with the computing of base64.
-
-**Code Generation**
-- Add comments to the header of c# class to mark the openType classes or Entity/Complex type.
 
 **Enhancement**
 - Set exit codes to be positive number to match Linux standard.
