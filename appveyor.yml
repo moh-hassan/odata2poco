@@ -85,13 +85,15 @@ deploy:
   on:
     APPVEYOR_REPO_TAG: true
 
+# nuget
 - provider: NuGet
   api_key:
     secure: XBvbm69UE+d1cuM8+VBfwMyjHDcAa79w0TBygcZsPZcl88AaLKN1EvI7KI8/K9Am
   on:
     APPVEYOR_REPO_TAG: true # Deploy on tag push only.
     branch: master          # Release from master branch only.
-    
+  artifact: global_tool,o2pgen,lib,symbol
+  on_failure: Continue  
 
 # myget
 - provider: NuGet
@@ -101,4 +103,5 @@ deploy:
   symbol_server: https://www.myget.org/F/odata2poco/api/v2/package
   on:    
     branch: develop          
-  
+  artifact: global_tool,o2pgen,lib,symbol,choco_pkg
+  on_failure: Continue 
