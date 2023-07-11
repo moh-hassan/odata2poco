@@ -10,9 +10,11 @@ POCO classes can be used in a typed RESTful client OData services. Code generati
 [![Chocolatey](https://img.shields.io/chocolatey/v/odata2poco-commandline.svg?label=Chocolatey%20Console)](https://chocolatey.org/packages/odata2poco-commandline)
 
 ## Continuous integration
-|Build server                |Build status                                                |
-|----------------------------|------------------------------------------------------------|
-|AppVeyor                    |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco)|
+|Branch    |Build status   |
+|----------|---------------|
+|Master    |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco/branch/master)|
+|Develop    |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco/branch/develop)|
+
 
 -----------
 
@@ -73,7 +75,7 @@ If you are using this project, please show your support by giving this project a
 - Generate c# code classes, classes with init-only properties of c#8 and records.
 - Generate typescript code as a single file or multi files(modules).
 - Generation is based on the Metadata of the service stored on the  server/  EDMX xml files or xml string contents.
-- Support http(s) with/without authentication. The Supported autherizations are: basic, token and Oauth2.
+- Support http(s) with different methods of authentication. The Supported autherizations are: Basic,Bearer,token,Ntlm,Digest, Custom and Oauth2.
 - Console CommandLine tool Support .NET472 or higher.
 - Class library Support NET6/netstandard2.0/net461.
 - Support Windows or Linux /OS fx (with mono installed) and NET6 (netcore).
@@ -87,7 +89,8 @@ If you are using this project, please show your support by giving this project a
 - Support Entites, complex data type, Collections  and navigation properties.
 - Support OData service version V1..V4
 - Code generation is controlled by setting different options: 
-  - Add the following attributes:
+  - User defined Atributes for the classes and properties using simple text file with c# Expressions.
+  - Built-in Attributes:
         - Add Key Attributes.
         - Add Required Attributes to the properties. 
         - Add JsonProperty Attribute to the properties.
@@ -126,6 +129,8 @@ If you are using this project, please show your support by giving this project a
 - Convert EDM.TIME in Odata v3 to TimeSpan.
 - Support multi schema.
 - Support multi containers in OData  v3.
+- New feature in [v5.0.1](https://github.com/moh-hassan/odata2poco/wiki/v5_0_1)
+- New feature in [v6.0](https://github.com/moh-hassan/odata2poco/wiki/v6_0_0).
 
  -------------
  ## OData2Poco Packages
