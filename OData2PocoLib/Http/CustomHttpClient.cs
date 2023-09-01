@@ -27,6 +27,7 @@ internal class CustomHttpClient : IDisposable
         {
             UseDefaultCredentials = true,
             AllowAutoRedirect = true,
+            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
         };
         Client = new HttpClient(HttpHandler);
     }
