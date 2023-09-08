@@ -13,12 +13,12 @@ POCO classes can be used in a typed RESTful client OData services. Code generati
 |Branch    |Build status   |
 |----------|---------------|
 |Master    |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco/branch/master)|
-|Develop    |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco/branch/develop)|
-
 
 -----------
 
-# Announcing new Release: V6.0.0
+# Announcing new Release: V6.1.0
+## What’s New in v6.1.0:
+- New Feature: Gzip encoded content [#48](https://github.com/moh-hassan/odata2poco/issues/48) by @DerekGn. Allow reading SAP metadata compressed as gzip.
 
 ## What’s New in v6.0.0:
 

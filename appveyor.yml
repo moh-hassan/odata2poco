@@ -77,6 +77,27 @@ artifacts:
   name: sha256    
 
 deploy:
+
+#chocolatey    
+- provider: NuGet
+  server: https://push.chocolatey.org   
+  api_key:
+    secure: CUR2VQy2d8EeiFJ//LEcn7BJrbXjVhuAi4Te/7Vtn3kpzA2LSHInh21H3Z38H57Q
+  on:
+    APPVEYOR_REPO_TAG: true # Deploy on tag push only.
+    # branch: master          # Release from master branch only.
+  artifact: choco_pkg
+  
+# Nuget
+- provider: NuGet
+  api_key:
+    secure: XBvbm69UE+d1cuM8+VBfwMyjHDcAa79w0TBygcZsPZcl88AaLKN1EvI7KI8/K9Am
+  on:
+    APPVEYOR_REPO_TAG: true # Deploy on tag push only.
+    # branch: master          # Release from master branch only.
+  artifact: global_tool,o2pgen,lib,symbol
+  
+#Github    
 - provider: GitHub
   auth_token:
      secure: sB33uLo96nR+LGmYLdPmY/segb6d4O061N2e8Nbz6iyHg82D0RysMxWE5JKnXmU+
@@ -84,16 +105,6 @@ deploy:
   prerelease: false  
   on:
     APPVEYOR_REPO_TAG: true
-
-# nuget
-- provider: NuGet
-  api_key:
-    secure: XBvbm69UE+d1cuM8+VBfwMyjHDcAa79w0TBygcZsPZcl88AaLKN1EvI7KI8/K9Am
-  on:
-    APPVEYOR_REPO_TAG: true # Deploy on tag push only.
-    branch: master          # Release from master branch only.
-  artifact: global_tool,o2pgen,lib,symbol
-  on_failure: Continue  
 
 # myget
 - provider: NuGet
@@ -104,4 +115,6 @@ deploy:
   on:    
     branch: develop          
   artifact: global_tool,o2pgen,lib,symbol,choco_pkg
-  on_failure: Continue 
+
+
+  

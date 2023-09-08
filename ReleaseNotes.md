@@ -1,5 +1,9 @@
 # OData2Poco 
 
+## Version 6.1.0
+**Release Date:**  SEP 9, 2023
+- New Feature: Gzip encoded content #48 by @DerekGn. Allow reading SAP metadata compressed as gzip.
+
 ## Version 6.0.0
 **Release Date:**  June 27, 2023
 
