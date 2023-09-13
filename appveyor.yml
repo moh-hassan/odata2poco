@@ -3,6 +3,14 @@
 version: 6.1.0-dev-{build} 
 
 image: Visual Studio 2022
+
+# Set the signing policy slug according to branch
+environment:
+  SIGNPATH_SIGNING_POLICY_SLUG: test-signing
+  ARTIFACT_CONFIGURATION_SLUG: o2p
+  SIGNPATH_ORGANIZATION_ID: 783237d7-f6db-4caa-b64e-a3fc87156006
+  SIGNPATH_PROJECT_SLUG : odata2poco  
+
 pull_requests:
   do_not_increment_build_number: false
 
@@ -77,14 +85,17 @@ artifacts:
   name: sha256    
 
 deploy:
+# - provider: Webhook    
+#   url: https://app.signpath.io/API/v1/%SIGNPATH_ORGANIZATION_ID%/Integrations/AppVeyor?ProjectSlug=%SIGNPATH_PROJECT_SLUG%&SigningPolicySlug=%SIGNPATH_SIGNING_POLICY_SLUG%&ArtifactConfigurationSlug=%ARTIFACT_CONFIGURATION_SLUG%
+#   authorization: 'Bearer %SIGNPATH_CI_USER_TOKEN%'
+  
 #chocolatey    
 - provider: NuGet
   server: https://push.chocolatey.org   
   api_key:
     secure: CUR2VQy2d8EeiFJ//LEcn7BJrbXjVhuAi4Te/7Vtn3kpzA2LSHInh21H3Z38H57Q
   on:
-    APPVEYOR_REPO_TAG: true # Deploy on tag push only.
-    branch: master          # Release from master branch only.
+    APPVEYOR_REPO_TAG: true # Deploy on tag push only.    
   artifact: choco_pkg
 
 
@@ -93,8 +104,7 @@ deploy:
   api_key:
     secure: XBvbm69UE+d1cuM8+VBfwMyjHDcAa79w0TBygcZsPZcl88AaLKN1EvI7KI8/K9Am
   on:
-    APPVEYOR_REPO_TAG: true # Deploy on tag push only.
-    branch: master          # Release from master branch only.
+    APPVEYOR_REPO_TAG: true # Deploy on tag push only.    
   artifact: global_tool,o2pgen,lib,symbol
   
 #Github    
@@ -115,4 +125,5 @@ deploy:
   on:    
     branch: develop          
   artifact: global_tool,o2pgen,lib,symbol,choco_pkg
-  on_failure: Continue 
+ 
+
