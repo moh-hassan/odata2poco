@@ -1,129 +1,73 @@
+# Define the build version
+version: 6.1.0.{build}
 
-#nuget version is nly changed by  RELEASE TAG 
-version: 6.1.0-dev-{build} 
-
+# Select the worker image
 image: Visual Studio 2022
+
+# scripts that run after cloning repository
+#install:
+#  - ps: Install-Module -Name SignPath
+#  - ps: Install-Module -Name PowerShellForGitHub 
+#  - cmd: choco install gh
+  
+#test: off
+
+# Fake build script
+build_script: 
+  - ps: write-host "This step would build the artifact in build-output/odata2poco-v6.1.0.zip"
+  - ps:  write-host " APPVEYOR_JOB_ID = $APPVEYOR_JOB_ID"
+  - ps:  write-host " APPVEYOR_JOB_NAME = $APPVEYOR_JOB_NAME"
+  - ps:  write-host " APPVEYOR_JOB_NUMBER = $APPVEYOR_JOB_NUMBER"
+    
+
+# cd
+# pushd .\build-output\signed
+# dir
+# 7z a -tzip odata2poco-%VERSION%.zip *.nupkg *.exe
+# dir
+
+    
+  
+# Definition of artifacts
+artifacts:
+  - path: build-output\odata2poco-v6.1.0.zip
 
 # Set the signing policy slug according to branch
 environment:
+  VERSION: v6.1.0
   SIGNPATH_SIGNING_POLICY_SLUG: test-signing
-  ARTIFACT_CONFIGURATION_SLUG: o2p
-  SIGNPATH_ORGANIZATION_ID: 783237d7-f6db-4caa-b64e-a3fc87156006
-  SIGNPATH_PROJECT_SLUG : odata2poco  
+  ARTIFACT_CONFIGURATION_SLUG: o2p2
+  SIGNPATH_PROJECT_SLUG : odata2poco 
+  SIGNPATH_SIGNING_REQUEST_ID : $SigningRequestId
+  SIGNPATH_ORGANIZATION_ID : 783237d7-f6db-4caa-b64e-a3fc87156006
+  SIGNPATH_SIGNING_REQUEST_STATUS : $SigningRequestStatus
+  SIGNPATH_CI_USER_TOKEN:
+    secure: fkMRmkT0HDBDna85gU5hTJnS4G7brD0xoc7YAtD001hqlRSgI4hCyCMtbeJZOYT1
 
-pull_requests:
-  do_not_increment_build_number: false
+for:
+  -
+    branches:
+      only:
+        - sign-code
+        - master
+    environment:
+      SIGNPATH_SIGNING_POLICY_SLUG: test-signing
 
-init:
-  - ps: |
-      git config --global core.autocrlf input
-      $env:CAN_PUBLISH = $true
-
-      if ($env:APPVEYOR_REPO_TAG -eq "true") {
-        $ver = $env:APPVEYOR_REPO_TAG_NAME
-        if($ver.StartsWith("v") -eq $true) { $ver = $ver.Substring(1) }
-        try
-        {         
-          Update-AppveyorBuild -Version $ver 
-          Write-Host "Update-AppveyorBuild Success to change version to TAG: '$env:APPVEYOR_REPO_TAG_NAME'"   -ForegroundColor Green          
-        }
-        catch
-        {
-          Write-Host "Update-AppveyorBuild Fail to change version to TAG: '$env:APPVEYOR_REPO_TAG_NAME'"   -ForegroundColor Red
-          Write-Host "Exception Error: $PSItem.Exception.Message" -ForegroundColor Red
-          $env:CAN_PUBLISH = $false
-        }
-      }
-  - ps: |
-      Write-Host "APPVEYOR_BUILD_VERSION='$env:APPVEYOR_BUILD_VERSION'" -ForegroundColor Yellow
-      Write-Host "APPVEYOR_REPO_TAG_NAME= '$env:APPVEYOR_REPO_TAG_NAME'" -ForegroundColor Yellow
-      Write-Host 'choco version';choco -v
-
-configuration: Release
-
-skip_commits:
-  files:
-    - docs/*
-    - art/*
-    - '**/*.md'    
-    - .gitignore
-    - .editorconfig
-  message: /updated readme.*|update readme.*s|update docs.*|update version.*|update changelog.*/
-
- 
-build_script:
-- cmd: dotnet build OData2Poco.sln -c Release --version-suffix %APPVEYOR_BUILD_VERSION% 
-
-test_script: 
-- cmd: dotnet test OData2Poco.Tests/ 
-- cmd: dotnet test OData2Poco.CommandLine.Test/
-
-after_test:
-- cmd: dotnet pack OData2Poco.CommandLine/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  
-- cmd: dotnet pack OData2Poco.dotnet.o2pgen/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  
-- cmd: dotnet pack OData2PocoLib/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  
-- ps: |
-    $version=$env:APPVEYOR_BUILD_VERSION
-    $allow_push=$env:APPVEYOR_REPO_TAG -eq "true"
-    .\scripts\build_choco $version $allow_push
-- ps: .\scripts\checksum.ps1 $env:APPVEYOR_BUILD_VERSION
- 
-artifacts:
-- path: .\build\OData2Poco.dotnet.o2pgen*.nupkg
-  name: global_tool
-- path: .\build\o2pgen.exe
-  name: o2p_exe
-- path: .\build\OData2Poco.CommandLine.*.nupkg
-  name: o2pgen
-- path: .\build\OData2Poco.*.nupkg
-  name: lib
-- path: '.\build\OData2Poco.*.snupkg'
-  name: symbol   
-- path: '.\chocolatey\*.nupkg'
-  name: choco_pkg 
-- path: .\build\schecksum256-*.txt
-  name: sha256    
 
 deploy:
-# - provider: Webhook    
-#   url: https://app.signpath.io/API/v1/%SIGNPATH_ORGANIZATION_ID%/Integrations/AppVeyor?ProjectSlug=%SIGNPATH_PROJECT_SLUG%&SigningPolicySlug=%SIGNPATH_SIGNING_POLICY_SLUG%&ArtifactConfigurationSlug=%ARTIFACT_CONFIGURATION_SLUG%
-#   authorization: 'Bearer %SIGNPATH_CI_USER_TOKEN%'
+  - provider: Webhook
+    url: https://app.signpath.io/API/v1/%SIGNPATH_ORGANIZATION_ID%/Integrations/AppVeyor?ProjectSlug=%SIGNPATH_PROJECT_SLUG%&SigningPolicySlug=%SIGNPATH_SIGNING_POLICY_SLUG%&ArtifactConfigurationSlug=%ARTIFACT_CONFIGURATION_SLUG%
+    authorization: 'Bearer %SIGNPATH_CI_USER_TOKEN%'
+
+
+
+# init:
+#  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   
-#chocolatey    
-- provider: NuGet
-  server: https://push.chocolatey.org   
-  api_key:
-    secure: CUR2VQy2d8EeiFJ//LEcn7BJrbXjVhuAi4Te/7Vtn3kpzA2LSHInh21H3Z38H57Q
-  on:
-    APPVEYOR_REPO_TAG: true # Deploy on tag push only.    
-  artifact: choco_pkg
+#  on_finish:
+# - ps: $blockRdp = $true; iex ((new-object  net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
-
-# Nuget
-- provider: NuGet
-  api_key:
-    secure: XBvbm69UE+d1cuM8+VBfwMyjHDcAa79w0TBygcZsPZcl88AaLKN1EvI7KI8/K9Am
-  on:
-    APPVEYOR_REPO_TAG: true # Deploy on tag push only.    
-  artifact: global_tool,o2pgen,lib,symbol
-  
-#Github    
-- provider: GitHub
-  auth_token:
-     secure: sB33uLo96nR+LGmYLdPmY/segb6d4O061N2e8Nbz6iyHg82D0RysMxWE5JKnXmU+
-  artifact: /.*(\.|\.s)nupkg|o2p_exe|sha256/            
-  prerelease: false  
-  on:
-    APPVEYOR_REPO_TAG: true
-
-# myget
-- provider: NuGet
-  server: https://www.myget.org/F/odata2poco/api/v2/package
-  api_key:
-    secure: QAHjX2gqddFX2cNhMNqweMTGQ89q++ezKnQvdAcinY5D1rwbj2vkWeFsTykm4koA
-  symbol_server: https://www.myget.org/F/odata2poco/api/v2/package
-  on:    
-    branch: develop          
-  artifact: global_tool,o2pgen,lib,symbol,choco_pkg
- 
+on_finish:
+  - ps: Write-Host "SIGNPATH_SIGNING_REQUEST_ID= $Env:SIGNPATH_SIGNING_REQUEST_ID"
+  - ps: Write-Host "SIGNPATH_SIGNING_REQUEST_ID= $Env:SIGNPATH_SIGNING_REQUEST_ID"
 
