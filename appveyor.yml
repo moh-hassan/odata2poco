@@ -15,16 +15,10 @@ image: Visual Studio 2022
 # Fake build script
 build_script: 
   - ps: write-host "This step would build the artifact in build-output/odata2poco-v6.1.0.zip"
-  - ps:  write-host "APPVEYOR_JOB_ID      = $Env:APPVEYOR_JOB_ID"
-  - ps:  write-host " APPVEYOR_JOB_NAME   = $Env:APPVEYOR_JOB_NAME"
-  - ps:  write-host " APPVEYOR_JOB_NUMBER = $Env:APPVEYOR_JOB_NUMBER"
+  - ps:  write-host "APPVEYOR_JOB_ID      = $Env:APPVEYOR_JOB_ID$"
+  - ps:  write-host " APPVEYOR_JOB_NAME   = $Env:APPVEYOR_JOB_NAME$"
+  - ps:  write-host " APPVEYOR_JOB_NUMBER = $Env:APPVEYOR_JOB_NUMBER$"
     
-
-# cd
-# pushd .\build-output\signed
-# dir
-# 7z a -tzip odata2poco-%VERSION%.zip *.nupkg *.exe
-# dir
 
     
   
