@@ -1,7 +1,6 @@
 # Define the build version
 version: 6.1.0.{build}
 
-# Select the worker image
 image: Visual Studio 2022
 
 # scripts that run after cloning repository
