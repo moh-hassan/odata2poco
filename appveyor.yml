@@ -28,7 +28,7 @@ artifacts:
   - path: build-output\odata2poco-v6.1.0.zip
   - path: build-output\sr.txt
 
-# Set the signing policy slug according to branch
+
 environment:
   VERSION: v6.1.0
   SIGNPATH_SIGNING_REQUEST_ID : ""
@@ -66,6 +66,7 @@ after_deploy:
       }
       Write-host "SIGNPATH_SIGNING_REQUESt_ID= $($env:SIGNPATH_SIGNING_REQUEST_ID)"
       Write-host "SIGNPATH_SIGNING_REQUEST_STATUS= $($env:SIGNPATH_SIGNING_REQUEST_STATUS)"
+
 
 # init:
 #  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
