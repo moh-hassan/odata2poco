@@ -23,7 +23,6 @@ build_script:
 
     
   
-# Definition of artifacts
 artifacts:
   - path: build-output\odata2poco-v6.1.0.zip
   - path: build-output\sr.txt
