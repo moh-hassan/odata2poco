@@ -60,9 +60,9 @@ deploy:
 after_deploy:
   - ps: |
       # Start-Sleep -Seconds 90
-      if ($($Env:SIGNING_REQUEST_ID) -ne '') {
+      if ($($Env:SIGNPATH_SIGNING_REQUEST_ID) -ne '') {
        # Write-Output $env:SIGNING_REQUEST_ID > rd.txt
-       $Env:SIGNING_REQUEST_ID | Set-Content "build-output\sr.txt"
+       $Env:SIGNPATH_SIGNING_REQUEST_ID | Set-Content "build-output\sr.txt"
       }
       Write-host "SIGNPATH_SIGNING_REQUESt_ID= $($env:SIGNPATH_SIGNING_REQUEST_ID)"
       Write-host "SIGNPATH_SIGNING_REQUEST_STATUS= $($env:SIGNPATH_SIGNING_REQUEST_STATUS)"
