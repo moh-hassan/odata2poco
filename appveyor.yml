@@ -55,18 +55,7 @@ deploy:
   - provider: Webhook
     url: https://app.signpath.io/API/v1/%SIGNPATH_ORGANIZATION_ID%/Integrations/AppVeyor?ProjectSlug=%SIGNPATH_PROJECT_SLUG%&SigningPolicySlug=%SIGNPATH_SIGNING_POLICY_SLUG%&ArtifactConfigurationSlug=%ARTIFACT_CONFIGURATION_SLUG%
     authorization: 'Bearer %SIGNPATH_CI_USER_TOKEN%'
-    request_timeout: 5
-
-after_deploy:
-  - ps: |
-      # Start-Sleep -Seconds 90
-      if ($($Env:SIGNPATH_SIGNING_REQUEST_ID) -ne '') {
-       # Write-Output $env:SIGNING_REQUEST_ID > rd.txt
-       $Env:SIGNPATH_SIGNING_REQUEST_ID | Set-Content "build-output\sr.txt"
-      }
-      Write-host "SIGNPATH_SIGNING_REQUESt_ID= $($env:SIGNPATH_SIGNING_REQUEST_ID)"
-      Write-host "SIGNPATH_SIGNING_REQUEST_STATUS= $($env:SIGNPATH_SIGNING_REQUEST_STATUS)"
-
+#    request_timeout: 5
 
 # init:
 #  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
@@ -74,9 +63,5 @@ after_deploy:
 #  on_finish:
 # - ps: $blockRdp = $true; iex ((new-object  net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
-on_finish:
-    - ps: |
-       Write-host "SIGNPATH_SIGNING_REQUESt_ID= $($env:SIGNPATH_SIGNING_REQUEST_ID)"
-       Write-host "SIGNPATH_SIGNING_REQUEST_STATUS= $($env:SIGNPATH_SIGNING_REQUEST_STATUS)"
        
   
