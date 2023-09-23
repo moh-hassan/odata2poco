@@ -10,7 +10,7 @@ using OData2Poco.Http;
 
 namespace OData2Poco.Tests;
 
-internal class CustomHttpClientTest : BaseTest
+public partial class CustomHttpClientTest : BaseTest
 {
     private bool _isLive;
     private string _token;

@@ -17,10 +17,10 @@ POCO classes can be used in a typed RESTful client OData services. Code generati
 -----------
 
 # Announcing new Release: V6.1.0
-## What’s New in v6.1.0:
+## Whatï¿½s New in v6.1.0:
 - New Feature: Gzip encoded content [#48](https://github.com/moh-hassan/odata2poco/issues/48) by @DerekGn. Allow reading SAP metadata compressed as gzip.
 
-## What’s New in v6.0.0:
+## Whatï¿½s New in v6.0.0:
 
 **Code Generation**
 - A new powerful option ```--att-defs``` allows you to dynamically generate attributes for c# classes and properties using a simple text file that contains your template with expressions. These expressions are valid C# code that can utilize C# string functions and other built-in extension methods. You can also filter on classes and properties to apply the attributes selectively.
@@ -249,9 +249,3 @@ MIT License.
 
 [Changes](https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md)
 
--------
-## Acknowledgements: 
-
-**Thank you [JetBrains](https://www.jetbrains.com "JetBrain") for [Resharper](https://www.jetbrains.com/resharper/ "Resharper") open source license**
-
-![](art/icon-resharper-256.png)

@@ -22,6 +22,7 @@
     <Compile Include="..\Fake\Common\Mocks.cs" Link="HttpMock\Mocks.cs" />
     <Compile Include="..\Fake\Common\MockSetup.cs" Link="HttpMock\MockSetup.cs" />
     <Compile Include="..\Fake\Common\Site.cs" Link="HttpMock\Site.cs" />
+    <Compile Include="..\Fake\Common\GzipMockServer.cs" Link="HttpMock\GzipMockServer.cs" />
   </ItemGroup>
 
   <ItemGroup>

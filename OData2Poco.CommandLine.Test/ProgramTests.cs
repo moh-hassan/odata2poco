@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Extensions;
 using OData2Poco.Fake;
+using OData2Poco.Tests;
 using OData2Poco.TestUtility;
 #pragma warning disable IDE0060
 
@@ -813,4 +814,17 @@ Format= [AdaptTo("[name]Dto"]
         output.Should().ContainAll(expected.ToLines());
     }
     #endregion
+
+    [Test]
+    public async Task MetaData_encoded_gzip_should_success_test()
+    {
+        //Arrange
+        string url = new GzipMockServer();
+        var a = $"-r {url} -v";
+        //Act
+        var tuple = await RunCommand(a);
+        var output = tuple.Item2;
+        //Assert
+        output.Should().Contain("public partial class City");
+    }
 }
