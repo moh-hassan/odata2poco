@@ -75,18 +75,19 @@ after_test:
  
 artifacts: 
 - path: .\build\odata2poco-%O2P_VERSION%.zip
-  name: o2p_zip 
+  name: o2p_zip   
+
 
 deploy:
 #Github    
 - provider: GitHub
   auth_token:
      secure: sB33uLo96nR+LGmYLdPmY/segb6d4O061N2e8Nbz6iyHg82D0RysMxWE5JKnXmU+
-  artifact: o2p_zip            
+  artifact: o2p_zip          
   prerelease: false  
   draft: true
   on:
-    SIGNING: true
+    SIGNING2: true
   #  APPVEYOR_REPO_TAG: true
  
 - provider: Webhook
