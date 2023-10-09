@@ -249,3 +249,10 @@ MIT License.
 
 [Changes](https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md)
 
+## Privacy Policy
+All programs or packages will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it. 
+
+## Code Signing Policy
+This project uses free code signing provided by [SignPath.io](https://signpath.io?utm_source=foundation&utm_medium=github&utm_campaign=odata2poco), and a certificate by the [SignPath Foundation](https://signpath.org?utm_source=foundation&utm_medium=github&utm_campaign=odata2poco).
+
+Starting with v6.2, o2pgen.exe and all odata2poco.xxx.nupkg packages are signed. Code signing is applied only to odata2poco project code in the [odata2poco repository](https://github.com/moh-hassan/odata2poco) master branch and built on AppVeyor.  The odata2poco.xxx.nupkg packages contain third-party libraries used by odata2poco, which may or may not be signed.  
