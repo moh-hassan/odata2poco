@@ -1,12 +1,12 @@
 
 #nuget version is nly changed by  RELEASE TAG 
-version: 6.1.0-dev-{build} 
+version: 6.2.0-dev-{build} 
 
 image: Visual Studio 2022
 
 # Set the signing policy slug according to branch
 environment:
-  SIGNPATH_SIGNING_POLICY_SLUG: test-signing
+  SIGNPATH_SIGNING_POLICY_SLUG: release-signing
   ARTIFACT_CONFIGURATION_SLUG: o2p2
   SIGNPATH_PROJECT_SLUG : odata2poco  
 
@@ -71,10 +71,10 @@ after_test:
     $allow_push=$env:APPVEYOR_REPO_TAG -eq "true"
     .\scripts\build_choco $version $allow_push
 - ps: .\scripts\checksum.ps1 $env:APPVEYOR_BUILD_VERSION
--  7z a -tzip .\build\odata2poco-%O2P_VERSION%.zip .\build\*.nupkg  .\build\*.snupkg  .\build\*.exe .\chocolatey\*.nupkg   
+-  7z a -tzip .\build\odata2poco-%O2P_VERSION%-unsigned.zip .\build\*.nupkg  .\build\*.snupkg  .\build\*.exe .\chocolatey\*.nupkg   
  
 artifacts: 
-- path: .\build\odata2poco-%O2P_VERSION%.zip
+- path: .\build\odata2poco-%O2P_VERSION%-unsigned.zip
   name: o2p_zip   
 
 
@@ -86,8 +86,8 @@ deploy:
   artifact: o2p_zip          
   prerelease: false  
   draft: true
-  on:
-    SIGNING2: true
+#  on:
+  #    SIGNING2: true
   #  APPVEYOR_REPO_TAG: true
  
 - provider: Webhook
