@@ -16,44 +16,11 @@ POCO classes can be used in a typed RESTful client OData services. Code generati
 
 -----------
 
-# Announcing new Release: V6.1.0
-## What�s New in v6.1.0:
-- New Feature: Gzip encoded content [#48](https://github.com/moh-hassan/odata2poco/issues/48) by @DerekGn. Allow reading SAP metadata compressed as gzip.
-
-## What�s New in v6.0.0:
-
-**Code Generation**
-- A new powerful option ```--att-defs``` allows you to dynamically generate attributes for c# classes and properties using a simple text file that contains your template with expressions. These expressions are valid C# code that can utilize C# string functions and other built-in extension methods. You can also filter on classes and properties to apply the attributes selectively.
-
-- Add comments to the header of c# class to mark the openType classes or Entity Types: EntitySet or Complex type.
-
-**Security**
-
-- Password/secret token  are encrypted when read from commandLine/file and it's stored in a SecuredContainer.
-- Reading password from keyboard and Encrypted then stored in a SecuredContainer.
-
-**User Experience**
-
-- Load option and arguments of commandLine from a text configuration File.
-- Reading value of any option in the commandLine from file.
-- Support repeating options in the commandLine for sequence args.
-
-**Http Connection**
-
-- New Option: Allow setting of SSL/TLS protocols.
-- New option: Allow to Skip Certification Check in http connection.  
-- New Option: Allow to specify Http header in Odata http connection with the computing of base64.
-
-
-
-**Enhancement**
-- Set exit codes to be positive number to match Linux standard.
-- Centeralizing packages and update all packages to the last version including Newtonsoft.Json to 13.0.3
-
-Try the new version and let me know your feedback. 
-
-[How to use the new v6.0](https://github.com/moh-hassan/odata2poco/wiki/v6_0_0_how_to)
-
+# Announcing new Release: V6.2.0 
+## What is New in v6.2.0:
+- New Feature: The application  `o2pgen.exe` and all `odata2poco.xxx.nupkg` packages are signed. 
+Code signing is applied only to odata2poco project code in the [odata2poco repository](https://github.com/moh-hassan/odata2poco) and built on AppVeyor.   
+   [Read Code Signing Policy](#code-signing-policy)
 ------------ 
 
 ## Development packages

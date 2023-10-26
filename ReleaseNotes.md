@@ -1,5 +1,15 @@
 # OData2Poco 
 
+## Version 6.2.0
+**Release Date:**  OCT 26, 2023
+- New Feature:  The application  `o2pgen.exe` and all `odata2poco.xxx.nupkg` packages are signed. 
+Code signing is applied only to odata2poco project code in the [odata2poco repository](https://github.com/moh-hassan/odata2poco) and built on AppVeyor.  
+The odata2poco.xxx.nupkg packages contain third-party libraries used by odata2poco, which may or may not be signed.  
+
+The project uses the free code signing provided by [SignPath.io](https://signpath.io?utm_source=foundation&utm_medium=github&utm_campaign=odata2poco), and a certificate by the [SignPath Foundation](https://signpath.org?utm_source=foundation&utm_medium=github&utm_campaign=odata2poco).
+
+Thanks to  [SignPath.io](https://signpath.io?utm_source=foundation&utm_medium=github&utm_campaign=odata2poco) and Thanks to @Paul Savoie for help and support.
+
 ## Version 6.1.0
 **Release Date:**  SEP 9, 2023
 - New Feature: Gzip encoded content #48 by @DerekGn. Allow reading SAP metadata compressed as gzip.
