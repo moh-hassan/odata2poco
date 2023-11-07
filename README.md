@@ -16,11 +16,10 @@ POCO classes can be used in a typed RESTful client OData services. Code generati
 
 -----------
 
-# Announcing new Release: V6.2.0 
-## What is New in v6.2.0:
-- New Feature: The application  `o2pgen.exe` and all `odata2poco.xxx.nupkg` packages are signed. 
-Code signing is applied only to odata2poco project code in the [odata2poco repository](https://github.com/moh-hassan/odata2poco) and built on AppVeyor.   
-   [Read Code Signing Policy](#code-signing-policy)
+# Announcing new Release: V6.2.1
+## What is New in v6.2.1:
+- Fix terminal close in windows 11 or displaying message 'process exited with code 259'  when run o2pgen in net472.
+
 ------------ 
 
 ## Development packages

@@ -42,8 +42,7 @@ init:
       }
   - ps: |
       Write-Host "APPVEYOR_BUILD_VERSION='$env:APPVEYOR_BUILD_VERSION'" -ForegroundColor Yellow
-      Write-Host "APPVEYOR_REPO_TAG_NAME= '$env:APPVEYOR_REPO_TAG_NAME'" -ForegroundColor Yellow
-      Write-Host 'choco version';choco -v
+      Write-Host "APPVEYOR_REPO_TAG_NAME= '$env:APPVEYOR_REPO_TAG_NAME'" -ForegroundColor Yellow      
 
 configuration: Release
 
