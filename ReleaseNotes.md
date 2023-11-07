@@ -1,5 +1,8 @@
 # OData2Poco 
-
+## Version 6.2.1
+**Release Date:**  Nov 7, 2023
+- Fix terminal close in windows 11 or error 'process exited with code 259' when run o2pgen in net472.
+ 
 ## Version 6.2.0
 **Release Date:**  OCT 26, 2023
 - New Feature:  The application  `o2pgen.exe` and all `odata2poco.xxx.nupkg` packages are signed. 

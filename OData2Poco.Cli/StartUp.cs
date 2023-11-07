@@ -16,17 +16,6 @@ namespace OData2Poco.CommandLine
         public static int RetCode { get; set; } = (int)ExitCodes.Success;
         public static IPocoFileSystem FileSystem { get; set; } = new PocoFileSystem();
 
-        private static void SetBufferHeight()
-        {
-#if !NETCOREAPP
-            //only supported in windows
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                return;
-            if (!(Console.IsOutputRedirected || Console.IsErrorRedirected))
-                Console.BufferHeight = short.MaxValue - 1;
-#endif
-        }
-
         public static async Task Run(string[] args)
         {
             Logger.Success(ApplicationInfo.HeadingInfo);
@@ -69,8 +58,7 @@ namespace OData2Poco.CommandLine
 
             try
             {
-                FileSystem = new PocoFileSystem();
-                SetBufferHeight();
+                FileSystem = new PocoFileSystem();                
 
                 // Catch all unhandled exceptions in all threads.
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;

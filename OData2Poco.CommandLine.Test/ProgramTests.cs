@@ -827,4 +827,19 @@ Format= [AdaptTo("[name]Dto"]
         //Assert
         output.Should().Contain("public partial class City");
     }
+
+    [Test]
+    public async Task Show_help_test()
+    {
+        //Arrange
+        string url = new GzipMockServer();
+        var a = $"--help";
+        //Act
+        var tuple = await RunCommand(a);
+        var output = tuple.Item2;
+        Console.WriteLine(output);
+        //Assert
+        output.Should().Contain("-r, --url");
+    }
+
 }
