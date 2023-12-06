@@ -23,6 +23,7 @@
     <Compile Include="..\Fake\Common\MockSetup.cs" Link="HttpMock\MockSetup.cs" />
     <Compile Include="..\Fake\Common\Site.cs" Link="HttpMock\Site.cs" />
     <Compile Include="..\Fake\Common\GzipMockServer.cs" Link="HttpMock\GzipMockServer.cs" />
+    <Compile Include="..\OData2Poco.Tests\GlobalUsings.cs" Link="GlobalUsings.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,5 +35,10 @@
 
   <ItemGroup>
     <PackageReference Include="WireMock.Net" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

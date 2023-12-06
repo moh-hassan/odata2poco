@@ -10,7 +10,8 @@ temp/
 MyTester/
 build/
 tools/
-Experiment/
+**/Experiment/
+**/localTest/
 Plugins/
 .vscode
 

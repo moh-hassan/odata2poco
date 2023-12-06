@@ -12,6 +12,9 @@
     <PackageId>OData2Poco.CommandLine</PackageId>
   </PropertyGroup>
   <Import Project="$(MSBuildProjectDirectory)\ilmerge.targets" />
+  <ItemGroup>
+    <Compile Include="..\OData2PocoLib\GlobalUsings.cs" Link="GlobalUsings.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OData2Poco.Cli\OData2Poco.Cli.csproj" />

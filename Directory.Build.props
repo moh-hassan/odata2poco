@@ -24,7 +24,7 @@
     <Version Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)</Version>
     <Version Condition="'$(VersionSuffix)' == ''">0.0.0</Version>
     <PackageTags>code-generation;odata;charp;c#;typescript;ts;dto;poco;AspNetWebApi;WebApi</PackageTags>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <ImplicitUsings>enable</ImplicitUsings>   
   </PropertyGroup>
   <!-- Enable building .NET Framework projects on any machine with at least MSBuild or the .NET Core SDK installed.-->
   <ItemGroup>
@@ -45,6 +45,10 @@
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="CliWrap" />
+    <PackageReference Include="NUnit.Analyzers" >
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -60,8 +64,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\common\NullAttributes.cs" Link="NullAttributes.cs" />
-    <Compile Include="..\common\Range.cs" Link="Range.cs" />
-    <Compile Include="..\common\GlobalUsings.cs" Link="GlobalUsings.cs" />
+    <Compile Include="..\common\Range.cs" Link="Range.cs" />   
   </ItemGroup>
 
   <PropertyGroup Label="analysis">

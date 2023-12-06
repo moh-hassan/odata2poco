@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net6.0</TargetFrameworks>
-		<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net6.0;net472</TargetFrameworks>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net6.0;net472</TargetFrameworks>	
 		<Authors>Mohamed Hassan</Authors>
 		<Copyright>Copyright ©  Mohamed Hassan 2016-2022</Copyright>
 		<Company>OData2Poco</Company>
