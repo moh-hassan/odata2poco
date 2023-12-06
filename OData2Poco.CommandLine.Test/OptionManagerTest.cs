@@ -12,12 +12,15 @@ public class OptionManagerTest
 {
     [Test]
     [TestCase("pas")]
+    [TestCase("Pas")]
     [TestCase("PAS")]
     [TestCase("camel")]
     [TestCase("none")]
     public void NameCase_valid_Test(string nameCase)
     {
-        Enum.TryParse<CaseEnum>(nameCase, out var nameCase2);
+        var result = Enum.TryParse<CaseEnum>(nameCase, true, out var nameCase2);
+        Assert.That(result, Is.True);
+
         var options = new Options
         {
             Lang = Language.CS,

@@ -4,7 +4,6 @@ using OData2Poco.InfraStructure.Logging;
 
 
 namespace OData2Poco.CustAttributes.UserAttributes;
-#pragma warning disable S927
 
 /// <summary>
 /// Generate a custom attribute from a template

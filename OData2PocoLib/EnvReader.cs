@@ -25,7 +25,7 @@ public class EnvReader
 
         foreach (var arg in args)
         {
-            if (arg.Contains("%") || arg.Contains("$")) //arg is env var
+            if (arg.Contains('%') || arg.Contains('$')) //arg is env var
             {
                 newArgs.Add(ResolveEnv(arg, out var errors));
                 if (errors.Count > 0)

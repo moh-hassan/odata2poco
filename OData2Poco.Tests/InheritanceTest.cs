@@ -12,7 +12,7 @@ internal class InheritanceTest
     public void InheritanceEnabledByDefaultTest()
     {
         var o2P = new O2P();
-        Assert.IsTrue(o2P.Setting.UseInheritance);
+        Assert.That(o2P.Setting.UseInheritance, Is.True);
     }
     [Test]
     public void InheritanceDisabledWithInheritSettingTest()
@@ -23,6 +23,6 @@ internal class InheritanceTest
             Inherit = "MyBaseClass",
         };
         var o2P = new O2P(setting);
-        Assert.IsFalse(o2P.Setting.UseInheritance);
+        Assert.That(o2P.Setting.UseInheritance, Is.False);
     }
 }

@@ -1,5 +1,5 @@
 // Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
-#pragma warning disable S1210
+
 using OData2Poco.CustAttributes;
 
 namespace OData2Poco;

@@ -37,8 +37,9 @@ public partial class CustomHttpClientTest : BaseTest
         //Act
         var cc = new CustomHttpClient(connection);
         var metadata = await cc.ReadMetaDataAsync();
-        //Assert
-        Assert.That(metadata.Length, Is.GreaterThan(0));
+        //Assert        
+        Assert.That(metadata, Is.Not.Empty);
+
     }
 
     [Test]
@@ -107,8 +108,8 @@ public partial class CustomHttpClientTest : BaseTest
         var client = new CustomHttpClient(connection, new CustomeHandler(r =>
         {
             r.Headers.Count().Should().Be(3);
-            Assert.IsNotNull(r.Headers.Authorization);
-            Assert.AreEqual("Bearer abc.123", r.Headers.Authorization.ToString());
+            Assert.That(r.Headers.Authorization, Is.Not.Null);
+            Assert.That(r.Headers.Authorization.ToString(), Is.EqualTo("Bearer abc.123"));
         }));
         await client.ReadMetaDataAsync();
     }

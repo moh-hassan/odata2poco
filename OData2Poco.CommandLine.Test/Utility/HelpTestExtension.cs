@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Text.RegularExpressions;
-// ReSharper disable CheckNamespace
 
 namespace OData2Poco.TestUtility;
 

@@ -258,8 +258,11 @@ public enum Feature
         var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
         var name = sut.ClassList.FirstOrDefault()?.Name;
         //Assert
-        Assert.That(sut.ClassList.Count, Is.EqualTo(1));
-        Assert.That(name, Is.EqualTo("Event"));
+        Assert.Multiple(() =>
+        {
+            Assert.That(sut.ClassList, Has.Count.EqualTo(1));
+            Assert.That(name, Is.EqualTo("Event"));
+        });
 
     }
     [Test]

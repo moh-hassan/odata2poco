@@ -4,7 +4,6 @@ using NUnit.Framework;
 using OData2Poco.InfraStructure.FileSystem;
 
 namespace OData2Poco.Tests;
-#pragma warning disable CA1822
 public abstract class BaseTest
 {
     protected List<ClassTemplate> ClassList;

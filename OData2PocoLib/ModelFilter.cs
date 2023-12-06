@@ -29,7 +29,7 @@ internal static class ModelFilter
         }
 
         //add * prefix to name if it do not contain namespace.
-        filter = filter.Select(x => !x.StartsWith("*") || x.Contains(".")
+        filter = filter.Select(x => !x.StartsWith("*") || x.Contains('.')
             ? x
             : $"*{x}").ToList();
         var list2 = filter.Select(x =>

@@ -17,7 +17,7 @@ internal class StringExtensionsTest : BaseTest
     [TestCase("user-Name", "UserName")]
     public void ToPascalCaseTest(string name, string pascalName)
     {
-        Assert.AreEqual(pascalName, name.ToPascalCase());
+        pascalName.Should().Be(name.ToPascalCase());
     }
 
     [Test]
@@ -27,7 +27,7 @@ internal class StringExtensionsTest : BaseTest
     [TestCase("user-Name", "userName")]
     public void ToCamelCaseTest(string name, string pascalName)
     {
-        Assert.AreEqual(pascalName, name.ToCamelCase());
+        pascalName.Should().Be(name.ToCamelCase());
     }
 
     [Test]
@@ -49,7 +49,7 @@ internal class StringExtensionsTest : BaseTest
           and this is     line2";
 
         var expected = "this is line1 and this is line2";
-        Assert.AreEqual(text.TrimAllSpace(), expected);
+        text.TrimAllSpace().Should().Be(expected);
     }
 
     [Test]
@@ -60,7 +60,7 @@ internal class StringExtensionsTest : BaseTest
 
           and this is     line2";
         var expected = "this is line1\nand this is line2\n";
-        Assert.AreEqual(text.TrimAllSpace(true), expected);
+        text.TrimAllSpace(true).Should().Be(expected);
     }
     [Test]
     [TestCase("Apple", "apple")]

@@ -7,7 +7,6 @@ using Microsoft.OData.Edm.Validation;
 using OData2Poco.InfraStructure.Logging;
 
 namespace OData2Poco.V4;
-#pragma warning disable CA1822
 
 /// <summary>
 ///     Process metadataString and generate list of   classes

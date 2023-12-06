@@ -4,7 +4,6 @@ using OData2Poco.Fake;
 using WireMock.Server;
 
 namespace OData2Poco.HttpMock;
-#pragma warning disable S3963
 internal static class Mocks
 {
 #if Test_Cli

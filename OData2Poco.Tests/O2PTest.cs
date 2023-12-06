@@ -27,7 +27,7 @@ public class O2PTest
         var connString = new OdataConnectionString { ServiceUrl = url };
         var o2P = new O2P();
         var code = await o2P.GenerateAsync(connString);
-        Assert.IsTrue(code.Contains("public partial class Product"));
+        Assert.That(code, Does.Contain("public partial class Product"));
     }
 
     [Test]
@@ -37,7 +37,7 @@ public class O2PTest
         var connString = new OdataConnectionString { ServiceUrl = url };
         var o2P = new O2P();
         var code = await o2P.GenerateAsync(connString);
-        Assert.IsTrue(code.Contains("public partial class City"));
+        Assert.That(code, Does.Contain("public partial class City"));
     }
 
     [Test]
@@ -47,7 +47,7 @@ public class O2PTest
         var connString = new OdataConnectionString { ServiceUrl = url };
         var o2P = new O2P();
         var code = await o2P.GenerateAsync(connString);
-        Assert.IsTrue(code.Contains("public partial class Product"));
+        Assert.That(code, Does.Contain("public partial class Product"));
     }
 
     [Test]
@@ -58,7 +58,7 @@ public class O2PTest
         var setting = new PocoSetting { Include = new List<string> { "NorthwindModel*" } };
         var o2P = new O2P(setting);
         var code = await o2P.GenerateAsync(connString);
-        Assert.IsTrue(code.Contains("public partial class Product"));
+        Assert.That(code, Does.Contain("public partial class Product"));
     }
 
     [Test]
@@ -68,7 +68,7 @@ public class O2PTest
         string xml = File.ReadAllText(fileName);
         var o2P = new O2P();
         var code = await o2P.GenerateAsync(xml);
-        Assert.IsTrue(code.Contains("public partial class Product"));
+        Assert.That(code, Does.Contain("public partial class Product"));
     }
     [Test]
     public async Task GenerateFromRemoteXmlfile()
@@ -77,7 +77,7 @@ public class O2PTest
         var connString = new OdataConnectionString { ServiceUrl = url };
         var o2P = new O2P();
         var code = await o2P.GenerateAsync(connString);
-        Assert.IsTrue(code.Contains("public partial class City"));
+        Assert.That(code, Does.Contain("public partial class City"));
     }
 
     [Test]
@@ -92,7 +92,7 @@ public class O2PTest
         var o2P = new O2P(setting);
         var code = await o2P.GenerateAsync(connString);
         //TripId is readonly, but overwrite by setting option 
-        Assert.IsTrue(code.Contains(" public int TripId {get;set;}"));
+        Assert.That(code, Does.Contain(" public int TripId {get;set;}"));
     }
 
     [Test]

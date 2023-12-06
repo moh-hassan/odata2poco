@@ -51,10 +51,13 @@ public partial class ProgramTests : BaseTest
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.AreEqual(0, tuble.Item1);
-        Assert.IsTrue(output.Contains("public partial class Product"));
-        Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations")); //-a key /or -k not set
-        Assert.IsFalse(output.Contains("System.ComponentModel.DataAnnotations.Schema")); //a- tab / or -t not set
+        Assert.Multiple(() =>
+        {
+            Assert.That(tuble.Item1, Is.EqualTo(0));
+            Assert.That(output, Does.Contain("public partial class Product"));
+            Assert.That(output, Does.Not.Contain("System.ComponentModel.DataAnnotations"));
+            Assert.That(output, Does.Not.Contain("System.ComponentModel.DataAnnotations.Schema"));
+        });
     }
 
     [Test]
@@ -67,7 +70,7 @@ public partial class ProgramTests : BaseTest
         var tuple = await RunCommand(a);
         var output = tuple.Item2;
         //Assert
-        Assert.AreEqual(0, tuple.Item1);
+        tuple.Item1.Should().Be(0);
 
         Assert.That(output, Does.Contain("public partial class Product"));
         Assert.That(output, Does.Contain("[Table(\"Products\")]")); //-a tab/ -t
@@ -91,7 +94,7 @@ public partial class ProgramTests : BaseTest
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.IsTrue(output.Contains("public partial class PublicTransportation : PlanItem"));
+        Assert.That(output, Does.Contain("public partial class PublicTransportation : PlanItem"));
     }
 
     [Test(Description = "If model inheritance is used (the default) check that the propterties of a base calsss are not duplicated inderived classes")]
@@ -122,13 +125,12 @@ public partial class ProgramTests : BaseTest
         //Act
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
-
-        Assert.IsTrue(output.Contains($"public partial class PublicTransportation : {myBaseClass}"));
+        Assert.That(output, Does.Contain($"public partial class PublicTransportation : {myBaseClass}"));
 
         var lines = output.Split('\n');
         var occurneces = lines.Count(l => l.Contains("public int PlanItemId"));
-        //Assert
-        Assert.IsTrue(occurneces > 1);
+        //Assert        
+        Assert.That(occurneces, Is.GreaterThan(1));
     }
 
     [Test(Description = "If model inheritance is not used, the properties from a base class should by duplicated in the derived classes.")]
@@ -144,8 +146,10 @@ public partial class ProgramTests : BaseTest
         var output = tuble.Item2;
         var lines = output.Split('\n');
         var occurneces = lines.Count(l => l.Contains("public int PlanItemId"));
-        //Assert
-        Assert.IsTrue(occurneces > 1); // If not using model inheritance, check that the PlanItemId property is duplicated in derived classes
+        //Assert       
+        Assert.That(occurneces, Is.GreaterThan(1));
+        // If not using model inheritance, check that the PlanItemId property is duplicated in derived classes
+
 
     }
 
@@ -160,10 +164,10 @@ public partial class ProgramTests : BaseTest
         //Assert
         var output = tuble.Item2;
         //Assert
-        Assert.AreEqual(0, tuble.Item1);
-        Assert.IsTrue(output.Contains("public partial class Product"));
-        Assert.IsTrue(output.Contains("public virtual Supplier Supplier {get;set;}")); //-n
-        Assert.IsTrue(output.Contains("int?"));  //-b
+        tuble.Item1.Should().Be(0);
+        Assert.That(output, Does.Contain("public partial class Product"));
+        Assert.That(output, Does.Contain("public virtual Supplier Supplier {get;set;}")); //-n
+        Assert.That(output, Does.Contain("int?"));  //-b
 
     }
     //feature #43
@@ -209,12 +213,12 @@ public partial class ProgramTests : BaseTest
         var output = tuble.Item2;
 
         //Assert
-        Assert.AreEqual(0, tuble.Item1); //exit code
-        Assert.IsTrue(output.Contains("public partial class Category"));
-        Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
-        Assert.IsTrue(output.Contains("Category"));
-        Assert.IsTrue(output.Contains(" [JsonProperty(PropertyName = \"CategoryName\")]"));
-        Assert.IsTrue(output.Contains("CategoryName"));
+        tuble.Item1.Should().Be(0); //exit code
+        Assert.That(output, Does.Contain("public partial class Category"));
+        Assert.That(output, Does.Contain("[JsonProperty(PropertyName = \"CategoryID\")]"));
+        Assert.That(output, Does.Contain("Category"));
+        Assert.That(output, Does.Contain(" [JsonProperty(PropertyName = \"CategoryName\")]"));
+        Assert.That(output, Does.Contain("CategoryName"));
     }
 
     [Test]
@@ -229,12 +233,12 @@ public partial class ProgramTests : BaseTest
         var output = tuble.Item2;
 
         //Assert
-        Assert.AreEqual(0, tuble.Item1); //exit code
-        Assert.IsTrue(output.Contains("public partial class Category"));
-        Assert.IsTrue(output.Contains("[JsonPropertyName(\"CategoryID\")]"));
-        Assert.IsTrue(output.Contains("Category"));
-        Assert.IsTrue(output.Contains(" [JsonPropertyName(\"CategoryName\")]"));
-        Assert.IsTrue(output.Contains("CategoryName"));
+        tuble.Item1.Should().Be(0); //exit code
+        Assert.That(output, Does.Contain("public partial class Category"));
+        Assert.That(output, Does.Contain("[JsonPropertyName(\"CategoryID\")]"));
+        Assert.That(output, Does.Contain("Category"));
+        Assert.That(output, Does.Contain(" [JsonPropertyName(\"CategoryName\")]"));
+        Assert.That(output, Does.Contain("CategoryName"));
     }
     [Test]
     [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
@@ -246,11 +250,11 @@ public partial class ProgramTests : BaseTest
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.IsTrue(output.Contains("public partial class Category"));
-        Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryName\")]"), "itshould be CategoryName");
-        Assert.IsTrue(output.Contains("categoryName"));
-        Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
-        Assert.IsTrue(output.Contains("category"));
+        Assert.That(output, Does.Contain("public partial class Category"));
+        Assert.That(output, Does.Contain("[JsonProperty(PropertyName = \"CategoryName\")]"));
+        Assert.That(output, Does.Contain("CategoryName"));
+        Assert.That(output, Does.Contain("[JsonProperty(PropertyName = \"CategoryID\")]"));
+        Assert.That(output, Does.Contain("category"));
     }
 
     [Test]
@@ -263,11 +267,11 @@ public partial class ProgramTests : BaseTest
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.AreEqual(0, tuble.Item1);
-        Assert.IsTrue(output.Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
-        Assert.IsTrue(output.Contains("Category"));
-        Assert.IsTrue(output.Contains(" [JsonProperty(PropertyName = \"CategoryName\")]"));
-        Assert.IsTrue(output.Contains("CategoryName"));
+        tuble.Item1.Should().Be(0);
+        Assert.That(output, Does.Contain("[JsonProperty(PropertyName = \"CategoryID\")]"));
+        Assert.That(output, Does.Contain("Category"));
+        Assert.That(output, Does.Contain(" [JsonProperty(PropertyName = \"CategoryName\")]"));
+        Assert.That(output, Does.Contain("CategoryName"));
 
     }
 
@@ -281,10 +285,10 @@ public partial class ProgramTests : BaseTest
         //Act
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
-        Assert.AreEqual(0, tuble.Item1);
+        tuble.Item1.Should().Be(0);
         //Assert
-        Assert.IsTrue(output.Contains("public partial class Product")); //-v
-        Assert.IsTrue(output.Contains("public Supplier Supplier {get;set;}")); //-e
+        Assert.That(output, Does.Contain("public partial class Product")); //-v
+        Assert.That(output, Does.Contain("public Supplier Supplier {get;set;}")); //-e
 
     }
 
@@ -298,8 +302,8 @@ public partial class ProgramTests : BaseTest
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.AreEqual(0, tuble.Item1);
-        Assert.IsTrue(output.Contains("public partial class Product : MyBaseClass,MyInterface")); //-i, -v
+        tuble.Item1.Should().Be(0);
+        Assert.That(output, Does.Contain("public partial class Product : MyBaseClass,MyInterface")); //-i, -v
 
     }
 
@@ -312,8 +316,8 @@ public partial class ProgramTests : BaseTest
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.AreEqual(0, tuble.Item1);
-        Assert.IsTrue(output.Contains("MyNamespace1.MyNamespace2.")); //-m, -v
+        tuble.Item1.Should().Be(0);
+        Assert.That(output, Does.Contain("MyNamespace1.MyNamespace2.")); //-m, -v
 
     }
 
@@ -327,12 +331,12 @@ public partial class ProgramTests : BaseTest
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.AreEqual(0, tuble.Item1);
-        Assert.IsTrue(output.Contains("public partial class Product"));
-        Assert.IsTrue(output.Contains("[Table")); //-t
-        Assert.IsTrue(output.Contains("[Key]")); //-k
-        Assert.IsTrue(output.Contains("[Required]"));  //-q
-        Assert.IsTrue(output.Contains("virtual")); //-n
+        tuble.Item1.Should().Be(0);
+        Assert.That(output, Does.Contain("public partial class Product"));
+        Assert.That(output, Does.Contain("[Table")); //-t
+        Assert.That(output, Does.Contain("[Key]")); //-k
+        Assert.That(output, Does.Contain("[Required]"));  //-q
+        Assert.That(output, Does.Contain("virtual")); //-n
     }
 
     [Test]
@@ -346,8 +350,8 @@ public partial class ProgramTests : BaseTest
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.AreEqual(0, tuble.Item1);
-        Assert.IsTrue(output.Contains("public partial class Product")); //-v
+        tuble.Item1.Should().Be(0);
+        Assert.That(output, Does.Contain("public partial class Product")); //-v
 
     }
     [Test]
@@ -411,8 +415,8 @@ public enum Feature
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.AreEqual(0, tuble.Item1);
-        Assert.IsTrue(output.Contains("public partial class Trip")); //-v
+        tuble.Item1.Should().Be(0);
+        Assert.That(output, Does.Contain("public partial class Trip")); //-v
 
     }
 
@@ -430,10 +434,10 @@ public enum Feature
         var output = tuble.Item2;
         //Assert  
         var line = $"//     Service Url: {url}";
-        Assert.IsTrue(output.Contains(line));
+        Assert.That(output, Does.Contain(line));
 
-        Assert.IsTrue(output.Contains("//     Parameters:"));
-        Assert.IsTrue(output.Contains("// 	-v Verbose= True"));
+        Assert.That(output, Does.Contain("//     Parameters:"));
+        Assert.That(output, Does.Contain("// 	-v Verbose= True"));
     }
 
     #region Name Case
@@ -460,7 +464,7 @@ public enum Feature
         };
         foreach (var s in expected)
         {
-            Assert.IsTrue(output.Contains(s));
+            Assert.That(output, Does.Contain(s));
         }
     }
 
@@ -487,7 +491,7 @@ public enum Feature
         };
         foreach (var s in expected)
         {
-            Assert.IsTrue(output.Contains(s));
+            Assert.That(output, Does.Contain(s));
         }
     }
     #endregion
@@ -504,8 +508,8 @@ public enum Feature
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.IsTrue(output.Contains("public partial class Product"));
-        Assert.IsTrue(output.Contains("public partial class Customer"));
+        Assert.That(output, Does.Contain("public partial class Product"));
+        Assert.That(output, Does.Contain("public partial class Customer"));
 
     }
     [Test]
@@ -518,7 +522,7 @@ public enum Feature
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.IsTrue(output.Contains("public partial class Supplier"));
+        Assert.That(output, Does.Contain("public partial class Supplier"));
     }
     [Test]
     public async Task Model_filter_namespace_star_test()
@@ -530,8 +534,8 @@ public enum Feature
         var tuble = await RunCommand(a);
         var output = tuble.Item2;
         //Assert
-        Assert.IsTrue(output.Contains("public partial class Supplier"));
-        Assert.IsTrue(output.Contains("public partial class Customer"));
+        Assert.That(output, Does.Contain("public partial class Supplier"));
+        Assert.That(output, Does.Contain("public partial class Customer"));
 
     }
     [Test]
@@ -545,9 +549,9 @@ public enum Feature
         var output = tuble.Item2;
 
         //Assert
-        Assert.IsTrue(output.Contains("public partial class Current_Product_List"));
-        Assert.IsTrue(output.Contains("public partial class Customer_and_Suppliers_by_City"));
-        Assert.IsTrue(output.Contains("public partial class Product_Sales_for_1997"));
+        Assert.That(output, Does.Contain("public partial class Current_Product_List"));
+        Assert.That(output, Does.Contain("public partial class Customer_and_Suppliers_by_City"));
+        Assert.That(output, Does.Contain("public partial class Product_Sales_for_1997"));
     }
 
     [Test]
@@ -561,8 +565,8 @@ public enum Feature
         var output = tuble.Item2;
         //Assert
 
-        Assert.IsTrue(output.Contains("public partial class Current_Product_List"));
-        Assert.IsTrue(output.Contains("public partial class Product_Sales_for_1997"));
+        Assert.That(output, Does.Contain("public partial class Current_Product_List"));
+        Assert.That(output, Does.Contain("public partial class Product_Sales_for_1997"));
 
     }
 
@@ -659,7 +663,7 @@ public partial class Airport
         };
         foreach (var s in list)
         {
-            Assert.IsTrue(output.Contains(s));
+            Assert.That(output, Does.Contain(s));
         }
     }
     #endregion
@@ -831,13 +835,11 @@ Format= [AdaptTo("[name]Dto"]
     [Test]
     public async Task Show_help_test()
     {
-        //Arrange
-        string url = new GzipMockServer();
+        //Arrange       
         var a = $"--help";
         //Act
         var tuple = await RunCommand(a);
-        var output = tuple.Item2;
-        Console.WriteLine(output);
+        var output = tuple.Item2;        
         //Assert
         output.Should().Contain("-r, --url");
     }

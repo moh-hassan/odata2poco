@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.CustAttributes;
 
@@ -31,8 +32,8 @@ internal class NamedAttributeTest
         //Act
         var sut = AttributeFactory.Default.GetAttributes(p, "key");
         var att = string.Join(" ", sut);
-        //Assert
-        Assert.IsTrue(att.Contains("[Key"));
+        //Assert        
+        Assert.That(att, Does.Contain("[Key"));
     }
 
     [Test]
@@ -50,8 +51,8 @@ internal class NamedAttributeTest
         //Act
         var sut = AttributeFactory.Default.GetAttributes(p, "key");
         var att = string.Join(" ", sut);
-        //Assert
-        Assert.IsTrue(att.Length == 0);
+        //Assert       
+        Assert.That(att, Is.Empty);
     }
 
     //attribute req
@@ -71,8 +72,8 @@ internal class NamedAttributeTest
         //Act
         var sut = AttributeFactory.Default.GetAttributes(p, "req");
         var att = string.Join(" ", sut);
-        //Assert
-        Assert.IsTrue(att.Contains("[Required]"));
+        //Assert      
+        Assert.That(att, Does.Contain("[Required]"));
     }
 
     [Test]
@@ -90,8 +91,8 @@ internal class NamedAttributeTest
         //Act
         var sut = AttributeFactory.Default.GetAttributes(p, "req");
         var att = string.Join(" ", sut);
-        //Assert
-        Assert.IsTrue(att.Length == 0);
+        //Assert       
+        Assert.That(att, Is.Empty);
     }
 
     [Test]
@@ -111,7 +112,7 @@ internal class NamedAttributeTest
         var att = string.Join(" ", sut);
         //Assert
         var expected = "[JsonProperty(PropertyName = \"FirstName\")]";
-        Assert.IsTrue(att.Contains(expected));
+        Assert.That(att, Does.Contain(expected));
     }
     [Test]
     public void PropertyTemplate_with_datamember_Test()
@@ -130,7 +131,7 @@ internal class NamedAttributeTest
         var att = string.Join(" ", sut);
         //Assert
         var expected = "[DataMember]";
-        Assert.IsTrue(att.Contains(expected));
+        Assert.That(att, Does.Contain(expected));
     }
     [Test]
     public void PropertyTemplate_with_proto_Test()
@@ -149,7 +150,7 @@ internal class NamedAttributeTest
         var att = string.Join(" ", sut);
         //Assert
         var expected = "[ProtoMember(3)]";
-        Assert.IsTrue(att.Contains(expected));
+        Assert.That(att, Does.Contain(expected));
     }
     [Test]
     public void PropertyTemplate_with_display_Test()
@@ -168,7 +169,7 @@ internal class NamedAttributeTest
         var att = string.Join(" ", sut);
         //Assert
         var expected = "[Display(Name = \"First Name\")]";
-        Assert.IsTrue(att.Contains(expected));
+        Assert.That(att, Does.Contain(expected));
     }
     [Test]
     public void PropertyTemplate_with_db_Test()
@@ -187,7 +188,7 @@ internal class NamedAttributeTest
         var att = string.Join(" ", sut);
         //Assert
         var expected = "[Key] [Required]";
-        Assert.IsTrue(att.Contains(expected));
+        Assert.That(att, Does.Contain(expected));
     }
     [Test]
     public void PropertyTemplate_with_table_Test()
@@ -204,8 +205,8 @@ internal class NamedAttributeTest
         //Act
         var sut = AttributeFactory.Default.GetAttributes(p, "tab");
         var att = string.Join(" ", sut);
-        //Assert
-        Assert.IsTrue(att.Length == 0);
+        //Assert       
+        Assert.That(att, Is.Empty);
     }
 
 
@@ -225,8 +226,8 @@ internal class NamedAttributeTest
             .Init()
             .GetAllAttributes(p);
         var att = string.Join(" ", sut);
-        //Assert
-        Assert.IsTrue(att.Length == 0);
+        //Assert      
+        Assert.That(att, Is.Empty);
     }
 
 
@@ -263,7 +264,7 @@ internal class NamedAttributeTest
             .GetAllAttributes(p);
         var att = string.Join(" ", sut);
         //Assert
-        Assert.AreEqual(expected, att);
+        expected.Should().Be(att);
     }
 
     [Test]
@@ -294,7 +295,7 @@ internal class NamedAttributeTest
             .GetAllAttributes(p);
         var att = string.Join(" ", sut);
         //Assert
-        Assert.AreEqual(value, att);
+        value.Should().Be(att);
     }
 
     private bool ListCheck<T>(IEnumerable<T> l1, IEnumerable<T> l2)
@@ -331,7 +332,7 @@ internal class NamedAttributeTest
             "[JsonProperty(PropertyName = \"FirstName\")]",
 
         });
-        Assert.IsTrue(match);
+        Assert.That(match, Is.True);
     }
 
     [Test]
@@ -353,7 +354,7 @@ internal class NamedAttributeTest
             "[Table(\"productDetail\")]",
             "[ProtoContract]",
         });
-        Assert.IsTrue(match);
+        Assert.That(match, Is.True);
     }
     //init factory test
     [Test]
@@ -387,7 +388,7 @@ internal class NamedAttributeTest
             "[JsonProperty(PropertyName = \"FirstName\")]",
 
         });
-        Assert.IsTrue(match);
+        Assert.That(match, Is.True);
 
     }
 
@@ -417,7 +418,7 @@ internal class NamedAttributeTest
             "[ProtoContract]",
 
         });
-        Assert.IsTrue(match);
+        Assert.That(match, Is.True);
 
 
     }
@@ -425,7 +426,7 @@ internal class NamedAttributeTest
     public void PocoAttributesList_supported_attributes_test()
     {
         var atts = new PocoAttributesList().SupportedAttributes();
-        Assert.That(atts.Count, Is.GreaterThan(0));
+        Assert.That(atts, Has.Count.GreaterThan(0));
     }
 
 }

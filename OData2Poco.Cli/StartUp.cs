@@ -58,7 +58,7 @@ namespace OData2Poco.CommandLine
 
             try
             {
-                FileSystem = new PocoFileSystem();                
+                FileSystem = new PocoFileSystem();
 
                 // Catch all unhandled exceptions in all threads.
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -107,5 +107,6 @@ namespace OData2Poco.CommandLine
     }
 
 }
+
 
 

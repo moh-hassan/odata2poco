@@ -2,7 +2,6 @@
 
 using System.Text.RegularExpressions;
 
-#pragma warning disable S3267
 
 namespace OData2Poco.CommandLine;
 

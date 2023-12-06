@@ -166,8 +166,8 @@ public class AttDefinitionTest : BaseTest
         var expected = """[JsonPropertyName("firstName")]""";
         //Act
         var atts = ad.ToAttribute(p);
-        //Assert
-        Assert.AreEqual(expected, atts.FirstOrDefault());
+        //Assert       
+        expected.Should().Be(atts.FirstOrDefault());
     }
 
     [Test]
@@ -193,7 +193,7 @@ public class AttDefinitionTest : BaseTest
         //Act
         var atts = ad.ToAttribute(p);
         //Assert
-        Assert.AreEqual(expected, atts.FirstOrDefault());
+        expected.Should().Be(atts.FirstOrDefault());
     }
 
     [Test]
@@ -221,7 +221,7 @@ public class AttDefinitionTest : BaseTest
         //Act
         var atts = ad.ToAttribute(p);
         //Assert
-        Assert.AreEqual(expected, atts.FirstOrDefault());
+        expected.Should().Be(atts.FirstOrDefault());
     }
 
     [Test]
@@ -244,7 +244,7 @@ public class AttDefinitionTest : BaseTest
         //Act
         var atts = ad.ToAttribute(p);
         //Assert
-        Assert.AreEqual(expected, atts.FirstOrDefault());
+        expected.Should().Be(atts.FirstOrDefault());
     }
 
     [Test]

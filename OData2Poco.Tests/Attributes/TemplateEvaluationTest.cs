@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace OData2Poco.Tests.Attributes
@@ -23,8 +24,9 @@ namespace OData2Poco.Tests.Attributes
         {
             var result = template.EvaluateTemplate(_prop, out var errors);
             //Assert
-            Assert.AreEqual(expected, result);
-            Assert.IsEmpty(errors);
+            expected.Should().Be(result);
+            Assert.That(errors, Is.Empty);
+
 
         }
         [Test]
@@ -36,14 +38,15 @@ namespace OData2Poco.Tests.Attributes
         [TestCase("IsKey && IsNullable", false)]
         [TestCase("IsKey || IsNullable", true)]
         [TestCase("IsKey || !IsNullable", true)]
-
         public void EvaluateConditionExpression_test(string condition, bool expected)
         {
             var result = condition.EvaluateCondition(_prop, out var error);
             //Assert
-            Assert.AreEqual(expected, result);
-            Assert.IsEmpty(error);
-
+            Assert.Multiple(() =>
+            {
+                Assert.That(expected, Is.EqualTo(result));
+                Assert.That(error, Is.Empty);
+            });
         }
     }
 }

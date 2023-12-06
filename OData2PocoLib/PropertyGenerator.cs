@@ -123,7 +123,7 @@ public class PropertyGenerator
     {
         var reducedName = pt.PropType;
         //not prefixed with namespace
-        if (!reducedName.Contains(".")) return reducedName;
+        if (!reducedName.Contains('.')) return reducedName;
 
         var ns = $"{pt.ClassNameSpace}.";
         if (pt.PropType.StartsWith(ns))

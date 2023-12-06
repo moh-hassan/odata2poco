@@ -55,5 +55,6 @@ public class GzipMockServer : IDisposable
     {
         _server.Stop();
         _server?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

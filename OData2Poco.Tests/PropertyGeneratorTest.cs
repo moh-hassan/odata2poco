@@ -29,7 +29,7 @@ internal class PropertyGeneratorTest
         };
         var pg = new PropertyGenerator(property, new PocoSetting());
 
-        Assert.IsTrue(pg.Declaration.Contains("public int CategoryID {get;set;}"));
+        Assert.That(pg.Declaration, Does.Contain("public int CategoryID {get;set;}"));
     }
     [Test]
     public void AllAttributesPropertyDeclaration_test()
@@ -52,10 +52,13 @@ internal class PropertyGeneratorTest
         var sut = new PropertyGenerator(property, setting);
 
 
-        // Assert 
-        Assert.IsTrue(sut.ToString().Contains("[Key]") &&
-                      sut.ToString().Contains("[Required]") &&
-                      sut.ToString().Contains("[JsonProperty(PropertyName = \"CategoryID\")]"));
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(sut.ToString(), Does.Contain("[Key]"));
+            Assert.That(sut.ToString(), Does.Contain("[Required]"));
+            Assert.That(sut.ToString(), Does.Contain("[JsonProperty(PropertyName = \"CategoryID\")]"));
+        });
     }
 
     [Test]
@@ -79,7 +82,7 @@ internal class PropertyGeneratorTest
         var sut = new PropertyGenerator(property, setting);
 
         // Assert 
-        Assert.IsTrue(sut.Declaration.Contains("public int categoryID {get;set;}"));
+        Assert.That(sut.Declaration, Does.Contain("public int categoryID {get;set;}"));
     }
     [Test]
     public void PascalCasePropertyDeclarationTest()
@@ -101,7 +104,7 @@ internal class PropertyGeneratorTest
         var sut = new PropertyGenerator(property, setting);
 
         // Assert 
-        Assert.IsTrue(sut.Declaration.Contains("public int CategoryID {get;set;}"));
+        Assert.That(sut.Declaration, Does.Contain("public int CategoryID {get;set;}"));
     }
     [Test]
     public void NoneCasePropertyDeclaration_test()
@@ -122,7 +125,7 @@ internal class PropertyGeneratorTest
         var sut = new PropertyGenerator(property, setting);
 
         // Assert 
-        Assert.IsTrue(sut.Declaration.Contains("public int Category_ID {get;set;}"));
+        Assert.That(sut.Declaration, Does.Contain("public int Category_ID {get;set;}"));
     }
     [Test]
     public void JsonAttributePropertyDeclaration_test()
@@ -144,8 +147,7 @@ internal class PropertyGeneratorTest
 
         // Assert 
         var expected = "[JsonProperty(PropertyName = \"CategoryID\")]";
-
-        Assert.IsTrue(sut.ToString().Contains(expected));
+        Assert.That(sut.ToString(), Does.Contain(expected));
     }
 
     [Test]
@@ -172,7 +174,7 @@ internal class PropertyGeneratorTest
             $"[JsonProperty(PropertyName = \"CategoryID\")] {Environment.NewLine}public int categoryID {{get;set;}} ";
 
 
-        Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
+        sut.ToString().TrimAllSpace().Should().Be(expected.TrimAllSpace());
     }
     [Test]
     public void KeyAttributePropertyDeclaration_test()
@@ -199,7 +201,7 @@ internal class PropertyGeneratorTest
 [Key]
 public int CategoryID {get;set;} ";
 
-        Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
+        sut.ToString().TrimAllSpace().Should().Be(expected.TrimAllSpace());
     }
 
     [Test]
@@ -226,7 +228,7 @@ public int CategoryID {get;set;} ";
 [Required]
 public int CategoryID {get;set;} ";
 
-        Assert.AreEqual(sut.ToString().TrimAllSpace(), expected.TrimAllSpace());
+        sut.ToString().TrimAllSpace().Should().Be(expected.TrimAllSpace());
     }
 
     [Test]
@@ -249,7 +251,7 @@ public int CategoryID {get;set;} ";
         var sut = new PropertyGenerator(property, setting);
         // Assert 
 
-        Assert.IsTrue(sut.Declaration.Contains("public int? dummy1 {get;set;}"));
+        Assert.That(sut.Declaration, Does.Contain("public int? dummy1 {get;set;}"));
     }
 
 
@@ -274,7 +276,7 @@ public int CategoryID {get;set;} ";
         // Act 
         var sut = new PropertyGenerator(property, setting);
         // Assert 
-        Assert.IsTrue(sut.Declaration.Contains("public List<Product> Products {get;set;}"));
+        Assert.That(sut.Declaration, Does.Contain("public List<Product> Products {get;set;}"));
     }
 
     [Test]
@@ -297,7 +299,7 @@ public int CategoryID {get;set;} ";
         // Act 
         var sut = new PropertyGenerator(property, setting);
         // Assert 
-        Assert.IsTrue(sut.Declaration.Contains("public virtual List<Product> Products {get;set;}"));
+        Assert.That(sut.Declaration, Does.Contain("public virtual List<Product> Products {get;set;}"));
     }
     [Test]
     public void Property_declaration_test()
@@ -358,7 +360,7 @@ public int CategoryID {get;set;} ";
         // Act 
         string sut = new PropertyGenerator(property, setting);
         // Assert 
-        Assert.IsTrue(sut.Contains(expected));
+        Assert.That(sut, Does.Contain(expected));
 
 
     }
@@ -380,7 +382,7 @@ public int CategoryID {get;set;} ";
         // Act 
         string sut = new PropertyGenerator(property, setting);
         // Assert 
-        Assert.IsTrue(sut.Contains(expected));
+        Assert.That(sut, Does.Contain(expected));
 
     }
     [Test]
@@ -401,7 +403,7 @@ public int CategoryID {get;set;} ";
         // Act 
         string sut = new PropertyGenerator(property, setting);
         // Assert 
-        Assert.IsTrue(sut.Contains(expected));
+        Assert.That(sut, Does.Contain(expected));
     }
     [Test]
     public void Property_has_type_without_prefix_namespac_test()
@@ -421,7 +423,7 @@ public int CategoryID {get;set;} ";
         // Act 
         string sut = new PropertyGenerator(property, setting);
         // Assert 
-        Assert.IsTrue(sut.Contains(expected));
+        Assert.That(sut, Does.Contain(expected));
     }
     [Test]
     public void Property_has_collection_type_in_the_same_namespac_test()
@@ -438,7 +440,7 @@ public int CategoryID {get;set;} ";
         // Act 
         string sut = new PropertyGenerator(property, setting);
         // Assert 
-        Assert.IsTrue(sut.Contains(expected));
+        Assert.That(sut, Does.Contain(expected));
     }
     [Test]
     public void Property_has_collection_type_in_different_namespac_test()
@@ -455,7 +457,7 @@ public int CategoryID {get;set;} ";
         // Act 
         string sut = new PropertyGenerator(property, setting);
         // Assert 
-        Assert.IsTrue(sut.Contains(expected));
+        Assert.That(sut, Does.Contain(expected));
     }
     [Test]
     public void Property_has__type_collection_without_prefix_namespac_test()
@@ -472,7 +474,7 @@ public int CategoryID {get;set;} ";
         // Act 
         string sut = new PropertyGenerator(property, setting);
         // Assert 
-        Assert.IsTrue(sut.Contains(expected));
+        Assert.That(sut, Does.Contain(expected));
     }
 
     //feature #43

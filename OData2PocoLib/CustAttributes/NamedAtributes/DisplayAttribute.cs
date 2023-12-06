@@ -2,7 +2,6 @@
 
 using OData2Poco.Extensions;
 
-// ReSharper disable UnusedMember.Global
 
 namespace OData2Poco.CustAttributes.NamedAtributes;
 
