@@ -1,6 +1,6 @@
 // Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-#pragma warning disable IDE0073, IDE0090, CS0436, CS8632, S927, S3427
+#pragma warning disable IDE0073, IDE0079,IDE0090, CS0436, CS8632
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.

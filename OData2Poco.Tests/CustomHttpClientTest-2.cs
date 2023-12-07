@@ -10,11 +10,11 @@ public class CustomHttpClientTest2
 {
     [Test]
     public async Task CustomHttpClient_with_metadata_compressed_should_success()
-    {       
-        string url = OdataService.Trippin;      
+    {
+        string url = OdataService.Trippin;
         OdataConnectionString cs = new OdataConnectionString
         {
-            ServiceUrl = url,          
+            ServiceUrl = url,
         };
         var customClient = new CustomHttpClient(cs);
         var metaData = await customClient.ReadMetaDataAsync();
@@ -26,7 +26,7 @@ public class CustomHttpClientTest2
         string url = OdataService.Northwind;
         OdataConnectionString cs = new OdataConnectionString
         {
-            ServiceUrl = url           
+            ServiceUrl = url
         };
         var customClient = new CustomHttpClient(cs);
         var metaData = await customClient.ReadMetaDataAsync();

@@ -838,7 +838,7 @@ Format= [AdaptTo("[name]Dto"]
         var a = $"--help";
         //Act
         var tuple = await RunCommand(a);
-        var output = tuple.Item2;        
+        var output = tuple.Item2;
         //Assert
         output.Should().Contain("-r, --url");
     }

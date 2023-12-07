@@ -3,9 +3,7 @@
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
 using OData2Poco.InfraStructure.Logging;
-#if !NETCOREAPP
-using System.Runtime.InteropServices;
-#endif
+
 namespace OData2Poco.CommandLine
 {
     public static class StartUp

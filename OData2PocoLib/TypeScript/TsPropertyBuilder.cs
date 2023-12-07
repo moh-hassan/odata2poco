@@ -1,10 +1,7 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-#pragma warning disable S3241
-// ReSharper disable UnusedMethodReturnValue.Local
 
 using OData2Poco.Extensions;
-
 namespace OData2Poco.TypeScript;
 
 internal sealed class TsPropertyBuilder : SimpleTemplate<TsPropertyBuilder>

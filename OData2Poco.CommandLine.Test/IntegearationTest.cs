@@ -51,7 +51,7 @@ internal class IntegrationTest
         result.ExitCode.Should().Be(exitCode);
     }
 
-public static IEnumerable TestCases
+    public static IEnumerable TestCases
     {
         get
         {
