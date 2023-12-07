@@ -4,6 +4,8 @@
 using System.Reflection;
 #endif
 
+using System.Diagnostics;
+
 namespace OData2Poco.CommandLine.Test
 {
     public class BaseTest

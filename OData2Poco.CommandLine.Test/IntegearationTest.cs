@@ -8,7 +8,6 @@ using CliWrap;
 using FluentAssertions;
 using NUnit.Framework;
 using OData2Poco.Fake;
-using OData2Poco.HttpMock;
 
 namespace OData2Poco.CommandLine.Test;
 internal class IntegrationTest
@@ -57,7 +56,7 @@ public static IEnumerable TestCases
         get
         {
             //var url = TestSample.UrlTripPinService;
-            var url = Mocks.TripPin.Url;
+            var url = OdataService.Trippin;
             yield return new TestCaseData($"-r {url} -v", 0, "public partial class Airline");
             yield return new TestCaseData($"-r {url} -v -Y", 1, "ERROR(S)");
             yield return new TestCaseData($"-r {url} -v -G record -I", 0, "public partial record Airline");

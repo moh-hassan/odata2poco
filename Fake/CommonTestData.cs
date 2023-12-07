@@ -23,6 +23,7 @@ public static class TestSample
     public static string NorthWindV3 => GetFullPath("northwindV3.xml");
     public static string TripPin4Flag => GetFullPath("trippinV4Flags.xml");
     public static string TripPin4 => GetFullPath("trippinV4.xml");
+    public static string TripPin4Gzip => GetFullPath("trippinV4.xml.gz");
     public static string TripPin4Rw => GetFullPath("trippin4rw.xml");
     public const string UrlNorthWindV4 = "https://services.odata.org/V4/Northwind/Northwind.svc";
     public const string UrlNorthWindV3 = "https://services.odata.org/V3/Northwind/Northwind.svc";
@@ -73,20 +74,6 @@ public static class TestSample
 
         };
 
-    #endregion
-
-    #region Url
-    public static object[] UrlLocalCases =
-        {
-            new object[] {"http://asd-pc/odata/api/northwind", "4.0", 26}
-
-        };
-
-    public static object[] UrlLocalSecuredCases =
-        {
-            new object[] {"http://asd-pc/odata2/api/northwind", "4.0", 26}
-
-        };
-    #endregion
+    #endregion   
 }
 

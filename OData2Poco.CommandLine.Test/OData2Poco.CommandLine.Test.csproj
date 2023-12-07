@@ -17,13 +17,9 @@
     <Compile Include="..\Fake\TestExtensions.cs" Link="TestExtensions.cs" />
 	</ItemGroup>
 
+
   <ItemGroup Label="mocks">
-    <Compile Include="..\Fake\Common\MockBuilder.cs" Link="HttpMock\MockBuilder.cs" />
-    <Compile Include="..\Fake\Common\Mocks.cs" Link="HttpMock\Mocks.cs" />
-    <Compile Include="..\Fake\Common\MockSetup.cs" Link="HttpMock\MockSetup.cs" />
-    <Compile Include="..\Fake\Common\Site.cs" Link="HttpMock\Site.cs" />
-    <Compile Include="..\Fake\Common\GzipMockServer.cs" Link="HttpMock\GzipMockServer.cs" />
-    <Compile Include="..\OData2Poco.Tests\GlobalUsings.cs" Link="GlobalUsings.cs" />
+    <Compile Include="..\Fake\Common\ODataService.cs" Link="HttpMock\ODataService.cs" />
   </ItemGroup>
 
   <ItemGroup>
