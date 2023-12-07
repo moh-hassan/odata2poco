@@ -72,12 +72,17 @@ after_test:
     $allow_push=$env:APPVEYOR_REPO_TAG -eq "true"
     .\scripts\build_choco $version $allow_push
 - ps: .\scripts\checksum.ps1 $env:APPVEYOR_BUILD_VERSION
--  7z a -tzip .\build\odata2poco-%O2P_VERSION%-unsigned.zip .\build\*.nupkg  .\build\*.snupkg  .\build\*.exe .\chocolatey\*.nupkg   
- 
+-  7z a -tzip .\build\odata2poco-%O2P_VERSION%-unsigned.zip .\build\*.nupkg  .\build\*.snupkg  .\build\*.exe .\chocolatey\*.nupkg  
+- ps: |
+   pushd .\build
+   $source="https://www.myget.org/F/odata2poco/api/v3/index.json"
+   $key=$env:MYGET_KEY 
+   nuget push *.nupkg -Source $source -ApiKey $key   
+   popd
+
 artifacts: 
 - path: .\build\odata2poco-%O2P_VERSION%-unsigned.zip
   name: o2p_zip   
-
 
 deploy:
 #Github    
