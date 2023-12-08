@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Reflection;
-
 namespace OData2Poco.CommandLine;
 #nullable disable
 public static class Utility

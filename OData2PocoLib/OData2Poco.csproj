@@ -22,7 +22,7 @@
     <PackageReference Include="DynamicExpresso.Core" />
     <PackageReference Include="Microsoft.Data.Edm" />
     <PackageReference Include="Microsoft.OData.Edm" />
-    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Newtonsoft.Json" />    
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">

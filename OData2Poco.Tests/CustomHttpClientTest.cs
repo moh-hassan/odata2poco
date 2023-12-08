@@ -1,10 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Net;
-using FluentAssertions;
-using NUnit.Framework;
-using OData2Poco.Extensions;
-using OData2Poco.Fake;
 using OData2Poco.Http;
 #pragma warning disable IDE0200
 
@@ -20,6 +16,7 @@ public partial class CustomHttpClientTest : BaseTest
     public void Setup()
     {
         _isLive = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("LiveTest", EnvironmentVariableTarget.User));
+        //token is updated periodically per month
         _token = Environment.GetEnvironmentVariable("Token", EnvironmentVariableTarget.User);
         _url = "https://localhost/odata/odata";
     }

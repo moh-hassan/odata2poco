@@ -25,7 +25,7 @@ public class O2P
     public O2P(PocoSetting? setting = null)
     {
         Setting = setting ?? new PocoSetting();
-        ClassList = new List<ClassTemplate>();
+        ClassList = [];
         MetaData = new MetaDataInfo();
         CodeText = "";
     }

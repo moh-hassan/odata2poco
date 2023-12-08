@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using NUnit.Framework;
 using OData2Poco.TextTransform;
 
 namespace OData2Poco.Tests.TextTransform;

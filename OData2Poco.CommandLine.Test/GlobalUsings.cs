@@ -1,12 +1,8 @@
 // Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-
 global using System.Diagnostics;
 global using FluentAssertions;
 global using NUnit.Framework;
 global using OData2Poco.Extensions;
 global using OData2Poco.Fake;
-#if NETFRAMEWORK
-global using System.Net.Http;
-#endif
 global using Assert = NUnit.Framework.Legacy.ClassicAssert;

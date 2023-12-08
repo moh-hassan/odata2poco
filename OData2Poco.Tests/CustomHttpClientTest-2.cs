@@ -1,11 +1,8 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using NUnit.Framework;
-using FluentAssertions;
 using OData2Poco.Http;
 
 namespace OData2Poco.Tests;
-
 public class CustomHttpClientTest2
 {
     [Test]

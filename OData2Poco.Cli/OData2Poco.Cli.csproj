@@ -10,10 +10,7 @@
       o2gen is a CommandLine tool for generating c# and typescript POCO (DTO) classes,interfaces and records from OData feeds with lot of configuration parameters.
     </Description>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\OData2PocoLib\GlobalUsings.cs" Link="GlobalUsings.cs" />
-  </ItemGroup>
+  
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" />

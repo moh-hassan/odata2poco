@@ -5,10 +5,6 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Text;
 using CliWrap;
-using FluentAssertions;
-using NUnit.Framework;
-using OData2Poco.Fake;
-
 namespace OData2Poco.CommandLine.Test;
 internal class IntegrationTest
 {

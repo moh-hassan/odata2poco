@@ -1,12 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
-
-using FluentAssertions;
-using NUnit.Framework;
-using OData2Poco.Extensions;
-using OData2Poco.Fake;
+#pragma warning disable IDE0060  // Remove unused parameter
 using OData2Poco.TestUtility;
-#pragma warning disable IDE0060
-
 namespace OData2Poco.CommandLine.Test;
 
 [TestFixture]

@@ -9,7 +9,12 @@
 		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
 		<RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
     <DefineConstants>$(DefineConstants);Test_Cli</DefineConstants>
-	</PropertyGroup>	
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Properties\**" />
+	  <EmbeddedResource Remove="Properties\**" />
+	  <None Remove="Properties\**" />
+	</ItemGroup>	
 
 	<ItemGroup Label="FakeData">		
 		<Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />
@@ -31,10 +36,5 @@
 
   <ItemGroup>
     <PackageReference Include="WireMock.Net" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

@@ -1,16 +1,9 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+#pragma warning disable IDE0060 // Remove unused parameter
 
 using System.Collections;
-using FluentAssertions;
-using NUnit.Framework;
 using OData2Poco.Api;
-using OData2Poco.Extensions;
-using OData2Poco.Fake;
-// ReSharper disable MethodHasAsyncOverload
-#pragma warning disable IDE0060
-
 namespace OData2Poco.Tests;
-
 public class O2PTest
 {
 

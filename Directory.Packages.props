@@ -7,7 +7,7 @@
     <PackageVersion Include="DynamicExpresso.Core" Version="2.16.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Microsoft.Data.Edm" Version="5.8.5" />
-    <PackageVersion Include="Microsoft.OData.Edm" Version="7.19.0" />
+    <PackageVersion Include="Microsoft.OData.Edm" Version="7.20.0" />
     <PackageVersion Include="CommandLineParser" Version="2.9.1" />
     <PackageVersion Include="ilmerge" Version="3.0.41" />
     <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
@@ -20,6 +20,8 @@
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
     <PackageVersion Include="CliWrap" Version="3.6.4" />
     <PackageVersion Include="coverlet.collector" Version="3.2.0" />
-    <PackageVersion Include="WireMock.Net" Version="1.5.41" />
+    <PackageVersion Include="PolySharp" Version="1.14.0" />
+    <!--<PackageVersion Include="System.Memory" Version="4.5.5" />-->
+    <PackageVersion Include="WireMock.Net" Version="1.5.42" />
   </ItemGroup>
 </Project>

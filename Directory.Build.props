@@ -19,7 +19,7 @@
     <PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128;NU1507;S3925</NoWarn>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
     <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
     <Version Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)</Version>
     <Version Condition="'$(VersionSuffix)' == ''">0.0.0</Version>
@@ -51,6 +51,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>   
+    <PackageReference Include="PolySharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>   
+  </ItemGroup>
+  
   <ItemGroup>
     <None Include="$(SolutionDir)license.txt" Pack="true" PackagePath=""/>
     <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\"/>
@@ -61,11 +68,7 @@
   <!-- disable the nullable warnings when compiling for .NET Standard 2.0 or net4x -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or $(TargetFramework.StartsWith('net4'))">
     <NoWarn>$(NoWarn);nullable</NoWarn>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\common\NullAttributes.cs" Link="NullAttributes.cs" />
-    <Compile Include="..\common\Range.cs" Link="Range.cs" />   
-  </ItemGroup>
+  </PropertyGroup>  
 
   <PropertyGroup Label="analysis">
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>

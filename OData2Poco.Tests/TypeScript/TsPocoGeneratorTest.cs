@@ -1,10 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 using System.Text.RegularExpressions;
-using FluentAssertions;
-using NUnit.Framework;
-using OData2Poco.Extensions;
-using OData2Poco.Fake;
 using OData2Poco.TypeScript;
 
 namespace OData2Poco.Tests.TypeScript;
