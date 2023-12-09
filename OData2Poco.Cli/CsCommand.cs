@@ -22,7 +22,7 @@ internal class CsCommand : IPocoCommand
     public CsCommand(Options options, IPocoFileSystem fileSystem)
     {
         _fileSystem = fileSystem ?? new NullFileSystem();
-        Errors = new List<string>();
+        Errors = [];
         OptionManager optionManager = new(options);
         ArgOptions = optionManager.PocoOptions;
         (OdataConnectionString, PocoSettingOptions) = optionManager;

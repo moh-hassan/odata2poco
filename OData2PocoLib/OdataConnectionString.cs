@@ -24,6 +24,7 @@ public class OdataConnectionString
     public SecurityContainer Password { get; set; }
     public string? Domain { get; set; }
     public string? Proxy { get; set; }
+    public string? ProxyUser { get; set; }
     public string? TokenUrl { get; set; }
     public string? TokenParams { get; set; }
     public string? ParamFile { get; set; }

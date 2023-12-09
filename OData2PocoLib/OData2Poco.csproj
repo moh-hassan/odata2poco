@@ -41,7 +41,6 @@
     <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
-    <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
-    <LangVersion>default</LangVersion>
+    <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>   
   </PropertyGroup>
 </Project>

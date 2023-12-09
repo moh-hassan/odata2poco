@@ -28,7 +28,7 @@ internal class Dependency
 
     private IEnumerable<ClassTemplate> Dfs(params ClassTemplate[] list)
     {
-        List<int> found = new();
+        List<int> found = [];
         foreach (var ct in list)
             found.AddRange(_graph.Dfs(ct.Id));
         foreach (var n in found.Distinct())

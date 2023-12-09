@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Collections;
 using System.Reflection;
 using OData2Poco.CustAttributes.UserAttributes;
 
@@ -14,7 +13,7 @@ public class PocoAttributesList : IEnumerable<INamedAttribute>
 
     public PocoAttributesList()
     {
-        _namedAttributes = new List<INamedAttribute>();
+        _namedAttributes = [];
         FillNamedAttributes();
     }
 

@@ -312,19 +312,20 @@ dotnet_diagnostic.VSTHRD011.severity = none
 
 #################################### cs 12
 # IDE0028: Collection initialization can be simplified
-dotnet_diagnostic.IDE0028.severity = none
+dotnet_diagnostic.IDE0028.severity = suggestion
 
 # IDE0300: Collection initialization can be simplified
-dotnet_diagnostic.IDE0300.severity = none
+dotnet_diagnostic.IDE0300.severity = suggestion
 
 
 # IDE0301: Collection initialization can be simplified
-dotnet_diagnostic.IDE0301.severity = none
+dotnet_diagnostic.IDE0301.severity = suggestion
 
+#ToArray, ToList
 # IDE0305: Collection initialization can be simplified
 dotnet_diagnostic.IDE0305.severity = none
 
-#IDE0290	Use primary constructor
+#IDE0290 Use primary constructor
 dotnet_diagnostic.IDE0290.severity = none
 
 ###############################CA messages
@@ -365,31 +366,31 @@ dotnet_diagnostic.CA1825.severity = none
 ######################################## NUnit 
 
 # NUnit2002: Consider using Assert.That(expr, Is.False) instead of ClassicAssert.IsFalse(expr)
-#dotnet_diagnostic.NUnit2002.severity = none
+#dotnet_diagnostic.NUnit2002.severity = suggestion
 
 # NUnit2003: Consider using Assert.That(expr, Is.True) instead of ClassicAssert.IsTrue(expr)
-#dotnet_diagnostic.NUnit2003.severity = none
+#dotnet_diagnostic.NUnit2003.severity = suggestion
 
 # NUnit2010: Use EqualConstraint for better assertion messages in case of failure
-#dotnet_diagnostic.NUnit2010.severity = none
+#dotnet_diagnostic.NUnit2010.severity = suggestion
 
 # NUnit2011: Use ContainsConstraint for better assertion messages in case of failure
-#dotnet_diagnostic.NUnit2011.severity = none
+#dotnet_diagnostic.NUnit2011.severity = suggestion
 
 # NUnit2019: Consider using Assert.That(expr, Is.Not.Null) instead of ClassicAssert.IsNotNull(expr)
-#dotnet_diagnostic.NUnit2019.severity = none
+#dotnet_diagnostic.NUnit2019.severity = suggestion
 
 # NUnit2035: Consider using Assert.That(collection, Is.Empty) instead of ClassicAssert.IsEmpty(collection)
-#dotnet_diagnostic.NUnit2035.severity = none
+#dotnet_diagnostic.NUnit2035.severity = suggestion
 
 # NUnit2043: Use ComparisonConstraint for better assertion messages in case of failure
-#dotnet_diagnostic.NUnit2043.severity = none
+#dotnet_diagnostic.NUnit2043.severity = suggestion
 
 # NUnit2045: Use Assert.Multiple
-#dotnet_diagnostic.NUnit2045.severity = none
+#dotnet_diagnostic.NUnit2045.severity = suggestion
 
 # NUnit2046: Use CollectionConstraint for better assertion messages in case of failure
-#dotnet_diagnostic.NUnit2046.severity = none
+#dotnet_diagnostic.NUnit2046.severity = suggestion
 
 # NUnit1028: The non-test method is public
 dotnet_diagnostic.NUnit1028.severity = none

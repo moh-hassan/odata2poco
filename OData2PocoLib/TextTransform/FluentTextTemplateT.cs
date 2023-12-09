@@ -16,7 +16,7 @@ internal class FluentTextTemplate<T> where T : FluentTextTemplate<T>
     {
         ToStringHelper = new ToStringInstanceHelper();
         GenerationText = new StringBuilder();
-        IndentLengths = new List<int>();
+        IndentLengths = [];
         Footer = "";
         PopIndentText = "";
     }

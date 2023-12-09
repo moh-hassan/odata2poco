@@ -213,7 +213,7 @@ namespace BookStore
         {
             Lang = Language.CS,
             NameCase = CaseEnum.None,
-            Attributes = new List<string> { att }
+            Attributes = [att]
         };
         var o2P = new O2P(setting);
         var code = await o2P.GenerateAsync(conn);

@@ -17,7 +17,7 @@ public class AttDefinition
         get => _scope;
         set
         {
-            if (value.IsValidValue(new[] { "property", "class" }))
+            if (value.IsValidValue(["property", "class"]))
             {
                 _scope = value;
             }

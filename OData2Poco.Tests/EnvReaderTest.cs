@@ -65,7 +65,7 @@ public class EnvReaderTest : BaseTest
     public void Args_without_env_vars()
     {
         //Arrange
-        string[] args = { "-a", "aa", "-b" };
+        string[] args = ["-a", "aa", "-b"];
         //Act
         var Args = new EnvReader(_fileSystem)
             .ResolveArgEnv(args, out var errors);
@@ -81,7 +81,7 @@ public class EnvReaderTest : BaseTest
     public void Args_wit_env_exist_test(string envName)
     {
         //Arrange
-        string[] args = { "-a", envName, "-b" };
+        string[] args = ["-a", envName, "-b"];
         //Act
         var sut = new EnvReader(_fileSystem)
             .ResolveArgEnv(args, out var errors);
@@ -98,7 +98,7 @@ public class EnvReaderTest : BaseTest
     public void Args_wit_expression_have_env_var_exist_test(string envName)
     {
         //Arrange
-        string[] args = { "-a", $"Agent {envName}", "-b" };
+        string[] args = ["-a", $"Agent {envName}", "-b"];
         //Act
         var sut = new EnvReader(_fileSystem)
             .ResolveArgEnv(args, out var errors);
@@ -113,7 +113,7 @@ public class EnvReaderTest : BaseTest
     public void Args_with_env_var_not_exist_test()
     {
         //Arrange
-        string[] args = { "-a", "%aa2%", "-b" };
+        string[] args = ["-a", "%aa2%", "-b"];
         //Act
         var sut = new EnvReader(_fileSystem)
             .ResolveArgEnv(args, out var errors);
@@ -145,7 +145,7 @@ public class EnvReaderTest : BaseTest
         //Arrange
         string text = "abc.123.xyz";
         Fakes.Mock("myFile.txt", text);
-        string[] args = { "-a", "@@myFile.txt", "-p", "%password%" };
+        string[] args = ["-a", "@@myFile.txt", "-p", "%password%"];
         //Act
         var sut = new EnvReader(_fileSystem)
             .ResolveArgEnv(args, out var errors);
@@ -160,7 +160,7 @@ public class EnvReaderTest : BaseTest
     public void Args_wit_at_at_file_not_exist_test()
     {
         //Arrange
-        string[] args = { "-a", "@@file.txt", "-b" };
+        string[] args = ["-a", "@@file.txt", "-b"];
         //Act
         var sut = new EnvReader(_fileSystem)
             .ResolveArgEnv(args, out var errors);

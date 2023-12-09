@@ -1,18 +1,14 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Collections;
 using OData2Poco.InfraStructure.Logging;
-
-
 namespace OData2Poco;
-#pragma warning disable S1144, IDE0051
 public class ErrorCollection : IEnumerable<OptionError>
 {
     private const int Info = 0;
     private const int Warning = 1;
     private const int Error = 2;
 
-    private readonly List<OptionError> _errors = new();
+    private readonly List<OptionError> _errors = [];
     private readonly ILog _logger = PocoLogger.Default;
     public void Add(OptionError error)
     {

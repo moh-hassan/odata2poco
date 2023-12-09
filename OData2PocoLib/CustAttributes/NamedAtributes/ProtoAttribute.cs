@@ -11,11 +11,11 @@ public class ProtoAttribute : INamedAttribute
     public bool IsValid { get; set; } = true;
     public List<string> GetAttributes(PropertyTemplate property)
     {
-        return new() { $"[ProtoMember({property.Serial})]" };
+        return [$"[ProtoMember({property.Serial})]"];
     }
 
     public List<string> GetAttributes(ClassTemplate classTemplate)
     {
-        return new() { "[ProtoContract]" };
+        return ["[ProtoContract]"];
     }
 }

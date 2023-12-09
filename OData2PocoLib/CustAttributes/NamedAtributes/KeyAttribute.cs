@@ -10,11 +10,11 @@ public class KeyAttribute : INamedAttribute
     public bool IsValid { get; set; } = true;
     public List<string> GetAttributes(PropertyTemplate property)
     {
-        return property.IsKey ? new List<string> { "[Key]" } : new List<string>();
+        return property.IsKey ? ["[Key]"] : [];
     }
 
     public List<string> GetAttributes(ClassTemplate classTemplate)
     {
-        return new();
+        return [];
     }
 }

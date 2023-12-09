@@ -25,7 +25,7 @@ internal partial class Poco : IPocoGenerator
     {
         _setting = setting;
         MetaData = metaData;
-        SchemaErrors = new List<string>();
+        SchemaErrors = [];
         EntitySets = new List<IEdmEntitySet>();
         Model = LoadModelFromString();
     }

@@ -19,9 +19,9 @@ public class EnvReader
 
     public string[] ResolveArgEnv(string[] args, out List<string> envErrors)
     {
-        List<string> newArgs = new List<string>();
-        envErrors = new List<string>();
-        if (args.Length == 0) return Array.Empty<string>();
+        List<string> newArgs = [];
+        envErrors = [];
+        if (args.Length == 0) return [];
 
         foreach (var arg in args)
         {
@@ -47,7 +47,7 @@ public class EnvReader
             }
         }
 
-        return newArgs.ToArray();
+        return [.. newArgs];
     }
     /// <summary>
     /// Resolve option start with @@fileName and read the corresponding text file fileName.
@@ -77,7 +77,7 @@ public class EnvReader
 
     internal string ResolveEnv(string arg, out List<string> errors)
     {
-        errors = new List<string>();
+        errors = [];
         var newArg = arg;
         var pattern = @"%(?<key>\w+)%|\$(?<key>\w+)";
         var matches = Regex.Matches(arg, pattern);

@@ -99,8 +99,8 @@ public class PocoSetting : IValidator
         NamespacePrefix = string.Empty;
         Inherit = "";
         NameCase = CaseEnum.None;
-        Attributes = new List<string>();
-        Include = new List<string>();
+        Attributes = [];
+        Include = [];
         CodeFilename = "UnDefined.txt";
         AtributeDefs = string.Empty;
     }

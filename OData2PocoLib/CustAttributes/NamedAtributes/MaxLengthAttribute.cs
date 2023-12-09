@@ -14,11 +14,11 @@ public class MaxLengthAttribute : INamedAttribute
     public bool IsValid { get; set; } = true;
     public List<string> GetAttributes(PropertyTemplate property)
     {
-        return property.MaxLength > 0 ? new List<string> { $"[MaxLength({property.MaxLength})]" } : new List<string>();
+        return property.MaxLength > 0 ? [$"[MaxLength({property.MaxLength})]"] : [];
     }
 
     public List<string> GetAttributes(ClassTemplate classTemplate)
     {
-        return new();
+        return [];
     }
 }

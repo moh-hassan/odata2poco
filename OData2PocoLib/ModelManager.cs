@@ -12,8 +12,8 @@ internal static class ModelManager
 {
     static ModelManager()
     {
-        ClassChangedName = new Dictionary<string, string>();
-        ModelWarning = new List<string>();
+        ClassChangedName = [];
+        ModelWarning = [];
     }
 
     private static Dictionary<string, string> ClassChangedName { get; }

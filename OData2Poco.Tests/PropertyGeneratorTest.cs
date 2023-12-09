@@ -34,7 +34,7 @@ internal class PropertyGeneratorTest
         // Arrange 
         var setting = new PocoSetting
         {
-            Attributes = new List<string> { "key", "req", "json" },
+            Attributes = ["key", "req", "json"],
         };
         _attributeManager.Init(setting);
 
@@ -130,7 +130,7 @@ internal class PropertyGeneratorTest
         // Arrange 
         var setting = new PocoSetting
         {
-            Attributes = new List<string> { "json" },
+            Attributes = ["json"],
         };
         _attributeManager.Init(setting);
         PropertyTemplate property = new PropertyTemplate
@@ -153,7 +153,7 @@ internal class PropertyGeneratorTest
         // Arrange 
         var setting = new PocoSetting
         {
-            Attributes = new List<string> { "json" },
+            Attributes = ["json"],
             NameCase = CaseEnum.Camel
         };
         _attributeManager.Init(setting);
@@ -179,7 +179,7 @@ internal class PropertyGeneratorTest
         // Arrange 
         var setting = new PocoSetting
         {
-            Attributes = new List<string> { "key" },
+            Attributes = ["key"],
         };
         _attributeManager.Init(setting);
         PropertyTemplate property = new PropertyTemplate
@@ -191,7 +191,7 @@ internal class PropertyGeneratorTest
         // Act 
         var sut = new PropertyGenerator(property, new PocoSetting
         {
-            Attributes = new List<string> { "key" },
+            Attributes = ["key"],
         });
         // Assert 
         var expected = @"
@@ -207,7 +207,7 @@ public int CategoryID {get;set;} ";
         // Arrange 
         var setting = new PocoSetting
         {
-            Attributes = new List<string> { "req" },
+            Attributes = ["req"],
         };
         _attributeManager.Init(setting);
 
@@ -306,7 +306,7 @@ public int CategoryID {get;set;} ";
         {
             AddEager = false,
             AddNavigation = true,
-            Attributes = new List<string> { "key", "json" },
+            Attributes = ["key", "json"],
         };
         _attributeManager.Init(setting);
         var property = new PropertyTemplate
@@ -342,7 +342,7 @@ public int CategoryID {get;set;} ";
         // Arrange 
         var setting = new PocoSetting
         {
-            Attributes = new List<string> { att }
+            Attributes = [att]
         };
         _attributeManager.Init(setting);
 

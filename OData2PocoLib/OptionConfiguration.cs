@@ -7,7 +7,6 @@ using OData2Poco.InfraStructure.FileSystem;
 
 
 namespace OData2Poco;
-#pragma warning disable IDE0059
 public class OptionConfiguration
 {
     private readonly IPocoFileSystem _fileSystem;
@@ -57,7 +56,7 @@ public class OptionConfiguration
         var sb = new StringBuilder();
         var text = LoadWithIncludeFile(fileName, out var errors).Trim();
         if (string.IsNullOrEmpty(text))
-            return Array.Empty<string>();
+            return [];
 
         using StringReader reader = new StringReader(text);
         while (reader.ReadLine() is { } line)

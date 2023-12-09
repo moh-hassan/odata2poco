@@ -13,12 +13,12 @@ public class JsonAttribute : INamedAttribute
     public List<string> GetAttributes(PropertyTemplate property)
     {
         return string.IsNullOrEmpty(property.OriginalName) || property.OriginalName == property.PropName
-            ? new List<string> { $"[JsonProperty(PropertyName = {property.PropName.Quote()})]" }
-            : new List<string>();
+            ? [$"[JsonProperty(PropertyName = {property.PropName.Quote()})]"]
+            : [];
     }
 
     public List<string> GetAttributes(ClassTemplate classTemplate)
     {
-        return new();
+        return [];
     }
 }

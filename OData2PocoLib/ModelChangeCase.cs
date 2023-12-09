@@ -13,7 +13,7 @@ internal class ModelChangeCase
 {
     private ModelChangeCase()
     {
-        ClassChangedName = new Dictionary<string, string>();
+        ClassChangedName = [];
     }
 
     private Dictionary<string, string> ClassChangedName { get; }

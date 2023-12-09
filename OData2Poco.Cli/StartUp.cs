@@ -20,8 +20,7 @@ namespace OData2Poco.CommandLine
             //read password from Input pipline if available
             var pw = Pipes.ReadPipe();
             if (!string.IsNullOrWhiteSpace(pw))
-                args = args.Concat(new[] { "-p", pw.Trim() }).ToArray();
-
+                args = args.Concat(["-p", pw.Trim()]).ToArray();
             //read configuration file if available
             if ((args.Length == 0) || (args.Length == 1 && args[0].StartsWith("@")))
             {

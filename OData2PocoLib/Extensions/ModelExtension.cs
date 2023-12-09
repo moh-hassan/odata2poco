@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+#pragma warning disable IDE0028 // Simplify collection initialization
 using System.Text;
 using System.Text.RegularExpressions;
 using OData2Poco.graph;
@@ -66,3 +67,4 @@ public static class ModelExtension
         return string.Empty;
     }
 }
+#pragma warning restore IDE0028 

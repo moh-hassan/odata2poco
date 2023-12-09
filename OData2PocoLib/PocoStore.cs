@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Collections;
 using System.Text;
 using OData2Poco.Extensions;
 using OData2Poco.InfraStructure.FileSystem;
@@ -9,7 +8,7 @@ namespace OData2Poco;
 
 public class PocoStore : IEnumerable<PocoStoreEntry>
 {
-    private readonly List<PocoStoreEntry> _entries = new();
+    private readonly List<PocoStoreEntry> _entries = [];
 
     public int Count => _entries.Count;
 

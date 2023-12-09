@@ -17,7 +17,7 @@ internal class Graph
         _v = v;
         _adj = new List<int>[v];
         for (var i = 0; i < v; ++i)
-            _adj[i] = new List<int>();
+            _adj[i] = [];
     }
 
     // Add an edge into the graph
@@ -45,7 +45,7 @@ internal class Graph
     // DFS traversal, It uses recursive DFSUtil()
     public List<int> Dfs(int v)
     {
-        List<int> found = new();
+        List<int> found = [];
 
         // Mark all the vertices as not visited (set as false by default)
         var visited = new bool[_v];

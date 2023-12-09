@@ -6,8 +6,8 @@ namespace OData2Poco;
 
 public static partial class ReserveWords
 {
-    private static readonly List<string> CsReserveWords = new()
-    {
+    private static readonly List<string> CsReserveWords =
+    [
         "abstract",
         "as",
         "base",
@@ -87,7 +87,7 @@ public static partial class ReserveWords
         "void",
         "volatile",
         "while"
-    };
+    ];
 
     public static string ChangeReservedWord(this string name)
     {

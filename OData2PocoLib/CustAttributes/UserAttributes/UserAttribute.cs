@@ -41,7 +41,7 @@ public class UserAttribute : INamedAttribute
     private List<string> EvaluateTemplate(object obj, string scope)
     {
         if (!IsValid || _attDefinition.Scope != scope)
-            return new List<string>();
+            return [];
 
         try
         {
@@ -49,17 +49,17 @@ public class UserAttribute : INamedAttribute
                          || _attDefinition.Filter.EvaluateCondition(obj, out _);
 
             if (!filter)
-                return new List<string>();
+                return [];
 
             var format = _attDefinition.Format.EvaluateTemplate(obj, out _);
-            return new List<string> { format };
+            return [format];
         }
         catch (Exception e)
         {
             IsValid = false;
             _logger.Warn($"Invalid Attribute {Name}, {e.Message}:\n{_attDefinition.Export()}");
         }
-        return new List<string>();
+        return [];
     }
 
     public static implicit operator AttDefinition(UserAttribute ua)

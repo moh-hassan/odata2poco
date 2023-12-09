@@ -48,7 +48,7 @@ public class O2PTest
     {
         var url = TestSample.NorthWindV4;
         var connString = new OdataConnectionString { ServiceUrl = url };
-        var setting = new PocoSetting { Include = new List<string> { "NorthwindModel*" } };
+        var setting = new PocoSetting { Include = ["NorthwindModel*"] };
         var o2P = new O2P(setting);
         var code = await o2P.GenerateAsync(connString);
         Assert.That(code, Does.Contain("public partial class Product"));

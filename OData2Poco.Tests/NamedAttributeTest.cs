@@ -8,9 +8,8 @@ namespace OData2Poco.Tests;
 [TestFixture]
 internal class NamedAttributeTest
 {
-
     //common data
-    private readonly List<string> _attributeList = new() { "dm", "db", "display", "json", "key", "req", "tab", "proto" };
+    private readonly List<string> _attributeList = ["dm", "db", "display", "json", "key", "req", "tab", "proto"];
 
     #region Property Attributes
 
@@ -254,7 +253,7 @@ internal class NamedAttributeTest
         //Act
         var setting = new PocoSetting
         {
-            Attributes = new List<string> { name }
+            Attributes = [name]
         };
 
         var sut = AttributeFactory.Default
@@ -286,7 +285,7 @@ internal class NamedAttributeTest
         //Act
         var setting = new PocoSetting
         {
-            Attributes = new List<string> { name }
+            Attributes = [name]
         };
         var sut = AttributeFactory.Default
             .Init(setting)

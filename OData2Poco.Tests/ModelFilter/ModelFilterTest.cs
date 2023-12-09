@@ -109,7 +109,7 @@ internal class ModelFilterTest : BaseTest
     {
         //Arrange
         List<string> list = expectedClasses == ""
-            ? new List<string>() : expectedClasses.Split(',').ToList();
+            ? [] : expectedClasses.Split(',').ToList();
         var filter = keyword.Split(',').ToList();
         //Act
         var sut = ClassList.FilterList(filter).Select(x => x.Name);
@@ -136,10 +136,7 @@ internal class ModelFilterTest : BaseTest
     public void Issue_29()
     {
         // Arrange
-        List<PropertyTemplate> props = new()
-        {
-            new PropertyTemplate{PropName="ownerid", PropType="ns.principal"}
-        };
+        List<PropertyTemplate> props = [new PropertyTemplate { PropName = "ownerid", PropType = "ns.principal" }];
         var classList = new List<ClassTemplate>
         {
             new (1) {Name = "account",NameSpace="ns",BaseType="ns.crmbaseentity", Properties=props, },

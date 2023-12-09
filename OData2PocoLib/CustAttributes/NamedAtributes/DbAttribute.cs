@@ -12,10 +12,12 @@ public class DbAttribute : INamedAttribute
 
     public DbAttribute()
     {
-        _sharedAttributes = new List<INamedAttribute>
-        {
-            new KeyAttribute(), new TableAttribute(), new RequiredAttribute()
-        };
+        _sharedAttributes =
+        [
+            new KeyAttribute(),
+            new TableAttribute(),
+            new RequiredAttribute()
+        ];
     }
     public List<string> GetAttributes(PropertyTemplate property)
     {

@@ -92,7 +92,8 @@ public class PocoClassGeneratorCsTest
             Name = "Feature",
             NameSpace = "SP",
             IsEnum = true,
-            EnumElements = new List<string> { "Feature0", "Feature1" }
+            // EnumElements = new List<string> { "Feature0", "Feature1" }
+            EnumElements = ["Feature0", "Feature1"]
         };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
@@ -120,7 +121,7 @@ public enum Feature
             NameSpace = "SP",
             IsEnum = true,
             IsFlags = true,
-            EnumElements = new List<string> { "Feature0", "Feature1" }
+            EnumElements = ["Feature0", "Feature1"]
         };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
@@ -147,7 +148,7 @@ public enum Feature
         //Arrange
         var setting = new PocoSetting
         {
-            Attributes = new List<string> { att },
+            Attributes = [att],
         };
 
         var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP", IsEntity = true };
@@ -171,7 +172,7 @@ public enum Feature
         //Arrange
         var setting = new PocoSetting
         {
-            Attributes = new List<string> { att },
+            Attributes = [att],
         };
         var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP", IsEntity = true };
         var gen = Moq.Moq4IPocoGenerator(ct);

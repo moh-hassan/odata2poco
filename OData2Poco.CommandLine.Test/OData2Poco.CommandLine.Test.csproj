@@ -4,8 +4,7 @@
 		<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net6.0;net472</TargetFrameworks>
 		<Authors>Mohamed Hassan</Authors>
 		<Product>OData2Poco</Product>
-		<IsTestProject>true</IsTestProject>
-		<LangVersion>default</LangVersion>
+		<IsTestProject>true</IsTestProject>	
 		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
 		<RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
     <DefineConstants>$(DefineConstants);Test_Cli</DefineConstants>
