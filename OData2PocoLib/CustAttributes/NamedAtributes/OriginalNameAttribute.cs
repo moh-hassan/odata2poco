@@ -23,16 +23,16 @@ public class OriginalNameAttribute : INamedAttribute
     public bool IsValid { get; set; } = true;
     public List<string> GetAttributes(PropertyTemplate property)
     {
-        return new List<string>
-        {
+        return
+        [
             property.OriginalName != property.PropName
                 ? $"[JsonProperty(\"{property.OriginalName}\")]"
                 : string.Empty
-        };
+        ];
     }
 
     public List<string> GetAttributes(ClassTemplate classTemplate)
     {
-        return new();
+        return [];
     }
 }

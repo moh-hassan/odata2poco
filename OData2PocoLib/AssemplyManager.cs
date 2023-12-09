@@ -29,7 +29,7 @@ internal class AssemplyManager
     /// <summary>
     ///     Default using assemplies
     /// </summary>
-    private readonly string[] _defaultAssemply = { "System", "System.IO", "System.Collections.Generic" };
+    private readonly string[] _defaultAssemply = ["System", "System.IO", "System.Collections.Generic"];
 
     private readonly List<ClassTemplate> _model;
     private readonly PocoSetting _pocoSetting;
@@ -49,7 +49,7 @@ internal class AssemplyManager
     {
         _pocoSetting = pocoSetting;
         _model = model;
-        AssemplyReference = new List<string>();
+        AssemplyReference = [];
         AddAssemply(_defaultAssemply); //add default assemplies
         AddAssemplyReferenceList();
     }

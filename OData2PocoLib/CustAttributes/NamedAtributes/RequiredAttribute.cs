@@ -10,11 +10,11 @@ public class RequiredAttribute : INamedAttribute
     public bool IsValid { get; set; } = true;
     public List<string> GetAttributes(PropertyTemplate property)
     {
-        return property.IsNullable ? new List<string>() : new List<string> { "[Required]" };
+        return property.IsNullable ? [] : ["[Required]"];
     }
 
     public List<string> GetAttributes(ClassTemplate classTemplate)
     {
-        return new();
+        return [];
     }
 }

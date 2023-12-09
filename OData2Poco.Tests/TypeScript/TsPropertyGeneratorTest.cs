@@ -27,7 +27,7 @@ public class TsPropertyGeneratorTest : BaseTest
         {
             Name = "A",
             NameSpace = "N",
-            Properties = new List<PropertyTemplate> { p },
+            Properties = [p],
         };
         PocoSetting setting = new()
         {
@@ -64,7 +64,7 @@ public class TsPropertyGeneratorTest : BaseTest
         {
             Name = "A",
             NameSpace = "N",
-            Properties = new List<PropertyTemplate> { p }
+            Properties = [p]
         };
         var builder = new TsClassBuilder(ct, setting);
         //Act
@@ -93,7 +93,7 @@ public class TsPropertyGeneratorTest : BaseTest
         ClassTemplate ct = new(1)
         {
             Name = "A",
-            Properties = new List<PropertyTemplate> { p }
+            Properties = [p]
         };
         var builder = new TsClassBuilder(ct, setting);
         //Act
@@ -121,7 +121,7 @@ public class TsPropertyGeneratorTest : BaseTest
         ClassTemplate ct = new(1)
         {
             Name = "A",
-            Properties = new List<PropertyTemplate> { p }
+            Properties = [p]
         };
         var builder = new TsClassBuilder(ct, setting);
         //Act
@@ -149,7 +149,7 @@ public class TsPropertyGeneratorTest : BaseTest
         ClassTemplate ct = new(1)
         {
             Name = "A",
-            Properties = new List<PropertyTemplate> { p }
+            Properties = [p]
         };
         var builder = new TsClassBuilder(ct, setting);
         //Act
@@ -180,7 +180,7 @@ public class TsPropertyGeneratorTest : BaseTest
         {
             Name = "A",
             NameSpace = "N",
-            Properties = new List<PropertyTemplate> { p }
+            Properties = [p]
         };
         var builder = new TsClassBuilder(ct, setting);
         //Act

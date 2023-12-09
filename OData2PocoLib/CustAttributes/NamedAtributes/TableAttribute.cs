@@ -11,13 +11,13 @@ public class TableAttribute : INamedAttribute
     public bool IsValid { get; set; } = true;
     public List<string> GetAttributes(PropertyTemplate property)
     {
-        return new();
+        return [];
     }
 
     public List<string> GetAttributes(ClassTemplate classTemplate)
     {
         return !string.IsNullOrEmpty(classTemplate.EntitySetName)
-            ? new List<string> { $"[Table(\"{classTemplate.EntitySetName}\")]" }
-            : new List<string>();
+            ? [$"[Table(\"{classTemplate.EntitySetName}\")]"]
+            : [];
     }
 }

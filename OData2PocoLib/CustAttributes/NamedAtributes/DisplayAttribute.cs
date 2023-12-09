@@ -14,11 +14,11 @@ public class DisplayAttribute : INamedAttribute
 
     public List<string> GetAttributes(PropertyTemplate property)
     {
-        return new() { $"[Display(Name = {property.PropName.ToTitle().Quote()})]" };
+        return [$"[Display(Name = {property.PropName.ToTitle().Quote()})]"];
     }
 
     public List<string> GetAttributes(ClassTemplate classTemplate)
     {
-        return new();
+        return [];
     }
 }

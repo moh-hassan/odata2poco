@@ -55,24 +55,23 @@ public static class TestSample
 
 
     public static object[] UrlNorthwindCases =
-        {
+        [
             //url ,version ,noOfClasses
-            new object[] { UrlNorthWindV4, "4.0", 26},
-            new object[] { UrlNorthWindV3, "1.0", 26}
-        };
+            new object[] { UrlNorthWindV4, "4.0", 26 },
+            new object[] { UrlNorthWindV3, "1.0", 26 }
+        ];
     public static object[] UrlOdatadCases =
-    {
+    [
         //url ,version ,noOfClasses
-        new object[] { UrlOdataV4, "4.0", 26},
-        new object[] { UrlOdataV3, "1.0", 26}
-    };
+        new object[] { UrlOdataV4, "4.0", 26 },
+        new object[] { UrlOdataV3, "1.0", 26 }
+    ];
 
     public static object[] FileCases =
-        {
-            new object[] { NorthWindV4, "4.0" ,11 },
-            new object[] { NorthWindV3, "1.0" ,11 }
-
-        };
+        [
+            new object[] { NorthWindV4, "4.0", 11 },
+            new object[] { NorthWindV3, "1.0", 11 }
+        ];
 
     #endregion   
 }

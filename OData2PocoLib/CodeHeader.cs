@@ -6,7 +6,7 @@ namespace OData2Poco;
 
 public static class CodeHeader
 {
-    private static List<string> _parameters = new();
+    private static List<string> _parameters = [];
 
     public static string GetHeader(IPocoGenerator pocoGen, bool addArgs = true)
     {

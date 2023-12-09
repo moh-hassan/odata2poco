@@ -19,7 +19,7 @@ internal class Authenticator
         if (ocs.Authenticate == AuthenticationType.None) return;
         var client = _customClient.Client;
         var handler = _customClient.HttpHandler;
-        CredentialCache credentials = new();
+        CredentialCache credentials = [];
         NetworkCredential nc = ocs.Password.GetCredential(ocs.UserName, ocs.Domain);
         switch (ocs.Authenticate)
         {

@@ -11,7 +11,7 @@ internal static class TemplateEvaluation
     public static string EvaluateTemplate(this string template, object inputObject,
         out string[] errors)
     {
-        errors = Array.Empty<string>();
+        errors = [];
         if (string.IsNullOrEmpty(template))
             return string.Empty;
         if (!template.Contains("{{"))

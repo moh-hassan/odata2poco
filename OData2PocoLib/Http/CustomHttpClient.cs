@@ -48,7 +48,7 @@ internal class CustomHttpClient : IDisposable
         {
             header.TryReplaceToBase64(out var header2);
 
-            var pair = header2.Split(new[] { ':', '=' }, 2);
+            var pair = header2.Split([':', '='], 2);
             if (pair.Length == 2)
             {
                 var key = pair[0].Trim().Trim('"');

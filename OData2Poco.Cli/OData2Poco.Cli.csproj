@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+  <PropertyGroup>   
     <TargetFrameworks>net6.0;net472</TargetFrameworks>
     <Nullable>enable</Nullable>
     <AssemblyName>OData2Poco.Cli</AssemblyName>

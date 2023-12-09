@@ -27,7 +27,7 @@ public class OptionConfigurationTest : BaseTest
     public void Read_existing_configuration_file_test()
     {
         //Arrange
-        string[] expected = { "-r", "localhost", "-v" };
+        string[] expected = ["-r", "localhost", "-v"];
         //Act
         var sut = cfg.ReadConfig(Config);
         //Assert
@@ -39,7 +39,7 @@ public class OptionConfigurationTest : BaseTest
     {
         //Arrange
         var args = new[] { "@config.txt" };
-        string[] expected = { "-r", "localhost", "-v" };
+        string[] expected = ["-r", "localhost", "-v"];
         Fakes.Mock("o2pgen.txt", Content);
         //Act
         var flag = cfg.TryGetConfigurationFile(args, out var cli, out var error,
@@ -69,7 +69,7 @@ public class OptionConfigurationTest : BaseTest
     public void Load_args_from_default_configuration_file_test()
     {
         //Arrange
-        string[] expected = { "-r", "localhost", "-v" };
+        string[] expected = ["-r", "localhost", "-v"];
         var args = Array.Empty<string>();
         Fakes.Mock("o2pgen.txt", Content);
         //Act

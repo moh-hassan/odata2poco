@@ -13,10 +13,10 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
 
     private ClassTemplate()
     {
-        Properties = new List<PropertyTemplate>();
-        Keys = new List<string>();
-        EnumElements = new List<string>();
-        Navigation = new List<string>();
+        Properties = [];
+        Keys = [];
+        EnumElements = [];
+        Navigation = [];
         BaseType = "";
         Comment = "";
         Name = "UNDEFINED";

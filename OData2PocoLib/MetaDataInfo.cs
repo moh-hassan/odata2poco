@@ -6,7 +6,7 @@ public class MetaDataInfo
 {
     public MetaDataInfo()
     {
-        ServiceHeader = new Dictionary<string, string>();
+        ServiceHeader = [];
     }
 
     public string ServiceUrl { get; set; } = null!;

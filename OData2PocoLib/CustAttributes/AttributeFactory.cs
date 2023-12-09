@@ -13,8 +13,8 @@ public class AttributeFactory
     private readonly ILog _logger = PocoLogger.Default;
     private AttributeFactory()
     {
-        _pocoAttributesList = new PocoAttributesList();
-        _attributes = new List<string>();
+        _pocoAttributesList = [];
+        _attributes = [];
     }
 
     public static AttributeFactory Default => Lazy.Value;
@@ -53,13 +53,13 @@ public class AttributeFactory
     public List<string> GetAttributes(object property, string attName)
     {
         if (attName.StartsWith("[") && property is PropertyTemplate)
-            return new List<string> { attName };
+            return [attName];
 
         var attributeObject = GetAttribute(attName);
         return property switch
         {
-            PropertyTemplate p => attributeObject != null ? attributeObject.GetAttributes(p) : new List<string>(),
-            ClassTemplate c => attributeObject != null ? attributeObject.GetAttributes(c) : new List<string>(),
+            PropertyTemplate p => attributeObject != null ? attributeObject.GetAttributes(p) : [],
+            ClassTemplate c => attributeObject != null ? attributeObject.GetAttributes(c) : [],
             _ => throw new Exception($"{property.GetType()} isn't supported for named attributes")
         };
     }

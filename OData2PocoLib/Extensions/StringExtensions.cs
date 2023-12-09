@@ -26,7 +26,7 @@ public static partial class StringExtensions
         if (text.Length < 2) return text.ToUpper(); //one char
 
         // Split the string into words.
-        char[] delimiterChars = { ' ', '-', '_', '.' };
+        char[] delimiterChars = [' ', '-', '_', '.'];
         var words = text.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
 
 

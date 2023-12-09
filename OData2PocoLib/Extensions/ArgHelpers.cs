@@ -20,7 +20,7 @@ public static class ArgHelper
             {
                 if (!dict.TryGetValue(arg, out var values))
                 {
-                    values = new List<string>();
+                    values = [];
                     dict.Add(arg, values);
                 }
 

@@ -27,9 +27,7 @@ public abstract class BaseTest
 
     protected string[] StringToArray(string text, char sep = ',')
     {
-        return text == ""
-            ? Array.Empty<string>()
-            : text.Split(sep);
+        return text == "" ? [] : text.Split(sep);
     }
     /// <summary>
     /// create temp file in user temp folder

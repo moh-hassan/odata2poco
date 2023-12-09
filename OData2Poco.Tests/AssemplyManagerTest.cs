@@ -9,7 +9,7 @@ internal class AssemplyManagerTest
     public void AddAsemplyTest()
     {
         var pocosetting = new PocoSetting();
-        AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());
+        AssemplyManager am = new AssemplyManager(pocosetting, []);
         am.AddAssemply("xyz");
         Assert.That(am.AssemplyReference, Has.Member("xyz"));
     }
@@ -17,7 +17,7 @@ internal class AssemplyManagerTest
     public void AddAsemplyArrayTest()
     {
         var pocosetting = new PocoSetting();
-        AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());
+        AssemplyManager am = new AssemplyManager(pocosetting, []);
         am.AddAssemply("xyz", "abc");
         Assert.That(am.AssemplyReference, Has.Member("xyz"));
         Assert.That(am.AssemplyReference, Has.Member("abc"));
@@ -32,10 +32,10 @@ internal class AssemplyManagerTest
     {
         var pocosetting = new PocoSetting
         {
-            Attributes = new List<string> { key },
+            Attributes = [key],
         };
 
-        AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());
+        AssemplyManager am = new AssemplyManager(pocosetting, []);
         Assert.That(am.AssemplyReference, Has.Member(value));
     }
     [Test]
@@ -43,11 +43,10 @@ internal class AssemplyManagerTest
     {
         var pocosetting = new PocoSetting
         {
-            Attributes = new List<string> { "tab", "req" },
-
+            Attributes = ["tab", "req"],
         };
 
-        AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());
+        AssemplyManager am = new AssemplyManager(pocosetting, []);
         Assert.That(am.AssemplyReference, Has.Member("System.ComponentModel.DataAnnotations.Schema"));
     }
 
@@ -56,10 +55,10 @@ internal class AssemplyManagerTest
     {
         var pocosetting = new PocoSetting
         {
-            Attributes = new List<string> { "tab", "req" },
+            Attributes = ["tab", "req"],
         };
 
-        AssemplyManager am = new AssemplyManager(pocosetting, new List<ClassTemplate>());
+        AssemplyManager am = new AssemplyManager(pocosetting, []);
         am.AddAssemply("xyz");
         Assert.That(am.AssemplyReference, Has.Member("System.ComponentModel.DataAnnotations.Schema"));
         Assert.That(am.AssemplyReference, Has.Member("xyz"));

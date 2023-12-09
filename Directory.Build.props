@@ -1,5 +1,6 @@
 <Project>
   <PropertyGroup>
+    <LangVersion>12</LangVersion>
     <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
     <PackageOutputPath>$(SolutionDir)build</PackageOutputPath>
     <Authors>Mohamed Hassan</Authors>
@@ -19,7 +20,7 @@
     <PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128;NU1507;S3925</NoWarn>
-    <LangVersion>12</LangVersion>
+    
     <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
     <Version Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)</Version>
     <Version Condition="'$(VersionSuffix)' == ''">0.0.0</Version>
@@ -62,9 +63,7 @@
     <None Include="$(SolutionDir)license.txt" Pack="true" PackagePath=""/>
     <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\"/>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\common\IsExternalInit.cs" Link="IsExternalInit.cs" />
-  </ItemGroup>
+ 
   <!-- disable the nullable warnings when compiling for .NET Standard 2.0 or net4x -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or $(TargetFramework.StartsWith('net4'))">
     <NoWarn>$(NoWarn);nullable</NoWarn>

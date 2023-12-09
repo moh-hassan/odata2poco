@@ -37,7 +37,7 @@ internal class TokenEndpoint
     internal Dictionary<string, string> TokenParamsAsDictionary()
     {
         if (string.IsNullOrEmpty(TokenParams))
-            return new Dictionary<string, string>();
+            return [];
         var args = TokenParams.Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
         return args.Select(StringToKeyValue).ToDictionary(pair => pair.Key, pair => pair.Value);
     }

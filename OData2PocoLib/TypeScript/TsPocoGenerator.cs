@@ -16,7 +16,7 @@ internal class TsPocoGenerator : IPocoClassGeneratorMultiFiles
         ClassList = pocoGen.GeneratePocoList();
         Template = new FluentTextTemplate();
         Template.WriteLine(GetHeader());
-        ModelStore = new PocoStore();
+        ModelStore = [];
         PocoSetting.Validate();
     }
 

@@ -6,9 +6,9 @@ public class RenameMap
 {
     // This is a list so we have the option to control how we match
     // the OldName.
-    public List<ClassNameMap> ClassNameMap { get; set; } = new();
+    public List<ClassNameMap> ClassNameMap { get; set; } = [];
 
-    public Dictionary<string, List<PropertyNameMap>> PropertyNameMap { get; set; } = new();
+    public Dictionary<string, List<PropertyNameMap>> PropertyNameMap { get; set; } = [];
 }
 
 public class ClassNameMap

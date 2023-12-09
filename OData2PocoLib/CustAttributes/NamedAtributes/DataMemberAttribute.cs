@@ -12,11 +12,11 @@ public class DataMemberAttribute : INamedAttribute
 
     public List<string> GetAttributes(PropertyTemplate property)
     {
-        return new() { "[DataMember]" };
+        return ["[DataMember]"];
     }
 
     public List<string> GetAttributes(ClassTemplate classTemplate)
     {
-        return new() { "[DataContract]" };
+        return ["[DataContract]"];
     }
 }

@@ -151,7 +151,7 @@ public partial class Options
     public Options()
     {
         Attributes = new List<string>();
-        Errors = new List<string>();
+        Errors = [];
         //set default
         Authenticate = AuthenticationType.None;
         NameCase = CaseEnum.None;
