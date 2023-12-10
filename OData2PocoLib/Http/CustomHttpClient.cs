@@ -75,12 +75,7 @@ internal class CustomHttpClient : IDisposable
             Logger.Info($"Setting the SSL/TLS protocols to: {OdataConnection.TlsProtocol}");
         }
 
-        if (!string.IsNullOrEmpty(OdataConnection.Proxy))
-        {
-            Logger.Trace($"Using Proxy: '{OdataConnection.Proxy}'");
-            HttpHandler.UseProxy = true;
-            HttpHandler.Proxy = new WebProxy(OdataConnection.Proxy);
-        }
+        SetupProxy();
 
         Client.DefaultRequestHeaders
             .TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
@@ -94,6 +89,39 @@ internal class CustomHttpClient : IDisposable
             await auth.Authenticate();
         }
     }
+
+    private void SetupProxy()
+    {
+        if (!string.IsNullOrEmpty(OdataConnection.Proxy))
+        {
+            Logger.Trace($"Using Proxy: '{OdataConnection.Proxy}'");
+            HttpHandler.UseProxy = true;
+            HttpHandler.Proxy = new WebProxy(OdataConnection.Proxy);
+            if (!string.IsNullOrEmpty(OdataConnection.ProxyUser))
+            {
+                var credentials = OdataConnection.ProxyUser.Split(':');
+                if (credentials.Length == 2)
+                {
+                    var proxyUserName = credentials[0];
+                    var proxyPassword = credentials[1];
+                    HttpHandler.Proxy.Credentials = new NetworkCredential(proxyUserName, proxyPassword);
+                    //disable default credentials
+                    HttpHandler.UseDefaultCredentials = false;
+                }
+                else
+                {
+                    Logger.Warn($"ProxyUser is not in the correct format. Expected format is 'username:password'.");
+                }
+
+            }
+            else
+            {
+                //enable default credentials
+                HttpHandler.UseDefaultCredentials = true;
+            }
+        }
+    }
+
     internal virtual async Task<HttpResponseMessage> GetAsync(string? requestUri)
     {
         await SetHttpClient();

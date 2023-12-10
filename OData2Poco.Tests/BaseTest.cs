@@ -7,7 +7,8 @@ public abstract class BaseTest
 {
     protected List<ClassTemplate> ClassList;
     protected IPocoFileSystem _fileSystem;
-
+    protected bool IsCi => Environment.GetEnvironmentVariable("CI") == "true";
+    protected bool IsLocalTest => Environment.GetEnvironmentVariable("LOCAL_TEST") == "1";
 
     [OneTimeSetUp]
     public void BaseOneTimeSetup()

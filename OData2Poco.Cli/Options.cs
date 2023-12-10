@@ -24,6 +24,8 @@ public partial class Options
     public string Domain { get; set; }
     [Option("proxy", HelpText = "Http Proxy in the form: 'server:port'.")]
     public string Proxy { get; set; }
+    [Option('U', "proxy-user", HelpText = "Proxy credentials in the form: 'user:password'.")]
+    public string ProxyUser { get; set; }
 
     [Option('t', "token-endpoint", HelpText = "OAuth2 Token Endpoint.")]
     public string TokenUrl { get; set; }

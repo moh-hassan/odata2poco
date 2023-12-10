@@ -33,15 +33,12 @@ internal static class CommandLineUtility
 
             var att = (OptionAttribute?)p1.attrs.FirstOrDefault();
             if (att == null) continue;
-            var shortName = att.ShortName == null ? $"--{att.LongName}" : $"-{att.ShortName}";
+            var shortName = string.IsNullOrEmpty(att.ShortName)
+                ? $"--{att.LongName}" : $"-{att.ShortName}";
             if (!string.IsNullOrEmpty(val?.ToString()))
             {
                 var text = $"{shortName} {p1.p.Name}= {val} ";
-                //hide password for security reason
-                if (shortName.Equals("-p") || shortName.Equals("--password"))
-                    text = $"{shortName} {p1.p.Name}= ***** ";
-                //hide http header for security reason
-                if (shortName.Equals("-H") || shortName.Equals("--http-header "))
+                if (IsSecurityOption(shortName))
                     text = $"{shortName} {p1.p.Name}= ***** ";
                 list.Add(text);
             }
@@ -49,5 +46,12 @@ internal static class CommandLineUtility
         CodeHeader.SetParameters(list);
         return list;
     }
-
+    private static bool IsSecurityOption(string option)
+    {
+        //hide security options on screen
+        string[] securedOptions =  { "-p", "--password", "-H", "--http-header", "-U",
+            "proxy-user" };
+        if (securedOptions.Contains(option)) return true;
+        return false;
+    }
 }

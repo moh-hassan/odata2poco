@@ -29,4 +29,5 @@ public class CustomHttpClientTest2
         var metaData = await customClient.ReadMetaDataAsync();
         metaData.Should().StartWith(@"<?xml version=""1.0"" encoding=""UTF-8""?>");
     }
+
 }
