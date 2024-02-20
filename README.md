@@ -222,3 +222,12 @@ All programs or packages will not transfer any information to other networked sy
 This project uses free code signing provided by [SignPath.io](https://signpath.io?utm_source=foundation&utm_medium=github&utm_campaign=odata2poco), and a certificate by the [SignPath Foundation](https://signpath.org?utm_source=foundation&utm_medium=github&utm_campaign=odata2poco).
 
 Starting with v6.2, o2pgen.exe and all odata2poco.xxx.nupkg packages are signed. Code signing is applied only to odata2poco project code in the [odata2poco repository](https://github.com/moh-hassan/odata2poco) master branch and built on AppVeyor.  The odata2poco.xxx.nupkg packages contain third-party libraries used by odata2poco, which may or may not be signed.  
+
+## Acknowledgements: 
+
+**Thank you [JetBrains](https://www.jetbrains.com "JetBrain") for [Resharper](https://www.jetbrains.com/resharper/ "Resharper") open source license**
+<img src="art/jb_beam.png" alt="signpath" width="200"/>
+
+**Thank you [SignPath](https://signpath.io?utm_source=foundation&utm_medium=github&utm_campaign=odata2poco) for free code signing.**
+
+<img src="art/signpath.jpg" alt="signpath" width="200"/>
