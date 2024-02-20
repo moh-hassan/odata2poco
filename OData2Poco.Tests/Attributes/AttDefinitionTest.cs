@@ -1,17 +1,15 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.CustAttributes;
-using OData2Poco.CustAttributes.UserAttributes;
-
 namespace OData2Poco.Tests.Attributes;
-using static Fake.TestSample;
 
+using CustAttributes;
+using CustAttributes.UserAttributes;
+using static TestSample;
 
 [Category("UserAttributes")]
 public class AttDefinitionTest : BaseTest
 {
     private readonly string _attFilePath = Path.Combine(FakeFolder, "attributes.txt");
-    private string _text;
 
     private readonly Dictionary<string, string> _attributes = new()
     {
@@ -20,9 +18,11 @@ public class AttDefinitionTest : BaseTest
         ["_key_"] = """[Key]""",
         ["_Required_"] = """[Required]""",
         ["_dm_"] = """[DataMember]""",
-        ["_dm2_"] = """[DataContract]""",    //class
-        ["_tab_"] = """[Table("Products")]""", //class
+        ["_dm2_"] = """[DataContract]""", //class
+        ["_tab_"] = """[Table("Products")]""" //class
     };
+
+    private string _text;
 
     [OneTimeSetUp]
     public void Setup()
@@ -74,6 +74,7 @@ public class AttDefinitionTest : BaseTest
         var att = ad.ToAttribute(p);
         att.FirstOrDefault().Should().Be(expected);
     }
+
     [Test]
     public void AttDefinition_import_text_test()
     {
@@ -82,12 +83,12 @@ public class AttDefinitionTest : BaseTest
             PropName = "ProductId",
             PropType = "int",
             IsKey = true,
-            Serial = 1,
+            Serial = 1
         };
         var ct = new ClassTemplate(1)
         {
             Name = "Product",
-            EntitySetName = "Products",
+            EntitySetName = "Products"
         };
         var attDefinition = AttDefinition.Import(_text);
         attDefinition.Should().NotBeEmpty();
@@ -99,30 +100,15 @@ public class AttDefinitionTest : BaseTest
         }
     }
 
-    private void AssertAttributes(AttributeFactory af, PropertyTemplate pp, ClassTemplate cc)
-    {
-        var afAttributes = af.GetAttributeList()
-            .Where(a => a.IsUserDefined)
-            .Select(a => (a.Name, F(a)))
-            .ToDictionary(a => a.Name, a => a.Item2);
-        afAttributes.Should().NotBeEmpty();
-        afAttributes.Should().BeEquivalentTo(_attributes);
-
-        //local function
-        string F(INamedAttribute ina) => ina.Scope switch
-        {
-            "property" => ina.GetAttributes(pp).FirstOrDefault(),
-            "class" => ina.GetAttributes(cc).FirstOrDefault(),
-            _ => null
-        };
-    }
-
     [Test]
     public void AttributeFactory_load_attDefinitions_from_pocoSetting_properly()
     {
         //Arrange
-        AttributeFactory af = AttributeFactory.Default;
-        var ps = new PocoSetting { AtributeDefs = _attFilePath };
+        var af = AttributeFactory.Default;
+        var ps = new PocoSetting
+        {
+            AtributeDefs = _attFilePath
+        };
         //initialize to load attributes from json
         af.Init(ps);
         var prop = new PropertyTemplate
@@ -130,12 +116,12 @@ public class AttDefinitionTest : BaseTest
             PropName = "ProductId",
             PropType = "int",
             IsKey = true,
-            Serial = 1,
+            Serial = 1
         };
         var ct = new ClassTemplate(1)
         {
             Name = "Product",
-            EntitySetName = "Products",
+            EntitySetName = "Products"
         };
         //Act
         var attDefinition = AttDefinition.Import(_text);
@@ -152,18 +138,18 @@ public class AttDefinitionTest : BaseTest
         {
             Name = "json2",
             Scope = "property",
-            Format = "[JsonPropertyName({{PropName.ToCamelCase().Quote()}})]",
+            Format = "[JsonPropertyName({{PropName.ToCamelCase().Quote()}})]"
         };
         var p = new PropertyTemplate
         {
             PropName = "FirstName",
             PropType = "string",
-            Serial = 1,
+            Serial = 1
         };
         var expected = """[JsonPropertyName("firstName")]""";
         //Act
         var atts = ad.ToAttribute(p);
-        //Assert       
+        //Assert
         expected.Should().Be(atts.FirstOrDefault());
     }
 
@@ -185,7 +171,7 @@ public class AttDefinitionTest : BaseTest
             PropName = "ProductId",
             PropType = "int",
             IsKey = isKey,
-            Serial = 1,
+            Serial = 1
         };
         //Act
         var atts = ad.ToAttribute(p);
@@ -212,7 +198,7 @@ public class AttDefinitionTest : BaseTest
             PropType = "int",
             IsKey = false,
             IsNullable = isNull,
-            Serial = 1,
+            Serial = 1
         };
 
         //Act
@@ -234,8 +220,7 @@ public class AttDefinitionTest : BaseTest
         var p = new ClassTemplate(1)
         {
             Name = "Product",
-            EntitySetName = "Products",
-
+            EntitySetName = "Products"
         };
         var expected = """[Table("Products")]""";
         //Act
@@ -252,7 +237,7 @@ public class AttDefinitionTest : BaseTest
         {
             Name = "json2",
             Scope = "property",
-            Format = "[DataMember]",
+            Format = "[DataMember]"
         };
         var expected = @"[json2]
 Scope=property
@@ -262,5 +247,26 @@ Format=[DataMember]
         var sb = ad.Export();
         //Assert
         sb.ToString().Should().ContainAll(expected.ToLines());
+    }
+
+    private void AssertAttributes(AttributeFactory af, PropertyTemplate pp, ClassTemplate cc)
+    {
+        var afAttributes = af.GetAttributeList()
+            .Where(a => a.IsUserDefined)
+            .Select(a => (a.Name, F(a)))
+            .ToDictionary(a => a.Name, a => a.Item2);
+        afAttributes.Should().NotBeEmpty();
+        afAttributes.Should().BeEquivalentTo(_attributes);
+
+        //local function
+        string F(INamedAttribute ina)
+        {
+            return ina.Scope switch
+            {
+                "property" => ina.GetAttributes(pp).FirstOrDefault(),
+                "class" => ina.GetAttributes(cc).FirstOrDefault(),
+                _ => null
+            };
+        }
     }
 }

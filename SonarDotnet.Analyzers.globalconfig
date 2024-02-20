@@ -1,0 +1,1236 @@
+################################################################################
+# https://docs.sonarsource.com/sonarlint/visual-studio/
+# https://rules.sonarsource.com/csharp/
+# https://rules.sonarsource.com/csharp/RSPEC-xxxx/
+#
+################################################################################
+
+# Top level entry required to mark this as a global AnalyzerConfig file
+is_global = true
+
+############################################################################################
+# Sonar-dotnet Analysis
+############################################################################################
+
+# Default severity for all analyzer diagnostics
+dotnet_analyzer_diagnostic.severity = none
+
+## SonarAnalyzer.CSharp
+
+# S100: Methods and properties should be named in PascalCase
+dotnet_diagnostic.S100.severity = warning
+
+# S1006: Method overrides should not change parameter defaults
+dotnet_diagnostic.S1006.severity = warning
+
+# S101: Types should be named in PascalCase
+dotnet_diagnostic.S101.severity = warning
+
+# S103: Lines should not be too long
+dotnet_diagnostic.S103.severity = suggestion
+
+# S104: Files should not have too many lines of code
+dotnet_diagnostic.S104.severity = suggestion
+
+# S1048: Destructors should not throw exceptions
+dotnet_diagnostic.S1048.severity = warning
+
+# S105: Tabulation characters should not be used
+dotnet_diagnostic.S105.severity = none
+
+# S106: Standard outputs should not be used directly to log anything
+dotnet_diagnostic.S106.severity = none
+
+# S1066: Collapsible "if" statements should be merged
+dotnet_diagnostic.S1066.severity = warning
+
+# S1067: Expressions should not be too complex
+dotnet_diagnostic.S1067.severity = none
+
+# S107: Methods should not have too many parameters
+dotnet_diagnostic.S107.severity = suggestion
+
+# S1075: URIs should not be hardcoded
+dotnet_diagnostic.S1075.severity = warning
+
+# S108: Nested blocks of code should not be left empty
+dotnet_diagnostic.S108.severity = warning
+
+# S109: Magic numbers should not be used
+dotnet_diagnostic.S109.severity = none
+
+# S110: Inheritance tree of classes should not be too deep
+dotnet_diagnostic.S110.severity = suggestion
+
+# S1104: Fields should not have public accessibility
+dotnet_diagnostic.S1104.severity = warning
+
+# S1109: A close curly brace should be located at the beginning of a line
+dotnet_diagnostic.S1109.severity = warning
+
+# S1110: Redundant pairs of parentheses should be removed
+dotnet_diagnostic.S1110.severity = warning
+
+# S1116: Empty statements should be removed
+dotnet_diagnostic.S1116.severity = warning
+
+# S1117: Local variables should not shadow class fields
+dotnet_diagnostic.S1117.severity = warning
+
+# S1118: Utility classes should not have public constructors
+dotnet_diagnostic.S1118.severity = warning
+
+# S112: General exceptions should never be thrown
+dotnet_diagnostic.S112.severity = warning
+
+# S1121: Assignments should not be made from within sub-expressions
+dotnet_diagnostic.S1121.severity = warning
+
+# S1123: "Obsolete" attributes should include explanations
+dotnet_diagnostic.S1123.severity = warning
+
+# S1125: Boolean literals should not be redundant
+dotnet_diagnostic.S1125.severity = warning
+
+# S1128: Unused "using" should be removed
+dotnet_diagnostic.S1128.severity = warning
+
+# S113: Files should contain an empty newline at the end
+dotnet_diagnostic.S113.severity = warning
+
+# S1134: Track uses of "FIXME" tags
+dotnet_diagnostic.S1134.severity = warning
+
+# S1135: Track uses of "TODO" tags
+dotnet_diagnostic.S1135.severity = warning
+
+# S1144: Unused private types or members should be removed
+dotnet_diagnostic.S1144.severity = warning
+
+# S1147: Exit methods should not be called
+dotnet_diagnostic.S1147.severity = warning
+
+# S1151: "switch case" clauses should not have too many lines of code
+dotnet_diagnostic.S1151.severity = suggestion
+
+# S1155: "Any()" should be used to test for emptiness
+dotnet_diagnostic.S1155.severity = warning
+
+# S1163: Exceptions should not be thrown in finally blocks
+dotnet_diagnostic.S1163.severity = warning
+
+# S1168: Empty arrays and collections should be returned instead of null
+dotnet_diagnostic.S1168.severity = warning
+
+# S1172: Unused method parameters should be removed
+dotnet_diagnostic.S1172.severity = warning
+
+# S1185: Overriding members should do more than simply call the same member in the base class
+dotnet_diagnostic.S1185.severity = warning
+
+# S1186: Methods should not be empty
+dotnet_diagnostic.S1186.severity = warning
+
+# S1192: String literals should not be duplicated
+dotnet_diagnostic.S1192.severity = none
+
+# S1199: Nested code blocks should not be used
+dotnet_diagnostic.S1199.severity = warning
+
+# S1200: Classes should not be coupled to too many other classes (Single Responsibility Principle)
+dotnet_diagnostic.S1200.severity = none
+
+# S1206: "Equals(Object)" and "GetHashCode()" should be overridden in pairs
+dotnet_diagnostic.S1206.severity = warning
+
+# S121: Control structures should use curly braces
+dotnet_diagnostic.S121.severity = none
+
+# S1210: "Equals" and the comparison operators should be overridden when implementing "IComparable"
+dotnet_diagnostic.S1210.severity = warning
+
+# S1215: "GC.Collect" should not be called
+dotnet_diagnostic.S1215.severity = warning
+
+# S122: Statements should be on separate lines
+dotnet_diagnostic.S122.severity = none
+
+# S1226: Method parameters, caught exceptions and foreach variables' initial values should not be ignored
+dotnet_diagnostic.S1226.severity = warning
+
+# S1227: break statements should not be used except for switch cases
+dotnet_diagnostic.S1227.severity = none
+
+# S1244: Floating point numbers should not be tested for equality
+dotnet_diagnostic.S1244.severity = warning
+
+# S125: Sections of code should not be commented out
+dotnet_diagnostic.S125.severity = warning
+
+# S126: "if ... else if" constructs should end with "else" clauses
+dotnet_diagnostic.S126.severity = none
+
+# S1264: A "while" loop should be used instead of a "for" loop
+dotnet_diagnostic.S1264.severity = warning
+
+# S127: "for" loop stop conditions should be invariant
+dotnet_diagnostic.S127.severity = warning
+
+# S1301: "switch" statements should have at least 3 "case" clauses
+dotnet_diagnostic.S1301.severity = warning
+
+# S1309: Track uses of in-source issue suppressions
+dotnet_diagnostic.S1309.severity = none
+
+# S131: "switch/Select" statements should contain a "default/Case Else" clauses
+dotnet_diagnostic.S131.severity = warning
+
+# S1313: Using hardcoded IP addresses is security-sensitive
+dotnet_diagnostic.S1313.severity = warning
+
+# S134: Control flow statements "if", "switch", "for", "foreach", "while", "do"  and "try" should not be nested too deeply
+dotnet_diagnostic.S134.severity = suggestion
+
+# S138: Functions should not have too many lines of code
+dotnet_diagnostic.S138.severity = suggestion
+
+# S1449: Culture should be specified for "string" operations
+dotnet_diagnostic.S1449.severity = none
+
+# S1450: Private fields only used as local variables in methods should become local variables
+dotnet_diagnostic.S1450.severity = warning
+
+# S1451: Track lack of copyright and license headers
+dotnet_diagnostic.S1451.severity = none
+
+# S1479: "switch" statements should not have too many "case" clauses
+dotnet_diagnostic.S1479.severity = suggestion
+
+# S1481: Unused local variables should be removed
+dotnet_diagnostic.S1481.severity = warning
+
+# S1541: Methods and properties should not be too complex
+dotnet_diagnostic.S1541.severity = none
+
+# S1607: Tests should not be ignored
+dotnet_diagnostic.S1607.severity = warning
+
+# S1643: Strings should not be concatenated using '+' in a loop
+dotnet_diagnostic.S1643.severity = warning
+
+# S1656: Variables should not be self-assigned
+dotnet_diagnostic.S1656.severity = warning
+
+# S1659: Multiple variables should not be declared on the same line
+dotnet_diagnostic.S1659.severity = warning
+
+# S1694: An abstract class should have both abstract and concrete methods
+dotnet_diagnostic.S1694.severity = warning
+
+# S1696: NullReferenceException should not be caught
+dotnet_diagnostic.S1696.severity = warning
+
+# S1698: "==" should not be used when "Equals" is overridden
+dotnet_diagnostic.S1698.severity = warning
+
+# S1699: Constructors should only call non-overridable methods
+dotnet_diagnostic.S1699.severity = warning
+
+# S1751: Loops with at most one iteration should be refactored
+dotnet_diagnostic.S1751.severity = warning
+
+# S1764: Identical expressions should not be used on both sides of a binary operator
+dotnet_diagnostic.S1764.severity = warning
+
+# S1821: "switch" statements should not be nested
+dotnet_diagnostic.S1821.severity = warning
+
+# S1848: Objects should not be created to be dropped immediately without being used
+dotnet_diagnostic.S1848.severity = warning
+
+# S1854: Unused assignments should be removed
+dotnet_diagnostic.S1854.severity = warning
+
+# S1858: "ToString()" calls should not be redundant
+dotnet_diagnostic.S1858.severity = warning
+
+# S1862: Related "if/else if" statements should not have the same condition
+dotnet_diagnostic.S1862.severity = warning
+
+# S1871: Two branches in a conditional structure should not have exactly the same implementation
+dotnet_diagnostic.S1871.severity = warning
+
+# S1905: Redundant casts should not be used
+dotnet_diagnostic.S1905.severity = warning
+
+# S1939: Inheritance list should not be redundant
+dotnet_diagnostic.S1939.severity = warning
+
+# S1940: Boolean checks should not be inverted
+dotnet_diagnostic.S1940.severity = warning
+
+# S1944: Inappropriate casts should not be made
+dotnet_diagnostic.S1944.severity = warning
+
+# S1994: "for" loop increment clauses should modify the loops' counters
+dotnet_diagnostic.S1994.severity = warning
+
+# S2053: Hashes should include an unpredictable salt
+dotnet_diagnostic.S2053.severity = warning
+
+# S2068: Hard-coded credentials are security-sensitive
+dotnet_diagnostic.S2068.severity = warning
+
+# S2077: Formatting SQL queries is security-sensitive
+dotnet_diagnostic.S2077.severity = warning
+
+# S2092: Creating cookies without the "secure" flag is security-sensitive
+dotnet_diagnostic.S2092.severity = warning
+
+# S2114: Collections should not be passed as arguments to their own methods
+dotnet_diagnostic.S2114.severity = warning
+
+# S2115: A secure password should be used when connecting to a database
+dotnet_diagnostic.S2115.severity = warning
+
+# S2123: Values should not be uselessly incremented
+dotnet_diagnostic.S2123.severity = warning
+
+# S2148: Underscores should be used to make large numbers readable
+dotnet_diagnostic.S2148.severity = warning
+
+# S2156: "sealed" classes should not have "protected" members
+dotnet_diagnostic.S2156.severity = warning
+
+# S2178: Short-circuit logic should be used in boolean contexts
+dotnet_diagnostic.S2178.severity = warning
+
+# S2183: Integral numbers should not be shifted by zero or more than their number of bits-1
+dotnet_diagnostic.S2183.severity = warning
+
+# S2184: Results of integer division should not be assigned to floating point variables
+dotnet_diagnostic.S2184.severity = warning
+
+# S2187: TestCases should contain tests
+dotnet_diagnostic.S2187.severity = warning
+
+# S2190: Recursion should not be infinite
+dotnet_diagnostic.S2190.severity = warning
+
+# S2197: Modulus results should not be checked for direct equality
+dotnet_diagnostic.S2197.severity = warning
+
+# S2201: Return values from functions without side effects should not be ignored
+dotnet_diagnostic.S2201.severity = warning
+
+# S2219: Runtime type checking should be simplified
+dotnet_diagnostic.S2219.severity = warning
+
+# S2221: "Exception" should not be caught when not required by called methods
+dotnet_diagnostic.S2221.severity = none
+
+# S2222: Locks should be released
+dotnet_diagnostic.S2222.severity = warning
+
+# S2223: Non-constant static fields should not be visible
+dotnet_diagnostic.S2223.severity = warning
+
+# S2225: "ToString()" method should not return null
+dotnet_diagnostic.S2225.severity = warning
+
+# S2228: Console logging should not be used
+dotnet_diagnostic.S2228.severity = warning
+
+# S2234: Parameters should be passed in the correct order
+dotnet_diagnostic.S2234.severity = warning
+
+# S2245: Using pseudorandom number generators (PRNGs) is security-sensitive
+dotnet_diagnostic.S2245.severity = warning
+
+# S2251: A "for" loop update clause should move the counter in the right direction
+dotnet_diagnostic.S2251.severity = warning
+
+# S2252: For-loop conditions should be true at least once
+dotnet_diagnostic.S2252.severity = warning
+
+# S2255: Writing cookies is security-sensitive
+dotnet_diagnostic.S2255.severity = warning
+
+# S2257: Using non-standard cryptographic algorithms is security-sensitive
+dotnet_diagnostic.S2257.severity = warning
+
+# S2259: Null pointers should not be dereferenced
+dotnet_diagnostic.S2259.severity = warning
+
+# S2275: Composite format strings should not lead to unexpected behavior at runtime
+dotnet_diagnostic.S2275.severity = warning
+
+# S2290: Field-like events should not be virtual
+dotnet_diagnostic.S2290.severity = warning
+
+# S2291: Overflow checking should not be disabled for "Enumerable.Sum"
+dotnet_diagnostic.S2291.severity = warning
+
+# S2292: Trivial properties should be auto-implemented
+dotnet_diagnostic.S2292.severity = warning
+
+# S2302: "nameof" should be used
+dotnet_diagnostic.S2302.severity = warning
+
+# S2306: "async" and "await" should not be used as identifiers
+dotnet_diagnostic.S2306.severity = warning
+
+# S2325: Methods and properties that don't access instance data should be static
+dotnet_diagnostic.S2325.severity = none
+
+# S2326: Unused type parameters should be removed
+dotnet_diagnostic.S2326.severity = warning
+
+# S2327: "try" statements with identical "catch" and/or "finally" blocks should be merged
+dotnet_diagnostic.S2327.severity = warning
+
+# S2328: "GetHashCode" should not reference mutable fields
+dotnet_diagnostic.S2328.severity = warning
+
+# S2330: Array covariance should not be used
+dotnet_diagnostic.S2330.severity = warning
+
+# S2333: Redundant modifiers should not be used
+dotnet_diagnostic.S2333.severity = warning
+
+# S2339: Public constant members should not be used
+dotnet_diagnostic.S2339.severity = none
+
+# S2342: Enumeration types should comply with a naming convention
+dotnet_diagnostic.S2342.severity = warning
+
+# S2344: Enumeration type names should not have "Flags" or "Enum" suffixes
+dotnet_diagnostic.S2344.severity = warning
+
+# S2345: Flags enumerations should explicitly initialize all their members
+dotnet_diagnostic.S2345.severity = warning
+
+# S2346: Flags enumerations zero-value members should be named "None"
+dotnet_diagnostic.S2346.severity = warning
+
+# S2357: Fields should be private
+dotnet_diagnostic.S2357.severity = warning
+
+# S2360: Optional parameters should not be used
+dotnet_diagnostic.S2360.severity = none
+
+# S2365: Properties should not make collection or array copies
+dotnet_diagnostic.S2365.severity = warning
+
+# S2368: Public methods should not have multidimensional array parameters
+dotnet_diagnostic.S2368.severity = suggestion
+
+# S2372: Exceptions should not be thrown from property getters
+dotnet_diagnostic.S2372.severity = warning
+
+# S2376: Write-only properties should not be used
+dotnet_diagnostic.S2376.severity = warning
+
+# S2386: Mutable fields should not be "public static"
+dotnet_diagnostic.S2386.severity = warning
+
+# S2387: Child class fields should not shadow parent class fields
+dotnet_diagnostic.S2387.severity = warning
+
+# S2436: Types and methods should not have too many generic parameters
+dotnet_diagnostic.S2436.severity = suggestion
+
+# S2437: Silly bit operations should not be performed
+dotnet_diagnostic.S2437.severity = warning
+
+# S2479: Whitespace and control characters in string literals should be explicit
+dotnet_diagnostic.S2479.severity = warning
+
+# S2486: Generic exceptions should not be ignored
+dotnet_diagnostic.S2486.severity = warning
+
+# S2551: Shared resources should not be used for locking
+dotnet_diagnostic.S2551.severity = warning
+
+# S2583: Conditionally executed code should be reachable
+dotnet_diagnostic.S2583.severity = warning
+
+# S2589: Boolean expressions should not be gratuitous
+dotnet_diagnostic.S2589.severity = warning
+
+# S2612: Setting loose file permissions is security-sensitive
+dotnet_diagnostic.S2612.severity = warning
+
+# S2674: The length returned from a stream read should be checked
+dotnet_diagnostic.S2674.severity = warning
+
+# S2681: Multiline blocks should be enclosed in curly braces
+dotnet_diagnostic.S2681.severity = warning
+
+# S2688: "NaN" should not be used in comparisons
+dotnet_diagnostic.S2688.severity = warning
+
+# S2692: "IndexOf" checks should not be for positive numbers
+dotnet_diagnostic.S2692.severity = warning
+
+# S2696: Instance members should not write to "static" fields
+dotnet_diagnostic.S2696.severity = warning
+
+# S2699: Tests should include assertions
+dotnet_diagnostic.S2699.severity = warning
+
+# S2701: Literal boolean values should not be used in assertions
+dotnet_diagnostic.S2701.severity = warning
+
+# S2737: "catch" clauses should do more than rethrow
+dotnet_diagnostic.S2737.severity = warning
+
+# S2743: Static fields should not be used in generic types
+dotnet_diagnostic.S2743.severity = warning
+
+# S2755: XML parsers should not be vulnerable to XXE attacks
+dotnet_diagnostic.S2755.severity = warning
+
+# S2757: "=+" should not be used instead of "+="
+dotnet_diagnostic.S2757.severity = warning
+
+# S2760: Sequential tests should not check the same condition
+dotnet_diagnostic.S2760.severity = warning
+
+# S2761: Doubled prefix operators "!!" and "~~" should not be used
+dotnet_diagnostic.S2761.severity = warning
+
+# S2857: SQL keywords should be delimited by whitespace
+dotnet_diagnostic.S2857.severity = warning
+
+# S2930: "IDisposables" should be disposed
+dotnet_diagnostic.S2930.severity = warning
+
+# S2931: Classes with "IDisposable" members should implement "IDisposable"
+dotnet_diagnostic.S2931.severity = warning
+
+# S2933: Fields that are only assigned in the constructor should be "readonly"
+dotnet_diagnostic.S2933.severity = warning
+
+# S2934: Property assignments should not be made for "readonly" fields not constrained to reference types
+dotnet_diagnostic.S2934.severity = warning
+
+# S2952: Classes should "Dispose" of members from the classes' own "Dispose" methods
+dotnet_diagnostic.S2952.severity = warning
+
+# S2953: Methods named "Dispose" should implement "IDisposable.Dispose"
+dotnet_diagnostic.S2953.severity = warning
+
+# S2955: Generic parameters not constrained to reference types should not be compared to "null"
+dotnet_diagnostic.S2955.severity = warning
+
+# S2971: "IEnumerable" LINQs should be simplified
+dotnet_diagnostic.S2971.severity = warning
+
+# S2995: "Object.ReferenceEquals" should not be used for value types
+dotnet_diagnostic.S2995.severity = warning
+
+# S2996: "ThreadStatic" fields should not be initialized
+dotnet_diagnostic.S2996.severity = warning
+
+# S2997: "IDisposables" created in a "using" statement should not be returned
+dotnet_diagnostic.S2997.severity = warning
+
+# S3005: "ThreadStatic" should not be used on non-static fields
+dotnet_diagnostic.S3005.severity = warning
+
+# S3010: Static fields should not be updated in constructors
+dotnet_diagnostic.S3010.severity = warning
+
+# S3011: Reflection should not be used to increase accessibility of classes, methods, or fields
+dotnet_diagnostic.S3011.severity = warning
+
+# S3052: Members should not be initialized to default values
+dotnet_diagnostic.S3052.severity = warning
+
+# S3059: Types should not have members with visibility set higher than the type's visibility
+dotnet_diagnostic.S3059.severity = none
+
+# S3060: "is" should not be used with "this"
+dotnet_diagnostic.S3060.severity = warning
+
+# S3168: "async" methods should not return "void"
+dotnet_diagnostic.S3168.severity = warning
+
+# S3169: Multiple "OrderBy" calls should not be used
+dotnet_diagnostic.S3169.severity = warning
+
+# S3172: Delegates should not be subtracted
+dotnet_diagnostic.S3172.severity = warning
+
+# S3215: "interface" instances should not be cast to concrete types
+dotnet_diagnostic.S3215.severity = warning
+
+# S3216: "ConfigureAwait(false)" should be used
+dotnet_diagnostic.S3216.severity = warning
+
+# S3217: "Explicit" conversions of "foreach" loops should not be used
+dotnet_diagnostic.S3217.severity = warning
+
+# S3218: Inner class members should not shadow outer class "static" or type members
+dotnet_diagnostic.S3218.severity = warning
+
+# S3220: Method calls should not resolve ambiguously to overloads with "params"
+dotnet_diagnostic.S3220.severity = warning
+
+# S3234: "GC.SuppressFinalize" should not be invoked for types without destructors
+dotnet_diagnostic.S3234.severity = warning
+
+# S3235: Redundant parentheses should not be used
+dotnet_diagnostic.S3235.severity = none
+
+# S3236: Caller information arguments should not be provided explicitly
+dotnet_diagnostic.S3236.severity = warning
+
+# S3237: "value" parameters should be used
+dotnet_diagnostic.S3237.severity = warning
+
+# S3240: The simplest possible condition syntax should be used
+dotnet_diagnostic.S3240.severity = warning
+
+# S3241: Methods should not return values that are never used
+dotnet_diagnostic.S3241.severity = warning
+
+# S3242: Method parameters should be declared with base types
+dotnet_diagnostic.S3242.severity = none
+
+# S3244: Anonymous delegates should not be used to unsubscribe from Events
+dotnet_diagnostic.S3244.severity = warning
+
+# S3246: Generic type parameters should be co/contravariant when possible
+dotnet_diagnostic.S3246.severity = warning
+
+# S3247: Duplicate casts should not be made
+dotnet_diagnostic.S3247.severity = warning
+
+# S3249: Classes directly extending "object" should not call "base" in "GetHashCode" or "Equals"
+dotnet_diagnostic.S3249.severity = warning
+
+# S3251: Implementations should be provided for "partial" methods
+dotnet_diagnostic.S3251.severity = warning
+
+# S3253: Constructor and destructor declarations should not be redundant
+dotnet_diagnostic.S3253.severity = warning
+
+# S3254: Default parameter values should not be passed as arguments
+dotnet_diagnostic.S3254.severity = warning
+
+# S3256: "string.IsNullOrEmpty" should be used
+dotnet_diagnostic.S3256.severity = warning
+
+# S3257: Declarations and initializations should be as concise as possible
+dotnet_diagnostic.S3257.severity = warning
+
+# S3260: Non-derived "private" classes and records should be "sealed"
+dotnet_diagnostic.S3260.severity = warning
+
+# S3261: Namespaces should not be empty
+dotnet_diagnostic.S3261.severity = warning
+
+# S3262: "params" should be used on overrides
+dotnet_diagnostic.S3262.severity = warning
+
+# S3263: Static fields should appear in the order they must be initialized 
+dotnet_diagnostic.S3263.severity = warning
+
+# S3264: Events should be invoked
+dotnet_diagnostic.S3264.severity = warning
+
+# S3265: Non-flags enums should not be used in bitwise operations
+dotnet_diagnostic.S3265.severity = warning
+
+# S3267: Loops should be simplified with "LINQ" expressions
+dotnet_diagnostic.S3267.severity = warning
+
+# S3329: Cipher Block Chaining IV's should be unpredictable
+dotnet_diagnostic.S3329.severity = warning
+
+# S3330: Creating cookies without the "HttpOnly" flag is security-sensitive
+dotnet_diagnostic.S3330.severity = warning
+
+# S3343: Caller information parameters should come at the end of the parameter list
+dotnet_diagnostic.S3343.severity = warning
+
+# S3346: Expressions used in "Debug.Assert" should not produce side effects
+dotnet_diagnostic.S3346.severity = warning
+
+# S3353: Unchanged local variables should be "const"
+dotnet_diagnostic.S3353.severity = warning
+
+# S3358: Ternary operators should not be nested
+dotnet_diagnostic.S3358.severity = suggestion
+
+# S3366: "this" should not be exposed from constructors
+dotnet_diagnostic.S3366.severity = warning
+
+# S3376: Attribute, EventArgs, and Exception type names should end with the type being extended
+dotnet_diagnostic.S3376.severity = warning
+
+# S3397: "base.Equals" should not be used to check for reference equality in "Equals" if "base" is not "object"
+dotnet_diagnostic.S3397.severity = warning
+
+# S3400: Methods should not return constants
+dotnet_diagnostic.S3400.severity = warning
+
+# S3415: Assertion arguments should be passed in the correct order
+dotnet_diagnostic.S3415.severity = warning
+
+# S3427: Method overloads with default parameter values should not overlap 
+dotnet_diagnostic.S3427.severity = warning
+
+# S3431: "[ExpectedException]" should not be used
+dotnet_diagnostic.S3431.severity = warning
+
+# S3433: Test method signatures should be correct
+dotnet_diagnostic.S3433.severity = warning
+
+# S3440: Variables should not be checked against the values they're about to be assigned
+dotnet_diagnostic.S3440.severity = warning
+
+# S3441: Redundant property names should be omitted in anonymous classes
+dotnet_diagnostic.S3441.severity = warning
+
+# S3442: "abstract" classes should not have "public" constructors
+dotnet_diagnostic.S3442.severity = warning
+
+# S3443: Type should not be examined on "System.Type" instances
+dotnet_diagnostic.S3443.severity = warning
+
+# S3444: Interfaces should not simply inherit from base interfaces with colliding members
+dotnet_diagnostic.S3444.severity = warning
+
+# S3445: Exceptions should not be explicitly rethrown
+dotnet_diagnostic.S3445.severity = warning
+
+# S3447: "[Optional]" should not be used on "ref" or "out" parameters
+dotnet_diagnostic.S3447.severity = warning
+
+# S3449: Right operands of shift operators should be integers
+dotnet_diagnostic.S3449.severity = warning
+
+# S3450: Parameters with "[DefaultParameterValue]" attributes should also be marked "[Optional]"
+dotnet_diagnostic.S3450.severity = warning
+
+# S3451: "[DefaultValue]" should not be used when "[DefaultParameterValue]" is meant
+dotnet_diagnostic.S3451.severity = warning
+
+# S3453: Classes should not have only "private" constructors
+dotnet_diagnostic.S3453.severity = warning
+
+# S3456: "string.ToCharArray()" should not be called redundantly
+dotnet_diagnostic.S3456.severity = warning
+
+# S3457: Composite format strings should be used correctly
+dotnet_diagnostic.S3457.severity = warning
+
+# S3458: Empty "case" clauses that fall through to the "default" should be omitted
+dotnet_diagnostic.S3458.severity = warning
+
+# S3459: Unassigned members should be removed
+dotnet_diagnostic.S3459.severity = warning
+
+# S3464: Type inheritance should not be recursive
+dotnet_diagnostic.S3464.severity = warning
+
+# S3466: Optional parameters should be passed to "base" calls
+dotnet_diagnostic.S3466.severity = warning
+
+# S3532: Empty "default" clauses should be removed
+dotnet_diagnostic.S3532.severity = warning
+
+# S3597: "ServiceContract" and "OperationContract" attributes should be used together
+dotnet_diagnostic.S3597.severity = warning
+
+# S3598: One-way "OperationContract" methods should have "void" return type
+dotnet_diagnostic.S3598.severity = warning
+
+# S3600: "params" should not be introduced on overrides
+dotnet_diagnostic.S3600.severity = warning
+
+# S3603: Methods with "Pure" attribute should return a value 
+dotnet_diagnostic.S3603.severity = warning
+
+# S3604: Member initializer values should not be redundant
+dotnet_diagnostic.S3604.severity = warning
+
+# S3610: Nullable type comparison should not be redundant
+dotnet_diagnostic.S3610.severity = warning
+
+# S3626: Jump statements should not be redundant
+dotnet_diagnostic.S3626.severity = warning
+
+# S3655: Empty nullable value should not be accessed
+dotnet_diagnostic.S3655.severity = warning
+
+# S3717: Track use of "NotImplementedException"
+dotnet_diagnostic.S3717.severity = warning
+
+# S3776: Cognitive Complexity of methods should not be too high
+dotnet_diagnostic.S3776.severity = none
+
+# S3869: "SafeHandle.DangerousGetHandle" should not be called
+dotnet_diagnostic.S3869.severity = warning
+
+# S3871: Exception types should be "public"
+dotnet_diagnostic.S3871.severity = warning
+
+# S3872: Parameter names should not duplicate the names of their methods
+dotnet_diagnostic.S3872.severity = none
+
+# S3874: "out" and "ref" parameters should not be used
+dotnet_diagnostic.S3874.severity = none
+
+# S3875: "operator==" should not be overloaded on reference types
+dotnet_diagnostic.S3875.severity = warning
+
+# S3876: Strings or integral types should be used for indexers
+dotnet_diagnostic.S3876.severity = warning
+
+# S3877: Exceptions should not be thrown from unexpected methods
+dotnet_diagnostic.S3877.severity = warning
+
+# S3880: Finalizers should not be empty
+dotnet_diagnostic.S3880.severity = warning
+
+# S3881: "IDisposable" should be implemented correctly
+dotnet_diagnostic.S3881.severity = warning
+
+# S3884: "CoSetProxyBlanket" and "CoInitializeSecurity" should not be used
+dotnet_diagnostic.S3884.severity = warning
+
+# S3885: "Assembly.Load" should be used
+dotnet_diagnostic.S3885.severity = warning
+
+# S3887: Mutable, non-private fields should not be "readonly"
+dotnet_diagnostic.S3887.severity = warning
+
+# S3889: Neither "Thread.Resume" nor "Thread.Suspend" should be used
+dotnet_diagnostic.S3889.severity = warning
+
+# S3897: Classes that provide "Equals(<T>)" should implement "IEquatable<T>"
+dotnet_diagnostic.S3897.severity = warning
+
+# S3898: Value types should implement "IEquatable<T>"
+dotnet_diagnostic.S3898.severity = warning
+
+# S3900: Arguments of public methods should be validated against null
+dotnet_diagnostic.S3900.severity = warning
+
+# S3902: "Assembly.GetExecutingAssembly" should not be called
+dotnet_diagnostic.S3902.severity = warning
+
+# S3903: Types should be defined in named namespaces
+dotnet_diagnostic.S3903.severity = warning
+
+# S3904: Assemblies should have version information
+dotnet_diagnostic.S3904.severity = warning
+
+# S3906: Event Handlers should have the correct signature
+dotnet_diagnostic.S3906.severity = warning
+
+# S3908: Generic event handlers should be used
+dotnet_diagnostic.S3908.severity = warning
+
+# S3909: Collections should implement the generic interface
+dotnet_diagnostic.S3909.severity = warning
+
+# S3923: All branches in a conditional structure should not have exactly the same implementation
+dotnet_diagnostic.S3923.severity = warning
+
+# S3925: "ISerializable" should be implemented correctly
+dotnet_diagnostic.S3925.severity = warning
+
+# S3926: Deserialization methods should be provided for "OptionalField" members
+dotnet_diagnostic.S3926.severity = warning
+
+# S3927: Serialization event handlers should be implemented correctly
+dotnet_diagnostic.S3927.severity = warning
+
+# S3928: Parameter names used into ArgumentException constructors should match an existing one 
+dotnet_diagnostic.S3928.severity = warning
+
+# S3937: Number patterns should be regular
+dotnet_diagnostic.S3937.severity = warning
+
+# S3949: Calculations should not overflow
+dotnet_diagnostic.S3949.severity = warning
+
+# S3956: "Generic.List" instances should not be part of public APIs (Breaking)
+dotnet_diagnostic.S3956.severity = none
+
+# S3962: "static readonly" constants should be "const" instead
+dotnet_diagnostic.S3962.severity = warning
+
+# S3963: "static" fields should be initialized inline
+dotnet_diagnostic.S3963.severity = none
+
+# S3966: Objects should not be disposed more than once
+dotnet_diagnostic.S3966.severity = warning
+
+# S3967: Multidimensional arrays should not be used
+dotnet_diagnostic.S3967.severity = suggestion
+
+# S3971: "GC.SuppressFinalize" should not be called
+dotnet_diagnostic.S3971.severity = warning
+
+# S3972: Conditionals should start on new lines
+dotnet_diagnostic.S3972.severity = warning
+
+# S3973: A conditionally executed single line should be denoted by indentation
+dotnet_diagnostic.S3973.severity = warning
+
+# S3981: Collection sizes and array length comparisons should make sense
+dotnet_diagnostic.S3981.severity = warning
+
+# S3984: Exceptions should not be created without being thrown
+dotnet_diagnostic.S3984.severity = warning
+
+# S3990: Assemblies should be marked as CLS compliant
+dotnet_diagnostic.S3990.severity = warning
+
+# S3992: Assemblies should explicitly specify COM visibility
+dotnet_diagnostic.S3992.severity = warning
+
+# S3993: Custom attributes should be marked with "System.AttributeUsageAttribute"
+dotnet_diagnostic.S3993.severity = warning
+
+# S3994: URI Parameters should not be strings
+dotnet_diagnostic.S3994.severity = warning
+
+# S3995: URI return values should not be strings
+dotnet_diagnostic.S3995.severity = warning
+
+# S3996: URI properties should not be strings
+dotnet_diagnostic.S3996.severity = warning
+
+# S3997: String URI overloads should call "System.Uri" overloads
+dotnet_diagnostic.S3997.severity = warning
+
+# S3998: Threads should not lock on objects with weak identity
+dotnet_diagnostic.S3998.severity = warning
+
+# S4000: Pointers to unmanaged memory should not be visible
+dotnet_diagnostic.S4000.severity = warning
+
+# S4002: Disposable types should declare finalizers
+dotnet_diagnostic.S4002.severity = warning
+
+# S4004: Collection properties should be readonly
+dotnet_diagnostic.S4004.severity = none
+
+# S4005: "System.Uri" arguments should be used instead of strings
+dotnet_diagnostic.S4005.severity = warning
+
+# S4015: Inherited member visibility should not be decreased
+dotnet_diagnostic.S4015.severity = warning
+
+# S4016: Enumeration members should not be named "Reserved"
+dotnet_diagnostic.S4016.severity = warning
+
+# S4017: Method signatures should not contain nested generic types
+dotnet_diagnostic.S4017.severity = suggestion
+
+# S4018: Generic methods should provide type parameters
+dotnet_diagnostic.S4018.severity = warning
+
+# S4019: Base class methods should not be hidden
+dotnet_diagnostic.S4019.severity = warning
+
+# S4022: Enumerations should have "Int32" storage
+dotnet_diagnostic.S4022.severity = warning
+
+# S4023: Interfaces should not be empty
+dotnet_diagnostic.S4023.severity = suggestion
+
+# S4025: Child class fields should not differ from parent class fields only by capitalization
+dotnet_diagnostic.S4025.severity = warning
+
+# S4026: Assemblies should be marked with "NeutralResourcesLanguageAttribute"
+dotnet_diagnostic.S4026.severity = warning
+
+# S4027: Exceptions should provide standard constructors
+dotnet_diagnostic.S4027.severity = warning
+
+# S4035: Classes implementing "IEquatable<T>" should be sealed
+dotnet_diagnostic.S4035.severity = warning
+
+# S4036: Searching OS commands in PATH is security-sensitive
+dotnet_diagnostic.S4036.severity = warning
+
+# S4039: Interface methods should be callable by derived types
+dotnet_diagnostic.S4039.severity = warning
+
+# S4040: Strings should be normalized to uppercase
+dotnet_diagnostic.S4040.severity = warning
+
+# S4041: Type names should not match namespaces
+dotnet_diagnostic.S4041.severity = warning
+
+# S4047: Generics should be used when appropriate
+dotnet_diagnostic.S4047.severity = warning
+
+# S4049: Properties should be preferred
+dotnet_diagnostic.S4049.severity = suggestion
+
+# S4050: Operators should be overloaded consistently
+dotnet_diagnostic.S4050.severity = warning
+
+# S4052: Types should not extend outdated base types
+dotnet_diagnostic.S4052.severity = warning
+
+# S4055: Literals should not be passed as localized parameters
+dotnet_diagnostic.S4055.severity = none
+
+# S4056: Overloads with a "CultureInfo" or an "IFormatProvider" parameter should be used
+dotnet_diagnostic.S4056.severity = none
+
+# S4057: Locales should be set for data types
+dotnet_diagnostic.S4057.severity = warning
+
+# S4058: Overloads with a "StringComparison" parameter should be used
+dotnet_diagnostic.S4058.severity = none
+
+# S4059: Property names should not match get methods
+dotnet_diagnostic.S4059.severity = warning
+
+# S4060: Non-abstract attributes should be sealed
+dotnet_diagnostic.S4060.severity = suggestion
+
+# S4061: "params" should be used instead of "varargs"
+dotnet_diagnostic.S4061.severity = warning
+
+# S4069: Operator overloads should have named alternatives
+dotnet_diagnostic.S4069.severity = warning
+
+# S4070: Non-flags enums should not be marked with "FlagsAttribute"
+dotnet_diagnostic.S4070.severity = warning
+
+# S4136: Method overloads should be grouped together
+dotnet_diagnostic.S4136.severity = warning
+
+# S4143: Collection elements should not be replaced unconditionally
+dotnet_diagnostic.S4143.severity = warning
+
+# S4144: Methods should not have identical implementations
+dotnet_diagnostic.S4144.severity = warning
+
+# S4158: Empty collections should not be accessed or iterated
+dotnet_diagnostic.S4158.severity = warning
+
+# S4159: Classes should implement their "ExportAttribute" interfaces
+dotnet_diagnostic.S4159.severity = warning
+
+# S4200: Native methods should be wrapped
+dotnet_diagnostic.S4200.severity = warning
+
+# S4201: Null checks should not be used with "is"
+dotnet_diagnostic.S4201.severity = warning
+
+# S4210: Windows Forms entry points should be marked with STAThread
+dotnet_diagnostic.S4210.severity = warning
+
+# S4211: Members should not have conflicting transparency annotations
+dotnet_diagnostic.S4211.severity = warning
+
+# S4212: Serialization constructors should be secured
+dotnet_diagnostic.S4212.severity = warning
+
+# S4214: "P/Invoke" methods should not be visible
+dotnet_diagnostic.S4214.severity = warning
+
+# S4220: Events should have proper arguments
+dotnet_diagnostic.S4220.severity = warning
+
+# S4225: Extension methods should not extend "object"
+dotnet_diagnostic.S4225.severity = warning
+
+# S4226: Extensions should be in separate namespaces
+dotnet_diagnostic.S4226.severity = warning
+
+# S4260: "ConstructorArgument" parameters should exist in constructors
+dotnet_diagnostic.S4260.severity = warning
+
+# S4261: Methods should be named according to their synchronicities
+dotnet_diagnostic.S4261.severity = warning
+
+# S4275: Getters and setters should access the expected fields
+dotnet_diagnostic.S4275.severity = warning
+
+# S4277: "Shared" parts should not be created with "new"
+dotnet_diagnostic.S4277.severity = warning
+
+# S4423: Weak SSL/TLS protocols should not be used
+dotnet_diagnostic.S4423.severity = warning
+
+# S4426: Cryptographic keys should be robust
+dotnet_diagnostic.S4426.severity = warning
+
+# S4428: "PartCreationPolicyAttribute" should be used with "ExportAttribute"
+dotnet_diagnostic.S4428.severity = warning
+
+# S4433: LDAP connections should be authenticated
+dotnet_diagnostic.S4433.severity = warning
+
+# S4456: Parameter validation in yielding methods should be wrapped
+dotnet_diagnostic.S4456.severity = warning
+
+# S4457: Parameter validation in "async"/"await" methods should be wrapped
+dotnet_diagnostic.S4457.severity = warning
+
+# S4462: Calls to "async" methods should not be blocking
+dotnet_diagnostic.S4462.severity = warning
+
+# S4487: Unread "private" fields should be removed
+dotnet_diagnostic.S4487.severity = warning
+
+# S4502: Disabling CSRF protections is security-sensitive
+dotnet_diagnostic.S4502.severity = warning
+
+# S4507: Delivering code in production with debug features activated is security-sensitive
+dotnet_diagnostic.S4507.severity = warning
+
+# S4524: "default" clauses should be first or last
+dotnet_diagnostic.S4524.severity = warning
+
+# S4564: ASP.NET HTTP request validation feature should not be disabled
+dotnet_diagnostic.S4564.severity = warning
+
+# S4581: "new Guid()" should not be used
+dotnet_diagnostic.S4581.severity = warning
+
+# S4583: Calls to delegate's method "BeginInvoke" should be paired with calls to "EndInvoke"
+dotnet_diagnostic.S4583.severity = warning
+
+# S4586: Non-async "Task/Task<T>" methods should not return null
+dotnet_diagnostic.S4586.severity = warning
+
+# S4635: String offset-based methods should be preferred for finding substrings from offsets
+dotnet_diagnostic.S4635.severity = warning
+
+# S4784: Using regular expressions is security-sensitive
+dotnet_diagnostic.S4784.severity = warning
+
+# S4787: Encrypting data is security-sensitive
+dotnet_diagnostic.S4787.severity = warning
+
+# S4790: Using weak hashing algorithms is security-sensitive
+dotnet_diagnostic.S4790.severity = warning
+
+# S4792: Configuring loggers is security-sensitive
+dotnet_diagnostic.S4792.severity = warning
+
+# S4818: Using Sockets is security-sensitive
+dotnet_diagnostic.S4818.severity = warning
+
+# S4823: Using command line arguments is security-sensitive
+dotnet_diagnostic.S4823.severity = warning
+
+# S4829: Reading the Standard Input is security-sensitive
+dotnet_diagnostic.S4829.severity = warning
+
+# S4830: Server certificates should be verified during SSL/TLS connections
+dotnet_diagnostic.S4830.severity = none
+
+# S4834: Controlling permissions is security-sensitive
+dotnet_diagnostic.S4834.severity = warning
+
+# S5034: "ValueTask" should be consumed correctly
+dotnet_diagnostic.S5034.severity = warning
+
+# S5042: Expanding archive files is security-sensitive
+dotnet_diagnostic.S5042.severity = warning
+
+# S5122: Having a permissive Cross-Origin Resource Sharing policy is security-sensitive
+dotnet_diagnostic.S5122.severity = warning
+
+# S5332: Using clear-text protocols is security-sensitive
+dotnet_diagnostic.S5332.severity = warning
+
+# S5443: Using publicly writable directories is security-sensitive
+dotnet_diagnostic.S5443.severity = warning
+
+# S5445: Insecure temporary file creation methods should not be used
+dotnet_diagnostic.S5445.severity = warning
+
+# S5542: Encryption algorithms should be used with secure mode and padding scheme
+dotnet_diagnostic.S5542.severity = warning
+
+# S5547: Cipher algorithms should be robust
+dotnet_diagnostic.S5547.severity = warning
+
+# S5659: JWT should be signed and verified with strong cipher algorithms
+dotnet_diagnostic.S5659.severity = warning
+
+# S5693: Allowing requests with excessive content length is security-sensitive
+dotnet_diagnostic.S5693.severity = warning
+
+# S5753: Disabling ASP.NET "Request Validation" feature is security-sensitive
+dotnet_diagnostic.S5753.severity = warning
+
+# S5766: Deserializing objects without performing data validation is security-sensitive
+dotnet_diagnostic.S5766.severity = warning
+
+# S5773: Types allowed to be deserialized should be restricted
+dotnet_diagnostic.S5773.severity = warning
+
+# S6354: Use a testable date/time provider.
+dotnet_diagnostic.S6354.severity = suggestion
+
+# S6419: Azure Functions should be stateless
+dotnet_diagnostic.S6419.severity = warning
+
+# S6420: Client instances should not be recreated on each Azure Function invocation
+dotnet_diagnostic.S6420.severity = warning
+
+# S6421: Azure Functions should use Structured Error Handling
+dotnet_diagnostic.S6421.severity = warning
+
+# S6422: Calls to "async" methods should not be blocking in Azure Functions
+dotnet_diagnostic.S6422.severity = warning
+
+# S6423: Azure Functions should log all failures
+dotnet_diagnostic.S6423.severity = warning
+
+# S6424: Interfaces for durable entities should satisfy the restrictions
+dotnet_diagnostic.S6424.severity = warning
+
+# S818: Literal suffixes should be upper case
+dotnet_diagnostic.S818.severity = warning
+
+# S881: Increment (++) and decrement (--) operators should not be used in a method call or mixed with other operators in an expression
+dotnet_diagnostic.S881.severity = warning
+
+# S907: "goto" statement should not be used
+dotnet_diagnostic.S907.severity = warning
+
+# S927: parameter names should match base declaration and other partial definitions
+dotnet_diagnostic.S927.severity = warning
+
+# S9999-cpd: Copy-paste token calculator (NotConfigurable)
+#dotnet_diagnostic.S9999-cpd.severity = warning
+
+# S9999-log: Log generator (NotConfigurable)
+#dotnet_diagnostic.S9999-log.severity = warning
+
+# S9999-metadata: File metadata generator (NotConfigurable)
+#dotnet_diagnostic.S9999-metadata.severity = warning
+
+# S9999-metrics: Metrics calculator (NotConfigurable)
+#dotnet_diagnostic.S9999-metrics.severity = warning
+
+# S9999-symbolRef: Symbol reference calculator (NotConfigurable)
+#dotnet_diagnostic.S9999-symbolRef.severity = warning
+
+# S9999-token-type: Token type calculator (NotConfigurable)
+#dotnet_diagnostic.S9999-token-type.severity = warning
+
+
+dotnet_diagnostic.S6610.severity = none
+
+# "Equals" and "GetHashCode" should be overridden when implementing "IComparable"
+dotnet_diagnostic.S1210.severity = none 

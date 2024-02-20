@@ -1,4 +1,4 @@
-// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 #nullable disable
 namespace OData2Poco;
@@ -23,13 +23,20 @@ public sealed class PropertyTemplate : IEquatable<PropertyTemplate>
 
     #region IEquatable and Comparer
 
-    public override bool Equals(object obj) => Equals(obj as PropertyTemplate);
+    public override bool Equals(object obj)
+    {
+        return Equals(obj as PropertyTemplate);
+    }
 
-    public bool Equals(PropertyTemplate other) => other is not null && PropName == other.PropName;
+    public bool Equals(PropertyTemplate other)
+    {
+        return other is not null && PropName == other.PropName;
+    }
 
-    public override int GetHashCode() => $"{Serial}+{ClassNameSpace}".GetHashCode();
+    public override int GetHashCode()
+    {
+        return $"{Serial}+{ClassNameSpace}".GetHashCode();
+    }
 
     #endregion
 }
-
-#nullable restore

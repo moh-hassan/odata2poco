@@ -1,18 +1,17 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+namespace OData2Poco.Fake.Common;
+
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
 
 public sealed class OdataService : IDisposable
 {
-    private static readonly Lazy<OdataService> lazy = new(() => new OdataService());
-    internal static OdataService Instance => lazy.Value;
+    private static readonly Lazy<OdataService> s_lazy = new(() => new OdataService());
     private readonly WireMockServer _mockServer;
-    internal static bool IsStarted => Instance._mockServer.IsStarted;
-    public static string Trippin => $"{Instance._mockServer.Urls[0]}/trippin";
-    public static string Northwind => $"{Instance._mockServer.Urls[0]}/northwind";
-    private bool disposedValue;
+    private bool _disposedValue;
+
     private OdataService()
     {
         _mockServer = WireMockServer.Start();
@@ -29,23 +28,31 @@ public sealed class OdataService : IDisposable
                 .WithStatusCode(200)
                 .WithBodyFromFile(TestSample.NorthWindV4));
     }
+
+    public static string Trippin => $"{Instance._mockServer.Urls[0]}/trippin";
+
+    public static string Northwind => $"{Instance._mockServer.Urls[0]}/northwind";
+
+    internal static OdataService Instance => s_lazy.Value;
+
+    internal static bool IsStarted => Instance._mockServer.IsStarted;
+
+    public void Dispose()
+    {
+        Dispose(true);
+    }
+
     private void Dispose(bool disposing)
     {
-        if (!disposedValue)
+        if (!_disposedValue)
         {
             if (disposing)
             {
                 _mockServer.Stop();
                 _mockServer.Dispose();
             }
-            disposedValue = true;
+
+            _disposedValue = true;
         }
     }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
 }
-

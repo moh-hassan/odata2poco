@@ -4,7 +4,7 @@ namespace OData2Poco;
 
 public static partial class ReserveWords
 {
-    private static readonly List<string> VbReserveWords =
+    private static readonly List<string> s_vbReserveWords =
     [
         "AddHandler",
         "AddressOf",

@@ -1,13 +1,14 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+namespace OData2Poco.Http;
+
 using System.Net;
 using System.Net.Http.Headers;
-
-namespace OData2Poco.Http;
 
 internal class Authenticator
 {
     private readonly CustomHttpClient _customClient;
+
     public Authenticator(CustomHttpClient customClient)
     {
         _customClient = customClient;
@@ -16,11 +17,15 @@ internal class Authenticator
     public async Task Authenticate()
     {
         var ocs = _customClient.OdataConnection;
-        if (ocs.Authenticate == AuthenticationType.None) return;
-        var client = _customClient.Client;
-        var handler = _customClient.HttpHandler;
+        if (ocs.Authenticate == AuthenticationType.None)
+        {
+            return;
+        }
+
+        var client = _customClient._client;
+        var handler = _customClient._httpHandler;
         CredentialCache credentials = [];
-        NetworkCredential nc = ocs.Password.GetCredential(ocs.UserName, ocs.Domain);
+        var nc = ocs.Password.GetCredential(ocs.UserName, ocs.Domain);
         switch (ocs.Authenticate)
         {
             case AuthenticationType.Basic:
@@ -36,11 +41,16 @@ internal class Authenticator
             case AuthenticationType.Oauth2:
                 if (!string.IsNullOrEmpty(ocs.TokenUrl))
                 {
-                    var accessToken = await new TokenEndpoint(ocs).GetAccessTokenAsync();
-                    if (string.IsNullOrEmpty(accessToken)) return;
-                    var headerValue = new AuthenticationHeaderValue("Bearer", accessToken);
+                    var accessToken = await new TokenEndpoint(ocs).GetAccessTokenAsync().ConfigureAwait(false);
+                    if (string.IsNullOrEmpty(accessToken))
+                    {
+                        return;
+                    }
+
+                    AuthenticationHeaderValue headerValue = new("Bearer", accessToken);
                     client.DefaultRequestHeaders.Authorization = headerValue;
                 }
+
                 break;
 
             case AuthenticationType.Ntlm:
@@ -52,7 +62,6 @@ internal class Authenticator
                 credentials.Add(new Uri(ocs.ServiceUrl), "Digest", nc);
                 handler.Credentials = credentials;
                 break;
-
         }
     }
 }

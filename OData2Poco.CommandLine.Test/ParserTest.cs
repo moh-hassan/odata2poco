@@ -5,71 +5,53 @@ namespace OData2Poco.CommandLine.Test;
 [Category("parser")]
 public class ParserTest : BaseTest
 {
-    private static readonly string Url = TestSample.NorthWindV4;
+    private static readonly string s_url = TestSample.NorthWindV4;
 
-    private ArgumentParser ArgumentParser { get; }
+    private ArgumentParser ArgumentParser { get; } = new();
 
-    public ParserTest()
-    {
-        ArgumentParser = new ArgumentParser();
-    }
     [OneTimeSetUp]
     public void SetupOneTime()
     {
         Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
     }
 
-    private async Task<Tuple<int, string>> RunCommand(string[] args)
-    {
-        ArgumentParser.ClearLogger();
-        ArgumentParser.SetLoggerSilent();
-        var exitCode = await ArgumentParser.RunOptionsAsync(args);
-        var help = ArgumentParser.Help;
-        return new Tuple<int, string>(exitCode, help);
-    }
     [Test]
     public async Task Arg_contains_version_Test()
     {
         //Arrange
-        var args = new[] { "--version" };
+        string[] args = ["--version"];
         //Act
-        var result = await RunCommand(args);
-        //Assert       
-        Assert.That(result.Item2.Split('\n'), Has.Length.EqualTo(2)); //commandlinee v2.8 add newline
-
+        var (_, output) = await RunCommand(args).ConfigureAwait(false);
+        //Assert
+        Assert.That(output.Split('\n'), Has.Length.EqualTo(2)); //commandlinee v2.8 add newline
     }
 
     [Test]
     public async Task Arg_contains_help_Test()
     {
         //Arrange
-        var args = new[] { "--help" };
+        string[] args = ["--help"];
         //Act
-        var result = await RunCommand(args);
-        var help = result.Item2;
+        var (_, help) = await RunCommand(args).ConfigureAwait(false);
         //Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.Item2.Split('\n'), Has.Length.GreaterThan(1));
+            Assert.That(help.Split('\n'), Has.Length.GreaterThan(1));
             Assert.That(help, Does.Contain("-r, --url"));
         });
-
     }
 
     [Test]
     public async Task Arg_contains_repeated_options_Test()
     {
-        var args = $"-r {Url} -v -v".SplitArgs();
-        var result = await RunCommand(args);
-        var help = result.Item2;
-        var retCode = result.Item1;
+        var args = $"-r {s_url} -v -v".SplitArgs();
+        var (retCode, help) = await RunCommand(args).ConfigureAwait(false);
         Assert.Multiple(() =>
         {
             Assert.That(retCode, Is.EqualTo(1));
             Assert.That(help, Does.Contain("ERROR(S)"));
             Assert.That(help, Does.Contain("Option 'v, verbose' is defined multiple times"));
         });
-
     }
 
     [Test]
@@ -78,36 +60,40 @@ public class ParserTest : BaseTest
     public async Task Arg_contains_url_without_option_Test(string arg)
     {
         var args = arg.SplitArgs();
-        var result = await RunCommand(args);
-        var help = result.Item2;
-        var retCode = result.Item1;
+        var (retCode, output) = await RunCommand(args).ConfigureAwait(false);
         Assert.Multiple(() =>
         {
             Assert.That(retCode, Is.EqualTo(1));
-            Assert.That(help, Does.Contain("ERROR(S)"));
-            Assert.That(help, Does.Contain("Required option 'r, url' is missing."));
+            Assert.That(output, Does.Contain("ERROR(S)"));
+            Assert.That(output, Does.Contain("Required option 'r, url' is missing."));
         });
-
     }
 
     [Test]
     [TestCase("")]
     [TestCase("-v")]
-    //any option exept -r 
+    //any option exept -r
     public async Task Arg_is_empty_Test(string options)
     {
-        var args = options.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-        var result = await RunCommand(args);
-        var help = result.Item2;
-        var retCode = result.Item1;
+        char[] separator = [' '];
+        var args = options.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+        var (retCode, output) = await RunCommand(args).ConfigureAwait(false);
         Assert.Multiple(() =>
         {
             Assert.That(retCode, Is.EqualTo(1));
-            Assert.That(help.Split('\n'), Has.Length.GreaterThan(1));
-            Assert.That(help, Does.Contain("-r, --url"));
-            Assert.That(help, Does.Contain("ERROR(S)"));
-            Assert.That(help, Does.Contain("Required option 'r, url' is missing"));
+            Assert.That(output.Split('\n'), Has.Length.GreaterThan(1));
+            Assert.That(output, Does.Contain("-r, --url"));
+            Assert.That(output, Does.Contain("ERROR(S)"));
+            Assert.That(output, Does.Contain("Required option 'r, url' is missing"));
         });
     }
 
+    private async Task<Tuple<int, string>> RunCommand(string[] args)
+    {
+        ArgumentParser.ClearLogger();
+        ArgumentParser.SetLoggerSilent();
+        var exitCode = await ArgumentParser.RunOptionsAsync(args).ConfigureAwait(false);
+        var help = ArgumentParser.Help;
+        return new Tuple<int, string>(exitCode, help);
+    }
 }

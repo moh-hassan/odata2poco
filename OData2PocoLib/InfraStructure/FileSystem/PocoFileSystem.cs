@@ -1,15 +1,19 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text;
-using OData2Poco.InfraStructure.Logging;
-
 namespace OData2Poco.InfraStructure.FileSystem;
+
+using System.Text;
+using Extensions;
+using Logging;
 
 public class PocoFileSystem : IPocoFileSystem
 {
-    private static readonly ILog Logger = PocoLogger.Default;
+    private static readonly ILog s_logger = PocoLogger.Default;
+
     public void SaveToFile(string filePath, Func<Stream> getStream)
     {
+        _ = filePath ?? throw new ArgumentNullException(nameof(filePath));
+        _ = getStream ?? throw new ArgumentNullException(nameof(getStream));
         using var incomingStream = getStream();
         using Stream fileStream = File.Open(filePath, FileMode.CreateNew, FileAccess.Write);
         incomingStream.CopyTo(fileStream);
@@ -21,12 +25,12 @@ public class PocoFileSystem : IPocoFileSystem
         try
         {
             SaveToFile(filePath, content, Encoding.UTF8);
-            Logger.Info($"Success saving to {filePath}");
+            s_logger.Info($"Success saving to {filePath}");
         }
         catch (Exception e)
         {
-            Logger.Error($"Fail to save file: {filePath}");
-            Logger.Error(e.Message);
+            s_logger.Error($"Fail to save file: {filePath}");
+            s_logger.Error(e.Message);
         }
     }
 
@@ -36,7 +40,7 @@ public class PocoFileSystem : IPocoFileSystem
         //create directory if not exist
         new FileInfo(path).Directory?.Create();
         using var fileStream = File.Open(path, FileMode.Create, FileAccess.Write);
-        using var streamWriter = new StreamWriter(fileStream, encoding);
+        using StreamWriter streamWriter = new(fileStream, encoding);
         streamWriter.Write(content);
         streamWriter.Flush();
         streamWriter.Close();
@@ -48,17 +52,21 @@ public class PocoFileSystem : IPocoFileSystem
         if (File.Exists(folderPath))
         {
             var msg = $"Cannot create folder '{folderPath}' because a file with the same name already exists.";
-            Logger.Error(msg);
+            s_logger.Error(msg);
             return;
         }
 
         if (!Directory.Exists(folderPath))
-            Directory.CreateDirectory(folderPath);
-        foreach (var entry in content)
         {
-            var fname = Path.Combine(folderPath, $"{entry.Key}.ts");
-            var code = entry.Value;
-            SaveToFile(fname, code);
+            Directory.CreateDirectory(folderPath);
+        }
+
+        if (content == null) return;
+
+        foreach (var (key, code) in content)
+        {
+            var fileName = Path.Combine(folderPath, $"{key}.ts");
+            SaveToFile(fileName, code);
         }
     }
 
@@ -69,9 +77,7 @@ public class PocoFileSystem : IPocoFileSystem
 
     public string ReadAllText(string? filePath)
     {
-        if (!Exists(filePath))
-            return "";
-        return File.ReadAllText(filePath!);
+        return !Exists(filePath) ? string.Empty : File.ReadAllText(filePath!);
     }
 
     public void WriteAllText(string filePath, string content)
@@ -83,6 +89,7 @@ public class PocoFileSystem : IPocoFileSystem
     {
         File.Delete(path);
     }
+
     public void Rename(string fromName, string toName)
     {
         File.Move(fromName, toName);

@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.InfraStructure.FileSystem;
-
 namespace OData2Poco.Tests;
+
+using InfraStructure.FileSystem;
+
 public class OptionConfigurationTest : BaseTest
 {
-    private OptionConfiguration cfg;
     private const string Config = "config.txt";
+
     private const string Content = @"
 # -r mysite.com
 -r localhost
@@ -15,11 +16,13 @@ public class OptionConfigurationTest : BaseTest
    
 ";
 
+    private OptionConfiguration _cfg;
+
     [SetUp]
     public void SetUp()
     {
         _fileSystem = new NullFileSystem();
-        cfg = new OptionConfiguration(_fileSystem);
+        _cfg = new OptionConfiguration(_fileSystem);
         Fakes.Mock(Config, Content);
     }
 
@@ -29,7 +32,7 @@ public class OptionConfigurationTest : BaseTest
         //Arrange
         string[] expected = ["-r", "localhost", "-v"];
         //Act
-        var sut = cfg.ReadConfig(Config);
+        var sut = _cfg.ReadConfig(Config);
         //Assert
         sut.Should().BeEquivalentTo(expected);
     }
@@ -38,12 +41,14 @@ public class OptionConfigurationTest : BaseTest
     public void Load_args_from_existing_configuration_file_test()
     {
         //Arrange
-        var args = new[] { "@config.txt" };
+        var args = new[]
+        {
+            "@config.txt"
+        };
         string[] expected = ["-r", "localhost", "-v"];
         Fakes.Mock("o2pgen.txt", Content);
         //Act
-        var flag = cfg.TryGetConfigurationFile(args, out var cli, out var error,
-            out string fileName);
+        var flag = _cfg.TryGetConfigurationFile(args, out var cli, out var error, out var fileName);
         //Assert
         flag.Should().BeTrue();
         fileName.Should().Be("config.txt");
@@ -55,10 +60,12 @@ public class OptionConfigurationTest : BaseTest
     public void Load_args_from_not_existing_configuration_file_test()
     {
         //Arrange
-        var args = new[] { "@config2.txt" };
+        var args = new[]
+        {
+            "@config2.txt"
+        };
         //Act
-        var flag = cfg.TryGetConfigurationFile(args, out var cli, out var error,
-            out string _);
+        var flag = _cfg.TryGetConfigurationFile(args, out var cli, out var error, out var _);
         //Assert
         flag.Should().BeFalse();
         cli.Should().BeEquivalentTo(args);
@@ -73,8 +80,7 @@ public class OptionConfigurationTest : BaseTest
         var args = Array.Empty<string>();
         Fakes.Mock("o2pgen.txt", Content);
         //Act
-        var flag = cfg.TryGetConfigurationFile(args, out var cli, out var error,
-            out string fileName);
+        var flag = _cfg.TryGetConfigurationFile(args, out var cli, out var error, out var fileName);
         Fakes.Remove("o2pgen.txt");
 
         //Assert
@@ -84,14 +90,16 @@ public class OptionConfigurationTest : BaseTest
         cli.Should().BeEquivalentTo(expected);
     }
 
-
     [Test]
     public void More_args_without_configuration_has_no_default_config_test()
     {
         //Arrange
-        var args = new[] { "-r", "localhost" };
+        var args = new[]
+        {
+            "-r", "localhost"
+        };
         //Act
-        var flag = cfg.TryGetConfigurationFile(args, out var cli, out var error, out string _);
+        var flag = _cfg.TryGetConfigurationFile(args, out var cli, out var error, out var _);
         //Assert
         flag.Should().BeFalse();
         cli.Should().BeEquivalentTo(args);
@@ -105,13 +113,14 @@ public class OptionConfigurationTest : BaseTest
         //Arrange
         var args = Array.Empty<string>();
         //Act
-        var flag = cfg.TryGetConfigurationFile(args, out var cli, out var error, out string _);
+        var flag = _cfg.TryGetConfigurationFile(args, out var cli, out var error, out var _);
 
         //Assert
         flag.Should().BeFalse();
         cli.Should().BeEmpty();
         error.Should().BeNull();
     }
+
     [Test]
     public void ConfigurationFile_with_include()
     {
@@ -139,7 +148,7 @@ public class OptionConfigurationTest : BaseTest
         Fakes.Mock("f2.txt", text2);
         Fakes.Mock("f1.txt", text1);
         //Act
-        var text3 = cfg.LoadWithIncludeFile("f1.txt", out var errors);
+        var text3 = _cfg.LoadWithIncludeFile("f1.txt", out var errors);
         //Assert
         errors.Length.Should().Be(1);
         text3.Trim().Should().BeEquivalentTo(expected.Trim());

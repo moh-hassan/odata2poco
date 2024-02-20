@@ -1,76 +1,55 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using CommandLine;
-using OData2Poco.InfraStructure.Logging;
-
 namespace OData2Poco.CommandLine;
+
+using InfraStructure.Logging;
+
 #nullable disable
 public class ArgumentParser
 {
+    private static readonly ILog s_logger = PocoLogger.Default;
+
     public static bool ShowVersionOrHelp { get; set; }
+
     public static StringWriter HelpWriter { get; private set; }
+
     public static string Help => HelpWriter.ToString();
-    private static readonly ILog Logger = PocoLogger.Default;
-    public static string OutPut => Logger.Output.ToString();
 
-    public void ClearLogger() => Logger.Clear();
+    public static string OutPut => s_logger.Output.ToString();
 
-    public void SetLoggerSilent(bool flag = true) => Logger.Silent = flag;
+    public void ClearLogger() => s_logger.Clear();
+
+    public void SetLoggerSilent(bool flag = true) => s_logger.Silent = flag;
 
     public async Task<int> RunOptionsAsync(string[] args, Func<Options, Task> func)
     {
-        Logger.Clear();
+        s_logger.Clear();
         var result = GetParserResult(args);
 
         var retCode = await result.MapResult(
             async x =>
             {
-                await func.Invoke(x);
+                await func.Invoke(x).ConfigureAwait(false);
                 return 0;
             },
             errs =>
             {
                 var retValue = GetHelp(errs);
                 return Task.FromResult(retValue);
-            });
+            }).ConfigureAwait(false);
 
         return retCode;
     }
 
-    public async Task<int> RunOptionsAsync(string[] args)
+    public Task<int> RunOptionsAsync(string[] args)
     {
-        return await RunOptionsAsync(args, RunCommandAsync);
-    }
-
-    private async Task RunCommandAsync(Options options) =>
-        await new CsCommand(options, StartUp.FileSystem).Execute().ConfigureAwait(false);
-
-    private int GetHelp(IEnumerable<Error> errors)
-    {
-        if (errors == null)
-            return 0;
-        ShowVersionOrHelp = true;
-        var enumerable = errors.ToList();
-        if (enumerable.Any(e => e.Tag == ErrorType.VersionRequestedError))
-        {
-            Logger.Info(HelpWriter.ToString());
-            return 0;
-        }
-
-        if (enumerable.Any(e => e.Tag == ErrorType.HelpRequestedError))
-        {
-            Logger.Normal(HelpWriter.ToString().RemoveEmptyLines());
-            return 0;
-        }
-
-        Logger.Normal(HelpWriter.ToString().RemoveEmptyLines());
-        return (int)ExitCodes.ArgumentsInvalid;
+        return RunOptionsAsync(args, RunCommandAsync);
     }
 
     internal ParserResult<Options> GetParserResult(string[] args)
     {
         HelpWriter = new StringWriter();
-        var parser = new Parser(config =>
+        using var parser = new Parser(config =>
         {
             config.HelpWriter = HelpWriter;
             config.CaseSensitive = true;
@@ -82,5 +61,32 @@ public class ArgumentParser
         var result = parser.ParseArguments<Options>(args);
         return result;
     }
+
+    private Task RunCommandAsync(Options options)
+    {
+        var command = new CsCommand(options, StartUp.FileSystem);
+        return command.Execute();
+    }
+
+    private int GetHelp(IEnumerable<Error> errors)
+    {
+        if (errors == null)
+            return 0;
+        ShowVersionOrHelp = true;
+        var enumerable = errors.ToList();
+        if (enumerable.Exists(e => e.Tag == ErrorType.VersionRequestedError))
+        {
+            s_logger.Info(HelpWriter.ToString());
+            return 0;
+        }
+
+        if (enumerable.Exists(e => e.Tag == ErrorType.HelpRequestedError))
+        {
+            s_logger.Normal(HelpWriter.ToString().RemoveEmptyLines());
+            return 0;
+        }
+
+        s_logger.Normal(HelpWriter.ToString().RemoveEmptyLines());
+        return (int)ExitCodes.ArgumentsInvalid;
+    }
 }
-#nullable restore

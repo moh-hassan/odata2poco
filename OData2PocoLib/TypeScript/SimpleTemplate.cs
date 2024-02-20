@@ -1,25 +1,13 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text;
-
 namespace OData2Poco.TypeScript;
 
-internal abstract class SimpleTemplate<T> where T : SimpleTemplate<T>
+using System.Text;
+
+internal abstract class SimpleTemplate<T>
+    where T : SimpleTemplate<T>
 {
-    private readonly StringBuilder _sb;
-
-    protected SimpleTemplate()
-    {
-        _sb = new StringBuilder();
-    }
-
-    protected abstract void Build();
-
-    protected string Generate()
-    {
-        Build();
-        return _sb.ToString();
-    }
+    private readonly StringBuilder _sb = new();
 
     public T AddText(string text)
     {
@@ -41,5 +29,13 @@ internal abstract class SimpleTemplate<T> where T : SimpleTemplate<T>
     public T Colon()
     {
         return AddText(": ");
+    }
+
+    protected abstract void Build();
+
+    protected string Generate()
+    {
+        Build();
+        return _sb.ToString();
     }
 }

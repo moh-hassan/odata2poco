@@ -1,15 +1,48 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Net;
-using CommandLine;
-using CommandLine.Text;
-using OData2Poco.Http;
-
+#pragma warning disable SA1117
 namespace OData2Poco.CommandLine;
+
+using System.Net;
+using global::CommandLine.Text;
+using Http;
+using Security;
+
 #nullable disable
 // Options of commandline
 public partial class Options
 {
+    //set default
+
+#if NETCOREAPP
+    [Usage(ApplicationAlias = "dotnet-o2pgen")]
+#else
+    [Usage(ApplicationAlias = "o2pgen")]
+#endif
+    public static IEnumerable<Example> Examples
+    {
+        get
+        {
+            yield return new Example("Default setting",
+                new Options
+                {
+                    ServiceUrl = "http://services.odata.org/V4/OData/OData.svc"
+                });
+            yield return new Example("Add json, key Attributes with camel case and nullable types",
+                new Options
+                {
+                    ServiceUrl = "http://services.odata.org/V4/OData/OData.svc",
+                    Attributes =
+                    [
+                        "json",
+                        "key"
+                    ],
+                    NameCase = CaseEnum.Camel,
+                    AddNullableDataType = true
+                });
+        }
+    }
+
     //-----------OdataConnectionString-------------------
 
     [Option('r', "url", Required = true, HelpText = "URL of OData feed.")]
@@ -19,11 +52,14 @@ public partial class Options
     public string UserName { get; set; }
 
     [Option('p', "password", HelpText = "password or/token Or access_token /Or client_secret in oauth2.")]
-    public SecurityContainer Password { get; set; }
+    public SecurityContainer Password { get; set; } = SecurityContainer.Empty;
+
     [Option("domain", HelpText = "Domain in Active Directory.")]
     public string Domain { get; set; }
+
     [Option("proxy", HelpText = "Http Proxy in the form: 'server:port'.")]
     public string Proxy { get; set; }
+
     [Option('U', "proxy-user", HelpText = "Proxy credentials in the form: 'user:password'.")]
     public string ProxyUser { get; set; }
 
@@ -34,22 +70,29 @@ public partial class Options
         "OAuth2 Token Parameters with key=value separated by Ampersand '&' formated as: 'client_id=xxx&client_secret=xxx&...', no space allowed.")]
     public string TokenParams { get; set; }
 
-    [Option("param-file", Hidden = true, HelpText = "Path to parameter file (json or text format. Postman Environment is supported)")]
+    [Option("param-file", Hidden = true,
+        HelpText = "Path to parameter file (json or text format. Postman Environment is supported)")]
     public string ParamFile { get; set; } //v3.1
 
-    [Option('o', "auth", Default = AuthenticationType.None, HelpText = "Authentication type, allowed values: none, basic, token, oauth2.")]
-    public AuthenticationType Authenticate { get; set; }
-    [Option('H', "http-header", Separator = ';', HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1:value1;ky2:value2.")]
-    public IEnumerable<string> HttpHeader { get; set; }
+    [Option('o', "auth", Default = AuthenticationType.None,
+        HelpText = "Authentication type, allowed values: none, basic, token, oauth2.")]
+    public AuthenticationType Authenticate { get; set; } = AuthenticationType.None;
 
+    [Option('H', "http-header", Separator = ';',
+        HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1:value1;ky2:value2.")]
+    public IEnumerable<string> HttpHeader { get; set; } = [];
 
     /// <summary>
     /// Skip Certification Check. This switch is only intended to be used for hosts using a self-signed certificate for testing purposes. This is not recommended in production environment
     /// </summary>
-    [Option('S', "skip-check", HelpText = "Skips certificate validation checks that include all validations such as trusted root authority, expiration, ... .")]
+    [Option('S', "skip-check",
+        HelpText =
+            "Skips certificate validation checks that include all validations such as trusted root authority, expiration, ... .")]
     public bool SkipCertificationCheck { get; set; }
 
-    [Option("ssl", HelpText = "Sets the SSL/TSL protocols. Allowed values: tls, tls11, tls12,tls13. Multiple values separated by comma are allowed,e.g, tls11,tls12.")]
+    [Option("ssl",
+        HelpText =
+            "Sets the SSL/TSL protocols. Allowed values: tls, tls11, tls12,tls13. Multiple values separated by comma are allowed,e.g, tls11,tls12.")]
     public SecurityProtocolType TlsProtocol { get; set; }
 
     //-----------pocoSetting-----------------
@@ -67,7 +110,7 @@ public partial class Options
     public bool AddEager { get; set; }
 
     [Option("lang", Default = Language.CS, HelpText = "Type cs for CSharp, ts for typescript")]
-    public Language Lang { get; set; } //v3
+    public Language Lang { get; set; } = Language.CS; //v3
 
     [Option('i', "inherit", HelpText = "for class inheritance from  BaseClass and/or interfaces")]
     public string Inherit { get; set; }
@@ -77,7 +120,7 @@ public partial class Options
 
     [Option('c', "case", Default = CaseEnum.None,
         HelpText = "Convert Class Property  case. Allowed values are: pas, camel, kebab, snake or none")]
-    public CaseEnum NameCase { get; set; }
+    public CaseEnum NameCase { get; set; } = CaseEnum.None;
 
     /// <summary>
     /// Convert case of Entity Name`
@@ -89,47 +132,56 @@ public partial class Options
     [Option("name-map", HelpText = "A JSON file to map class and property names.")]
     public string NameMapFile { get; set; }
 
-    // NOT AN OPTION! A a place holder because we try to parse the file
+    // NOT AN OPTION! A placeholder because we try to parse the file
     // at the time of option parsing so that if someone is using this
-    // programatically, they can directly setup the rename map how they
+    // programatically, they can directly set up the rename map how they
     // see fit.
     public RenameMap RenameMap { get; set; }
 
     [Option('a', "attribute",
         HelpText = "Attributes that are built-in or user defined by option 'att-defs'.")]
-    public IEnumerable<string> Attributes { get; set; }
+    public IEnumerable<string> Attributes { get; set; } = [];
 
     [Option('g', "gen-project", HelpText = "Generate a class library (.Net Stnadard) project csproj/vbproj.")]
     public bool GenerateProject { get; set; }
 
-    [Option('w', "show-warning", HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
+    [Option('w', "show-warning",
+        HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
     public bool ShowWarning { get; set; }
 
     /// <summary>
-    /// Filter the Entities by FullName, case insensitive. Use comma delemeted list of entity names. Name may include the special characters * and ?. The char *  represents a string of characters and ? match any single char.
+    /// Filter the Entities by FullName, case-insensitive. Use comma delemeted list of entity names. Name may include the special characters * and ?. The char *  represents a string of characters and ? match any single char.
     /// </summary>
     [Option("include",
-        HelpText = "Filter the Entities by FullName, case insensitive. Use space delemeted list of entity names. Name may include the special characters * and ?. The char *  represents a string of characters and ? match any single char.")]
-    public IEnumerable<string> Include { get; set; }
+        HelpText =
+            "Filter the Entities by FullName, case insensitive. Use space delemeted list of entity names. Name may include the special characters * and ?. The char *  represents a string of characters and ? match any single char.")]
+    public IEnumerable<string> Include { get; set; } = [];
 
     //feature #41
     [Option("read-write", HelpText = "All properties are read/write")]
     public bool ReadWrite { get; set; }
+
     /// <summary>
     /// Allow Nulable Reference Type in c#8, feature #43
     /// </summary>
-    [Option('B', "enable-nullable-reference", HelpText = "Enable nullable for all reference types including option -b for primitive  types by adding ? to types")]
+    [Option('B', "enable-nullable-reference",
+        HelpText =
+            "Enable nullable for all reference types including option -b for primitive  types by adding ? to types")]
     public bool EnableNullableReferenceTypes { get; set; }
+
     [Option('I', "init-only", HelpText = "Allow setter of class property to be 'init' instead of 'set' (c# 9 feature)")]
     public bool InitOnly { get; set; }
 
-    [Option('O', "open-api", Hidden = true, HelpText = "Path of file .json /.yml for OpenApi or Swagger Specification version 3.")]
+    [Option('O', "open-api", Hidden = true,
+        HelpText = "Path of file .json /.yml for OpenApi or Swagger Specification version 3.")]
     public string OpenApiFileName { get; set; }
+
     [Option('G', "generator-type", HelpText = "Generator Type. Allowd values: class or interface or record")]
     public GeneratorType GeneratorType { get; set; }
 
     [Option("multi-files", HelpText = "Generate multi files.")]
     public bool MultiFiles { get; set; }
+
     [Option("full-name", HelpText = "Use fullname prfixed by namespace as a name for Poco Class.")]
     public bool UseFullName { get; set; }
 
@@ -148,41 +200,7 @@ public partial class Options
 
     [Option('l', "list", HelpText = "List POCO classes to standard output.")]
     public bool ListPoco { get; set; }
-    public List<string> Errors { get; set; }
 
-    public Options()
-    {
-        Attributes = new List<string>();
-        Errors = [];
-        //set default
-        Authenticate = AuthenticationType.None;
-        NameCase = CaseEnum.None;
-        Lang = Language.CS;
-        Include = new List<string>();
-        Password = SecurityContainer.Empty;
-        HttpHeader = new List<string>();
-    }
-
-#if NETCOREAPP
-    [Usage(ApplicationAlias = "dotnet-o2pgen")]
-#else
-    [Usage(ApplicationAlias = "o2pgen")]
-#endif
-    public static IEnumerable<Example> Examples
-    {
-        get
-        {
-            yield return new Example("Default setting",
-                new Options { ServiceUrl = "http://services.odata.org/V4/OData/OData.svc" });
-            yield return new Example("Add json, key Attributes with camel case and nullable types", new Options
-            {
-                ServiceUrl = "http://services.odata.org/V4/OData/OData.svc",
-                Attributes = new List<string> { "json", "key" },
-                NameCase = CaseEnum.Camel,
-                AddNullableDataType = true
-            });
-        }
-    }
-
+    public List<string> Errors { get; } = [];
 }
 #nullable restore

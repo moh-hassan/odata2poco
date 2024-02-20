@@ -4,7 +4,7 @@
     <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
     <PackageOutputPath>$(SolutionDir)build</PackageOutputPath>
     <Authors>Mohamed Hassan</Authors>
-    <Copyright>Copyright &#169; 2016-2023, Mohamed Hassan &#038; Contributers </Copyright>
+    <Copyright>Copyright &#169; 2016-2024, Mohamed Hassan &#038; Contributers </Copyright>
     <Product>OData2Poco</Product>
     <PackageProjectUrl>https://github.com/moh-hassan/odata2poco</PackageProjectUrl>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
@@ -19,13 +19,12 @@
     <Company>OData2Poco</Company>
     <PackageReleaseNotes>https://github.com/moh-hassan/odata2poco/blob/master/ReleaseNotes.md </PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <NoWarn>$(NoWarn);1570;1572;1573;1587;NU5128;NU1507;S3925</NoWarn>
-    
     <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
     <Version Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)</Version>
     <Version Condition="'$(VersionSuffix)' == ''">0.0.0</Version>
     <PackageTags>code-generation;odata;charp;c#;typescript;ts;dto;poco;AspNetWebApi;WebApi</PackageTags>
-    <ImplicitUsings>enable</ImplicitUsings>   
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>$(NoWarn);SYSLIB1045</NoWarn>
   </PropertyGroup>
   <!-- Enable building .NET Framework projects on any machine with at least MSBuild or the .NET Core SDK installed.-->
   <ItemGroup>
@@ -40,43 +39,69 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="nunit" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="CliWrap" />
-    <PackageReference Include="NUnit.Analyzers" >
+    <PackageReference Include="coverlet.collector" >
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NUnit.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="WireMock.Net" />
   </ItemGroup>
 
-  <ItemGroup>   
-    <PackageReference Include="PolySharp">
+  <ItemGroup>
+    <PackageReference Include="PolySharp" Condition="'$(IsTestProject)' == 'false'">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>   
+    </PackageReference>
   </ItemGroup>
-  
+
   <ItemGroup>
-    <None Include="$(SolutionDir)license.txt" Pack="true" PackagePath=""/>
-    <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\"/>
+    <None Include="$(SolutionDir)license.txt" Pack="true" PackagePath="" />
+    <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\" />
   </ItemGroup>
- 
+
   <!-- disable the nullable warnings when compiling for .NET Standard 2.0 or net4x -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or $(TargetFramework.StartsWith('net4'))">
     <NoWarn>$(NoWarn);nullable</NoWarn>
-  </PropertyGroup>  
+  </PropertyGroup>
 
   <PropertyGroup Label="analysis">
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
-    <SonarQubeExclude>True</SonarQubeExclude>
+    <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+    <AnalysisLevel>latest-all</AnalysisLevel>
+    <AnalysisModeGlobalization>none</AnalysisModeGlobalization>
+    <UseStyleCop>true</UseStyleCop>
+    <UseSonar>false</UseSonar>
+
   </PropertyGroup>
+
+  <ItemGroup  Condition="'$(UseStyleCop)' == 'true'">
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="all" />
+    <GlobalAnalyzerConfigFiles Include="$(MSBuildThisFileDirectory)/StyleCop.Analyzers.globalconfig" />
+  </ItemGroup>
+
+  <ItemGroup  Condition="'$(UseSonar)' == 'true'">
+    <PackageReference Include="SonarAnalyzer.CSharp" >
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <GlobalAnalyzerConfigFiles Include="$(MSBuildThisFileDirectory)/SonarDotnet.Analyzers.globalconfig" />
+  </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>portable</DebugType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)/CodeMetricsConfig.txt" />
+  </ItemGroup>
 </Project>

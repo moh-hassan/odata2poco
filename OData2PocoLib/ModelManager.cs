@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text.RegularExpressions;
-using OData2Poco.Extensions;
-
 namespace OData2Poco;
+
+using System.Text.RegularExpressions;
+using Extensions;
 
 /// <summary>
 ///     handle reserved cs keywords
@@ -16,13 +16,17 @@ internal static class ModelManager
         ModelWarning = [];
     }
 
-    private static Dictionary<string, string> ClassChangedName { get; }
     public static List<string> ModelWarning { get; set; }
+
+    private static Dictionary<string, string> ClassChangedName { get; }
 
     public static void RenameReservedWords(List<ClassTemplate> list)
     {
-        if (!list.Any())
+        if (list.Count == 0)
+        {
             return;
+        }
+
         list.Update(c => c.Name = RenameClass(c.Name));
         list.ForEach(classTemplate => classTemplate.Properties.Update(RenameProperty));
         ModifyPropertiesType(list);
@@ -30,13 +34,16 @@ internal static class ModelManager
 
     public static void AddItem(string key, string value)
     {
-        if (!ClassChangedName.ContainsKey(key))
-            ClassChangedName.Add(key, value);
+        ClassChangedName.TryAdd(key, value);
     }
 
     public static string RenameClass(string className)
     {
-        if (!className.IsCSharpReservedWord()) return className;
+        if (!className.IsCSharpReservedWord())
+        {
+            return className;
+        }
+
         var newClassName = className.ToggleFirstLetter();
         ModelWarning.Add($"The class: '{className}' is a reserved keyword. It's renamed to '{newClassName}'");
         AddItem(className, newClassName);
@@ -46,31 +53,6 @@ internal static class ModelManager
     public static void ModifyPropertiesType(List<ClassTemplate> list)
     {
         list.ForEach(ct => ct.Properties.Update(c => c.PropType = ModifyPropertyType(c)));
-    }
-
-
-    private static string ModifyPropertyType(PropertyTemplate prop)
-    {
-        var type = prop.PropType;
-        const string pattern = @"List<([\w\.]+)>";
-        var m = Regex.Match(type, pattern);
-        string newType;
-        if (m.Success)
-        {
-            var name = m.Groups[1].ToString();
-            if (!ClassChangedName.ContainsKey(name)) return type;
-            newType = $"List<{ClassChangedName[name]}>";
-            ModelWarning.Add(
-                $"Modify the type of the property: '{prop.ClassName}.{prop.PropName}' from  {type} to {newType}");
-            return newType;
-        }
-
-        if (!ClassChangedName.ContainsKey(type)) return type;
-
-        newType = ClassChangedName[type];
-        ModelWarning.Add(
-            $"++ Modify the type of the property: '{prop.ClassName}.{prop.PropName}' from  {type} to {newType}");
-        return newType;
     }
 
     public static PropertyTemplate RenameProperty(PropertyTemplate property)
@@ -89,12 +71,45 @@ internal static class ModelManager
         }
 
         //check if property is reserved keyword
-        if (!property.PropName.IsCSharpReservedWord()) return property;
+        if (!property.PropName.IsCSharpReservedWord())
+        {
+            return property;
+        }
 
         newName = property.PropName.ToggleFirstLetter();
         ModelWarning.Add(
             $"Rename the property {property.ClassName}.{property.PropName} to '{newName}' becauuse its name is a reserved keyword");
         property.PropName = newName;
         return property;
+    }
+
+    private static string ModifyPropertyType(PropertyTemplate prop)
+    {
+        var type = prop.PropType;
+        const string Pattern = @"List<([\w\.]+)>";
+        var m = Regex.Match(type, Pattern);
+        string? newType;
+        if (m.Success)
+        {
+            var name = m.Groups[1].ToString();
+            if (!ClassChangedName.TryGetValue(name, out var value))
+            {
+                return type;
+            }
+
+            newType = $"List<{value}>";
+            ModelWarning.Add(
+                $"Modify the type of the property: '{prop.ClassName}.{prop.PropName}' from  {type} to {newType}");
+            return newType;
+        }
+
+        if (!ClassChangedName.TryGetValue(type, out newType))
+        {
+            return type;
+        }
+
+        ModelWarning.Add(
+            $"Modify the type of the property: '{prop.ClassName}.{prop.PropName}' from  {type} to {newType}");
+        return newType;
     }
 }

@@ -1,10 +1,8 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text;
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedMemberInSuper.Global
-
 namespace OData2Poco.InfraStructure.FileSystem;
+
+using System.Text;
 
 public interface IPocoFileSystem
 {

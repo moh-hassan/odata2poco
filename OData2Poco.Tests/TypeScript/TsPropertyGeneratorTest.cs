@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.TypeScript;
-
 namespace OData2Poco.Tests.TypeScript;
+
+using OData2Poco.TypeScript;
 
 [Category("typescript")]
 public class TsPropertyGeneratorTest : BaseTest
@@ -12,27 +12,25 @@ public class TsPropertyGeneratorTest : BaseTest
     [TestCase("string", "public Property1: string;")]
     [TestCase("int", "public Property1: number;")]
     [TestCase("float", "public Property1: number;")]
-
     public void Property_data_type_test(string type, string expected)
     {
         //Arrange
-
         PropertyTemplate p = new()
         {
             PropName = "Property1",
             PropType = type,
-            IsNullable = true,
+            IsNullable = true
         };
         ClassTemplate ct = new(1)
         {
             Name = "A",
             NameSpace = "N",
-            Properties = [p],
+            Properties = [p]
         };
         PocoSetting setting = new()
         {
             // AddNavigation = true,
-            Lang = Language.TS,
+            Lang = Language.TS
         };
         var builder = new TsClassBuilder(ct, setting);
         //Act
@@ -101,6 +99,7 @@ public class TsPropertyGeneratorTest : BaseTest
         //Assert
         sut.Should().Be(expected);
     }
+
     [Test]
     [TestCase("string", "public Property1?: string;")]
     [TestCase("int", "public Property1?: number;")]
@@ -129,6 +128,7 @@ public class TsPropertyGeneratorTest : BaseTest
         //Assert
         sut.Should().Be(expected);
     }
+
     [Test]
     [TestCase(true, "string", "// public Product: string; //navigator")]
     [TestCase(false, "string", "public Product: string;")]
@@ -161,8 +161,7 @@ public class TsPropertyGeneratorTest : BaseTest
     [Test]
     [TestCase(true, "string", "public Product: string; //navigator")]
     [TestCase(false, "string", "public Product: string;")]
-    public void Generate_property_navigate_true_test(bool isNavigate, string type,
-        string expected)
+    public void Generate_property_navigate_true_test(bool isNavigate, string type, string expected)
     {
         //Arrange
         PropertyTemplate p = new()
@@ -188,5 +187,4 @@ public class TsPropertyGeneratorTest : BaseTest
         //Assert
         sut.Should().Be(expected);
     }
-
 }

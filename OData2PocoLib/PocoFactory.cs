@@ -1,14 +1,14 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.V4;
-
 namespace OData2Poco;
+
+using V4;
 
 // factory class
 internal static class PocoFactory
 {
     /// <summary>
-    ///     Generate Poco Modelas List<ClassTemplate>
+    ///     Generate Poco Model List<ClassTemplate/>
     /// </summary>
     /// <param name="metadata"></param>
     /// <param name="setting"></param>
@@ -16,7 +16,9 @@ internal static class PocoFactory
     internal static IPocoGenerator Create(MetaDataInfo metadata, PocoSetting setting)
     {
         if (string.IsNullOrEmpty(metadata.MetaDataAsString))
+        {
             throw new InvalidOperationException("No Metadata available");
+        }
 
         var metaDataVersion = metadata.MetaDataVersion;
         return metaDataVersion switch
@@ -32,15 +34,15 @@ internal static class PocoFactory
     internal static async Task<IPocoGenerator> GenerateModel(OdataConnectionString connectionString,
         PocoSetting setting)
     {
-        var metaData = await MetaDataReader.LoadMetadataAsync(connectionString);
+        var metaData = await MetaDataReader.LoadMetadataAsync(connectionString).ConfigureAwait(false);
         var generator = Create(metaData, setting);
         return generator;
     }
 
-    internal static async Task<IPocoGenerator> GenerateModel(string xmlContents,
+    internal static async Task<IPocoGenerator> GenerateModelAsync(string xmlContents,
         PocoSetting setting)
     {
-        var metaData = await Task.Run(() => MetaDataReader.LoadMetaDataFromXml(xmlContents));
+        var metaData = await Task.Run(() => MetaDataReader.LoadMetaDataFromXml(xmlContents)).ConfigureAwait(false);
         var generator = Create(metaData, setting);
         return generator;
     }

@@ -2,16 +2,29 @@
 
 namespace OData2Poco;
 
-
 /// <summary>
 ///     Setting options to control the code generation
 /// </summary>
 public class PocoSetting : IValidator
 {
+    /// <summary>
+    ///     Initialization
+    /// </summary>
+    public PocoSetting()
+    {
+        Lang = Language.CS;
+        NamespacePrefix = string.Empty;
+        Inherit = string.Empty;
+        NameCase = CaseEnum.None;
+        Attributes = [];
+        Include = [];
+        CodeFilename = "UnDefined.txt";
+        AtributeDefs = string.Empty;
+    }
 
     /// <summary>
-    ///     Set nullabable ? to the type of property
-    ///     Example int? , double?
+    ///     Set nullable ? to the type of property
+    ///     Example int?  double?
     /// </summary>
     public bool AddNullableDataType { get; set; }
 
@@ -21,7 +34,7 @@ public class PocoSetting : IValidator
     public bool AddNavigation { get; set; }
 
     /// <summary>
-    ///     Add Navigation properties as non virtual properties for eager loading
+    ///     Add Navigation properties as non-virtual properties for eager loading
     /// </summary>
     public bool AddEager { get; set; }
 
@@ -41,7 +54,7 @@ public class PocoSetting : IValidator
     public string Inherit { get; set; }
 
     /// <summary>
-    ///     Indicates whether or not to generate classes that follow the inheritance hierarchy of the ODATA types. Default is
+    ///     Indicates whether to generate classes that follow the inheritance hierarchy of the ODATA types. Default is
     ///     true. Disable by setting Inherit to a non-null value.
     /// </summary>
     public bool UseInheritance => string.IsNullOrEmpty(Inherit);
@@ -59,6 +72,7 @@ public class PocoSetting : IValidator
     /// </summary>
     public CaseEnum NameCase { get; set; }
 
+    /// <summary>
     /// Gets or sets Entity NameCase: Pas/Camel/None for case conversion.
     /// </summary>
     public CaseEnum EntityNameCase { get; set; }
@@ -75,13 +89,13 @@ public class PocoSetting : IValidator
     public bool AddReference { get; set; }
     public GeneratorType GeneratorType { get; set; }
     public List<string>? Include { get; set; }
-    public bool ReadWrite { get; set; } //all properties are read/write 
+    public bool ReadWrite { get; set; } //all properties are read/write
     public bool EnableNullableReferenceTypes { get; set; } //all properties are read/write
 
     public bool InitOnly { get; set; }
 
     // public bool AsRecord { get; set; } //create record type c# 9 feature
-    public string OpenApiFileName { get; set; } = "";
+    public string OpenApiFileName { get; set; } = string.Empty;
 
     public string CodeFilename { get; set; }
 
@@ -90,46 +104,36 @@ public class PocoSetting : IValidator
     public bool ShowWarning { get; set; }
     public string AtributeDefs { get; set; }
 
-    /// <summary>
-    ///     Initialization
-    /// </summary>
-    public PocoSetting()
-    {
-        Lang = Language.CS;
-        NamespacePrefix = string.Empty;
-        Inherit = "";
-        NameCase = CaseEnum.None;
-        Attributes = [];
-        Include = [];
-        CodeFilename = "UnDefined.txt";
-        AtributeDefs = string.Empty;
-    }
     public void Validate()
     {
         if (Lang == Language.None)
+        {
             Lang = Language.CS;
+        }
 
         if (GeneratorType == GeneratorType.None)
+        {
             GeneratorType = Lang == Language.CS
                 ? GeneratorType.Class
                 : GeneratorType.Interface;
+        }
 
         //multi files is not supported in c#, it's planned.
         if (Lang == Language.CS && MultiFiles)
         {
-            Console.WriteLine("Multi-files is not supported in c#");
+            Console.WriteLine("Multi-files are not supported in c#");
             MultiFiles = false;
         }
 
         //for type script
         if (string.IsNullOrEmpty(CodeFilename))
+        {
             CodeFilename = MultiFiles ? "Model" : $"poco.{Lang.ToString().ToLower()}";
+        }
     }
 }
 
-
 public interface IValidator
 {
-    // ReSharper disable once UnusedMemberInSuper.Global
     void Validate();
 }

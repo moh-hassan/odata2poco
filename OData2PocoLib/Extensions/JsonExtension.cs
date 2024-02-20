@@ -1,15 +1,14 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using Newtonsoft.Json;
-
 namespace OData2Poco.Extensions;
+
+using Newtonsoft.Json;
 
 public static class JsonExtension
 {
-    /// <summary>
     public static string ToJson(this object data)
     {
-        var config = new JsonSerializerSettings
+        JsonSerializerSettings config = new()
         {
             DefaultValueHandling = DefaultValueHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,

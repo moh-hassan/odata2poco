@@ -22,12 +22,11 @@
     <PackageReference Include="DynamicExpresso.Core" />
     <PackageReference Include="Microsoft.Data.Edm" />
     <PackageReference Include="Microsoft.OData.Edm" />
-    <PackageReference Include="Newtonsoft.Json" />    
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -36,11 +35,8 @@
 
   <PropertyGroup>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Copyright>Copyright © 2016-2022, Mohamed Hassan</Copyright>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
-    <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>   
   </PropertyGroup>
 </Project>

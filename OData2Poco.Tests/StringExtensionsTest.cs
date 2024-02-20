@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.Http;
-
 namespace OData2Poco.Tests;
 
+using Http;
+
 [TestFixture]
-internal class StringExtensionsTest : BaseTest
+public class StringExtensionsTest : BaseTest
 {
     [Test]
     [TestCase("userName", "UserName")]
@@ -36,7 +36,6 @@ internal class StringExtensionsTest : BaseTest
         kebabName.Should().Be(name.ToKebabCase());
     }
 
-
     [Test]
     public void TrimAllSpaceAndCrLfTest()
     {
@@ -59,6 +58,7 @@ internal class StringExtensionsTest : BaseTest
         var expected = "this is line1\nand this is line2\n";
         text.TrimAllSpace(true).Should().Be(expected);
     }
+
     [Test]
     [TestCase("Apple", "apple")]
     [TestCase("apple", "Apple")]
@@ -127,7 +127,6 @@ internal class StringExtensionsTest : BaseTest
         var flag = header.TryReplaceToBase64(out var header2);
         flag.Should().Be(expectedFlag);
         header2.Should().Be(expectedHeader);
-
     }
 
     [Test]
@@ -145,6 +144,7 @@ internal class StringExtensionsTest : BaseTest
         var flag = "abc".Like(value);
         flag.Should().Be(expected);
     }
+
     [Test]
     [TestCase("a*", false)]
     [TestCase("a*c", false)]
@@ -171,6 +171,7 @@ internal class StringExtensionsTest : BaseTest
         var flag = value.In("city", "trip", "book");
         flag.Should().Be(expected);
     }
+
     [Test]
     [TestCase("city", false)]
     [TestCase("trip", false)]
@@ -180,5 +181,32 @@ internal class StringExtensionsTest : BaseTest
     {
         var flag = value.NotIn("city", "trip", "book");
         flag.Should().Be(expected);
+    }
+
+    [Test]
+    public void String_with_dot_can_be_reduced_to_last()
+    {
+        //Arrange
+        var sut = "a.b.c";
+        var expected = "c";
+        //Act
+        var actual = sut.Reduce();
+        //Assert
+        actual.Should().Be(expected);
+    }
+
+    [Test]
+    [TestCase("a=b", "a", "b")]
+    [TestCase("a=", "a", "")]
+    [TestCase("a", "a", "")]
+    [TestCase(null, "", "")]
+    public void Key_value_pair_should_split(string sut, string key, string value)
+    {
+        //Arrange
+        //Act
+        var (k, v) = sut.SplitKeyValue();
+        //Assert
+        k.Should().BeEquivalentTo(key);
+        v.Should().BeEquivalentTo(value);
     }
 }

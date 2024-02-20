@@ -2,13 +2,13 @@
 
 namespace OData2Poco.InfraStructure.Logging;
 
-public class PocoLogger : ColoredConsole
+public sealed class PocoLogger : ColoredConsole
 {
-    private static readonly Lazy<ILog> Lazy = new(() => new PocoLogger());
+    private static readonly Lazy<ILog> s_lazy = new(() => new PocoLogger());
 
     private PocoLogger()
     {
     }
 
-    public static ILog Default => Lazy.Value;
+    public static ILog Default => s_lazy.Value;
 }

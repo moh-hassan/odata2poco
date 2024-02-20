@@ -13,12 +13,9 @@
     <PackAsTool>True</PackAsTool>
     <PackageId>OData2Poco.dotnet.o2pgen</PackageId>
     <ToolCommandName>dotnet-o2pgen</ToolCommandName>
-    <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
-    <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OData2Poco.Cli\OData2Poco.Cli.csproj" />
   </ItemGroup>
-
 </Project>

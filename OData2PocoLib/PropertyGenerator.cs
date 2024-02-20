@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+namespace OData2Poco;
+
 using System.Text;
 using System.Text.RegularExpressions;
-using OData2Poco.CustAttributes;
-using OData2Poco.Extensions;
-
-namespace OData2Poco;
+using CustAttributes;
+using Extensions;
 
 /// <summary>
 ///     Generate All attributes of property :KeyAttribut,Required,JsonProperty
@@ -38,9 +38,7 @@ public class PropertyGenerator
         get
         {
             var mappedName = MappedPropertyName();
-            if (mappedName is not null) return mappedName;
-
-            return _setting.NameCase switch
+            return mappedName ?? _setting.NameCase switch
             {
                 CaseEnum.Pas => _property.PropName.ToPascalCase(),
                 CaseEnum.Camel => _property.PropName.ToCamelCase(),
@@ -57,9 +55,12 @@ public class PropertyGenerator
     {
         get
         {
-            if (_setting.GeneratorType == GeneratorType.Record)
-                return string.Empty;
-            return _setting.AddNavigation && !_setting.AddEager ? " virtual" : string.Empty;
+            var virtualModifier = _setting is { AddNavigation: true, AddEager: false }
+                ? " virtual"
+                : string.Empty;
+            return _setting.GeneratorType == GeneratorType.Record
+                ? string.Empty
+                : virtualModifier;
         }
     }
 
@@ -69,23 +70,31 @@ public class PropertyGenerator
         {
             var setter = "{get;set;}";
             if (_setting.InitOnly)
+            {
                 setter = "{get;init;}";
+            }
+
             return new StringBuilder()
                 .Append($"public{VirtualModifier}")
-                .Append(" ")
+                .Append(' ')
                 .Append(ReducedPropertyTypeName)
                 .Append(GetNullableModifier())
-                .Append(" ")
+                .Append(' ')
                 .Append(Name)
-                .Append(" ")
+                .Append(' ')
                 .Append(_property.IsReadOnly && !_setting.ReadWrite ? "{get;}" : setter)
-                .Append(" ")
+                .Append(' ')
                 .Append(Comment())
                 .ToString();
         }
     }
 
     private string ReducedPropertyTypeName => ReducedPropertyType(_property);
+
+    public static implicit operator string(PropertyGenerator pg)
+    {
+        return pg != null ? pg.ToString() : string.Empty;
+    }
 
     /// <summary>
     ///     Get all attributes based on PocoSetting initialization
@@ -97,19 +106,17 @@ public class PropertyGenerator
     }
 
     /// <summary>
-    ///     NullableModifier represented by "?" added to type , e.g int?
+    ///     NullableModifier represented by "?" added to type , e.g. int?
     /// </summary>
     public string GetNullableModifier()
     {
         //support -b option
-        if (_setting.EnableNullableReferenceTypes && _property.IsNullable
-                                                  && !_property.IsKey)
-            return "?";
-
-        if (_setting.AddNullableDataType && _property.IsNullable)
-            return Helper.GetNullable(_property.PropType);
-
-        return string.Empty;
+        var nullableModifier = _setting.AddNullableDataType && _property.IsNullable
+            ? Helper.GetNullable(_property.PropType)
+            : string.Empty;
+        return _setting.EnableNullableReferenceTypes && _property is { IsNullable: true, IsKey: false }
+            ? "?"
+            : nullableModifier;
     }
 
     public override string ToString()
@@ -123,31 +130,37 @@ public class PropertyGenerator
     {
         var reducedName = pt.PropType;
         //not prefixed with namespace
-        if (!reducedName.Contains('.')) return reducedName;
+        if (!reducedName.Contains('.'))
+        {
+            return reducedName;
+        }
 
         var ns = $"{pt.ClassNameSpace}.";
         if (pt.PropType.StartsWith(ns))
-            reducedName = pt.PropType.Replace(ns, "");
+        {
+            reducedName = pt.PropType.Replace(ns, string.Empty);
+        }
+
         //collection
         var match = Regex.Match(pt.PropType.Trim(), "List<(.+?)>");
-        if (!match.Success) return reducedName;
+        if (!match.Success)
+        {
+            return reducedName;
+        }
+
         var type = match.Groups[1].ToString();
-        var typeReduced = type.Replace(ns, "");
-        reducedName = $"List<{typeReduced}>";
-
-        return reducedName;
-    }
-
-    public static implicit operator string(PropertyGenerator pg)
-    {
-        return pg.ToString();
+        var typeReduced = type.Replace(ns, string.Empty);
+        return $"List<{typeReduced}>";
     }
 
     private string Comment()
     {
-        var comment = _property.PropComment + (_property.IsReadOnly ? " ReadOnly" : "");
+        var comment = _property.PropComment + (_property.IsReadOnly ? " ReadOnly" : string.Empty);
         if (!string.IsNullOrEmpty(comment))
+        {
             comment = $"//{comment}";
+        }
+
         return comment;
     }
 
@@ -161,33 +174,44 @@ public class PropertyGenerator
         List<PropertyNameMap>? allMap = null;
         var map = _setting.RenameMap.PropertyNameMap;
         foreach (var className in map.Keys)
-            if (className.Equals("ALL", StringComparison.InvariantCultureIgnoreCase))
+        {
+            if (className.Equals("ALL", StringComparison.OrdinalIgnoreCase))
             {
                 // The ALL is a last resort.
                 allMap = map[className];
             }
-            else if (className.Equals(_property.ClassName, StringComparison.InvariantCultureIgnoreCase))
+            else if (className.Equals(_property.ClassName, StringComparison.OrdinalIgnoreCase))
             {
                 var n = map[className]
-                    .FirstOrDefault(n =>
-                        n.OldName.Equals(_property.PropName, StringComparison.InvariantCultureIgnoreCase));
+                    .Find(n =>
+                        n.OldName.Equals(_property.PropName, StringComparison.OrdinalIgnoreCase));
 
-                if (n is not null) return string.IsNullOrWhiteSpace(n.NewName) ? null : n.NewName;
+                if (n is not null)
+                {
+                    return string.IsNullOrWhiteSpace(n.NewName) ? null : n.NewName;
+                }
             }
+        }
 
         if (allMap is not null)
         {
             var exactNameMap = allMap
-                .FirstOrDefault(n => n.OldName.Equals(_property.PropName, StringComparison.InvariantCultureIgnoreCase));
+                .Find(n => n.OldName.Equals(_property.PropName, StringComparison.OrdinalIgnoreCase));
 
             if (exactNameMap is not null)
+            {
                 return string.IsNullOrWhiteSpace(exactNameMap.NewName) ? null : exactNameMap.NewName;
+            }
 
             foreach (var regexNameMap in allMap)
-                if (regexNameMap.OldName.IndexOf('^') == 0 &&
+            {
+                if (regexNameMap.OldName.StartsWith("^") &&
                     Regex.IsMatch(_property.PropName, regexNameMap.OldName, RegexOptions.IgnoreCase))
+                {
                     //it's a regex. We really should compile it and cache it.
                     return string.IsNullOrWhiteSpace(regexNameMap.NewName) ? null : regexNameMap.NewName;
+                }
+            }
         }
 
         return null;

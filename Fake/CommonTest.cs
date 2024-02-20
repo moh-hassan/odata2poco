@@ -1,27 +1,27 @@
-// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
-
-using System.Text.RegularExpressions;
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 namespace OData2Poco.Fake;
+
+using System.Text.RegularExpressions;
 
 internal static class CommonTest
 {
     #region Name Mapping
+
     public static void AssertRenameMap(string code)
     {
         var expected = new List<string>
-            {
-                //class should be modified
-                "public partial class a0_City",
-                "public partial class a0_Location",
-                //property should be modified
-                "public a0_City City {get;set;}",
-                //base class should be modified
-                "public partial class EventLocation : a0_Location"
-            };
+        {
+            //class should be modified
+            "public partial class a0_City",
+            "public partial class a0_Location",
+            //property should be modified
+            "public a0_City City {get;set;}",
+            //base class should be modified
+            "public partial class EventLocation : a0_Location"
+        };
         //Assert
         code.Should().ContainAll(expected);
-
     }
 
     public static void AssertRenameMap2(string code)
@@ -39,5 +39,6 @@ internal static class CommonTest
         matches = Regex.Matches(code, "f02_Name");
         matches.Count.Should().Be(1);
     }
+
     #endregion
 }

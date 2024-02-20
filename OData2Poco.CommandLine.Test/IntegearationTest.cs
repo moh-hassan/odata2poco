@@ -1,16 +1,31 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
 #if !DEBUG
-//release and windows only
+//Run on Release and Windows only
+namespace OData2Poco.CommandLine.Test;
+
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Text;
 using CliWrap;
-namespace OData2Poco.CommandLine.Test;
+using Fake.Common;
+
 internal class IntegrationTest
 {
     //release
     private string _workingDirectory;
     private string _o2Pgen;
+
+    public static IEnumerable TestCases
+    {
+        get
+        {
+            var url = OdataService.Trippin;
+            yield return new TestCaseData($"-r {url} -v", 0, "public partial class Airline");
+            yield return new TestCaseData($"-r {url} -v -Y", 1, "ERROR(S)");
+            yield return new TestCaseData($"-r {url} -v -G record -I", 0, "public partial record Airline");
+        }
+    }
 
     [OneTimeSetUp]
     public void Setup()
@@ -19,10 +34,10 @@ internal class IntegrationTest
         _o2Pgen = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory, "o2pgen.exe"));
 
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
-        _workingDirectory = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory,
-            "..", "..", "..", "..", "build"));
-        _o2Pgen = Path.GetFullPath(Path.Combine(TestSample.BaseDirectory,
-            "..", "..", "..", "..", "build", "o2pgen.exe"));
+        _workingDirectory = Path.GetFullPath(Path.Combine(
+            TestSample.BaseDirectory, "..", "..", "..", "..", "build"));
+        _o2Pgen = Path.GetFullPath(Path.Combine(
+            TestSample.BaseDirectory, "..", "..", "..", "..", "build", "o2pgen.exe"));
     }
 
     [Test]
@@ -35,6 +50,7 @@ internal class IntegrationTest
             Assert.Ignore("ignore test o2pgen.exe in non windows OS");
             return;
         }
+
         var stdOutBuffer = new StringBuilder();
         var result = await Cli.Wrap(_o2Pgen)
             .WithArguments(options)
@@ -45,18 +61,6 @@ internal class IntegrationTest
 
         stdOutBuffer.ToString().Should().Contain(expected);
         result.ExitCode.Should().Be(exitCode);
-    }
-
-    public static IEnumerable TestCases
-    {
-        get
-        {
-            //var url = TestSample.UrlTripPinService;
-            var url = OdataService.Trippin;
-            yield return new TestCaseData($"-r {url} -v", 0, "public partial class Airline");
-            yield return new TestCaseData($"-r {url} -v -Y", 1, "ERROR(S)");
-            yield return new TestCaseData($"-r {url} -v -G record -I", 0, "public partial record Airline");
-        }
     }
 }
 

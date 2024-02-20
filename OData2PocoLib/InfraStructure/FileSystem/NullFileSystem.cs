@@ -1,14 +1,11 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text;
-
 namespace OData2Poco.InfraStructure.FileSystem;
+
+using System.Text;
 
 public class NullFileSystem : IPocoFileSystem
 {
-    public NullFileSystem()
-    {
-    }
     public void SaveToFile(string filePath, string content)
     {
         //do nothing
@@ -31,17 +28,12 @@ public class NullFileSystem : IPocoFileSystem
 
     public bool Exists(string? filePath)
     {
-        if (string.IsNullOrWhiteSpace(filePath))
-            return false;
-        return Fakes.Exists(filePath);
-
+        return !string.IsNullOrWhiteSpace(filePath) && Fakes.Exists(filePath);
     }
 
     public string ReadAllText(string? filePath)
     {
-        if (!Exists(filePath))
-            throw new InvalidOperationException($"could not read file {filePath}");
-        return Fakes.Get(filePath!);
+        return !Exists(filePath) ? throw new InvalidOperationException($"could not read file {filePath}") : Fakes.Get(filePath);
     }
 
     public void WriteAllText(string filePath, string content)

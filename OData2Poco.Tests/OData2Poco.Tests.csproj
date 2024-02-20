@@ -2,12 +2,13 @@
   <PropertyGroup>
     <TargetFrameworks>net6.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net6.0;net472</TargetFrameworks>
-    <Authors>Mohamed Hassan</Authors>
-    <Copyright>Copyright ©  Mohamed Hassan 2016-2022</Copyright>
+    <Authors>Mohamed Hassan</Authors>    
     <Company>OData2Poco</Company>
     <Product>OData2Poco</Product>
     <IsTestProject>true</IsTestProject>
     <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+    <NoWarn>$(NoWarn);SA1201;SA1202</NoWarn>
+
   </PropertyGroup>
 
   <ItemGroup Label="FakeData">
@@ -24,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WireMock.Net" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
   </ItemGroup>
 
@@ -36,20 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="books.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="northwind3.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="northwind4.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="odata3.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="tripPin.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <PackageReference Update="NUnit.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>

@@ -1,31 +1,59 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.InfraStructure.Logging;
 namespace OData2Poco;
+
+using InfraStructure.Logging;
+
 public class ErrorCollection : IEnumerable<OptionError>
 {
-    private const int Info = 0;
-    private const int Warning = 1;
     private const int Error = 2;
-
+    private const int Warning = 1;
     private readonly List<OptionError> _errors = [];
     private readonly ILog _logger = PocoLogger.Default;
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public IEnumerator<OptionError> GetEnumerator()
+    {
+        return _errors.GetEnumerator();
+    }
+
     public void Add(OptionError error)
     {
         _errors.Add(error);
     }
+
     public void Add(string message, int level = 0)
     {
-        var error = new OptionError(message, level);
+        OptionError error = new(message, level);
         Add(error);
     }
-    public void AddError(string message) => Add(message, Error);
-    public void AddWarning(string message) => Add(message, Warning);
-    public void AddInfo(string message) => Add(message);
+
+    public void AddError(string message)
+    {
+        Add(message, Error);
+    }
+
+    public void AddWarning(string message)
+    {
+        Add(message, Warning);
+    }
+
+    public void AddInfo(string message)
+    {
+        Add(message);
+    }
 
     public int ShowErrors()
     {
-        if (!_errors.Any()) return 0;
+        if (_errors.Count == 0)
+        {
+            return 0;
+        }
+
         foreach (var error in _errors.OrderBy(e => e.Level))
         {
             switch (error.Level)
@@ -44,16 +72,7 @@ public class ErrorCollection : IEnumerable<OptionError>
                     break;
             }
         }
-        return _errors.Any(e => e.Level >= 2) ? 1 : 0;
-    }
-    public IEnumerator<OptionError> GetEnumerator()
-    {
-        return _errors.GetEnumerator();
 
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
+        return _errors.Exists(e => e.Level >= 2) ? 1 : 0;
     }
 }

@@ -2,9 +2,12 @@
 
 namespace OData2Poco.Tests;
 
+using InfraStructure.FileSystem;
+
 public class EnvReaderTest : BaseTest
 {
     #region Setup
+
     [OneTimeSetUp]
     public void SetUp()
     {
@@ -17,11 +20,13 @@ public class EnvReaderTest : BaseTest
         CreateEnv("client_id", "a-123-456");
         CreateEnv("client_secret", "abc-456-xyz");
     }
+
     [OneTimeTearDown]
     public void TearDown()
     {
         DelEnv("aa", "myToken", "key1", "user", "password", "zone", "client_id", "client_secret");
     }
+
     #endregion
 
     [Test]
@@ -37,7 +42,6 @@ public class EnvReaderTest : BaseTest
         //Assert
         flag.Should().BeTrue();
         value.Should().NotBeEmpty();
-
     }
 
     [Test]
@@ -67,11 +71,11 @@ public class EnvReaderTest : BaseTest
         //Arrange
         string[] args = ["-a", "aa", "-b"];
         //Act
-        var Args = new EnvReader(_fileSystem)
+        var resolvedArgs = new EnvReader(_fileSystem)
             .ResolveArgEnv(args, out var errors);
         //Assert
-        Args.Length.Should().Be(3);
-        Args.Should().BeEquivalentTo(args);
+        resolvedArgs.Length.Should().Be(3);
+        resolvedArgs.Should().BeEquivalentTo(args);
         errors.Should().BeEmpty();
     }
 
@@ -108,7 +112,6 @@ public class EnvReaderTest : BaseTest
         errors.Count.Should().Be(0);
     }
 
-
     [Test]
     public void Args_with_env_var_not_exist_test()
     {
@@ -127,9 +130,9 @@ public class EnvReaderTest : BaseTest
     public void Arg_as_at_at_file_exist_test()
     {
         //Arrange
-        string text = "abc.123.xyz";
+        var text = "abc.123.xyz";
         Fakes.Mock("myFile.txt", text);
-        string arg = "@@myFile.txt";
+        var arg = "@@myFile.txt";
         //Act
         var flag = new EnvReader(_fileSystem)
             .TryResolveFile(arg, out var value, out var error);
@@ -139,11 +142,12 @@ public class EnvReaderTest : BaseTest
         value.Should().Be("abc.123.xyz");
         error.Should().BeNull();
     }
+
     [Test]
     public void Args_wit_at_at_file_exist_including_env_var_test()
     {
         //Arrange
-        string text = "abc.123.xyz";
+        var text = "abc.123.xyz";
         Fakes.Mock("myFile.txt", text);
         string[] args = ["-a", "@@myFile.txt", "-p", "%password%"];
         //Act
@@ -169,7 +173,6 @@ public class EnvReaderTest : BaseTest
         sut.Should().BeEquivalentTo(args);
         errors.Count.Should().Be(1);
     }
-
 
     [Test]
     [TestCase("%myToken%")]
@@ -200,7 +203,6 @@ public class EnvReaderTest : BaseTest
         //Assert
         text.Should().Be(input);
         errors.Count.Should().Be(1);
-
     }
 
     [Test]
@@ -215,7 +217,6 @@ public class EnvReaderTest : BaseTest
         text.Should().Be("Authorization=Bearer abc:$key2");
         errors.Count.Should().Be(1);
     }
-
 
     [Test]
     [TestCase("Authorization=Basic %user%:%password%")]
@@ -275,14 +276,14 @@ public class EnvReaderTest : BaseTest
     {
         //Arrange
         var cmd = """
-        -r http://localhost/odata
-        --auth oauth2
-        -u %client_id%
-        -p %client_secret%
-        --token-endpoint https://dev-identity.com/oauth/token
-        --token-params  audience=https://www.todo.com
-        -v
-        """;
+                  -r http://localhost/odata
+                  --auth oauth2
+                  -u %client_id%
+                  -p %client_secret%
+                  --token-endpoint https://dev-identity.com/oauth/token
+                  --token-params  audience=https://www.todo.com
+                  -v
+                  """;
         var expected = new[]
         {
             "-r", "http://localhost/odata", "--auth", "oauth2", "-u", "a-123-456", "-p", "abc-456-xyz",
@@ -294,7 +295,10 @@ public class EnvReaderTest : BaseTest
 
         //Act
         var cfg = new OptionConfiguration(_fileSystem);
-        var args = new[] { "@myFile.txt" };
+        var args = new[]
+        {
+            "@myFile.txt"
+        };
         var flag = cfg.TryGetConfigurationFile(args, out var args2, out var error, out var fileName);
 
         var newArgs2 = new EnvReader(_fileSystem)

@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+namespace OData2Poco;
+
 using System.Reflection;
 using System.Xml;
-using OData2Poco.Extensions;
-
-namespace OData2Poco;
+using Extensions;
 
 /// <summary>
 ///     Static Helper Functions
@@ -16,29 +16,73 @@ internal static class Helper
     /// </summary>
     public static readonly Dictionary<string, string> NullableDataTypes = new()
     {
-        { "object", "" },
-        { "string", "" },
-        { "bool", "?" },
-        { "byte", "?" },
-        { "char", "?" },
-        { "decimal", "?" },
-        { "double", "?" },
-        { "short", "?" },
-        { "int", "?" },
-        { "long", "?" },
-        { "sbyte", "?" },
-        { "float", "?" },
-        { "ushort", "?" },
-        { "uint", "?" },
-        { "ulong", "?" },
-        { "void", "?" },
+        {
+            "object", string.Empty
+        },
+        {
+            "string", string.Empty
+        },
+        {
+            "bool", "?"
+        },
+        {
+            "byte", "?"
+        },
+        {
+            "char", "?"
+        },
+        {
+            "decimal", "?"
+        },
+        {
+            "double", "?"
+        },
+        {
+            "short", "?"
+        },
+        {
+            "int", "?"
+        },
+        {
+            "long", "?"
+        },
+        {
+            "sbyte", "?"
+        },
+        {
+            "float", "?"
+        },
+        {
+            "ushort", "?"
+        },
+        {
+            "uint", "?"
+        },
+        {
+            "ulong", "?"
+        },
+        {
+            "void", "?"
+        },
         ////Nullable DateTime issue #3 , included in v2.3.0
-        { "DateTime", "?" },
-        { "DateTimeOffset", "?" },
-        { "TimeSpan", "?" },
-        { "Guid", "?" },
-        { "Microsoft.OData.Edm.Date", "?" },
-        { "Microsoft.OData.Edm.TimeOfDay", "?" }
+        {
+            "DateTime", "?"
+        },
+        {
+            "DateTimeOffset", "?"
+        },
+        {
+            "TimeSpan", "?"
+        },
+        {
+            "Guid", "?"
+        },
+        {
+            "Microsoft.OData.Edm.Date", "?"
+        },
+        {
+            "Microsoft.OData.Edm.TimeOfDay", "?"
+        }
     };
 
     /// <summary>
@@ -48,9 +92,7 @@ internal static class Helper
     /// <returns></returns>
     public static string GetNullable(string name)
     {
-        if (NullableDataTypes.ContainsKey(name))
-            return NullableDataTypes[name];
-        return "";
+        return NullableDataTypes.GetValueOrDefault(name, string.Empty);
     }
 
     /// <summary>
@@ -65,7 +107,7 @@ internal static class Helper
         if (string.IsNullOrEmpty(metadataString))
             throw new ArgumentException("Metadata is not available");
 
-        var reader = XmlReader.Create(new StringReader(metadataString));
+        using var reader = XmlReader.Create(new StringReader(metadataString));
         reader.MoveToContent();
         var version =
             reader.GetAttribute(
@@ -82,9 +124,12 @@ internal static class Helper
     public static string GetServiceVersion(Dictionary<string, string> header)
     {
         foreach (var entry in header)
+        {
             if (entry.Key.Contains("OData-Version") || entry.Key.Contains("DataServiceVersion"))
                 return entry.Value;
-        return "";
+        }
+
+        return string.Empty;
     }
 
     /// <summary>
@@ -95,7 +140,7 @@ internal static class Helper
     public static string? GetNameSpace(string metadataString)
     {
         if (string.IsNullOrEmpty(metadataString)) return "MyNameSpace";
-        var reader = XmlReader.Create(new StringReader(metadataString));
+        using var reader = XmlReader.Create(new StringReader(metadataString));
         reader.MoveToContent();
         reader.ReadToFollowing("Schema");
         var schemaNamespace = reader.GetAttribute("Namespace");
@@ -140,6 +185,7 @@ internal static class Helper
         var list = new List<object>();
         //loop through the found dlls and load them
         foreach (var dll in dlls)
+        {
             try
             {
                 var plugin = Assembly.Load(dll);
@@ -154,6 +200,7 @@ internal static class Helper
             {
                 // ignored, bad plugin dll
             }
+        }
 
         return list;
     }

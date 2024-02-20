@@ -1,30 +1,28 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+#pragma warning disable CA1721, SA1202
+namespace OData2Poco.Security;
+
 using System.Net;
 using System.Security;
-using OData2Poco.Extensions;
-
-namespace OData2Poco;
+using Extensions;
 
 public sealed class SecurityContainer : IDisposable
 {
-    public NetworkCredential Credential { get; }
-    public bool IsKeyBoardEntry { get; }
-    public bool IsSecuredString { get; }
-
     public SecurityContainer()
     {
         Credential = new NetworkCredential();
     }
+
     public SecurityContainer(string password) : this()
     {
-        if (password == "?" || password == "-")
+        if (password is "?" or "-")
         {
             IsKeyBoardEntry = true;
         }
         else
         {
-            string cipher = password.EncryptPassword();
+            var cipher = password.EncryptPassword();
             Credential.Password = cipher;
         }
     }
@@ -34,6 +32,48 @@ public sealed class SecurityContainer : IDisposable
         IsSecuredString = true;
         var cipher = password.EncryptPassword();
         Credential.Password = cipher;
+    }
+
+    public static SecurityContainer Empty => new();
+
+    public NetworkCredential Credential { get; }
+    public bool IsKeyBoardEntry { get; }
+    public bool IsSecuredString { get; }
+
+    public static implicit operator SecurityContainer(string pw)
+    {
+        return new(pw);
+    }
+
+    public static implicit operator SecurityContainer(SecureString pw)
+    {
+        return new(pw);
+    }
+
+    public string GetBasicAuth(string? user)
+    {
+        if (string.IsNullOrEmpty(user))
+        {
+            return string.Empty;
+        }
+
+        var token = $"{user}:{GetRawPassword()}".ToBase64();
+        return token;
+    }
+
+    public NetworkCredential GetCredential(string? user, string? domain)
+    {
+        return new(user, GetRawPassword(), domain);
+    }
+
+    public string GetToken()
+    {
+        return GetRawPassword();
+    }
+
+    public override string ToString()
+    {
+        return Credential.Password;
     }
 
     internal string GetRawPassword()
@@ -46,28 +86,6 @@ public sealed class SecurityContainer : IDisposable
 
         var password = Credential.Password.DecryptPassword();
         return password;
-    }
-    public string GetBasicAuth(string? user)
-    {
-        if (string.IsNullOrEmpty(user)) return string.Empty;
-        var token = $"{user}:{GetRawPassword()}".ToBase64();
-        return token;
-    }
-    public NetworkCredential GetCredential(string? user, string? domain)
-    {
-        return new(user, GetRawPassword(), domain);
-    }
-    public string GetToken()
-    {
-        return GetRawPassword();
-    }
-    public static SecurityContainer Empty => new();
-    public static implicit operator SecurityContainer(string pw) => new(pw);
-    public static implicit operator SecurityContainer(SecureString pw) => new(pw);
-
-    public override string ToString()
-    {
-        return Credential.Password;
     }
 
     public void Dispose()

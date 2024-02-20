@@ -1,15 +1,15 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.Http;
-
 namespace OData2Poco;
+
+using Http;
 
 internal static class MetaDataReader
 {
     public static async Task<MetaDataInfo> LoadMetaDataHttpAsync(OdataConnectionString odataConnString)
     {
-        var client = new CustomHttpClient(odataConnString);
-        var content = await client.ReadMetaDataAsync();
+        using var client = new CustomHttpClient(odataConnString);
+        var content = await client.ReadMetaDataAsync().ConfigureAwait(false);
 
         var metaData = new MetaDataInfo
         {
@@ -19,19 +19,20 @@ internal static class MetaDataReader
             SchemaNamespace = Helper.GetNameSpace(content),
             MediaType = Media.Http
         };
-        if (client.Response != null)
-            foreach (var entry in client.Response.Headers)
+        if (client._response != null)
+        {
+            foreach (var entry in client._response.Headers)
             {
                 var value = entry.Value.FirstOrDefault();
                 if (value == null) continue;
                 var key = entry.Key;
                 metaData.ServiceHeader.Add(key, value);
             }
+        }
 
         metaData.ServiceVersion = Helper.GetServiceVersion(metaData.ServiceHeader);
         return metaData;
     }
-
 
     /// <summary>
     ///     Load Metadata from xml string
@@ -44,7 +45,7 @@ internal static class MetaDataReader
         {
             MetaDataAsString = xmlContent,
             MetaDataVersion = Helper.GetMetadataVersion(xmlContent),
-            ServiceUrl = "",
+            ServiceUrl = string.Empty,
             SchemaNamespace = Helper.GetNameSpace(xmlContent),
             MediaType = Media.Xml
         };
@@ -57,13 +58,13 @@ internal static class MetaDataReader
         if (!odataConnString.ServiceUrl.StartsWith("http"))
         {
             using StreamReader reader = new(odataConnString.ServiceUrl);
-            var xml = await reader.ReadToEndAsync();
+            var xml = await reader.ReadToEndAsync().ConfigureAwait(false);
             metaData = LoadMetaDataFromXml(xml);
             metaData.ServiceUrl = odataConnString.ServiceUrl;
             return metaData;
         }
 
-        metaData = await LoadMetaDataHttpAsync(odataConnString);
+        metaData = await LoadMetaDataHttpAsync(odataConnString).ConfigureAwait(false);
         return metaData;
     }
 }

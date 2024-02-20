@@ -1,9 +1,13 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Reflection;
 namespace OData2Poco.Fake;
+
+using System.Reflection;
+
 public static class ProjectTestData
 {
+    private static readonly string s_relativeFakeFolder = Path.Combine("..", "..", "..", "..", "Fake", "project_samples");
+
     public static string BaseDirectory
     {
         get
@@ -15,9 +19,7 @@ public static class ProjectTestData
         }
     }
 
-    private static readonly string RelativeFakeFolder = Path.Combine("..", "..", "..", "..", "Fake", "project_samples");
-
-    public static string FakeFolder => Path.GetFullPath(Path.Combine(BaseDirectory, RelativeFakeFolder));
+    public static string FakeFolder => Path.GetFullPath(Path.Combine(BaseDirectory, s_relativeFakeFolder));
 
     public static string GenerateDefaultProjectTest => GetFullPath("Generate_default_project_Test.txt");
     public static string GenerateProjectForJsonTest => GetFullPath("Generate_project_for_json_Test.txt");
@@ -26,8 +28,7 @@ public static class ProjectTestData
 
     public static string GetFullPath(string relative)
     {
-        var path = Path.GetFullPath(Path.Combine(BaseDirectory, RelativeFakeFolder, relative));
+        var path = Path.GetFullPath(Path.Combine(BaseDirectory, s_relativeFakeFolder, relative));
         return path;
     }
 }
-

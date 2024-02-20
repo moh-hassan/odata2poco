@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text;
-using OData2Poco.Extensions;
-using OData2Poco.InfraStructure.FileSystem;
-
 namespace OData2Poco;
+
+using System.Text;
+using Extensions;
+using InfraStructure.FileSystem;
 
 public class PocoStore : IEnumerable<PocoStoreEntry>
 {
@@ -12,25 +12,17 @@ public class PocoStore : IEnumerable<PocoStoreEntry>
 
     public int Count => _entries.Count;
 
-    public PocoStoreEntry? this[string fullName] =>
-        _entries.FirstOrDefault(a => a.FullName == fullName);
+    public PocoStoreEntry? this[string fullName]
+        => _entries.Find(a => a.FullName == fullName);
 
-    public PocoStoreEntry? this[int id]
-    {
-        get
-        {
-            if (id >= 0 && id <= _entries.Count - 1)
-                return _entries[id];
-            return null;
-        }
-    }
+    public PocoStoreEntry? this[int id] => id >= 0 && id <= _entries.Count - 1 ? _entries[id] : null;
 
-    public IEnumerator<PocoStoreEntry> GetEnumerator()
+    IEnumerator IEnumerable.GetEnumerator()
     {
         return _entries.GetEnumerator();
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
+    public IEnumerator<PocoStoreEntry> GetEnumerator()
     {
         return _entries.GetEnumerator();
     }
@@ -40,26 +32,30 @@ public class PocoStore : IEnumerable<PocoStoreEntry>
         _entries.Add(row);
     }
 
-    //destination can be folderName when multFile =true otherwise it is filename 
-    public void Save(string destination, IPocoFileSystem fileSystem, bool multFile)
+    //destination can be folderName when multFile =true otherwise it is filename
+    public void Save(string destination, IPocoFileSystem fileSystem, bool multiFile)
     {
+        _ = destination ?? throw new ArgumentNullException(nameof(destination));
+        _ = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         //single file
-        if (!multFile)
+        if (!multiFile)
         {
-            var code = _entries[0].Code ?? "";
+            var code = _entries[0].Code ?? string.Empty;
             fileSystem.SaveToFile(destination, code);
             return;
         }
 
         //multi files
         foreach (var entry in _entries)
+        {
             entry.Save(destination, fileSystem);
+        }
     }
 
-    public void Save(string destination, bool multFile)
+    public void Save(string destination, bool multiFile)
     {
         IPocoFileSystem fileSystem = new PocoFileSystem();
-        Save(destination, fileSystem, multFile);
+        Save(destination, fileSystem, multiFile);
     }
 
     public StringBuilder Display()
@@ -97,6 +93,8 @@ public class PocoStoreEntry
 
     public void Save(string folderName, IPocoFileSystem fileSystem)
     {
+        _ = folderName ?? throw new ArgumentNullException(nameof(folderName));
+        _ = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         var path = Path.Combine(folderName, Namespace.RemoveDot(), FileName);
         fileSystem.SaveToFile(path, Code);
     }
@@ -106,4 +104,3 @@ public class PocoStoreEntry
         return Code;
     }
 }
-#nullable restore

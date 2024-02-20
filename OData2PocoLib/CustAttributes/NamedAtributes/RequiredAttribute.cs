@@ -6,11 +6,12 @@ public class RequiredAttribute : INamedAttribute
 {
     public string Name { get; set; } = "req";
     public string Scope { get; set; } = "property";
-    public bool IsUserDefined { get; set; } = false;
+    public bool IsUserDefined { get; set; }
     public bool IsValid { get; set; } = true;
-    public List<string> GetAttributes(PropertyTemplate property)
+
+    public List<string> GetAttributes(PropertyTemplate propertyTemplate)
     {
-        return property.IsNullable ? [] : ["[Required]"];
+        return propertyTemplate is { IsNullable: true } ? [] : ["[Required]"];
     }
 
     public List<string> GetAttributes(ClassTemplate classTemplate)

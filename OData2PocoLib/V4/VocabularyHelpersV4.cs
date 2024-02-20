@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+namespace OData2Poco.V4;
+
 using Microsoft.OData.Edm;
 using Microsoft.OData.Edm.Vocabularies;
 using Microsoft.OData.Edm.Vocabularies.V1;
-
-namespace OData2Poco.V4;
 
 /// <summary>
 ///     Read Vocabulary
@@ -21,8 +21,41 @@ internal static class VocabularyHelpersV4
         ReadWrite = 3
     }
 
-    private static IEdmVocabularyAnnotation? FindVocabularyAnnotation(this IEdmModel model,
-        IEdmVocabularyAnnotatable target, IEdmTerm term)
+    public static CorePermission? GetPermissions(this IEdmModel model, IEdmProperty property)
+    {
+        if (model == null) throw new ArgumentNullException(nameof(model));
+        if (property == null) throw new ArgumentNullException(nameof(property));
+
+        return model.GetEnum<CorePermission>(property, CoreVocabularyModel.PermissionsTerm);
+    }
+
+    public static bool IsReadOnly(this IEdmModel model, IEdmProperty property)
+    {
+        var result = model.GetComputed(property)
+                     ?? model.GetPermissions(property) == CorePermission.Read;
+        return result;
+    }
+
+    internal static bool? GetImmutable(this IEdmModel model, IEdmProperty property)
+    {
+        if (model == null) throw new ArgumentNullException(nameof(model));
+        if (property == null) throw new ArgumentNullException(nameof(property));
+
+        return model.GetBoolean(property, CoreVocabularyModel.ImmutableTerm);
+    }
+
+    internal static bool? GetComputed(this IEdmModel model, IEdmProperty property)
+    {
+        if (model == null) throw new ArgumentNullException(nameof(model));
+        if (property == null) throw new ArgumentNullException(nameof(property));
+
+        return model.GetBoolean(property, CoreVocabularyModel.ComputedTerm);
+    }
+
+    private static IEdmVocabularyAnnotation? FindVocabularyAnnotation(
+        this IEdmModel model,
+        IEdmVocabularyAnnotatable target,
+        IEdmTerm term)
     {
         var annotations = model.FindVocabularyAnnotations(target);
         if (annotations == null) return null;
@@ -43,42 +76,10 @@ internal static class VocabularyHelpersV4
         return (T)Enum.Parse(typeof(T), enumMember.Name);
     }
 
-    public static CorePermission? GetPermissions(this IEdmModel model, IEdmProperty property)
-    {
-        if (model == null) throw new ArgumentNullException(nameof(model));
-        if (property == null) throw new ArgumentNullException(nameof(property));
-
-        return model.GetEnum<CorePermission>(property, CoreVocabularyModel.PermissionsTerm);
-    }
-
-
-    internal static bool? GetImmutable(this IEdmModel model, IEdmProperty property)
-    {
-        if (model == null) throw new ArgumentNullException(nameof(model));
-        if (property == null) throw new ArgumentNullException(nameof(property));
-
-        return model.GetBoolean(property, CoreVocabularyModel.ImmutableTerm);
-    }
-
-    internal static bool? GetComputed(this IEdmModel model, IEdmProperty property)
-    {
-        if (model == null) throw new ArgumentNullException(nameof(model));
-        if (property == null) throw new ArgumentNullException(nameof(property));
-
-        return model.GetBoolean(property, CoreVocabularyModel.ComputedTerm);
-    }
-
     private static bool? GetBoolean(this IEdmModel model, IEdmProperty property, IEdmTerm term)
     {
         var annotation = model.FindVocabularyAnnotation(property, term);
         var booleanExpression = annotation?.Value as IEdmBooleanConstantExpression;
         return booleanExpression?.Value;
-    }
-
-    public static bool IsReadOnly(this IEdmModel model, IEdmProperty property)
-    {
-        var result = model.GetComputed(property)
-                     ?? model.GetPermissions(property) == CorePermission.Read;
-        return result;
     }
 }

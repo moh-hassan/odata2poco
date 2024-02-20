@@ -4,14 +4,13 @@
 namespace OData2Poco.Tests;
 
 [TestFixture]
-internal class HelperTest
+public sealed class HelperTest
 {
     [Test]
     [TestCase("int", "?")]
     [TestCase("DateTime", "?")]
     public void GetNullableTest(string type, string nullable)
     {
-
         Helper.GetNullable(type).Should().Be(nullable);
     }
 }

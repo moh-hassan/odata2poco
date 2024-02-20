@@ -1,23 +1,20 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+namespace OData2Poco.V3;
+
 using System.Xml;
+using InfraStructure.Logging;
 using Microsoft.Data.Edm;
 using Microsoft.Data.Edm.Csdl;
 using Microsoft.Data.Edm.Library.Values;
 using Microsoft.Data.Edm.Validation;
-using OData2Poco.InfraStructure.Logging;
-// ReSharper disable CollectionNeverQueried.Local
-#if !NETCOREAPP
-// ReSharper disable NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
-#endif
-
-namespace OData2Poco.V3;
 
 /// <summary>
 ///     Process metadataString and generate list of   classes
 /// </summary>
 internal partial class Poco : IPocoGenerator
 {
+    internal IEdmModel _model;
     private readonly ILog _logger = PocoLogger.Default;
     private readonly PocoSetting _setting;
 
@@ -26,15 +23,14 @@ internal partial class Poco : IPocoGenerator
         _setting = setting;
         MetaData = metaData;
         SchemaErrors = [];
-        EntitySets = new List<IEdmEntitySet>();
-        Model = LoadModelFromString();
+        EntitySets = [];
+        _model = LoadModelFromString();
     }
 
     public string MetaDataAsString => MetaData.MetaDataAsString;
+    public MetaDataInfo MetaData { get; set; }
     private IEnumerable<IEdmEntitySet> EntitySets { get; set; }
     private List<string> SchemaErrors { get; }
-    internal IEdmModel Model;
-    public MetaDataInfo MetaData { get; set; }
 
     /// <summary>
     ///     Fill List with class name and properties of corresponding entitie to be used for generating code
@@ -43,7 +39,7 @@ internal partial class Poco : IPocoGenerator
     public List<ClassTemplate> GeneratePocoList()
     {
         var list = new List<ClassTemplate>();
-        var schemaElements = GetSchemaElements(Model);
+        var schemaElements = GetSchemaElements(_model);
         var id = 1;
         foreach (var type in schemaElements.ToList())
         {
@@ -56,58 +52,6 @@ internal partial class Poco : IPocoGenerator
         if (_setting.Include?.Count > 0)
             list = list.FilterList(_setting.Include).ToList();
         return list;
-    }
-
-    private IEdmModel LoadModelFromString()
-    {
-        var tr = new StringReader(MetaDataAsString);
-        var xmlReader = XmlReader.Create(tr);
-        var flag = EdmxReader.TryParse(xmlReader, out Model, out var errors);
-        List<string> messages = errors
-            .Select(a => $"{a.ErrorCode}: {a.ErrorMessage} {a.ErrorLocation}").ToList();
-        string errorText = messages.Any()
-            ? $"Encountered the following errors (total: {messages.Count}) when parsing the EDMX document:\n" + string.Join(Environment.NewLine, messages)
-            : string.Empty;
-        if (!flag)
-        {
-            throw new InvalidOperationException($"Model can't be generated.\n{errorText}\n");
-        }
-
-        EntitySets = GetEntitySets(Model);
-        if (_setting.ShowWarning && errors.Any())
-            _logger.Info($"{errorText}\nXml Parser errors are ignored.");
-        return Model;
-    }
-
-    private List<string> GetEnumElements(IEdmSchemaType type, out bool isFlags)
-    {
-        var enumList = new List<string>();
-        isFlags = false;
-        if (type.TypeKind != EdmTypeKind.Enum) return enumList;
-        if (!(type is IEdmEnumType enumType)) return enumList;
-        var list2 = enumType.Members;
-        isFlags = enumType.IsFlags;
-        foreach (var item in list2)
-        {
-            var enumValue = ((EdmIntegerConstant)item.Value).Value;
-            var enumElement = $"\t\t{item.Name}={enumValue}";
-
-            //enumList.Add(item.Name); // v2.3.0
-            enumList.Add(enumElement); //issue #7 complete enum name /value
-        }
-
-        return enumList;
-    }
-
-    private string GetEntitySetName(IEdmSchemaType ct)
-    {
-        if (ct.TypeKind != EdmTypeKind.Entity)
-            return string.Empty;
-
-        var entitySet = EntitySets
-            .Where(m => m.ElementType.FullName() == ct.FullName())
-            .DefaultIfEmpty().First();
-        return entitySet != null ? entitySet.Name : ct.Name;
     }
 
     internal IEnumerable<IEdmEntitySet> GetEntitySets(IEdmModel model)
@@ -165,13 +109,13 @@ internal partial class Poco : IPocoGenerator
                 return null;
         }
 
-        //fill keys 
+        //fill keys
         var list = GetKeys(ent);
-        if (list.Any()) classTemplate.Keys.AddRange(list);
+        if (list.Count > 0) classTemplate.Keys.AddRange(list);
 
         //fill navigation properties
         var list2 = GetNavigation(ent);
-        if (list2.Any()) classTemplate.Navigation.AddRange(list2);
+        if (list2.Count > 0) classTemplate.Navigation.AddRange(list2);
 
         var entityProperties = GetClassProperties(ent);
 
@@ -192,10 +136,79 @@ internal partial class Poco : IPocoGenerator
         return classTemplate;
     }
 
+    internal IEdmSchemaType? GetSchemaType(string name, string nameSpace)
+    {
+        return (IEdmSchemaType?)_model.SchemaElements
+            .FirstOrDefault(x => x.Name == name && x.Namespace == nameSpace);
+    }
+
+    internal IEdmSchemaType? GetSchemaType(string fullName)
+    {
+        return (IEdmSchemaType?)_model.SchemaElements
+            .FirstOrDefault(x => x.FullName() == fullName);
+    }
+
+    internal IEnumerable<IEdmSchemaType> GetSchemaElements(
+        Func<IEnumerable<IEdmSchemaType>, IEnumerable<IEdmSchemaType>> func)
+    {
+        var elements = _model.SchemaElements.OfType<IEdmSchemaType>();
+        return func(elements);
+    }
+
+    private IEdmModel LoadModelFromString()
+    {
+        var tr = new StringReader(MetaDataAsString);
+        using var xmlReader = XmlReader.Create(tr);
+        var flag = EdmxReader.TryParse(xmlReader, out _model, out var errors);
+        var messages = errors
+            .Select(a => $"{a.ErrorCode}: {a.ErrorMessage} {a.ErrorLocation}").ToList();
+        var errorText = messages.Count > 0
+            ? $"Encountered the following errors (total: {messages.Count}) when parsing the EDMX document:\n" +
+              string.Join(Environment.NewLine, messages)
+            : string.Empty;
+        if (!flag) throw new InvalidOperationException($"Model can't be generated.\n{errorText}\n");
+
+        EntitySets = GetEntitySets(_model);
+        if (_setting.ShowWarning && errors.Any())
+            _logger.Info($"{errorText}\nXml Parser errors are ignored.");
+        return _model;
+    }
+
+    private List<string> GetEnumElements(IEdmSchemaType type, out bool isFlags)
+    {
+        var enumList = new List<string>();
+        isFlags = false;
+        if (type.TypeKind != EdmTypeKind.Enum) return enumList;
+        if (type is not IEdmEnumType enumType) return enumList;
+        var list2 = enumType.Members;
+        isFlags = enumType.IsFlags;
+        foreach (var item in list2)
+        {
+            var enumValue = ((EdmIntegerConstant)item.Value).Value;
+            var enumElement = $"\t\t{item.Name}={enumValue}";
+
+            //enumList.Add(item.Name); // v2.3.0
+            enumList.Add(enumElement); //issue #7 complete enum name /value
+        }
+
+        return enumList;
+    }
+
+    private string GetEntitySetName(IEdmSchemaType ct)
+    {
+        if (ct.TypeKind != EdmTypeKind.Entity)
+            return string.Empty;
+
+        var entitySet = EntitySets
+            .Where(m => m.ElementType.FullName() == ct.FullName())
+            .DefaultIfEmpty().First();
+        return entitySet != null ? entitySet.Name : ct.Name;
+    }
+
     private List<string> GetNavigation(IEdmSchemaType ent)
     {
         var list = new List<string>();
-        if (!(ent is IEdmEntityType entityType)) return list;
+        if (ent is not IEdmEntityType entityType) return list;
         var nav = entityType.DeclaredNavigationProperties().ToList();
         list.AddRange(nav.Select(key => key.Name));
         return list;
@@ -204,7 +217,7 @@ internal partial class Poco : IPocoGenerator
     private List<string> GetKeys(IEdmSchemaType ent)
     {
         var list = new List<string>();
-        if (!(ent is IEdmEntityType entityType)) return list;
+        if (ent is not IEdmEntityType entityType) return list;
         var keys = entityType.DeclaredKey;
         if (keys != null)
             list.AddRange(keys.Select(key => key.Name));
@@ -231,7 +244,7 @@ internal partial class Poco : IPocoGenerator
             Serial = serial++,
             ClassNameSpace = ent.Namespace,
             MaxLength = GetMaxLength(property),
-            IsReadOnly = Model.IsReadOnly(property)
+            IsReadOnly = _model.IsReadOnly(property)
         }).ToList();
 
         return list;
@@ -239,16 +252,12 @@ internal partial class Poco : IPocoGenerator
 
     private int? GetMaxLength(IEdmProperty property)
     {
-        int? maxLength = null;
-        switch (property.Type.PrimitiveKind())
+        var maxLength = property.Type.PrimitiveKind() switch
         {
-            case EdmPrimitiveTypeKind.String:
-                maxLength = property.Type.AsString().MaxLength;
-                break;
-            case EdmPrimitiveTypeKind.Binary:
-                maxLength = property.Type.AsBinary().MaxLength;
-                break;
-        }
+            EdmPrimitiveTypeKind.String => property.Type.AsString().MaxLength,
+            EdmPrimitiveTypeKind.Binary => property.Type.AsBinary().MaxLength,
+            _ => null
+        };
 
         //property.Type.AsDecimal().Precision
         return maxLength ?? 0;
@@ -277,11 +286,11 @@ internal partial class Poco : IPocoGenerator
             return ent1.FullName();
 
         if (!edmTypeReference.IsCollection()) return clrTypeName;
-        if (!(edmType is IEdmCollectionType edmCollectionType)) return clrTypeName;
+        if (edmType is not IEdmCollectionType edmCollectionType) return clrTypeName;
         var elementTypeReference = edmCollectionType.ElementType;
-        if (!(elementTypeReference.Definition is IEdmPrimitiveType primitiveElementType))
+        if (elementTypeReference.Definition is not IEdmPrimitiveType primitiveElementType)
         {
-            if (!(elementTypeReference.Definition is IEdmSchemaElement schemaElement))
+            if (elementTypeReference.Definition is not IEdmSchemaElement schemaElement)
                 return clrTypeName;
             clrTypeName = schemaElement.FullName();
             clrTypeName = $"List<{clrTypeName}>";
@@ -296,8 +305,8 @@ internal partial class Poco : IPocoGenerator
     private string EdmToClr(IEdmPrimitiveType type)
     {
         var kind = type.PrimitiveKind;
-        return ClrDictionary.ContainsKey(kind)
-            ? ClrDictionary[kind]
+        return ClrDictionary.TryGetValue(kind, out var value)
+            ? value
             : kind.ToString();
     }
 
@@ -311,31 +320,8 @@ internal partial class Poco : IPocoGenerator
         SchemaErrors.Add($"Invalid Type Reference: {edmType}");
     }
 
-    #region Helper Methods
-
-    internal IEdmSchemaType? GetSchemaType(string name, string nameSpace)
-    {
-        return (IEdmSchemaType?)Model.SchemaElements
-            .FirstOrDefault(x => x.Name == name && x.Namespace == nameSpace);
-    }
-
-    internal IEdmSchemaType? GetSchemaType(string fullName)
-    {
-        return (IEdmSchemaType?)Model.SchemaElements
-            .FirstOrDefault(x => x.FullName() == fullName);
-    }
-
     private IEnumerable<IEdmSchemaType> GetSchemaElements(IEdmModel model)
     {
         return model.SchemaElements.OfType<IEdmSchemaType>();
     }
-
-    internal IEnumerable<IEdmSchemaType> GetSchemaElements(
-        Func<IEnumerable<IEdmSchemaType>, IEnumerable<IEdmSchemaType>> func)
-    {
-        var elements = Model.SchemaElements.OfType<IEdmSchemaType>();
-        return func(elements);
-    }
-
-    #endregion
 }

@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.Extensions;
-
 namespace OData2Poco.TypeScript;
+
+using Extensions;
 
 internal static class TsTypeExtension
 {
     //mapping c# type with typescript
-    private static readonly Dictionary<string, string> TsDictionary = new()
+    private static readonly Dictionary<string, string> s_tsDictionary = new()
     {
         //string
         ["string"] = "string",
@@ -44,18 +44,16 @@ internal static class TsTypeExtension
 
     internal static string ToTypeScript(this string csType)
     {
-        return TsDictionary.ContainsKey(csType)
-            ? TsDictionary[csType]
+        return s_tsDictionary.TryGetValue(csType, out var value)
+            ? value
             : csType.GenenericToArray();
     }
 
     //Convert List<T> to T[]
     internal static string GenenericToArray(this string propType)
     {
-        var listPattern = @"List[<](.+)[>]";
-        var m = propType.MatchPattern(listPattern);
-        if (m.Success)
-            return m.Groups[1].Value + "[]";
-        return propType;
+        const string ListPattern = "List[<](.+)[>]";
+        var m = propType.MatchPattern(ListPattern);
+        return m.Success ? m.Groups[1].Value + "[]" : propType;
     }
 }

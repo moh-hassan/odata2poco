@@ -1,8 +1,9 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+namespace OData2Poco.Extensions;
+
 using System.Text.RegularExpressions;
 
-namespace OData2Poco.Extensions;
 public static partial class StringExtensions
 {
     public static bool IsValidValue(this string value, string[] validValues, bool isCaseSensitive = false)
@@ -11,6 +12,7 @@ public static partial class StringExtensions
             ? validValues.Contains(value)
             : validValues.Contains(value, StringComparer.OrdinalIgnoreCase);
     }
+
     /// <summary>
     /// check if the name is in the validValues
     /// </summary>

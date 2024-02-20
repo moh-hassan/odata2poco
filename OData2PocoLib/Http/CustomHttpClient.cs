@@ -1,70 +1,110 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Net;
-using OData2Poco.Extensions;
-using OData2Poco.InfraStructure.Logging;
-
+#pragma warning disable SA1202
 namespace OData2Poco.Http;
+
+using System.Net;
+using Extensions;
+using InfraStructure.Logging;
 
 internal class CustomHttpClient : IDisposable
 {
-    private static readonly ILog Logger = PocoLogger.Default;
-    internal DelegatingHandler? _delegatingHandler;
+    public HttpResponseMessage? _response = new();
+    internal static readonly ILog Logger = PocoLogger.Default;
     internal readonly OdataConnectionString OdataConnection;
-    internal HttpClient Client;
-    internal HttpClientHandler HttpHandler;
-    public HttpResponseMessage Response = new();
-    public Uri ServiceUri { get; set; }
+    internal HttpClient _client;
+    internal DelegatingHandler? _delegatingHandler;
+    internal HttpClientHandler _httpHandler;
 
     public CustomHttpClient(OdataConnectionString odataConnectionString)
     {
-
         OdataConnection = odataConnectionString;
         ServiceUri = new Uri(OdataConnection.ServiceUrl);
-        HttpHandler = new HttpClientHandler
+        _httpHandler = new HttpClientHandler
         {
             UseDefaultCredentials = true,
             AllowAutoRedirect = true,
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
         };
-        Client = new HttpClient(HttpHandler);
+        _client = new HttpClient(_httpHandler);
     }
 
     public CustomHttpClient(OdataConnectionString odataConnectionString,
         DelegatingHandler dh) : this(odataConnectionString)
     {
         _delegatingHandler = dh;
-        _delegatingHandler.InnerHandler = HttpHandler;
-        Client = new HttpClient(_delegatingHandler);
+        _delegatingHandler.InnerHandler = _httpHandler;
+        _client = new HttpClient(_delegatingHandler);
     }
 
+    public Uri ServiceUri { get; set; }
 
+    internal virtual async Task<HttpResponseMessage> GetAsync(string? requestUri)
+    {
+        _ = requestUri ?? throw new ArgumentNullException(nameof(requestUri));
+        await SetHttpClient().ConfigureAwait(false);
+        var response = await _client.GetAsync(new Uri(requestUri)).ConfigureAwait(false);
+        if (response.StatusCode is HttpStatusCode.ServiceUnavailable or
+            HttpStatusCode.GatewayTimeout)
+        {
+            response = await Policy
+                .RetryAsync(() => _client.GetAsync(new Uri(requestUri)), 2).ConfigureAwait(false);
+        }
+
+        return response ?? throw new OData2PocoException("Response is null");
+    }
+
+    internal async Task<string> ReadMetaDataAsync()
+    {
+        var url = ServiceUri.AbsoluteUri.EndsWith(".xml") ? ServiceUri.AbsoluteUri : ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
+        //check url is remote xml file
+        try
+        {
+            _response = await GetAsync(url).ConfigureAwait(false);
+            _response.EnsureSuccessStatusCode();
+            var content = await _response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return content;
+        }
+        catch (Exception)
+        {
+            if (_response?.StatusCode != HttpStatusCode.Unauthorized)
+            {
+                throw;
+            }
+
+            var wwwAuthenticate = _response.Headers.WwwAuthenticate.ToString();
+            throw new OData2PocoException(
+                $"HTTP {_response.StatusCode} ({(int)_response.StatusCode}): {wwwAuthenticate}");
+        }
+    }
 
     private void SetupHeader()
     {
+        if (OdataConnection.HttpHeader == null || !OdataConnection.HttpHeader.Any())
+        {
+            return;
+        }
 
-        if (OdataConnection.HttpHeader == null || !OdataConnection.HttpHeader.Any()) return;
         foreach (var header in OdataConnection.HttpHeader)
         {
             header.TryReplaceToBase64(out var header2);
-
             var pair = header2.Split([':', '='], 2);
             if (pair.Length == 2)
             {
                 var key = pair[0].Trim().Trim('"');
                 var value = pair[1].Trim().Trim('"');
-                Client.DefaultRequestHeaders.TryAddWithoutValidation(key, value);
+                _client.DefaultRequestHeaders.TryAddWithoutValidation(key, value);
             }
         }
     }
 
-    private async Task SetHttpClient()
+    private Task SetHttpClient()
     {
         //setup Skip Certification Check.
-        //Use in development environment, but is not recommended in production 
+        //Use in development environment, but is not recommended in production
         if (OdataConnection.SkipCertificationCheck)
         {
-            HttpHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+            _httpHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
             Logger.Warn("Skip Certification Check is set to true.");
         }
 
@@ -77,17 +117,19 @@ internal class CustomHttpClient : IDisposable
 
         SetupProxy();
 
-        Client.DefaultRequestHeaders
+        _client.DefaultRequestHeaders
             .TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-        var agent = "OData2Poco";
-        Client.DefaultRequestHeaders.Add("User-Agent", agent);
+        const string Agent = "OData2Poco";
+        _client.DefaultRequestHeaders.Add("User-Agent", Agent);
         SetupHeader();
 
         if (OdataConnection.Authenticate != AuthenticationType.None)
         {
             Authenticator auth = new(this);
-            await auth.Authenticate();
+            return auth.Authenticate();
         }
+
+        return Task.CompletedTask;
     }
 
     private void SetupProxy()
@@ -95,8 +137,8 @@ internal class CustomHttpClient : IDisposable
         if (!string.IsNullOrEmpty(OdataConnection.Proxy))
         {
             Logger.Trace($"Using Proxy: '{OdataConnection.Proxy}'");
-            HttpHandler.UseProxy = true;
-            HttpHandler.Proxy = new WebProxy(OdataConnection.Proxy);
+            _httpHandler.UseProxy = true;
+            _httpHandler.Proxy = new WebProxy(OdataConnection.Proxy);
             if (!string.IsNullOrEmpty(OdataConnection.ProxyUser))
             {
                 var credentials = OdataConnection.ProxyUser.Split(':');
@@ -104,56 +146,20 @@ internal class CustomHttpClient : IDisposable
                 {
                     var proxyUserName = credentials[0];
                     var proxyPassword = credentials[1];
-                    HttpHandler.Proxy.Credentials = new NetworkCredential(proxyUserName, proxyPassword);
+                    _httpHandler.Proxy.Credentials = new NetworkCredential(proxyUserName, proxyPassword);
                     //disable default credentials
-                    HttpHandler.UseDefaultCredentials = false;
+                    _httpHandler.UseDefaultCredentials = false;
                 }
                 else
                 {
-                    Logger.Warn($"ProxyUser is not in the correct format. Expected format is 'username:password'.");
+                    Logger.Warn("ProxyUser is not in the correct format. Expected format is 'username:password'.");
                 }
-
             }
             else
             {
                 //enable default credentials
-                HttpHandler.UseDefaultCredentials = true;
+                _httpHandler.UseDefaultCredentials = true;
             }
-        }
-    }
-
-    internal virtual async Task<HttpResponseMessage> GetAsync(string? requestUri)
-    {
-        await SetHttpClient();
-        var response = await Client.GetAsync(requestUri);
-        if (response.StatusCode == HttpStatusCode.ServiceUnavailable ||
-            response.StatusCode == HttpStatusCode.GatewayTimeout)
-        {
-            response = await Policy.RetryAsync(() => Client.GetAsync(requestUri), 2);
-        }
-        return response ?? throw new OData2PocoException("Response is null");
-    }
-
-    internal async Task<string> ReadMetaDataAsync()
-    {
-        string url;
-        //check url is remote xml file
-        if (ServiceUri.AbsoluteUri.EndsWith(".xml"))
-            url = ServiceUri.AbsoluteUri;
-        else
-            url = ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
-        try
-        {
-            Response = await GetAsync(url);
-            Response.EnsureSuccessStatusCode();
-            var content = await Response.Content.ReadAsStringAsync();
-            return content;
-        }
-        catch (Exception)
-        {
-            if (Response.StatusCode != HttpStatusCode.Unauthorized) throw;
-            var wwwAuthenticate = Response.Headers.WwwAuthenticate.ToString();
-            throw new OData2PocoException($"HTTP {Response.StatusCode} ({(int)Response.StatusCode}): {wwwAuthenticate}");
         }
     }
 
@@ -162,15 +168,13 @@ internal class CustomHttpClient : IDisposable
         Dispose(true);
         GC.SuppressFinalize(this);
     }
+
     protected virtual void Dispose(bool disposing)
     {
         OdataConnection.Password.Dispose();
+        _httpHandler.Dispose();
         _delegatingHandler?.Dispose();
-        Response?.Dispose();
-        Client.Dispose();
-    }
-    ~CustomHttpClient()
-    {
-        Dispose(false);
+        _response?.Dispose();
+        _client.Dispose();
     }
 }

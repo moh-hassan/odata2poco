@@ -1,8 +1,4 @@
-// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
-
-
-
-// ReSharper disable UnusedMember.Global
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 namespace OData2Poco.CustAttributes.NamedAtributes;
 
@@ -19,14 +15,16 @@ public class OriginalNameAttribute : INamedAttribute
 {
     public string Name { get; set; } = "original";
     public string Scope { get; set; } = "property";
-    public bool IsUserDefined { get; set; } = false;
+    public bool IsUserDefined { get; set; }
     public bool IsValid { get; set; } = true;
-    public List<string> GetAttributes(PropertyTemplate property)
+
+    public List<string> GetAttributes(PropertyTemplate propertyTemplate)
     {
+        _ = propertyTemplate ?? throw new ArgumentNullException(nameof(propertyTemplate));
         return
         [
-            property.OriginalName != property.PropName
-                ? $"[JsonProperty(\"{property.OriginalName}\")]"
+            propertyTemplate.OriginalName != propertyTemplate.PropName
+                ? $"[JsonProperty(\"{propertyTemplate.OriginalName}\")]"
                 : string.Empty
         ];
     }

@@ -1,12 +1,14 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 namespace OData2Poco.Tests;
+
 public class ModelExtensionTest : BaseTest
 {
     [Test]
     [TestCase("string", "string")]
     [TestCase("List<string>", "string")]
-    [TestCase("List<Microsoft.OData.SampleService.Models.TripPin.Location>", "Microsoft.OData.SampleService.Models.TripPin.Location")]
+    [TestCase("List<Microsoft.OData.SampleService.Models.TripPin.Location>",
+        "Microsoft.OData.SampleService.Models.TripPin.Location")]
     [TestCase("Microsoft.OData.SampleService.Models.TripPin.PersonGender",
         "Microsoft.OData.SampleService.Models.TripPin.PersonGender")]
     [TestCase("long", "long")]
@@ -30,9 +32,8 @@ public class ModelExtensionTest : BaseTest
         //Arrange
         var ct = GetClassTemplateSample(name);
         //Act
-        var sut = ct.BaseType.ToClassTemplate(ClassList);
+        var sut = ct.BaseType.ToClassTemplate(_classList);
         //Assert
         sut?.Name.Should().BeEquivalentTo(expected);
-
     }
 }

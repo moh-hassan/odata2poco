@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.Http;
 namespace OData2Poco.CommandLine.Test;
+
+using Http;
+
 public class OptionManagerTest
 {
     [Test]
@@ -22,7 +24,6 @@ public class OptionManagerTest
         };
         _ = new OptionManager(options);
         Assert.That(options.Errors, Is.Empty);
-
     }
 
     [Test]
@@ -36,18 +37,23 @@ public class OptionManagerTest
             Password = "secret",
             Lang = Language.TS,
             NameCase = CaseEnum.Camel,
-            Attributes = new[] { "key", "json" },
+            Attributes =
+            [
+                "key",
+                "json"
+            ],
         };
         //Act
         var (cs, ps) = new OptionManager(options);
         //Assert
-        cs?.ServiceUrl.Should().Be(options.ServiceUrl);
-        cs?.UserName.Should().Be(options.UserName);
-        cs?.Password.Should().BeEquivalentTo(options.Password);
+        cs.ServiceUrl.Should().Be(options.ServiceUrl);
+        cs.UserName.Should().Be(options.UserName);
+        cs.Password.Should().BeEquivalentTo(options.Password);
         ps?.Lang.Should().Be(options.Lang);
         ps?.NameCase.Should().Be(options.NameCase);
         ps?.Attributes.Should().BeEquivalentTo(options.Attributes);
     }
+
     [Test]
     public void Option_with_password_should_be_serialized_deserialized_correctly_test()
     {
@@ -61,10 +67,10 @@ public class OptionManagerTest
         //Act
         var (cs, _) = new OptionManager(options);
         //Assert
-        cs?.Password.Should().BeEquivalentTo(options.Password);
-        cs?.UserName.Should().Be(options.UserName);
-        cs?.Password.GetBasicAuth(cs.UserName).Should().Be("dXNlcjE6c2VjcmV0");
-        cs?.GetToken().Should().Be(options.Password.GetRawPassword());
+        cs.Password.Should().BeEquivalentTo(options.Password);
+        cs.UserName.Should().Be(options.UserName);
+        cs.Password.GetBasicAuth(cs.UserName).Should().Be("dXNlcjE6c2VjcmV0");
+        cs.GetToken().Should().Be(options.Password.GetRawPassword());
     }
 
     [Test]
@@ -86,7 +92,7 @@ public class OptionManagerTest
         var (cs, _) = new OptionManager(options);
         var dh = new AuthHandler();
         var client = cs.ToCustomHttpClient(dh);
-        await client.GetAsync("http://localhost2");
+        await client.GetAsync("http://localhost2").ConfigureAwait(false);
         //Assert
         dh.AuthHeader.Should().NotBeNull();
         dh.AuthHeader?.ToString().Should().BeEquivalentTo(expected);

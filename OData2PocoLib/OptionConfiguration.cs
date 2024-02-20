@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+namespace OData2Poco;
+
 using System.Text;
 using System.Text.RegularExpressions;
-using OData2Poco.Extensions;
-using OData2Poco.InfraStructure.FileSystem;
+using Extensions;
+using InfraStructure.FileSystem;
 
-
-namespace OData2Poco;
 public class OptionConfiguration
 {
     private readonly IPocoFileSystem _fileSystem;
@@ -14,17 +14,19 @@ public class OptionConfiguration
     public OptionConfiguration(IPocoFileSystem fs)
     {
         _fileSystem = fs;
-
     }
+
     public OptionConfiguration() : this(new PocoFileSystem())
     {
     }
 
-
-
-    public bool TryGetConfigurationFile(string[] args, out string[] commandLine,
-        out string? error, out string? fileName)
+    public bool TryGetConfigurationFile(
+        string[] args,
+        out string[] commandLine,
+        out string? error,
+        out string? fileName)
     {
+        args ??= [];
         error = null;
         fileName = null;
         if (args.Length == 0 && _fileSystem.Exists("o2pgen.txt"))
@@ -43,6 +45,7 @@ public class OptionConfiguration
                 commandLine = args;
                 return false;
             }
+
             commandLine = ReadConfig(fileName);
             return true;
         }
@@ -53,18 +56,25 @@ public class OptionConfiguration
 
     internal string[] ReadConfig(string fileName)
     {
-        var sb = new StringBuilder();
-        var text = LoadWithIncludeFile(fileName, out var errors).Trim();
+        StringBuilder sb = new();
+        var text = LoadWithIncludeFile(fileName, out _).Trim();
         if (string.IsNullOrEmpty(text))
+        {
             return [];
+        }
 
-        using StringReader reader = new StringReader(text);
+        using StringReader reader = new(text);
         while (reader.ReadLine() is { } line)
         {
             var line2 = LineClean(line);
-            if (string.IsNullOrEmpty(line2)) continue;
+            if (string.IsNullOrEmpty(line2))
+            {
+                continue;
+            }
+
             sb.Append($"{line2} ");
         }
+
         var args = sb.ToString().Trim().SplitArgs();
         return args;
 
@@ -72,22 +82,30 @@ public class OptionConfiguration
         {
             line = line.Trim();
             if (string.IsNullOrEmpty(line) || line.StartsWith("#"))
+            {
                 return null;
+            }
+
             var pos = line.IndexOf("#", StringComparison.Ordinal);
             if (pos > 0)
+            {
                 line = line[..pos];
+            }
+
             return line.Trim();
         }
     }
 
     internal string LoadWithIncludeFile(string fname, out string[] errors)
     {
-        var errorsList = new List<string>();
+        List<string> errorsList = [];
         var text = _fileSystem.ReadAllText(fname);
-        var pattern = @"^\#include\s+(.*)$";
-        var matches = Regex.Matches(text, pattern,
+        const string Pattern = @"^\#include\s+(.*)$";
+        var matches = Regex.Matches(
+            text,
+            Pattern,
             RegexOptions.Multiline | RegexOptions.IgnoreCase);
-        foreach (Match m in matches)
+        foreach (var m in matches.Cast<Match>())
         {
             try
             {
@@ -99,8 +117,8 @@ public class OptionConfiguration
             {
                 errorsList.Add(e.Message);
             }
-
         }
+
         errors = errorsList.ToArray();
         return text;
     }

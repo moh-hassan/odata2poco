@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.Http;
-
 namespace OData2Poco.Extensions;
+
+using Http;
 
 internal static class CustomClientExtensions
 {
@@ -13,17 +13,17 @@ internal static class CustomClientExtensions
             ? new CustomHttpClient(ocs)
             : new CustomHttpClient(ocs, dh);
     }
+
     public static string GetBasicAuth(this OdataConnectionString ocs)
     {
-        if (string.IsNullOrEmpty(ocs.UserName)
-            || string.IsNullOrEmpty(ocs.Password.Credential.Password))
-            return string.Empty;
-        return ocs.Password.GetBasicAuth(ocs.UserName);
+        return string.IsNullOrEmpty(ocs.UserName)
+            || string.IsNullOrEmpty(ocs.Password.Credential.Password)
+            ? string.Empty
+            : ocs.Password.GetBasicAuth(ocs.UserName);
     }
+
     public static string GetToken(this OdataConnectionString ocs)
     {
-        if (string.IsNullOrEmpty(ocs.Password.Credential.Password))
-            return string.Empty;
-        return ocs.Password.GetToken();
+        return string.IsNullOrEmpty(ocs.Password.Credential.Password) ? string.Empty : ocs.Password.GetToken();
     }
 }

@@ -1,8 +1,11 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+
 namespace OData2Poco.Fake;
+
 internal static class TsTestData
 {
     #region data without navigation
+
     internal const string Class = @"  
 export class Flight extends PublicTransportation {
 	public FlightNumber: string; //Not null
@@ -11,6 +14,7 @@ export class Flight extends PublicTransportation {
 	// public Airline: Airline; //navigator
 }
 ";
+
     internal const string Interface = @"
 export interface Flight extends PublicTransportation {
 	FlightNumber: string; //Not null
@@ -19,6 +23,7 @@ export interface Flight extends PublicTransportation {
 	// Airline: Airline; //navigator
 }
 ";
+
     internal const string ClassMultiFiles = @"  
 import {Airport} from './Airport';
 import {AirportLocation} from './AirportLocation';
@@ -35,6 +40,7 @@ export class Flight extends PublicTransportation {
 	// public Airline: Airline; //navigator
 }
 ";
+
     internal const string InterfaceMultiFiles = @"
 import {Airport} from './Airport';
 import {AirportLocation} from './AirportLocation';
@@ -51,6 +57,7 @@ export interface Flight extends PublicTransportation {
 	// Airline: Airline; //navigator
 }
 ";
+
     internal const string ImportMultiFile = @"
 
 ";
@@ -72,6 +79,7 @@ export class MicrosoftODataSampleServiceModelsTripPinFlight extends MicrosoftODa
 	// public Airline: MicrosoftODataSampleServiceModelsTripPinAirline; //navigator
 }
 ";
+
     internal const string InterfaceMultiFilesUsingFullName = @"
 import {MicrosoftODataSampleServiceModelsTripPinAirport} from './MicrosoftODataSampleServiceModelsTripPinAirport';
 import {MicrosoftODataSampleServiceModelsTripPinAirportLocation} from './MicrosoftODataSampleServiceModelsTripPinAirportLocation';
@@ -89,6 +97,7 @@ export interface MicrosoftODataSampleServiceModelsTripPinFlight extends Microsof
 	// Airline: MicrosoftODataSampleServiceModelsTripPinAirline; //navigator
 }
 ";
+
     internal const string Enum = @"
 	export enum PersonGender {
 		Male=0 ,
@@ -96,9 +105,11 @@ export interface MicrosoftODataSampleServiceModelsTripPinFlight extends Microsof
 		Unknown=2 
 	}
 ";
+
     #endregion
 
     #region data with navigation
+
     internal const string NavClass = @"  
 export class Flight extends PublicTransportation {
 	public FlightNumber: string; //Not null
@@ -107,6 +118,7 @@ export class Flight extends PublicTransportation {
 	// public Airline: Airline; //navigator
 }
 ";
+
     internal const string NavInterface = @"
 export interface Flight extends PublicTransportation {
 	FlightNumber: string; //Not null
@@ -115,6 +127,7 @@ export interface Flight extends PublicTransportation {
 	// Airline: Airline; //navigator
 }
 ";
+
     internal const string NavClassMultiFiles = @"  
 import { Airport } from './Airport';
 import { Airline } from './Airline';
@@ -127,6 +140,7 @@ export class Flight extends PublicTransportation {
 	// public Airline: Airline; //navigator
 }
 ";
+
     internal const string NavInterfaceMultiFiles = @"
 import { Airport } from './Airport';
 import { Airline } from './Airline';
@@ -139,5 +153,6 @@ export interface Flight extends PublicTransportation {
 	// Airline: Airline; //navigator
 }
 ";
+
     #endregion
 }

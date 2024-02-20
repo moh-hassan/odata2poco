@@ -1,54 +1,12 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using NSubstitute;
-using OData2Poco.Api;
-
 namespace OData2Poco.Tests;
+
+using Api;
+using NSubstitute;
 
 public static class Moq
 {
-    private static MetaDataInfo GetMetadataInfo()
-    {
-        return new MetaDataInfo
-        {
-            MetaDataVersion = "v4.0",
-            ServiceUrl = "http://localhost",
-        };
-    }
-
-    public static IPocoGenerator Moq4IPocoGenerator(List<ClassTemplate> list)
-    {
-        var gen = Substitute.For<IPocoGenerator>();
-        gen.GeneratePocoList().Returns(list);
-        gen.MetaData = GetMetadataInfo();
-        return gen;
-    }
-    public static IPocoGenerator Moq4IPocoGenerator(ClassTemplate ct)
-    {
-        var list = new List<ClassTemplate> { ct };
-        var gen = Substitute.For<IPocoGenerator>();
-        gen.GeneratePocoList().Returns(list);
-        gen.MetaData = GetMetadataInfo();
-        return gen;
-    }
-    public static async Task<IPocoGenerator> Moq4IPocoGeneratorAsync(string url,
-        PocoSetting setting)
-    {
-        OdataConnectionString connection = OdataConnectionString.Create(url);
-        var o2P = new O2P(setting);
-        var gen = await o2P.GenerateModel(connection);
-        return gen;
-    }
-    #region TripPin
-    public static async Task<IPocoGenerator> TripPin4IgenAsync(PocoSetting setting)
-    {
-        string url = TestSample.TripPin4;
-        return await Moq4IPocoGeneratorAsync(url, setting);
-    }
-    public static async Task<IPocoGenerator> TripPin4IgenAsync()
-    {
-        return await TripPin4IgenAsync(new PocoSetting());
-    }
     public static List<ClassTemplate> TripPinModel
     {
         get
@@ -59,8 +17,6 @@ public static class Moq
         }
     }
 
-    #endregion
-    #region NorthWind
     public static List<ClassTemplate> NorthWindModel
     {
         get
@@ -70,16 +26,66 @@ public static class Moq
             return list;
         }
     }
-    public static async Task<IPocoGenerator> NorthWind3Async(PocoSetting setting)
+
+    public static IPocoGenerator Moq4IPocoGenerator(List<ClassTemplate> list)
     {
-        string url = TestSample.NorthWindV3;
-        return await Moq4IPocoGeneratorAsync(url, setting);
+        var gen = Substitute.For<IPocoGenerator>();
+        gen.GeneratePocoList().Returns(list);
+        gen.MetaData = GetMetadataInfo();
+        return gen;
     }
-    public static async Task<IPocoGenerator> NorthWindGeneratorAsync()
+
+    public static IPocoGenerator Moq4IPocoGenerator(ClassTemplate ct)
+    {
+        var list = new List<ClassTemplate>
+        {
+            ct
+        };
+        var gen = Substitute.For<IPocoGenerator>();
+        gen.GeneratePocoList().Returns(list);
+        gen.MetaData = GetMetadataInfo();
+        return gen;
+    }
+
+    public static async Task<IPocoGenerator> Moq4IPocoGeneratorAsync(string url,
+        PocoSetting setting)
+    {
+        var connection = OdataConnectionString.Create(url);
+        var o2P = new O2P(setting);
+        var gen = await o2P.GenerateModel(connection).ConfigureAwait(false);
+        return gen;
+    }
+
+    public static Task<IPocoGenerator> TripPin4IgenAsync(PocoSetting setting)
+    {
+        var url = TestSample.TripPin4;
+        return Moq4IPocoGeneratorAsync(url, setting);
+    }
+
+    public static Task<IPocoGenerator> TripPin4IgenAsync()
+    {
+        return TripPin4IgenAsync(new PocoSetting());
+    }
+
+    public static Task<IPocoGenerator> NorthWind3Async(PocoSetting setting)
+    {
+        var url = TestSample.NorthWindV3;
+        return Moq4IPocoGeneratorAsync(url, setting);
+    }
+
+    public static Task<IPocoGenerator> NorthWindGeneratorAsync()
     {
         PocoSetting setting = new();
-        string url = TestSample.NorthWindV3;
-        return await Moq4IPocoGeneratorAsync(url, setting);
+        var url = TestSample.NorthWindV3;
+        return Moq4IPocoGeneratorAsync(url, setting);
     }
-    #endregion
+
+    private static MetaDataInfo GetMetadataInfo()
+    {
+        return new MetaDataInfo
+        {
+            MetaDataVersion = "v4.0",
+            ServiceUrl = "http://localhost"
+        };
+    }
 }

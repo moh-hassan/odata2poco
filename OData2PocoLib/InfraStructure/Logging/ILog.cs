@@ -1,8 +1,9 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text;
-
+#pragma warning disable CA1716 // Identifiers should not match keywords
 namespace OData2Poco.InfraStructure.Logging;
+
+using System.Text;
 
 public interface ILog
 {

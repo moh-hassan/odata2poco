@@ -1,44 +1,55 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using DynamicExpresso;
-using System.Text.RegularExpressions;
-using OData2Poco.Extensions;
+namespace OData2Poco.CustAttributes.UserAttributes;
 
-namespace OData2Poco;
+using System.Text.RegularExpressions;
+using DynamicExpresso;
+using Extensions;
 
 internal static class TemplateEvaluation
 {
-    public static string EvaluateTemplate(this string template, object inputObject,
+    public static string EvaluateTemplate(
+        this string template,
+        object inputObject,
         out string[] errors)
     {
         errors = [];
         if (string.IsNullOrEmpty(template))
-            return string.Empty;
-        if (!template.Contains("{{"))
-            return template;
-        string pattern = @"{{([\s\S]+?)}}";
-        var allErrors = new List<string>();
-
-        string outputString = Regex.Replace(template, pattern, match =>
         {
-            string expression = match.Groups[1].Value;
+            return string.Empty;
+        }
+
+        if (!template.Contains("{{"))
+        {
+            return template;
+        }
+
+        const string Pattern = @"{{([\s\S]+?)}}";
+        List<string> allErrors = [];
+
+        var outputString = Regex.Replace(template, Pattern, match =>
+        {
+            var expression = match.Groups[1].Value;
             string? result = null;
             try
             {
-                result = EvaluateExpression(expression, inputObject, out _)?.ToString();
+                result = expression.EvaluateExpression(inputObject, out _)?.ToString();
             }
             catch
             {
                 var msg = $"Fail to evaluate {match.Value}";
                 allErrors.Add(msg);
             }
+
             return result ?? match.Value;
         });
-        errors = allErrors.ToArray();
+        errors = [.. allErrors];
         return outputString;
     }
 
-    public static object? EvaluateExpression(this string expression, object? inputObject,
+    public static object? EvaluateExpression(
+        this string expression,
+        object? inputObject,
         out string error)
     {
         if (string.IsNullOrEmpty(expression))
@@ -52,12 +63,13 @@ internal static class TemplateEvaluation
             error = "Null input object";
             return null;
         }
+
         error = string.Empty;
-        Interpreter interpreter = new Interpreter();
+        Interpreter interpreter = new();
 
         interpreter
-            .Reference(typeof(StringExtensions))
-            .SetVariable("this", inputObject);
+           .Reference(typeof(StringExtensions))
+           .SetVariable("this", inputObject);
         try
         {
             return interpreter.Eval(expression);
@@ -68,12 +80,12 @@ internal static class TemplateEvaluation
         }
     }
 
-    public static bool EvaluateCondition(this string expression, object inputObject,
+    public static bool EvaluateCondition(
+        this string expression,
+        object inputObject,
         out string error)
     {
-        var result = EvaluateExpression(expression, inputObject, out error);
-        if (result is bool b)
-            return b;
-        throw new OData2PocoException($"Expression '{expression}' is not a valid condition");
+        var result = expression.EvaluateExpression(inputObject, out error);
+        return result is bool b ? b : throw new OData2PocoException($"Expression '{expression}' is not a valid condition");
     }
 }

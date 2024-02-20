@@ -1,46 +1,21 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text.RegularExpressions;
-using OData2Poco.Api;
-using OData2Poco.Tests;
-
 namespace OData2Poco.Test.TypeScript;
+
+using System.Text.RegularExpressions;
+using Api;
+using Tests;
 
 [Category("typescript")]
 public class TsO2PTest : BaseTest
 {
-    #region data
-    private string Url { get; } = TestSample.TripPin4;
-
-    private const string TsClassCode = @"
-export class Location  {
-		public address: string; //Not null
-		public city?: City;
-	}
-
-	export class EventLocation extends Location {
-		public buildingInfo?: string;
-	}
-";
-    private const string TsInterfaceCode = @"
-export interface Location  {
-		address: string; //Not null
-		city?: City;
-	}
-
-	export interface EventLocation extends Location {
-		buildingInfo?: string;
-	}
-";
-    #endregion
-
     [Test]
     [TestCase(GeneratorType.Class, TsClassCode)]
     [TestCase(GeneratorType.Interface, TsInterfaceCode)]
     public async Task Generate_typescribt_as_single_file_test(GeneratorType type,
         string expected)
     {
-        //Arrange           
+        //Arrange
         PocoSetting setting = new()
         {
             Lang = Language.TS,
@@ -51,9 +26,9 @@ export interface Location  {
         };
         var o2 = new O2P(setting);
 
-        //Act             
+        //Act
         var cs = OdataConnectionString.Create(Url);
-        var pocostore = await o2.GenerateTsAsync(cs);
+        var pocostore = await o2.GenerateTsAsync(cs).ConfigureAwait(false);
         var code = pocostore.ToString();
         //Assert
         code.ToLines().Should().ContainInOrder(expected.ToLines());
@@ -64,7 +39,7 @@ export interface Location  {
     public async Task Generate_typescript_interface_as_single_file_test()
     {
         //Arrange
-        GeneratorType type = GeneratorType.Interface;
+        var type = GeneratorType.Interface;
         PocoSetting setting = new()
         {
             Lang = Language.TS,
@@ -84,9 +59,9 @@ export interface Location  {
 		buildingInfo?: string;
 	}
 ";
-        //Act            
+        //Act
         var cs = OdataConnectionString.Create(Url);
-        var pocostore = await o2.GenerateTsAsync(cs);
+        var pocostore = await o2.GenerateTsAsync(cs).ConfigureAwait(false);
         var code = pocostore.ToString();
         //Assert
         code.ToLines().Should().ContainInOrder(expected.ToLines());
@@ -94,11 +69,12 @@ export interface Location  {
         Regex.Matches(code, "export enum PersonGender").Count.Should().Be(1);
         Assert.That(code, Does.Not.Contain("class"));
     }
+
     [Test]
     public async Task Generate_typescribt_class_as_multi_files_test()
     {
         //Arrange
-        GeneratorType type = GeneratorType.Class;
+        var type = GeneratorType.Class;
         PocoSetting setting = new()
         {
             Lang = Language.TS,
@@ -126,21 +102,24 @@ export class Trip  {
 	public planItems?: PlanItem[]; //navigator
 }
 ";
-        //Act             
+        //Act
         var cs = OdataConnectionString.Create(Url);
-        var codes = await o2.GenerateTsAsync(cs);
+        var codes = await o2.GenerateTsAsync(cs).ConfigureAwait(false);
 
         //Assert
         var trip = codes.FirstOrDefault(a => a.Name.EndsWith("Trip"));
         codes.Count.Should().Be(14);
         trip?.Code.ToLines().Should().ContainInOrder(expected.ToLines());
-
     }
 
     [Test]
     [TestCase(GeneratorType.Interface, 13, 1, "interface")]
     [TestCase(GeneratorType.Class, 13, 1, "class")]
-    public async Task Multi_files_can_generate_class_or_interface_test(GeneratorType type, int n1, int n2, string keyword)
+    public async Task Multi_files_can_generate_class_or_interface_test(
+        GeneratorType type,
+        int n1,
+        int n2,
+        string keyword)
     {
         //Arrange
         PocoSetting setting = new()
@@ -154,14 +133,42 @@ export class Trip  {
         };
         var o2 = new O2P(setting);
 
-        //Act             
+        //Act
         var cs = OdataConnectionString.Create(Url);
-        var codes = await o2.GenerateTsAsync(cs);
+        var codes = await o2.GenerateTsAsync(cs).ConfigureAwait(false);
 
-        //Assert            
+        //Assert
         codes.Count(a => a.Code.Contains(keyword))
             .Should().Be(n1);
         codes.Count(a => a.Code.Contains("enum"))
             .Should().Be(n2);
     }
+
+    #region data
+
+    private string Url { get; } = TestSample.TripPin4;
+
+    private const string TsClassCode = @"
+export class Location  {
+		public address: string; //Not null
+		public city?: City;
+	}
+
+	export class EventLocation extends Location {
+		public buildingInfo?: string;
+	}
+";
+
+    private const string TsInterfaceCode = @"
+export interface Location  {
+		address: string; //Not null
+		city?: City;
+	}
+
+	export interface EventLocation extends Location {
+		buildingInfo?: string;
+	}
+";
+
+    #endregion
 }

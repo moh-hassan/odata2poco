@@ -1,9 +1,8 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text.RegularExpressions;
-
-
 namespace OData2Poco.CommandLine;
+
+using System.Text.RegularExpressions;
 
 // Options of commandline
 public partial class Options
@@ -26,7 +25,7 @@ public partial class Options
             }
             else
             {
-                //We want to validate the JSON but it also has a side effect of setting the RenameMap.                   
+                //We want to validate the JSON, but it also has a side effect of setting the RenameMap.
                 using var ifh = new StreamReader(NameMapFile);
                 RenameMap = Newtonsoft.Json.JsonConvert.DeserializeObject<RenameMap>(ifh.ReadToEnd());
                 if (RenameMap is null)
@@ -40,7 +39,7 @@ public partial class Options
                     {
                         foreach (var map in RenameMap.PropertyNameMap[className])
                         {
-                            if (map.OldName.IndexOf('^') == 0)
+                            if (map.OldName.StartsWith("^"))
                             {
                                 // MUST start with ^
                                 if (className.Equals("ALL", StringComparison.OrdinalIgnoreCase))
@@ -56,7 +55,8 @@ public partial class Options
                                 }
                                 else
                                 {
-                                    Errors.Add("There is an OldName regex for " + className + " -- They are only valid for the ALL class.");
+                                    Errors.Add("There is an OldName regex for " + className +
+                                               " -- They are only valid for the ALL class.");
                                 }
                             }
                         }

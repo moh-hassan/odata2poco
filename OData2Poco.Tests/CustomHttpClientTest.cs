@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Net;
-using OData2Poco.Http;
-#pragma warning disable IDE0200
-
 namespace OData2Poco.Tests;
 
-public partial class CustomHttpClientTest : BaseTest
+using System.Net;
+using Http;
+
+public class CustomHttpClientTest : BaseTest
 {
     private bool _isLive;
     private string _token;
@@ -25,18 +24,17 @@ public partial class CustomHttpClientTest : BaseTest
     public async Task No_auth_ReadMetaDataTest()
     {
         //Arrange
-        string url = TestSample.UrlTripPinService;
+        var url = TestSample.UrlTripPinService;
         var connection = new OdataConnectionString
         {
             ServiceUrl = url,
-            Authenticate = AuthenticationType.None,
+            Authenticate = AuthenticationType.None
         };
         //Act
-        var cc = new CustomHttpClient(connection);
-        var metadata = await cc.ReadMetaDataAsync();
-        //Assert        
+        using var cc = new CustomHttpClient(connection);
+        var metadata = await cc.ReadMetaDataAsync().ConfigureAwait(false);
+        //Assert
         Assert.That(metadata, Is.Not.Empty);
-
     }
 
     [Test]
@@ -48,12 +46,11 @@ public partial class CustomHttpClientTest : BaseTest
             ServiceUrl = "http://localhost/odata/odata",
             Password = "accessToken",
             Authenticate = AuthenticationType.Token
-
         };
         //Act
-        var ah = new AuthHandler();
-        var client = new CustomHttpClient(connection, ah);
-        await client.GetAsync(client.ServiceUri.ToString());
+        using var ah = new AuthHandler();
+        using var client = new CustomHttpClient(connection, ah);
+        await client.GetAsync(client.ServiceUri.ToString()).ConfigureAwait(false);
         //Assert
         ah.AuthHeader.Should().NotBeNull();
         ah.Scheme?.Should().Be("Bearer");
@@ -71,44 +68,46 @@ public partial class CustomHttpClientTest : BaseTest
             UserName = "user1",
             Password = "secret",
             Authenticate = AuthenticationType.Basic,
-            Domain = "localhost",
+            Domain = "localhost"
         };
         //Act
         //Assert
-        var client = new CustomHttpClient(connection, new CustomeHandler(r =>
+        using var delegatingHandler = new CustomeHandler(r =>
         {
             r.RequestUri?.ToString().Should().Be("http://localhost/odata2/api/northwind/$metadata");
             r.Headers.UserAgent.Should().NotBeNull();
             r.Headers.UserAgent.ToString().Should().Be("OData2Poco");
             r.Headers.Authorization.Should().NotBeNull();
-            r.Headers?.Authorization?.ToString().Should().Be("Basic dXNlcjE6c2VjcmV0");
-        }));
-        await client.ReadMetaDataAsync();
+            r.Headers.Authorization?.ToString().Should().Be("Basic dXNlcjE6c2VjcmV0");
+        });
+        using var client = new CustomHttpClient(connection, delegatingHandler);
+        await client.ReadMetaDataAsync().ConfigureAwait(false);
     }
+
     [Test]
     public async Task Custom_header_test()
     {
         //Arrange
         var list = new List<string>()
-         {
-             "ky1=123",
-             "Authorization=Bearer abc.123"
+        {
+            "ky1=123", "Authorization=Bearer abc.123"
         };
 
         var connection = new OdataConnectionString
         {
             ServiceUrl = "https://localhost/odata/v1",
-            HttpHeader = list,
+            HttpHeader = list
         };
         //Act
         //Assert
-        var client = new CustomHttpClient(connection, new CustomeHandler(r =>
+        using var delegatingHandler = new CustomeHandler(r =>
         {
             r.Headers.Count().Should().Be(3);
             Assert.That(r.Headers.Authorization, Is.Not.Null);
             Assert.That(r.Headers.Authorization.ToString(), Is.EqualTo("Bearer abc.123"));
-        }));
-        await client.ReadMetaDataAsync();
+        });
+        using var client = new CustomHttpClient(connection, delegatingHandler);
+        await client.ReadMetaDataAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -118,15 +117,15 @@ public partial class CustomHttpClientTest : BaseTest
         var ocs = new OdataConnectionString
         {
             ServiceUrl = "https://localhost/weatherforecast",
-            HttpHeader = new List<string>
-            {
+            HttpHeader =
+            [
                 "Authorization=Basic YWRtaW46YWRtaW4="
-            }
+            ]
         };
-        var ah = new AuthHandler();
+        using var ah = new AuthHandler();
         var sut = ocs.ToCustomHttpClient(ah);
         //Act
-        await sut.GetAsync(ocs.ServiceUrl);
+        await sut.GetAsync(ocs.ServiceUrl).ConfigureAwait(false);
         //Assert
         ah.AuthHeader.Should().NotBeNull();
         ah.AuthHeader?.ToString().Should().Be("Basic YWRtaW46YWRtaW4=");
@@ -143,15 +142,15 @@ public partial class CustomHttpClientTest : BaseTest
         var ocs = new OdataConnectionString
         {
             ServiceUrl = "https://localhost/weatherforecast",
-            HttpHeader = new List<string>
-            {
+            HttpHeader =
+            [
                 "Authorization=Bearer secret$token"
-            }
+            ]
         };
-        var ah = new AuthHandler();
-        var sut = ocs.ToCustomHttpClient(ah);
+        using var ah = new AuthHandler();
+        using var sut = ocs.ToCustomHttpClient(ah);
         //Act
-        await sut.GetAsync(ocs.ServiceUrl);
+        await sut.GetAsync(ocs.ServiceUrl).ConfigureAwait(false);
         //Assert
         ah.AuthHeader.Should().NotBeNull();
         ah.AuthHeader?.ToString().Should().Be("Bearer secret$token");
@@ -166,21 +165,22 @@ public partial class CustomHttpClientTest : BaseTest
         var ocs = new OdataConnectionString
         {
             ServiceUrl = "https://localhost/weatherforecast",
-            HttpHeader = new List<string>
-            {
+            HttpHeader =
+            [
                 "Authorization:Basic {user1:password1}"
-            }
+            ]
         };
-        var ah = new AuthHandler();
-        var sut = ocs.ToCustomHttpClient(ah);
+        using var ah = new AuthHandler();
+        using var sut = ocs.ToCustomHttpClient(ah);
         //Act
-        await sut.GetAsync(ocs.ServiceUrl);
+        await sut.GetAsync(ocs.ServiceUrl).ConfigureAwait(false);
         //Assert
         ah.AuthHeader.Should().NotBeNull();
         ah.AuthHeader?.ToString().Should().Be("Basic dXNlcjE6cGFzc3dvcmQx");
         ah.Scheme.Should().Be("Basic");
         ah.Parameter.Should().Be("dXNlcjE6cGFzc3dvcmQx");
     }
+
     [Test]
     public async Task Custom_client_http_multiple_header_test()
     {
@@ -188,18 +188,18 @@ public partial class CustomHttpClientTest : BaseTest
         var ocs = new OdataConnectionString
         {
             ServiceUrl = "https://localhost/weatherforecast",
-            HttpHeader = new List<string>
-            {
+            HttpHeader =
+            [
                 "key1:123",
                 "key2:abc",
                 "Authorization:Bearer secret$token"
-            }
+            ]
         };
 
-        var ah = new AuthHandler();
-        var sut = ocs.ToCustomHttpClient(ah);
+        using var ah = new AuthHandler();
+        using var sut = ocs.ToCustomHttpClient(ah);
         //Act
-        await sut.GetAsync(ocs.ServiceUrl);
+        await sut.GetAsync(ocs.ServiceUrl).ConfigureAwait(false);
         //Assert
         ah.AuthHeader.Should().NotBeNull();
         ah.AuthHeader?.ToString().Should().Be("Bearer secret$token");
@@ -215,31 +215,30 @@ public partial class CustomHttpClientTest : BaseTest
         var ocs = new OdataConnectionString
         {
             ServiceUrl = "https://localhost/weatherforecast",
-            HttpHeader = new List<string>
-            {
+            HttpHeader =
+            [
                 "key1:123",
                 "key2:abc",
                 "key3:",
                 "xyz",
                 "Authorization:Bearer secret+token"
-            }
+            ]
         };
 
-        var ah = new AuthHandler();
-        var sut = ocs.ToCustomHttpClient(ah);
+        using var ah = new AuthHandler();
+        using var sut = ocs.ToCustomHttpClient(ah);
         //Act
-        await sut.GetAsync(ocs.ServiceUrl);
+        await sut.GetAsync(ocs.ServiceUrl).ConfigureAwait(false);
         //Assert
         ah.AuthHeader.Should().NotBeNull();
         ah.AuthHeader?.ToString().Should().Be("Bearer secret+token");
         ah.Request?.Headers.Should().Contain(x => x.Key == "key1" && x.Value.Contains("123"));
         ah.Request?.Headers.Should().Contain(x => x.Key == "key2" && x.Value.Contains("abc"));
         ah.Request?.Headers.Should().Contain(x => x.Key == "Authorization" && x.Value.Contains("Bearer secret+token"));
-        ah.Request?.Headers.Should().Contain(x => x.Key == "key3" && x.Value.Contains(""));
-
+        ah.Request?.Headers.Should().Contain(x => x.Key == "key3" && x.Value.Contains(string.Empty));
     }
-    #endregion
 
+    #endregion
 
     #region Auth live Test
 
@@ -255,12 +254,12 @@ public partial class CustomHttpClientTest : BaseTest
         {
             ServiceUrl = _url,
             Password = _token,
-            Authenticate = AuthenticationType.Token,
+            Authenticate = AuthenticationType.Token
         };
-        var ah = new AuthHandler(true);
-        var client = ocs.ToCustomHttpClient(ah);
+        using var ah = new AuthHandler(true);
+        using var client = ocs.ToCustomHttpClient(ah);
         //Act
-        await client.GetAsync(client.ServiceUri.ToString());
+        await client.GetAsync(client.ServiceUri.ToString()).ConfigureAwait(false);
         //Assert
         var expectedToken = ocs.Password.GetToken();
         ah.AuthHeader.Should().NotBeNull();
@@ -273,23 +272,22 @@ public partial class CustomHttpClientTest : BaseTest
     [Category("live")]
     public async Task Bearer_Auth_live_with_inValid_token_test()
     {
-        if (!_isLive)
-            Assert.Ignore("live test");
+        if (!_isLive) Assert.Ignore("live test");
         //Arrange
         var ocs = new OdataConnectionString
         {
             ServiceUrl = _url,
             Password = "xyz",
-            Authenticate = AuthenticationType.Token,
+            Authenticate = AuthenticationType.Token
         };
-        var ah = new AuthHandler(true);
-        var client = ocs.ToCustomHttpClient(ah);
+        using var ah = new AuthHandler(true);
+        using var client = ocs.ToCustomHttpClient(ah);
 
         //Act
-        var act = async () => await client.ReadMetaDataAsync();
+        var act = client.ReadMetaDataAsync;
         //Assert
         await act.Should().ThrowAsync<OData2PocoException>()
-            .WithMessage(@"HTTP Unauthorized (401): Bearer error=""invalid_token""");
+            .WithMessage(@"HTTP Unauthorized (401): Bearer error=""invalid_token""").ConfigureAwait(false);
     }
 
     [Test]
@@ -303,12 +301,15 @@ public partial class CustomHttpClientTest : BaseTest
         var ocs = new OdataConnectionString
         {
             ServiceUrl = _url,
-            HttpHeader = new List<string> { $"Authorization : Bearer {_token}" },
+            HttpHeader =
+            [
+                $"Authorization : Bearer {_token}"
+            ]
         };
-        var ah = new AuthHandler(true);
-        var client = ocs.ToCustomHttpClient(ah);
+        using var ah = new AuthHandler(true);
+        using var client = ocs.ToCustomHttpClient(ah);
         //Act
-        await client.ReadMetaDataAsync();
+        await client.ReadMetaDataAsync().ConfigureAwait(false);
         //Assert
         ah.AuthHeader.Should().NotBeNull();
         ah.AuthHeader?.ToString().Should().Be($"Bearer {_token}");
@@ -318,5 +319,4 @@ public partial class CustomHttpClientTest : BaseTest
     }
 
     #endregion
-
 }

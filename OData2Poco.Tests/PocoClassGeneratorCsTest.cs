@@ -12,7 +12,12 @@ public class PocoClassGeneratorCsTest
     {
         //Arrange
         var setting = new PocoSetting();
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP", BaseType = "SP.FileSystemItem" };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP",
+            BaseType = "SP.FileSystemItem"
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -22,12 +27,18 @@ public class PocoClassGeneratorCsTest
         var expected = "public partial class Folder : FileSystemItem";
         Assert.That(code, Does.Contain(expected));
     }
+
     [Test]
     public void Class_basetype_has_different_namespace_test()
     {
         //Arrange
         var setting = new PocoSetting();
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP1", BaseType = "SP.FileSystemItem" };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP1",
+            BaseType = "SP.FileSystemItem"
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
         var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
 
@@ -37,12 +48,18 @@ public class PocoClassGeneratorCsTest
         var expected = "public partial class Folder : SP.FileSystemItem";
         Assert.That(code, Does.Contain(expected));
     }
+
     [Test]
     public void Class_is_abstract_test()
     {
         //Arrange
         var setting = new PocoSetting();
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP", IsAbstrct = true };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP",
+            IsAbstrct = true
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -52,12 +69,18 @@ public class PocoClassGeneratorCsTest
         var expected = "public abstract partial class Folder";
         Assert.That(code, Does.Contain(expected));
     }
+
     [Test]
     public void Class_is_entity_test()
     {
         //Arrange
         var setting = new PocoSetting();
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP", IsEntity = true };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP",
+            IsEntity = true
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -67,12 +90,18 @@ public class PocoClassGeneratorCsTest
         var expected = "public partial class Folder";
         Assert.That(code, Does.Contain(expected));
     }
+
     [Test]
     public void Class_is_complex_test()
     {
         //Arrange
         var setting = new PocoSetting();
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP", IsComplex = true };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP",
+            IsComplex = true
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -82,6 +111,7 @@ public class PocoClassGeneratorCsTest
         var expected = "public partial class Folder";
         Assert.That(code, Does.Contain(expected));
     }
+
     [Test]
     public void Type_is_enum_test()
     {
@@ -110,6 +140,7 @@ public enum Feature
 ";
         Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
     }
+
     [Test]
     public void Type_is_enum_with_flags_test()
     {
@@ -148,10 +179,15 @@ public enum Feature
         //Arrange
         var setting = new PocoSetting
         {
-            Attributes = [att],
+            Attributes = [att]
         };
 
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP", IsEntity = true };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP",
+            IsEntity = true
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -172,9 +208,14 @@ public enum Feature
         //Arrange
         var setting = new PocoSetting
         {
-            Attributes = [att],
+            Attributes = [att]
         };
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP", IsEntity = true };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP",
+            IsEntity = true
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -197,14 +238,19 @@ public enum Feature
                 Assert.That(code.TrimAllSpace(), Does.Contain(expectedProto));
                 break;
         }
-
     }
+
     [Test]
     public void Class_renamed_has_no_json_attribute_test()
     {
         //Arrange
         var setting = new PocoSetting();
-        var ct = new ClassTemplate(1) { Name = "Event", NameSpace = "SP", OriginalName = "event" };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Event",
+            NameSpace = "SP",
+            OriginalName = "event"
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -214,12 +260,18 @@ public enum Feature
         var expected = "public partial class Event";
         Assert.That(code, Does.Contain(expected));
     }
+
     [Test]
     public void ReducedBaseTyp_in_the_same_namespace_test()
     {
         //Arrange
         var setting = new PocoSetting();
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP", BaseType = "SP.FileSystem" };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP",
+            BaseType = "SP.FileSystem"
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -229,13 +281,19 @@ public enum Feature
         //Assert
         Assert.That(reducedType, Is.EqualTo("FileSystem"));
     }
+
     [Test]
     public void ReducedBaseTyp_in_different_namespace_test()
     {
         //Arrange
         var setting = new PocoSetting();
 
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP1", BaseType = "SP.FileSystem" };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP1",
+            BaseType = "SP.FileSystem"
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -244,12 +302,19 @@ public enum Feature
         //Assert
         Assert.That(reducedType, Is.EqualTo("SP.FileSystem"));
     }
+
     [Test]
     public void Rename_reserved_keyword_test()
     {
         //Arrange
         var setting = new PocoSetting();
-        var ct = new ClassTemplate(1) { Name = "event", NameSpace = "SP", BaseType = "SP.FileSystem", OriginalName = "event" };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "event",
+            NameSpace = "SP",
+            BaseType = "SP.FileSystem",
+            OriginalName = "event"
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -261,14 +326,21 @@ public enum Feature
             Assert.That(sut.ClassList, Has.Count.EqualTo(1));
             Assert.That(name, Is.EqualTo("Event"));
         });
-
     }
+
     [Test]
     public void Prefix_namespace_test()
     {
         //Arrange
-        var setting = new PocoSetting { NamespacePrefix = "abc" };
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP" };
+        var setting = new PocoSetting
+        {
+            NamespacePrefix = "abc"
+        };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP"
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -276,14 +348,18 @@ public enum Feature
         var code = sut.GeneratePoco();
         //Assert
         Assert.That(code, Does.Contain("abc.SP"));
-
     }
+
     [Test]
     public void Code_generation_test()
     {
         //Arrange
         var setting = new PocoSetting();
-        var ct = new ClassTemplate(1) { Name = "Folder", NameSpace = "SP" };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Folder",
+            NameSpace = "SP"
+        };
         var gen = Moq.Moq4IPocoGenerator(ct);
 
         //Act
@@ -296,6 +372,7 @@ public enum Feature
         Assert.That(code, Does.Contain("namespace SP"));
         Assert.That(code, Does.Contain("public partial class Folder"));
     }
+
     [Test]
     public void Code_generation_with_multi_namespace_test()
     {
@@ -303,9 +380,18 @@ public enum Feature
         var setting = new PocoSetting();
         var list = new List<ClassTemplate>
         {
-            new(1) { Name = "Folder", NameSpace = "SP"},
-            new(2) { Name = "Folder", NameSpace = "SP2",BaseType = "SP.Folder"},
-            new(3) { Name = "File", NameSpace = "SP2"},
+            new(1)
+            {
+                Name = "Folder", NameSpace = "SP"
+            },
+            new(2)
+            {
+                Name = "Folder", NameSpace = "SP2", BaseType = "SP.Folder"
+            },
+            new(3)
+            {
+                Name = "File", NameSpace = "SP2"
+            }
         };
         var gen = Moq.Moq4IPocoGenerator(list);
 
@@ -335,7 +421,6 @@ namespace SP2
 }
 ";
         Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
-
     }
 
     [Test]
@@ -345,10 +430,22 @@ namespace SP2
         var setting = new PocoSetting();
         var list = new List<ClassTemplate>
         {
-            new (1) { Name = "Shape", NameSpace = "BookStore", IsComplex = true},
-            new (2) { Name = "Circle", NameSpace = "BookStore",BaseType = "BookStore.Shape", IsComplex = true},
-            new (3) { Name = "Rectangle", NameSpace = "BookStore",BaseType = "BookStore.Shape",
-                IsEntity = true, EntitySetName = "Rectangle"},
+            new(1)
+            {
+                Name = "Shape", NameSpace = "BookStore", IsComplex = true
+            },
+            new(2)
+            {
+                Name = "Circle", NameSpace = "BookStore", BaseType = "BookStore.Shape", IsComplex = true
+            },
+            new(3)
+            {
+                Name = "Rectangle",
+                NameSpace = "BookStore",
+                BaseType = "BookStore.Shape",
+                IsEntity = true,
+                EntitySetName = "Rectangle"
+            }
         };
         var gen = Moq.Moq4IPocoGenerator(list);
 
@@ -376,7 +473,6 @@ namespace BookStore
 }
 ";
         Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
-
     }
 
     [Test]
@@ -386,10 +482,22 @@ namespace BookStore
         var setting = new PocoSetting();
         var list = new List<ClassTemplate>
         {
-            new (1) { Name = "Shape", NameSpace = "BookStore"},
-            new (2) { Name = "Circle", NameSpace = "BookStore",BaseType = "Shape", IsComplex = true},
-            new (3) { Name = "Rectangle", NameSpace = "BookStore",BaseType = "Shape",IsEntity = true, EntitySetName = "Rectangle"},
-
+            new(1)
+            {
+                Name = "Shape", NameSpace = "BookStore"
+            },
+            new(2)
+            {
+                Name = "Circle", NameSpace = "BookStore", BaseType = "Shape", IsComplex = true
+            },
+            new(3)
+            {
+                Name = "Rectangle",
+                NameSpace = "BookStore",
+                BaseType = "Shape",
+                IsEntity = true,
+                EntitySetName = "Rectangle"
+            }
         };
         var gen = Moq.Moq4IPocoGenerator(list);
 
@@ -417,6 +525,5 @@ namespace BookStore
 }
 ";
         Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
-
     }
 }

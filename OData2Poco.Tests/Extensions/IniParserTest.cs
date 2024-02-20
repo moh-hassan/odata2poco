@@ -1,20 +1,23 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
 namespace OData2Poco.Tests;
+
+using Extensions;
+
 public class IniParserTest
 {
     [Test]
     public void IniParser_test()
     {
-        string iniData = """
-      ;including formula
-      [json]
-      Format= "[JsonProperty(PropertyName = {{PropName.Quote()}})]"   
-
-      [_key_]
-      Format= [Key]
-      Filter= IsKey;
-  """;
+        var iniData = """
+                          ;including formula
+                          [json]
+                          Format= "[JsonProperty(PropertyName = {{PropName.Quote()}})]"
+                      
+                          [_key_]
+                          Format= [Key]
+                          Filter= IsKey;
+                      """;
 
         var result = iniData.ParseIni();
         result.Should().NotBeEmpty();

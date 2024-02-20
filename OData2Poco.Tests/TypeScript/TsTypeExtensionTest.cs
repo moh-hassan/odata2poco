@@ -2,7 +2,7 @@
 
 namespace OData2Poco.Tests.TypeScript;
 
-internal class TsTypeExtensionTest
+public class TsTypeExtensionTest
 {
     [Test]
     public void Reduce_namespace_test()

@@ -1,15 +1,22 @@
-// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
+﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.CustAttributes;
-
+#pragma warning disable CA1721, CA2227
 namespace OData2Poco;
 
+using CustAttributes;
+using Extensions;
+
 /// <summary>
-///     Define the propertis of the class
+///     Define the properties of the class
 /// </summary>
 public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<ClassTemplate>
 {
     private readonly AttributeFactory _attributeFactory = AttributeFactory.Default;
+
+    public ClassTemplate(int id) : this()
+    {
+        Id = id;
+    }
 
     private ClassTemplate()
     {
@@ -17,15 +24,10 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
         Keys = [];
         EnumElements = [];
         Navigation = [];
-        BaseType = "";
-        Comment = "";
+        BaseType = string.Empty;
+        Comment = string.Empty;
         Name = "UNDEFINED";
-        NameSpace = "";
-    }
-
-    public ClassTemplate(int id) : this()
-    {
-        Id = id;
+        NameSpace = string.Empty;
     }
 
     public int Id { get; }
@@ -54,6 +56,7 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
     public bool IsEntity { get; set; }
     public bool IsAbstrct { get; set; }
     public bool IsOpen { get; set; }
+
     public List<string> GetAllAttributes()
     {
         return _attributeFactory.GetAllAttributes(this);
@@ -61,19 +64,23 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
 
     public string GetComment()
     {
-        var complex = IsComplex ? "Complex Entity" : "";
-        var openType = IsOpen ? "OpenType" : "";
-        var entityType = IsEntity ? $"EntitySetName: {EntitySetName}" : "";
-        var comments = new[] { openType, entityType, complex }.Where(a => a.Length > 0);
+        var complex = IsComplex ? "Complex Entity" : string.Empty;
+        var openType = IsOpen ? "OpenType" : string.Empty;
+        var entityType = IsEntity ? $"EntitySetName: {EntitySetName}" : string.Empty;
+        var comments = new[]
+        {
+            openType, entityType, complex
+        }.Where(a => a.Length > 0);
 
         return string.Join(", ", comments);
     }
+
     public override string ToString()
     {
         // 'id:name(parent)'
         return string.IsNullOrEmpty(BaseType)
             ? $"{Id}:{Name}"
-            : $"{Id}:{Name}({BaseType.Split('.').Last()})";
+            : $"{Id}:{Name}({BaseType.Reduce()})";
     }
 
     #region IEquatable and Comparer
@@ -95,11 +102,12 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
 
     public int CompareTo(ClassTemplate? other)
     {
-        if (BaseType == other?.FullName)
-            return 1;
-        if (FullName == other?.BaseType)
-            return -1;
-        return string.Compare(FullName, other?.FullName, StringComparison.Ordinal);
+        var compareTo = FullName == other?.BaseType
+            ? -1
+            : string.Compare(FullName, other?.FullName, StringComparison.Ordinal);
+        return BaseType == other?.FullName
+            ? 1
+            : compareTo;
     }
 
     #endregion

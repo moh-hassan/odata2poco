@@ -1,27 +1,19 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Text;
 namespace OData2Poco.InfraStructure.Logging;
+
+using System.Text;
 
 public class ColoredConsole : ILog
 {
     private readonly object _colorLock = new();
-    public ConsoleColor ErrorColor { get; }
-    public ConsoleColor InfoColor { get; }
-    public ConsoleColor SuccessColor { get; }
-    public ConsoleColor TraceColor { get; }
-    public ConsoleColor WarningColor { get; }
+    public ConsoleColor ErrorColor { get; } = ConsoleColor.Red;
+    public ConsoleColor InfoColor { get; } = ConsoleColor.Cyan;
+    public ConsoleColor SuccessColor { get; } = ConsoleColor.Green;
+    public ConsoleColor TraceColor { get; } = ConsoleColor.DarkGray;
+    public ConsoleColor WarningColor { get; } = ConsoleColor.Yellow;
 
-    public ColoredConsole()
-    {
-        Output = new StringBuilder();
-        ErrorColor = ConsoleColor.Red;
-        InfoColor = ConsoleColor.Cyan;
-        SuccessColor = ConsoleColor.Green;
-        TraceColor = ConsoleColor.DarkGray;
-        WarningColor = ConsoleColor.Yellow;
-    }
-    public StringBuilder Output { get; set; }
+    public StringBuilder Output { get; set; } = new();
     public bool Silent { get; set; }
 
     public void Clear()
@@ -46,7 +38,10 @@ public class ColoredConsole : ILog
 
     public void Warn(Func<string> message)
     {
-        Warn(message.Invoke());
+        if (message != null)
+        {
+            Warn(message.Invoke());
+        }
     }
 
     public void Info(string msg)
@@ -56,7 +51,10 @@ public class ColoredConsole : ILog
 
     public void Info(Func<string> message)
     {
-        Info(message.Invoke());
+        if (message != null)
+        {
+            Info(message.Invoke());
+        }
     }
 
     public void Error(string msg)
@@ -66,7 +64,10 @@ public class ColoredConsole : ILog
 
     public void Error(Func<string> message)
     {
-        Error(message.Invoke());
+        if (message != null)
+        {
+            Error(message.Invoke());
+        }
     }
 
     public void Fatal(string msg)
@@ -91,16 +92,19 @@ public class ColoredConsole : ILog
 
     public void SetTheme(Action<ColoredConsole> action)
     {
-        action(this);
+        action?.Invoke(this);
     }
-
 
     public void Log(ConsoleColor foreColor, string msg)
     {
         lock (_colorLock)
         {
             Console.ForegroundColor = foreColor;
-            if (!Silent) Console.WriteLine(msg);
+            if (!Silent)
+            {
+                Console.WriteLine(msg);
+            }
+
             Console.ResetColor();
             Output.AppendLine(msg);
         }
@@ -112,7 +116,11 @@ public class ColoredConsole : ILog
         {
             Console.BackgroundColor = backColor;
             Console.ForegroundColor = foreColor;
-            if (!Silent) Console.WriteLine(msg);
+            if (!Silent)
+            {
+                Console.WriteLine(msg);
+            }
+
             Console.ResetColor();
             Output.AppendLine(msg);
         }

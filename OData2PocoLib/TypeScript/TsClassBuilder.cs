@@ -1,15 +1,15 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.TextTransform;
-
 namespace OData2Poco.TypeScript;
+
+using TextTransform;
 
 internal class TsClassBuilder : FluentTextTemplate<TsClassBuilder>
 {
+    internal NamingConvention _namingConvention;
     private const string Lb = "{";
     private const string Rb = "}";
     private readonly ClassTemplate _classTemplate;
-    internal NamingConvention NamingConvention;
 
     public TsClassBuilder(ClassTemplate ct, PocoSetting? seetting)
     {
@@ -20,7 +20,7 @@ internal class TsClassBuilder : FluentTextTemplate<TsClassBuilder>
             NameCase = CaseEnum.Camel,
             GeneratorType = GeneratorType.Interface
         };
-        NamingConvention = new NamingConvention(ct, Setting);
+        _namingConvention = new NamingConvention(ct, Setting);
     }
 
     public PocoSetting Setting { get; set; }
@@ -28,14 +28,18 @@ internal class TsClassBuilder : FluentTextTemplate<TsClassBuilder>
     public TsClassBuilder WriteProperty(PropertyTemplate p)
     {
         PushIndent("\t")
-            .WriteLine(new TsPropertyBuilder(p, this))
-            .PopIndent();
+           .WriteLine(new TsPropertyBuilder(p, this))
+           .PopIndent();
         return this;
     }
 
     public TsClassBuilder WriteProperties()
     {
-        foreach (var p in _classTemplate.Properties) WriteProperty(p);
+        foreach (var p in _classTemplate.Properties)
+        {
+            WriteProperty(p);
+        }
+
         return this;
     }
 
@@ -47,23 +51,23 @@ internal class TsClassBuilder : FluentTextTemplate<TsClassBuilder>
     public TsClassBuilder WriteEnum()
     {
         // WriteLine($"export enum {_classTemplate.GlobalName(Setting)} {Lb}")
-        WriteLine($"export enum {NamingConvention.ClassName} {Lb}")
-            .WriteEnumElements()
-            .WriteLine(Rb);
+        WriteLine($"export enum {_namingConvention.ClassName} {Lb}")
+           .WriteEnumElements()
+           .WriteLine(Rb);
         return this;
     }
 
     public TsClassBuilder WriteClass()
     {
         var extend = string.IsNullOrEmpty(_classTemplate.BaseType)
-            ? ""
-            : $"extends {NamingConvention.BaseType}";
+            ? string.Empty
+            : $"extends {_namingConvention.BaseType}";
         var type = Setting.GeneratorType == GeneratorType.Interface
             ? "interface"
             : "class";
-        WriteLine($"export {type} {NamingConvention.ClassName} {extend} {Lb}")
-            .WriteProperties()
-            .WriteLine(Rb);
+        WriteLine($"export {type} {_namingConvention.ClassName} {extend} {Lb}")
+           .WriteProperties()
+           .WriteLine(Rb);
 
         return this;
     }

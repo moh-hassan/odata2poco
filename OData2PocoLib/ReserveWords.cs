@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.Extensions;
-
 namespace OData2Poco;
+
+using Extensions;
 
 public static partial class ReserveWords
 {
-    private static readonly List<string> CsReserveWords =
+    private static readonly List<string> s_csReserveWords =
     [
         "abstract",
         "as",
@@ -91,19 +91,17 @@ public static partial class ReserveWords
 
     public static string ChangeReservedWord(this string name)
     {
-        if (string.IsNullOrEmpty(name))
-            return name;
-
-        return CsReserveWords.Contains(name) ? name.ToggleFirstLetter() : name;
+        var changeReservedWord = s_csReserveWords.Contains(name) ? name.ToggleFirstLetter() : name;
+        return string.IsNullOrEmpty(name) ? name : changeReservedWord;
     }
 
     public static bool IsCSharpReservedWord(this string name)
     {
-        return CsReserveWords.Contains(name);
+        return s_csReserveWords.Contains(name);
     }
 
     public static bool IsVbReservedWord(this string name)
     {
-        return VbReserveWords.Contains(name);
+        return s_vbReserveWords.Contains(name);
     }
 }

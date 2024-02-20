@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using Newtonsoft.Json;
-
 namespace OData2Poco;
+
+using Newtonsoft.Json;
 
 internal static class Dumper
 {
@@ -10,7 +10,9 @@ internal static class Dumper
     {
         try
         {
-            var json = JsonConvert.SerializeObject(obj, Formatting.Indented,
+            var json = JsonConvert.SerializeObject(
+                obj,
+                Formatting.Indented,
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
@@ -25,6 +27,7 @@ internal static class Dumper
         {
             Console.WriteLine($"Can't dump {title}: {e.Message}");
         }
+
         return string.Empty;
     }
 }

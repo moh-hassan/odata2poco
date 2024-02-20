@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.graph;
+namespace OData2Poco.Tests.Graphs;
 
-namespace OData2Poco.Tests.graph;
+using OData2Poco.Graphs;
 
 [Category("dependency")]
-internal class DependencyTest : BaseTest
+public sealed class DependencyTest : BaseTest
 {
     [Test]
     [TestCase("City", "")]
@@ -23,12 +23,13 @@ internal class DependencyTest : BaseTest
         //Arrange
         var ct = GetClassTemplateSample(name);
         var expected = StringToArray(expectedDep);
-        //Act            
-        var sut = Dependency.Search(ClassList, ct);
+        //Act
+        var sut = Dependency.Search(_classList, ct);
         //Assert
         sut.Select(c => c.Name).Should()
             .BeEquivalentTo(expected);
     }
+
     [Test]
     public void ClassTemplate_equality_test()
     {

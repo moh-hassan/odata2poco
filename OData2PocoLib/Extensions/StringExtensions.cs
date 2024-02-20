@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+namespace OData2Poco.Extensions;
+
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
-namespace OData2Poco.Extensions;
 
 /// <summary>
 ///     Utility for CamelCase/PascalCase Conversion
@@ -21,23 +21,22 @@ public static partial class StringExtensions
     /// <returns></returns>
     public static string ToPascalCase(this string text)
     {
-        text = text.Trim();
         if (string.IsNullOrEmpty(text)) return text;
+        text = text.Trim();
         if (text.Length < 2) return text.ToUpper(); //one char
 
         // Split the string into words.
         char[] delimiterChars = [' ', '-', '_', '.'];
         var words = text.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
-
-
-        var result = "";
+        //use stringBuilder for better performance
+        var result = new StringBuilder();
         foreach (var word in words)
         {
-            result += char.ToUpper(word[0]); //Convert First Char in word to Capita letter
-            result += word[1..]; // Combine with the rest of word
+            result.Append(char.ToUpper(word[0])); //Convert First Char in word to Capital letter
+            result.Append(word[1..]); // Combine with the rest of word
         }
 
-        return result;
+        return result.ToString();
     }
 
     /// <summary>
@@ -77,18 +76,19 @@ public static partial class StringExtensions
     /// <returns></returns>
     public static string TrimAllSpace(this string text, bool keepCrLf = false)
     {
-        var result = "";
+        if (string.IsNullOrEmpty(text)) return text;
+        var result = string.Empty;
         Regex trimmer = new(@"\s+");
         if (!keepCrLf)
         {
-            result = trimmer.Replace(text.Trim(), " ");
-            return result;
+            return trimmer.Replace(text.Trim(), " ");
         }
 
-        var lines = text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-        foreach (var line in lines) result += $"{trimmer.Replace(line.Trim(), " ")}\n";
+        char[] separator = ['\n', '\r'];
+        var lines = text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
 
-        return result;
+        return lines.Aggregate(result, (current, line)
+            => current + $"{trimmer.Replace(line.Trim(), " ")}\n");
     }
 
     /// <summary>
@@ -135,7 +135,6 @@ public static partial class StringExtensions
         }
     }
 
-
     public static string Quote(this string text, char c = '"')
     {
         return $"{c}{text}{c}";
@@ -143,11 +142,13 @@ public static partial class StringExtensions
 
     public static string UnQuote(this string text)
     {
+        if (string.IsNullOrEmpty(text)) return text;
         return text.Trim('\'').Trim('"');
     }
 
     public static string ToTitle(this string text)
     {
+        if (string.IsNullOrEmpty(text)) return text;
         if (text.Length <= 2) return text;
         text = text.ToPascalCase();
         StringBuilder builder = new();
@@ -163,11 +164,8 @@ public static partial class StringExtensions
     public static string ToSnakeCase(this string str)
     {
         var text = string.Concat(str.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x : x.ToString())).ToLower();
-        text = text.Replace("__", "_");
-        return text;
+        return text.Replace("__", "_");
     }
-
-
 
     public static string RemoveEmptyLines(this string input)
     {
@@ -189,13 +187,15 @@ public static partial class StringExtensions
 
     public static string GetInnerException(this Exception ex)
     {
-        if (ex.InnerException != null)
-            return $"{ex.InnerException.Message} ---> {GetInnerException(ex.InnerException)} "; //recursive
-        return "";
+        if (ex == null) return string.Empty;
+        return ex.InnerException != null
+            ? $"{ex.InnerException.Message} ---> {GetInnerException(ex.InnerException)} "
+            : string.Empty;
     }
 
     public static string FullExceptionMessage(this Exception ex, bool showTrace = false)
     {
+        if (ex == null) return string.Empty;
         var s = ex.GetInnerException();
         var msg = string.IsNullOrEmpty(s) ? ex.Message : ex.Message + "-->\n" + s;
 
@@ -210,6 +210,7 @@ public static partial class StringExtensions
     /// <returns></returns>
     public static string DicToString(this Dictionary<string, string> header)
     {
+        if (header == null) return string.Empty;
         StringBuilder builder = new();
         foreach (var item in header) builder.Append(item.Key).Append(": ").Append(item.Value).AppendLine();
         var result = builder.ToString();
@@ -222,11 +223,16 @@ public static partial class StringExtensions
             return name;
         var letters = name.ToCharArray();
         if (letters[0] >= 'a' && letters[0] <= 'z')
-            //Convert lowercase to uppercase 
+        {
+            //Convert lowercase to uppercase
             letters[0] = (char)(letters[0] - 32);
+        }
         else if (letters[0] >= 'A' && letters[0] <= 'Z')
-            //Convert uppercase to lowercase 
+        {
+            //Convert uppercase to lowercase
             letters[0] = (char)(letters[0] + 32);
+        }
+
         return new string(letters);
     }
 
@@ -257,16 +263,18 @@ public static partial class StringExtensions
 
     public static List<string> ToLines(this string text)
     {
+        if (string.IsNullOrEmpty(text)) return [];
         return text.Trim().Split('\n')
             .Select(a => a.Trim(' ', '\t', '{', '}', '\r'))
             .Where(a => a.Length > 0)
             .ToList();
     }
 
-    public static string EnumToString(this Type t)
+    public static string EnumToString(this Type type)
     {
-        if (!t.IsEnum) return "";
-        var values = Enum.GetNames(t);
+        if (type == null) return string.Empty;
+        if (!type.IsEnum) return string.Empty;
+        var values = Enum.GetNames(type);
         return string.Join(", ", values);
     }
 
@@ -279,19 +287,17 @@ public static partial class StringExtensions
 
     public static string Suffix(this string name, string? suffix)
     {
-        if (string.IsNullOrEmpty(suffix))
-            return name;
-        return $"{name}{suffix}";
+        return string.IsNullOrEmpty(suffix) ? name : $"{name}{suffix}";
     }
 
     public static Match MatchPattern(this string inputText, string pattern)
     {
-        var option = RegexOptions.IgnoreCase
-                     | RegexOptions.Compiled
-                     | RegexOptions.CultureInvariant
-                     | RegexOptions.IgnorePatternWhitespace;
+        const RegexOptions Option = RegexOptions.IgnoreCase
+                                    | RegexOptions.Compiled
+                                    | RegexOptions.CultureInvariant
+                                    | RegexOptions.IgnorePatternWhitespace;
 
-        Regex myRegex = new(pattern, option);
+        Regex myRegex = new(pattern, Option);
         var m = myRegex.Match(inputText);
 
         return m;
@@ -299,21 +305,21 @@ public static partial class StringExtensions
 
     public static string Reduce(this string text, char separator = '.')
     {
-        return text.Split(separator).Last();
+        return string.IsNullOrEmpty(text) ? text : text.Split(separator)[^1];
     }
 
     public static string RemoveNamespace(this string text, string ns)
     {
-        if (string.IsNullOrEmpty(ns))
+        if (string.IsNullOrEmpty(ns) || string.IsNullOrEmpty(text))
             return text;
-        if (text.StartsWith(ns, StringComparison.Ordinal))
-            return text.Replace(ns, "").TrimStart('.');
-        return text;
+        return text.StartsWith(ns, StringComparison.Ordinal)
+            ? text.Replace(ns, string.Empty).TrimStart('.')
+            : text;
     }
 
     public static string RemoveDot(this string name)
     {
-        return name.Replace(".", "");
+        return string.IsNullOrEmpty(name) ? name : name.Replace(".", string.Empty);
     }
 
     public static string NormalizeName(this string name, string ns, bool useFullName)
@@ -326,7 +332,7 @@ public static partial class StringExtensions
     public static string[] SplitArgs(this string? command, bool keepQuote = false)
     {
         if (string.IsNullOrEmpty(command))
-            return new string[0];
+            return [];
 
         var inQuote = false;
         var chars = command.ToCharArray().Select(v =>
@@ -349,10 +355,11 @@ public static partial class StringExtensions
     /// <returns></returns>
     public static string ToBase64(this string input)
     {
-        byte[] bytes = Encoding.UTF8.GetBytes(input);
-        string base64 = Convert.ToBase64String(bytes);
+        var bytes = Encoding.UTF8.GetBytes(input);
+        var base64 = Convert.ToBase64String(bytes);
         return base64;
     }
+
     /// <summary>
     /// convert base64 to string
     /// </summary>
@@ -360,24 +367,48 @@ public static partial class StringExtensions
     /// <returns></returns>
     public static string FromBase64(this string base64)
     {
-        byte[] bytes = Convert.FromBase64String(base64);
-        string input = Encoding.UTF8.GetString(bytes);
+        var bytes = Convert.FromBase64String(base64);
+        var input = Encoding.UTF8.GetString(bytes);
         return input;
     }
+
     /// <summary>
     /// Any string that ends with {xxx} will be replaced with base64 of xxx
     /// </summary>
     /// <param name="header"></param>
-    /// <param name="header2">header in base64 if contained in {..}</param>
+    /// <param name="header2">header in base64 if contained in { }</param>
     /// <returns></returns>
     public static bool TryReplaceToBase64(this string header, out string header2)
     {
+        if (string.IsNullOrEmpty(header))
+        {
+            header2 = string.Empty;
+            return false;
+        }
+
         header2 = header;
-        var pattern = @"^.+?(\{[^}]+\})$";
-        var m = Regex.Match(header, pattern);
+        const string Pattern = @"^.+?(\{[^}]+\})$";
+        var m = Regex.Match(header, Pattern);
         if (!m.Success) return false;
         var base64 = m.Groups[1].Value.Trim().Trim('{', '}').ToBase64();
         header2 = header.Replace(m.Groups[1].Value, base64);
         return true;
+    }
+
+    public static (string, string) SplitKeyValue(this string input)
+    {
+        if (input == null)
+        {
+            return (string.Empty, string.Empty);
+        }
+
+        char[] separator = ['='];
+        var parts = input.Split(separator, 2, StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length switch
+        {
+            1 => (parts[0], string.Empty),
+            2 => (parts[0], parts[1]),
+            _ => (string.Empty, string.Empty)
+        };
     }
 }

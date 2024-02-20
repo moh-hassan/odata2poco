@@ -1,7 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using CommandLine;
-
 namespace OData2Poco.CommandLine;
 
 internal static class CommandLineUtility
@@ -12,7 +10,11 @@ internal static class CommandLineUtility
         var t = option.GetType();
         var props = t.GetProperties()
             .Where(p => p.GetValue(option) != null)
-            .Select(p => new { p, attrs = p.GetCustomAttributes(typeof(OptionAttribute), false) });
+            .Select(p => new
+            {
+                p,
+                attrs = p.GetCustomAttributes(typeof(OptionAttribute), false)
+            });
 
         foreach (var p1 in props)
         {
@@ -34,7 +36,8 @@ internal static class CommandLineUtility
             var att = (OptionAttribute?)p1.attrs.FirstOrDefault();
             if (att == null) continue;
             var shortName = string.IsNullOrEmpty(att.ShortName)
-                ? $"--{att.LongName}" : $"-{att.ShortName}";
+                ? $"--{att.LongName}"
+                : $"-{att.ShortName}";
             if (!string.IsNullOrEmpty(val?.ToString()))
             {
                 var text = $"{shortName} {p1.p.Name}= {val} ";
@@ -43,14 +46,23 @@ internal static class CommandLineUtility
                 list.Add(text);
             }
         }
+
         CodeHeader.SetParameters(list);
         return list;
     }
+
     private static bool IsSecurityOption(string option)
     {
         //hide security options on screen
-        string[] securedOptions =  { "-p", "--password", "-H", "--http-header", "-U",
-            "proxy-user" };
+        string[] securedOptions =
+        [
+            "-p",
+            "--password",
+            "-H",
+            "--http-header",
+            "-U",
+            "proxy-user"
+        ];
         if (securedOptions.Contains(option)) return true;
         return false;
     }

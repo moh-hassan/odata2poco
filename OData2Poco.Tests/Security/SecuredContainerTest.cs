@@ -2,6 +2,8 @@
 
 namespace OData2Poco.Tests;
 
+using OData2Poco.Security;
+
 [TestFixture]
 public class SecuredContainerTest : BaseTest
 {
@@ -32,6 +34,7 @@ public class SecuredContainerTest : BaseTest
         sut.Credential.Password.Should().NotBeEmpty();
         password2.Should().Be(password);
     }
+
     [Test]
     [TestCase("pass@123")]
     public void Round_trip_secured_string_password(string password)
@@ -59,13 +62,14 @@ public class SecuredContainerTest : BaseTest
         sut.IsSecuredString.Should().BeTrue();
         password2.Should().Be(password);
     }
+
     [Test]
     public void Get_tokens_test()
     {
         //Arrange
-        string password = "pass@123";
-        string user = "user1";
-        var sut = new SecurityContainer(password);
+        var password = "pass@123";
+        var user = "user1";
+        using var sut = new SecurityContainer(password);
         //Act
         var basicAuth = sut.GetBasicAuth(user);
         var token = sut.GetToken();

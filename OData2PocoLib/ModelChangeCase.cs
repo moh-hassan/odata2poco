@@ -1,15 +1,14 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
+namespace OData2Poco;
 
 using System.Text.RegularExpressions;
-using OData2Poco.Extensions;
-
-namespace OData2Poco;
+using Extensions;
 
 /// <summary>
 ///     Change EntityName case
 /// </summary>
-internal class ModelChangeCase
+internal sealed class ModelChangeCase
 {
     private ModelChangeCase()
     {
@@ -23,12 +22,21 @@ internal class ModelChangeCase
     /// </summary>
     /// <param name="list">Class list</param>
     /// <param name="caseEnum">caseEnum</param>
+    /// <param name="renameMap">renameMap</param>
     /// <returns></returns>
     public static ModelChangeCase RenameClasses(List<ClassTemplate> list, CaseEnum caseEnum, RenameMap? renameMap)
     {
-        var cc = new ModelChangeCase();
-        if (caseEnum == CaseEnum.None && renameMap is null) return cc;
-        if (!list.Any()) return cc;
+        ModelChangeCase cc = new();
+        if (caseEnum == CaseEnum.None && renameMap is null)
+        {
+            return cc;
+        }
+
+        if (list.Count == 0)
+        {
+            return cc;
+        }
+
         //rename classes
         list.Update(c =>
         {
@@ -46,19 +54,18 @@ internal class ModelChangeCase
         return cc;
     }
 
-
     private void AddItem(string key, string value)
     {
-        if (!ClassChangedName.ContainsKey(key)) ClassChangedName.Add(key, value);
+        ClassChangedName.TryAdd(key, value);
     }
 
     private string RenameClass(string className, CaseEnum caseEnum, RenameMap? renameMap)
     {
-        if (renameMap is not null)
+        if (renameMap is { })
         {
             // It is questionable if we should do InvariantCultureIgnoreCase.
             var nameMap = renameMap.ClassNameMap
-                .FirstOrDefault(cnm => cnm.OldName.Equals(className, StringComparison.InvariantCultureIgnoreCase));
+                .Find(cnm => cnm.OldName.Equals(className, StringComparison.OrdinalIgnoreCase));
 
             if (nameMap is not null && !string.IsNullOrWhiteSpace(nameMap.NewName))
             {
@@ -79,27 +86,42 @@ internal class ModelChangeCase
 
     private void RenamePropertiesType(List<ClassTemplate> list)
     {
-        if (!list.Any())
+        if (list.Count == 0)
+        {
             return;
+        }
+
         list.ForEach(ct => ct.Properties.Update(c => c.PropType = RenamePropertyType(c)));
     }
 
     private string GetNewName(string name)
     {
-        if (string.IsNullOrEmpty(name)) return "";
-        if (ClassChangedName.ContainsKey(name)) return ClassChangedName[name];
+        if (string.IsNullOrEmpty(name))
+        {
+            return string.Empty;
+        }
+
+        if (ClassChangedName.TryGetValue(name, out var newName))
+        {
+            return newName;
+        }
+
         //check if name contains namespace
         var index = name.LastIndexOf('.');
-        if (index < 0) return name;
+        if (index < 0)
+        {
+            return name;
+        }
+
         var entity = name[(index + 1)..];
-        return ClassChangedName.ContainsKey(entity) ? ClassChangedName[entity] : name;
+        return ClassChangedName.GetValueOrDefault(entity, name);
     }
 
     private string RenamePropertyType(PropertyTemplate prop)
     {
         var type = prop.PropType;
-        const string pattern = @"List<([\w\.]+)>";
-        var m = Regex.Match(type, pattern);
+        const string Pattern = @"List<([\w\.]+)>";
+        var m = Regex.Match(type, Pattern);
         if (m.Success)
         {
             var name = m.Groups[1].ToString();

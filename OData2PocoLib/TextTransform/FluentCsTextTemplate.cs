@@ -19,6 +19,11 @@ internal class FluentCsTextTemplate : FluentTextTemplate<FluentCsTextTemplate>
 
     public string KeyWord { get; set; }
 
+    public static implicit operator string(FluentCsTextTemplate ft)
+    {
+        return ft.ToString();
+    }
+
     public FluentCsTextTemplate LeftBrace()
     {
         WriteLine("{");
@@ -60,29 +65,11 @@ internal class FluentCsTextTemplate : FluentTextTemplate<FluentCsTextTemplate>
     public FluentCsTextTemplate WriteComment(string str)
     {
         if (string.IsNullOrEmpty(str))
+        {
             return this;
-        Write(str.Trim().StartsWith(@"//") ? str : $"//{str}");
-        return this;
-    }
+        }
 
-    private string DeclareClass(string name, string inherit = "", string visibility = "public",
-        bool abstractClass = false)
-    {
-        var abstractKeyword = abstractClass ? " abstract" : "";
-        var partialKeyword = " partial";
-        var baseClass = string.IsNullOrEmpty(inherit) ? "" : $" : {inherit}";
-        return $"{visibility}{abstractKeyword}{partialKeyword} {KeyWord} {name}{baseClass}";
-    }
-
-    internal FluentCsTextTemplate StartClass(string name, string inherit = "", string visibility = "public",
-        bool abstractClass = false)
-    {
-        //syntax: 'public abstract partial class MyClass : parent'
-        PushTabIndent() // ident one tab
-            .Write(DeclareClass(name, inherit, visibility, abstractClass))
-            .NewLine()
-            .LeftBrace()
-            .PushSpaceIndent(); //push tab  for the next write block
+        Write(str.Trim().StartsWith("//") ? str : $"//{str}");
         return this;
     }
 
@@ -99,8 +86,30 @@ internal class FluentCsTextTemplate : FluentTextTemplate<FluentCsTextTemplate>
         return this;
     }
 
-    public static implicit operator string(FluentCsTextTemplate ft)
+    internal FluentCsTextTemplate StartClass(
+        string name,
+        string inherit = "",
+        string visibility = "public",
+        bool abstractClass = false)
     {
-        return ft.ToString();
+        //syntax: 'public abstract partial class MyClass : parent'
+        PushTabIndent() // ident one tab
+            .Write(DeclareClass(name, inherit, visibility, abstractClass))
+            .NewLine()
+            .LeftBrace()
+            .PushSpaceIndent(); //push tab  for the next write block
+        return this;
+    }
+
+    private string DeclareClass(
+        string name,
+        string inherit = "",
+        string visibility = "public",
+        bool abstractClass = false)
+    {
+        var abstractKeyword = abstractClass ? " abstract" : string.Empty;
+        const string PartialKeyword = " partial";
+        var baseClass = string.IsNullOrEmpty(inherit) ? string.Empty : $" : {inherit}";
+        return $"{visibility}{abstractKeyword}{PartialKeyword} {KeyWord} {name}{baseClass}";
     }
 }

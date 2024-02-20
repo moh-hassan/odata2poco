@@ -1,11 +1,12 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using OData2Poco.InfraStructure.FileSystem;
-
 namespace OData2Poco.Tests;
+
+using InfraStructure.FileSystem;
+
 public abstract class BaseTest
 {
-    protected List<ClassTemplate> ClassList;
+    protected List<ClassTemplate> _classList;
     protected IPocoFileSystem _fileSystem;
     protected bool IsCi => Environment.GetEnvironmentVariable("CI") == "true";
     protected bool IsLocalTest => Environment.GetEnvironmentVariable("LOCAL_TEST") == "1";
@@ -13,23 +14,23 @@ public abstract class BaseTest
     [OneTimeSetUp]
     public void BaseOneTimeSetup()
     {
-        ClassList = Moq.TripPinModel;
+        _classList = Moq.TripPinModel;
         Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
         _fileSystem = new NullFileSystem();
         Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
     }
-    public ClassTemplate GetClassTemplateSample(string name)
+
+    protected ClassTemplate GetClassTemplateSample(string name)
     {
-
-        var ct = ClassList.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        var ct = _classList.Find(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         return ct;
-
     }
 
     protected string[] StringToArray(string text, char sep = ',')
     {
-        return text == "" ? [] : text.Split(sep);
+        return string.IsNullOrEmpty(text) ? [] : text.Split(sep);
     }
+
     /// <summary>
     /// create temp file in user temp folder
     /// </summary>
@@ -39,7 +40,7 @@ public abstract class BaseTest
     //extension ".txt"
     protected string NewTemporaryFile(string content, string extension = null)
     {
-        string filepath = Path.GetTempFileName();
+        var filepath = Path.GetTempFileName();
         if (!string.IsNullOrEmpty(extension))
         {
             extension = extension.TrimStart('.');
@@ -49,16 +50,15 @@ public abstract class BaseTest
         File.WriteAllText(filepath, content);
         return filepath;
     }
+
     /// <summary>
     /// Remove environment variable
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="names"></param>
     protected void DelEnv(params string[] names)
     {
-        foreach (var name in names)
-        {
-            Environment.SetEnvironmentVariable(name, null);
-        }
+        if (names == null) return;
+        foreach (var name in names) Environment.SetEnvironmentVariable(name, null);
     }
 
     protected void CreateEnv(string name, string value)

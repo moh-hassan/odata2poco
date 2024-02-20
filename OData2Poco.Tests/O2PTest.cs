@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
-#pragma warning disable IDE0060 // Remove unused parameter
+
+namespace OData2Poco.Tests;
 
 using System.Collections;
-using OData2Poco.Api;
-namespace OData2Poco.Tests;
+using Api;
+
 public class O2PTest
 {
-
     [OneTimeSetUp]
     public void Init()
     {
@@ -17,9 +17,12 @@ public class O2PTest
     [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
     public async Task GenerateDefaultTest(string url, string version, int n)
     {
-        var connString = new OdataConnectionString { ServiceUrl = url };
+        var connString = new OdataConnectionString
+        {
+            ServiceUrl = url
+        };
         var o2P = new O2P();
-        var code = await o2P.GenerateAsync(connString);
+        var code = await o2P.GenerateAsync(connString).ConfigureAwait(false);
         Assert.That(code, Does.Contain("public partial class Product"));
     }
 
@@ -27,9 +30,12 @@ public class O2PTest
     public async Task GenerateDefaultTestV4()
     {
         var url = TestSample.TripPin4;
-        var connString = new OdataConnectionString { ServiceUrl = url };
+        var connString = new OdataConnectionString
+        {
+            ServiceUrl = url
+        };
         var o2P = new O2P();
-        var code = await o2P.GenerateAsync(connString);
+        var code = await o2P.GenerateAsync(connString).ConfigureAwait(false);
         Assert.That(code, Does.Contain("public partial class City"));
     }
 
@@ -37,9 +43,12 @@ public class O2PTest
     public async Task GenerateDefaultTestV3()
     {
         var url = TestSample.NorthWindV3;
-        var connString = new OdataConnectionString { ServiceUrl = url };
+        var connString = new OdataConnectionString
+        {
+            ServiceUrl = url
+        };
         var o2P = new O2P();
-        var code = await o2P.GenerateAsync(connString);
+        var code = await o2P.GenerateAsync(connString).ConfigureAwait(false);
         Assert.That(code, Does.Contain("public partial class Product"));
     }
 
@@ -47,10 +56,16 @@ public class O2PTest
     public async Task Filter_by_namespace_Test()
     {
         var url = TestSample.NorthWindV4;
-        var connString = new OdataConnectionString { ServiceUrl = url };
-        var setting = new PocoSetting { Include = ["NorthwindModel*"] };
+        var connString = new OdataConnectionString
+        {
+            ServiceUrl = url
+        };
+        var setting = new PocoSetting
+        {
+            Include = ["NorthwindModel*"]
+        };
         var o2P = new O2P(setting);
-        var code = await o2P.GenerateAsync(connString);
+        var code = await o2P.GenerateAsync(connString).ConfigureAwait(false);
         Assert.That(code, Does.Contain("public partial class Product"));
     }
 
@@ -58,18 +73,22 @@ public class O2PTest
     [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
     public async Task GenerateFromXmlContents(string fileName, string version, int n)
     {
-        string xml = File.ReadAllText(fileName);
+        var xml = File.ReadAllText(fileName);
         var o2P = new O2P();
-        var code = await o2P.GenerateAsync(xml);
+        var code = await o2P.GenerateAsync(xml).ConfigureAwait(false);
         Assert.That(code, Does.Contain("public partial class Product"));
     }
+
     [Test]
     public async Task GenerateFromRemoteXmlfile()
     {
         var url = "https://raw.githubusercontent.com/moh-hassan/odata2poco/master/Fake/trippinV4.xml";
-        var connString = new OdataConnectionString { ServiceUrl = url };
+        var connString = new OdataConnectionString
+        {
+            ServiceUrl = url
+        };
         var o2P = new O2P();
-        var code = await o2P.GenerateAsync(connString);
+        var code = await o2P.GenerateAsync(connString).ConfigureAwait(false);
         Assert.That(code, Does.Contain("public partial class City"));
     }
 
@@ -77,14 +96,17 @@ public class O2PTest
     public async Task Enable_read_write_properties_even_for_readonly()
     {
         var url = "https://raw.githubusercontent.com/moh-hassan/odata2poco/master/Fake/trippinV4.xml";
-        var connString = new OdataConnectionString { ServiceUrl = url };
+        var connString = new OdataConnectionString
+        {
+            ServiceUrl = url
+        };
         var setting = new PocoSetting
         {
-            ReadWrite = true, //Allow readonly property to be read/write
+            ReadWrite = true //Allow readonly property to be read/write
         };
         var o2P = new O2P(setting);
-        var code = await o2P.GenerateAsync(connString);
-        //TripId is readonly, but overwrite by setting option 
+        var code = await o2P.GenerateAsync(connString).ConfigureAwait(false);
+        //TripId is readonly, but overwrite by setting option
         Assert.That(code, Does.Contain(" public int TripId {get;set;}"));
     }
 
@@ -92,10 +114,13 @@ public class O2PTest
     public async Task O2p_call_static_method_test()
     {
         //Arrange
-        OdataConnectionString cs = new OdataConnectionString { ServiceUrl = TestSample.NorthWindV4 };
+        var cs = new OdataConnectionString
+        {
+            ServiceUrl = TestSample.NorthWindV4
+        };
         //Act
-        PocoSetting ps = new PocoSetting();
-        var code = await O2P.GeneratePocoAsync(cs, ps);
+        var ps = new PocoSetting();
+        var code = await O2P.GeneratePocoAsync(cs, ps).ConfigureAwait(false);
 
         //Assert
         code.Should().ContainAll("public partial class Category",
@@ -108,13 +133,19 @@ public class O2PTest
         //Arrange
         var config = new Configuration
         {
-            ConnectionString = new OdataConnectionString { ServiceUrl = TestSample.NorthWindV4 },
-            Setting = new PocoSetting { NameCase = CaseEnum.Camel }
+            ConnectionString = new OdataConnectionString
+            {
+                ServiceUrl = TestSample.NorthWindV4
+            },
+            Setting = new PocoSetting
+            {
+                NameCase = CaseEnum.Camel
+            }
         };
         var json = config.ToJson();
 
         //Act
-        var code = await O2P.GeneratePocoAsync(json);
+        var code = await O2P.GeneratePocoAsync(json).ConfigureAwait(false);
 
         //Assert
         code.Should().ContainAll("public partial class Category",
@@ -128,7 +159,7 @@ public class O2PTest
         var json = TestCaseFactory.Northwind;
 
         //Act
-        var code = await O2P.GeneratePocoAsync(json);
+        var code = await O2P.GeneratePocoAsync(json).ConfigureAwait(false);
         //Assert
         code.Should().ContainAll("public partial class Category",
             "public partial class CustomerDemographic");
@@ -154,26 +185,7 @@ public class O2PTest
 
 public static class TestCaseFactory
 {
-    private static string Path2Json(string path)
-    {
-        return path.Replace(@"\", @"\\");
-    }
-    public static IEnumerable TestCases
-    {
-        get
-        {
-            yield return new TestCaseData(TestSample.NorthWindV4, "swagger.json",
-                "\"openapi\": \"3.0.1\"");
-            yield return new TestCaseData(TestSample.NorthWindV4, "swagger.yml",
-                "openapi: 3.0.1");
-            yield return new TestCaseData(TestSample.UrlTripPinService, "swaggerPin.json",
-                "\"openapi\": \"3.0.1\"");
-            yield return new TestCaseData(TestSample.UrlTripPinService, "swaggerPin.yml",
-                "openapi: 3.0.1");
-        }
-    }
-
-    public static string Northwind = @$"
+    internal static string Northwind = @$"
        {{'ConnectionString': {{
             'ServiceUrl': '{Path2Json(TestSample.NorthWindV4)}',
             'UserName': null,
@@ -212,4 +224,23 @@ public static class TestCaseFactory
         }}  
      }}
 ";
+
+    public static IEnumerable TestCases
+    {
+        get
+        {
+            yield return new TestCaseData(TestSample.NorthWindV4, "swagger.json", "\"openapi\": \"3.0.1\"");
+            yield return new TestCaseData(TestSample.NorthWindV4, "swagger.yml", "openapi: 3.0.1");
+            yield return new TestCaseData(
+                TestSample.UrlTripPinService,
+                "swaggerPin.json",
+                @"""openapi"": ""3.0.1""");
+            yield return new TestCaseData(TestSample.UrlTripPinService, "swaggerPin.yml", "openapi: 3.0.1");
+        }
+    }
+
+    private static string Path2Json(string path)
+    {
+        return path.Replace(@"\", @"\\");
+    }
 }

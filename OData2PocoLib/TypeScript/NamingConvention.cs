@@ -1,9 +1,8 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-
-using OData2Poco.Extensions;
-
 namespace OData2Poco.TypeScript;
+
+using Extensions;
 
 internal class NamingConvention
 {
@@ -12,14 +11,16 @@ internal class NamingConvention
         Setting = setting;
         ClassName = setting.UseFullName ? ct.FullName.RemoveDot() : ct.Name;
         if (!string.IsNullOrEmpty(ct.BaseType))
+        {
             BaseType = setting.UseFullName
                 ? ct.BaseType.RemoveDot()
                 : ct.BaseType.Reduce();
+        }
     }
 
     public PocoSetting Setting { get; }
     public string ClassName { get; }
-    public string BaseType { get; } = "";
+    public string BaseType { get; } = string.Empty;
 
     public string GetPropertyType(string propType)
     {

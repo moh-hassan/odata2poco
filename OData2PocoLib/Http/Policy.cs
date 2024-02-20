@@ -1,14 +1,18 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-using System.Net;
-using OData2Poco.InfraStructure.Logging;
-
 namespace OData2Poco.Http;
+
+using System.Net;
+using InfraStructure.Logging;
 
 internal static class Policy
 {
-    private static readonly ILog Logger = PocoLogger.Default;
-    public static async Task<HttpResponseMessage?> RetryAsync(Func<Task<HttpResponseMessage>> action, int maxRetries, int delay = 2)
+    private static readonly ILog s_logger = PocoLogger.Default;
+
+    public static async Task<HttpResponseMessage?> RetryAsync(
+        Func<Task<HttpResponseMessage>> action,
+        int maxRetries,
+        int delay = 2)
     {
         var retryCount = 0;
         HttpResponseMessage? response = null;
@@ -17,37 +21,45 @@ internal static class Policy
         while (retryCount < maxRetries)
         {
             if (retryCount > 0)
-                Logger.Info($"Retry http connection: {retryCount}");
+            {
+                s_logger.Info($"Retry http connection: {retryCount}");
+            }
+
             try
             {
-                response = await action();
+                response = await action().ConfigureAwait(false);
 
                 if (response.IsSuccessStatusCode)
+                {
                     break;
-                if (response.StatusCode == HttpStatusCode.ServiceUnavailable ||
-                    response.StatusCode == HttpStatusCode.GatewayTimeout)
+                }
+
+                if (response.StatusCode is HttpStatusCode.ServiceUnavailable or
+                    HttpStatusCode.GatewayTimeout)
                 {
                     // Handle the 503 or 504 error and retry the request
                     retryCount++;
                     if (retryCount < maxRetries)
                     {
-                        Logger.Info($"Retry: {retryCount}, StatusCode: {response.StatusCode}");
+                        s_logger.Info($"Retry: {retryCount}, StatusCode: {response.StatusCode}");
                         Console.WriteLine($"Retry: {retryCount}, StatusCode: {response.StatusCode}");
-                        await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
+                        await Task.Delay(TimeSpan.FromSeconds(delaySeconds)).ConfigureAwait(false);
                         delaySeconds++;
                     }
                 }
                 else
+                {
                     break;
+                }
             }
             catch (HttpRequestException ex)
             {
                 retryCount++;
                 if (retryCount < maxRetries)
                 {
-                    Logger.Info($"Retry: {retryCount}, Error: {ex.Message}");
+                    s_logger.Info($"Retry: {retryCount}, Error: {ex.Message}");
                     Console.WriteLine($"Retry: {retryCount}, StatusCode: {response?.StatusCode}");
-                    await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
+                    await Task.Delay(TimeSpan.FromSeconds(delaySeconds)).ConfigureAwait(false);
                     delaySeconds++;
                 }
             }
@@ -56,4 +68,3 @@ internal static class Policy
         return response;
     }
 }
-

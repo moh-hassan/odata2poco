@@ -1,23 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>   
-    <TargetFrameworks>net6.0;net472</TargetFrameworks>
-    <Nullable>enable</Nullable>
-    <AssemblyName>OData2Poco.Cli</AssemblyName>
-    <Authors>Mohamed Hassan</Authors>
-    <Product>OData2Poco.Cli</Product>
-    <Description>
-      o2gen is a CommandLine tool for generating c# and typescript POCO (DTO) classes,interfaces and records from OData feeds with lot of configuration parameters.
-    </Description>
-  </PropertyGroup>
-  
+	<PropertyGroup>
+		<TargetFrameworks>net6.0;net472</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<AssemblyName>OData2Poco.Cli</AssemblyName>
+		<Authors>Mohamed Hassan</Authors>
+		<Product>OData2Poco.Cli</Product>
+		<Description>
+			o2gen is a CommandLine tool for generating c# and typescript POCO (DTO) classes,interfaces and records from OData feeds with lot of configuration parameters.
+		</Description>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" />
+	</ItemGroup>
+
+	<ItemGroup>		
+		<ProjectReference Include="..\OData2PocoLib\OData2Poco.csproj" />
+	</ItemGroup>
 
 </Project>
