@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net6.0;netstandard2.0;net461;net472</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' == 'unix'">
-      net6.0;netstandard2.0
-    </TargetFrameworks>
     <RootNamespace>OData2Poco</RootNamespace>
     <AssemblyName>OData2Poco</AssemblyName>
     <Authors>Mohamed Hassan</Authors>

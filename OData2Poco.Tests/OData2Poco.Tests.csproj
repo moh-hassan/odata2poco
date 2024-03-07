@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net6.0;net472</TargetFrameworks>
-    <Authors>Mohamed Hassan</Authors>    
+    <TargetFrameworks>net6.0;net472</TargetFrameworks>
+    <Authors>Mohamed Hassan</Authors>
     <Company>OData2Poco</Company>
     <Product>OData2Poco</Product>
     <IsTestProject>true</IsTestProject>
