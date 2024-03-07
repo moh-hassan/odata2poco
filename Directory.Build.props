@@ -57,13 +57,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PolySharp" Condition="'$(IsTestProject)' == 'false'">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="$(SolutionDir)license.txt" Pack="true" PackagePath="" />
     <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\" />
   </ItemGroup>
