@@ -14,7 +14,7 @@ public sealed class OdataService : IDisposable
 
     private OdataService()
     {
-        _mockServer = WireMockServer.Start();
+        _mockServer = WireMockServer.Start(12399);
         _mockServer
             .Given(Request.Create().WithPath("/trippin/$metadata"))
             .RespondWith(Response.Create()

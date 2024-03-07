@@ -24,6 +24,9 @@ internal static class TestSample
         }
     }
 
+    public static string SolutionFolder
+        => Path.GetFullPath(Path.Combine(BaseDirectory, "..", "..", "..", ".."));
+
     public static string
         RelativeFakeFolder => Path.Combine("..", "..", "..", "..", "Fake"); //. /release/bin/project/soln
 
