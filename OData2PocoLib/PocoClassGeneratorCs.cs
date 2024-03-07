@@ -87,8 +87,8 @@ internal sealed class PocoClassGeneratorCs : IPocoClassGenerator
         {
             //Use a user supplied namespace prefix combined with the schema namepace or just the schema namespace
 
-            var namespc = PrefixNamespace(s);
-            template.StartNamespace(namespc);
+            var @namespace = PrefixNamespace(s);
+            template.StartNamespace(@namespace);
             var pocoModel = ClassList.Where(x => x.NameSpace == s);
             foreach (var item in pocoModel)
             {
@@ -121,6 +121,7 @@ internal sealed class PocoClassGeneratorCs : IPocoClassGenerator
     {
         FluentCsTextTemplate csTemplate = new(PocoSetting);
         var comment = ent.GetComment();
+        var visibility = PocoSetting.TypeVisibility ? "internal" : "public";
         if (comment.Length > 0)
         {
             csTemplate.PushIndent("\t").WriteLine("// " + ent.GetComment()).PopIndent();
@@ -131,7 +132,7 @@ internal sealed class PocoClassGeneratorCs : IPocoClassGenerator
         {
             var elements = string.Join($",{_nl}", ent.EnumElements);
             var flagAttribute = ent.IsFlags ? "[Flags] " : string.Empty;
-            var enumString = $"\t{flagAttribute}public enum {ent.Name}{_nl}\t {{{_nl} {elements} {_nl}\t}}";
+            var enumString = $"\t{flagAttribute}{visibility} enum {ent.Name}{_nl}\t {{{_nl} {elements} {_nl}\t}}";
             return enumString;
         }
 
@@ -143,8 +144,7 @@ internal sealed class PocoClassGeneratorCs : IPocoClassGenerator
         var baseClass = !string.IsNullOrEmpty(ent.BaseType) && PocoSetting.UseInheritance
             ? ReducedBaseTyp(ent) //ent.BaseType
             : PocoSetting.Inherit;
-
-        csTemplate.StartClass(ent.Name, baseClass, abstractClass: ent.IsAbstrct);
+        csTemplate.StartClass(ent.Name, baseClass, visibility, ent.IsAbstrct);
 
         foreach (var p in ent.Properties)
         {

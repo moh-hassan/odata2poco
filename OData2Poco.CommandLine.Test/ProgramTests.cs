@@ -782,4 +782,16 @@ public partial record Flight : PublicTransportation
         //Assert
         output.Should().Contain("-r, --url");
     }
+
+    [Test]
+    public async Task Class_or_Enum_can_be_internal_or_public()
+    {
+        //Arrange
+        var url = OdataService.Trippin;
+        var a = $"-r {url} -v --internal";
+        //Act
+        var (_, output) = await RunCommand(a).ConfigureAwait(false);
+        //Assert
+        output.Should().ContainAll(["internal partial class City", "internal enum PersonGender"]);
+    }
 }

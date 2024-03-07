@@ -201,6 +201,9 @@ public partial class Options
     [Option('l', "list", HelpText = "List POCO classes to standard output.")]
     public bool ListPoco { get; set; }
 
+    [Option("internal", HelpText = "Declare class as internal.")]
+    public bool TypeVisibility { get; set; }
+
     public List<string> Errors { get; } = [];
 }
 #nullable restore

@@ -103,7 +103,7 @@ public class PocoSetting : IValidator
     public bool UseFullName { get; set; }
     public bool ShowWarning { get; set; }
     public string AtributeDefs { get; set; }
-
+    public bool TypeVisibility { get; set; }
     public void Validate()
     {
         if (Lang == Language.None)

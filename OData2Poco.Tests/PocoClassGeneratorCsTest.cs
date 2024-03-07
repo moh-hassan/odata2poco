@@ -526,4 +526,51 @@ namespace BookStore
 ";
         Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
     }
+
+    [Test]
+    [TestCase(true)]
+    [TestCase(false)]
+    public void Class_can_be_internal_or_public(bool visibility)
+    {
+        //Arrange
+        var setting = new PocoSetting { TypeVisibility = visibility };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Customer",
+            NameSpace = "SP"
+        };
+        var gen = Moq.Moq4IPocoGenerator(ct);
+
+        //Act
+        var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
+        var code = sut.ClassToString(ct);
+        //Assert
+        var expected = visibility ? "internal partial class Customer" : "public partial class Customer";
+        Assert.That(code, Does.Contain(expected));
+    }
+
+    [Test]
+    [TestCase(true)]
+    [TestCase(false)]
+    public void Enum_can_be_internal_or_public(bool visibility)
+    {
+        //Arrange
+        var setting = new PocoSetting { TypeVisibility = visibility };
+        var ct = new ClassTemplate(1)
+        {
+            Name = "Feature",
+            NameSpace = "SP",
+            IsEnum = true,
+            EnumElements = ["Feature0", "Feature1"]
+        };
+        var gen = Moq.Moq4IPocoGenerator(ct);
+
+        //Act
+        var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
+        var code = sut.ClassToString(ct);
+        //Assert
+        var expected = visibility ? "internal enum Feature" : "public enum Feature";
+        Assert.That(code, Does.Contain(expected));
+    }
+
 }
