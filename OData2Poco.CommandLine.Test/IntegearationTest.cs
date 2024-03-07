@@ -49,7 +49,7 @@ public class IntegrationTest
     [Test]
     [Category("integration")]
 #if NET
-    [TestCase("net6.0")]
+    [TestCase("net8.0")]
 #else
     [TestCase("net472")]
 #endif
