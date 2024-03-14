@@ -20,6 +20,7 @@ public sealed class PropertyTemplate : IEquatable<PropertyTemplate>
     public int? Precision { get; set; }
     public int? Scale { get; set; }
     public bool IsReadOnly { get; set; }
+    internal bool InConstructor => !IsNullable && !IsNavigate;
 
     #region IEquatable and Comparer
 

@@ -12,7 +12,7 @@ using Extensions;
 ///     Convert name to Camel/Pascal Case
 ///     Generate the declaration of property e.g.   virtual public int? name  {get;set;} //comment
 /// </summary>
-public class PropertyGenerator
+internal partial class PropertyGenerator
 {
     private readonly AttributeFactory _attributeManager = AttributeFactory.Default;
     private readonly string _nl = Environment.NewLine;

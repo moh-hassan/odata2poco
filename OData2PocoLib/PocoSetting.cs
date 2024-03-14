@@ -104,6 +104,7 @@ public class PocoSetting : IValidator
     public bool ShowWarning { get; set; }
     public string AtributeDefs { get; set; }
     public bool TypeVisibility { get; set; }
+    public Ctor WithConstructor { get; set; }
     public void Validate()
     {
         if (Lang == Language.None)
