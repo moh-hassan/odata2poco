@@ -5,8 +5,6 @@
     <AssemblyName>OData2Poco</AssemblyName>
     <Authors>Mohamed Hassan</Authors>
     <Product>OData2Poco</Product>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Nullable>enable</Nullable>
     <Description>
       "OData2Poco is a class library supporting netstandard2,net6 and .NET 4.61+ to generate  plain-old CLR objects (POCO/DTO) from OData feeds that implement both V1-3 and V4 OData protocol,based on the metadata of the service stored on the  server. Code generation is controlled with lot of configuration parameters. POCO/DTO  can be used in typed RESTful client OData services"

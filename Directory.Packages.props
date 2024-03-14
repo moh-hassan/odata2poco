@@ -13,15 +13,15 @@
     <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageVersion Include="nunit" Version="4.0.1" />
+    <PackageVersion Include="nunit" Version="4.1.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="NUnit.Analyzers" Version="4.0.1" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
-    <PackageVersion Include="CliWrap" Version="3.6.6" />   
-    <PackageVersion Include="PolySharp" Version="1.14.1" />  
-    <PackageVersion Include="WireMock.Net" Version="1.5.48" />
+    <PackageVersion Include="CliWrap" Version="3.6.6" />
+    <PackageVersion Include="PolySharp" Version="1.14.1" />
+    <PackageVersion Include="WireMock.Net" Version="1.5.49" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.16.0.82469" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.1.118" />
   </ItemGroup>
