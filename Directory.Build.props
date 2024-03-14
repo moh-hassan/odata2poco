@@ -26,6 +26,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <NoWarn>$(NoWarn);SYSLIB1045</NoWarn>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
   <!-- Enable building .NET Framework projects on any machine with at least MSBuild or the .NET Core SDK installed.-->
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies">
