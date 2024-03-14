@@ -411,4 +411,7 @@ public static partial class StringExtensions
             _ => (string.Empty, string.Empty)
         };
     }
+
+    public static string AsString(this IEnumerable<string> list, string separator = ", ")
+        => string.Join(separator, list);
 }

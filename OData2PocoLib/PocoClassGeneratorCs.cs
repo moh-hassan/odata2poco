@@ -8,7 +8,7 @@ using TextTransform;
 /// <summary>
 ///     Generate c# code
 /// </summary>
-internal sealed class PocoClassGeneratorCs : IPocoClassGenerator
+public sealed class PocoClassGeneratorCs : IPocoClassGenerator
 {
     internal string _header;
     private readonly string _nl = Environment.NewLine;
@@ -34,7 +34,6 @@ internal sealed class PocoClassGeneratorCs : IPocoClassGenerator
     public string LangName { get; set; } = "csharp";
     public List<ClassTemplate> ClassList { get; set; }
     public PocoSetting PocoSetting { get; set; }
-
     private string? CodeText { get; set; }
 
     //key is fullName: <namespace.className>
@@ -42,6 +41,7 @@ internal sealed class PocoClassGeneratorCs : IPocoClassGenerator
 
     public static PocoClassGeneratorCs GenerateCsPocoClass(IPocoGenerator pocoGen, PocoSetting? setting)
     {
+        pocoGen = pocoGen ?? throw new ArgumentNullException(nameof(pocoGen));
         setting ??= new PocoSetting();
         //add jsonproperty to properties/classes that are renamed
         setting.Attributes.Add("original"); //v3.2
@@ -146,32 +146,21 @@ internal sealed class PocoClassGeneratorCs : IPocoClassGenerator
             : PocoSetting.Inherit;
         csTemplate.StartClass(ent.Name, baseClass, visibility, ent.IsAbstrct);
 
-        foreach (var p in ent.Properties)
+        //add constructor
+        if (PocoSetting.WithConstructor != Ctor.None)
         {
-            PropertyGenerator pp = new(p, PocoSetting);
-
-            if (p.IsNavigate && PocoSetting is { AddNavigation: false, AddEager: false })
-            {
-                continue;
-            }
-
-            foreach (var item in pp.GetAllAttributes().Where(item => !string.IsNullOrEmpty(item)))
-            {
-                csTemplate.WriteLine(item);
-            }
-
-            csTemplate.WriteLine(pp.Declaration);
-
-            if (BlankSpaceBeforeProperties)
-            {
-                csTemplate.WriteLine(string.Empty); //empty line
-            }
+            var ctor = PropertyGenerator.GenerateFullConstructor(ent, PocoSetting);
+            if (!string.IsNullOrEmpty(ctor))
+                csTemplate.WriteLine(ctor);
         }
+
+        //add properties
+        csTemplate.WriteLine(PropertyGenerator.GenerateProperties(ent, PocoSetting));
 
         csTemplate.EndClass();
         if (includeNamespace)
         {
-            csTemplate.EndNamespace(); //"}" for namespace
+            csTemplate.EndNamespace();
         }
 
         CodeText = csTemplate.ToString();
