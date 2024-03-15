@@ -794,4 +794,40 @@ public partial record Flight : PublicTransportation
         //Assert
         output.Should().ContainAll(["internal partial class City", "internal enum PersonGender"]);
     }
+
+    [Test]
+    public async Task Allow_internal_class_test()
+    {
+        //Arrange
+        var url = OdataService.Trippin;
+        var a = $"-r {url} -v --internal";
+        //Act
+        var (exitCode, output) = await RunCommand(a).ConfigureAwait(false);
+        //Assert
+        output.Should().Contain("internal partial class City");
+        exitCode.Should().Be(0);
+    }
+
+    [Test]
+    [TestCase("--ctor")]
+    [TestCase("-R")]
+    public async Task Generate_constructor_test(string option)
+    {
+        //Arrange
+        var expected = """
+                         public City (string countryRegion, string name, string region)
+                            {
+                                CountryRegion = countryRegion;
+                                Name = name;
+                                Region = region;
+                            }
+                       """;
+        var url = OdataService.Trippin;
+        var a = $"-r {url} -v {option} full";
+        //Act
+        var (exitCode, output) = await RunCommand(a).ConfigureAwait(false);
+        //Assert
+        output.ToLines().Should().Contain(expected.ToLines());
+        exitCode.Should().Be(0);
+    }
 }

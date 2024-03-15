@@ -204,8 +204,9 @@ public partial class Options
     [Option("internal", HelpText = "Declare class as internal.")]
     public bool TypeVisibility { get; set; }
 
-    [Option("constructor", Default = Ctor.None, HelpText = "Add constructor to the class or record.")]
+    [Option('R', "ctor", Default = Ctor.None, HelpText = "Add constructor to the class or record. Allowed values: none, full for generating Parameterized Constructor. Default value is 'none' for no constructor")]
     public Ctor WithConstructor { get; set; }
+
     public List<string> Errors { get; } = [];
 }
 #nullable restore
