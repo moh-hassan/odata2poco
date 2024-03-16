@@ -1,4 +1,15 @@
 # OData2Poco 
+
+## Version 6.3.0
+**Release Date:**  March 16, 2024
+
+- New Feature: Generate Parameterized Constructor.
+- New Feature: class/record can be internal (default is public).
+- Allow entering Proxy user:password.
+- Move the global tool ``` dotnet o2pgen``` to net8 (Breaking Change).
+
+----------------
+
 ## Version 6.2.1
 **Release Date:**  Nov 7, 2023
 - Fix terminal close in windows 11 or error 'process exited with code 259' when run o2pgen in net472.

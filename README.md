@@ -16,12 +16,6 @@ POCO classes can be used in a typed RESTful client OData services. Code generati
 
 -----------
 
-# Announcing new Release: V6.2.1
-## What is New in v6.2.1:
-- Fix terminal close in windows 11 or displaying message 'process exited with code 259'  when run o2pgen in net472.
-
------------- 
-
 ## Development packages
 The developed packages can be downloaded from `myget.org`
 
