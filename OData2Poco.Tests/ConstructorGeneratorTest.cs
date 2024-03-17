@@ -67,6 +67,8 @@ public class ConstructorGeneratorTest
     {
         //Arrange
         var expected = """
+                       public Customer () { }
+                       
                        public Customer (int categoryID, string description)
                        {
                         CategoryID = categoryID;

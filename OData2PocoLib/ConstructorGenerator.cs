@@ -65,6 +65,8 @@ internal partial class PropertyGenerator
         PocoSetting? pocoSetting = null)
     {
         pocoSetting ??= new PocoSetting();
+        if (classTemplate is null)
+            return string.Empty;
         if (pocoSetting.WithConstructor == Ctor.None)
             return string.Empty;
         var className = classTemplate.Name;
@@ -82,7 +84,9 @@ internal partial class PropertyGenerator
             assignmentList.Add(pg.AssignmentDeclaration);
         }
 
-        textTemplate.Write("public ")
+        var parameterLessConstructor = $"public {className} () {{}}\r\n";
+        textTemplate.WriteLine(parameterLessConstructor)
+            .Write("public ")
             .Write(className)
             .WriteLine(GeneratePrimaryConstructor(classTemplate, pocoSetting))
             .WriteLine("{")
