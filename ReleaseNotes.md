@@ -1,6 +1,11 @@
 # OData2Poco 
 
-## Version 6.3.0
+## Version 6.3.2
+**Release Date:**  March 18, 2024
+- Fix : Generate ParameterLess Constructor beside the Parameterized one to avoid compilation error CS7036 when class inherits parent.
+
+
+## Version 6.3.1
 **Release Date:**  March 16, 2024
 
 - New Feature: Generate Parameterized Constructor.

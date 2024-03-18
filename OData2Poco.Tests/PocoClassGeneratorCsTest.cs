@@ -533,7 +533,7 @@ namespace BookStore
     public void Class_can_be_internal_or_public(bool visibility)
     {
         //Arrange
-        var setting = new PocoSetting { TypeVisibility = visibility };
+        var setting = new PocoSetting { IsInternal = visibility };
         var ct = new ClassTemplate(1)
         {
             Name = "Customer",
@@ -552,10 +552,10 @@ namespace BookStore
     [Test]
     [TestCase(true)]
     [TestCase(false)]
-    public void Enum_can_be_internal_or_public(bool visibility)
+    public void Enum_can_be_internal_or_public(bool @internal)
     {
         //Arrange
-        var setting = new PocoSetting { TypeVisibility = visibility };
+        var setting = new PocoSetting { IsInternal = @internal };
         var ct = new ClassTemplate(1)
         {
             Name = "Feature",
@@ -569,8 +569,7 @@ namespace BookStore
         var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
         var code = sut.ClassToString(ct);
         //Assert
-        var expected = visibility ? "internal enum Feature" : "public enum Feature";
+        var expected = @internal ? "internal enum Feature" : "public enum Feature";
         Assert.That(code, Does.Contain(expected));
     }
-
 }

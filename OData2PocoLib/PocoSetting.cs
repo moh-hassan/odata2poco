@@ -103,7 +103,7 @@ public class PocoSetting : IValidator
     public bool UseFullName { get; set; }
     public bool ShowWarning { get; set; }
     public string AtributeDefs { get; set; }
-    public bool TypeVisibility { get; set; }
+    public bool IsInternal { get; set; }
     public Ctor WithConstructor { get; set; }
     public void Validate()
     {

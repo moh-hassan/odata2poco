@@ -188,6 +188,12 @@ public partial class Options
     [Option("att-defs", HelpText = "Path of user defined attributes. File is a json format.")]
     public string AtributeDefs { get; set; }
 
+    [Option("internal", HelpText = "Declare class as internal.")]
+    public bool IsInternal { get; set; }
+
+    [Option('R', "ctor", Default = Ctor.None, HelpText = "Add constructor to the class or record. Allowed values: none, full for generating Parameterized Constructor. Default value is 'none' for no constructor")]
+    public Ctor WithConstructor { get; set; }
+
     //----------------------Action options
     [Option('x', "metafile", HelpText = "Xml filename to save metadata.")]
     public string MetaFilename { get; set; }
@@ -200,12 +206,6 @@ public partial class Options
 
     [Option('l', "list", HelpText = "List POCO classes to standard output.")]
     public bool ListPoco { get; set; }
-
-    [Option("internal", HelpText = "Declare class as internal.")]
-    public bool TypeVisibility { get; set; }
-
-    [Option('R', "ctor", Default = Ctor.None, HelpText = "Add constructor to the class or record. Allowed values: none, full for generating Parameterized Constructor. Default value is 'none' for no constructor")]
-    public Ctor WithConstructor { get; set; }
 
     public List<string> Errors { get; } = [];
 }

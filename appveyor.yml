@@ -1,6 +1,6 @@
 
 #nuget version is only changed by  RELEASE TAG 
-version: 6.4.0-dev-{build} 
+version: 6.3.2-dev-{build} 
 
 image: Visual Studio 2022
 

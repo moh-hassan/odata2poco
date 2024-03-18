@@ -121,7 +121,7 @@ public sealed class PocoClassGeneratorCs : IPocoClassGenerator
     {
         FluentCsTextTemplate csTemplate = new(PocoSetting);
         var comment = ent.GetComment();
-        var visibility = PocoSetting.TypeVisibility ? "internal" : "public";
+        var visibility = PocoSetting.IsInternal ? "internal" : "public";
         if (comment.Length > 0)
         {
             csTemplate.PushIndent("\t").WriteLine("// " + ent.GetComment()).PopIndent();
