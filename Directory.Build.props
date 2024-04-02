@@ -25,6 +25,7 @@
     <PackageTags>code-generation;odata;charp;c#;typescript;ts;dto;poco;AspNetWebApi;WebApi</PackageTags>
     <ImplicitUsings>enable</ImplicitUsings>
     <NoWarn>$(NoWarn);SYSLIB1045</NoWarn>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <PropertyGroup>
