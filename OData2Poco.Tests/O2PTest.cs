@@ -4,6 +4,7 @@ namespace OData2Poco.Tests;
 
 using System.Collections;
 using Api;
+using Fake.Common;
 
 public class O2PTest
 {
@@ -42,7 +43,7 @@ public class O2PTest
     [Test]
     public async Task GenerateDefaultTestV3()
     {
-        var url = TestSample.NorthWindV3;
+        var url = OdataService.Northwind3;
         var connString = new OdataConnectionString
         {
             ServiceUrl = url
@@ -55,7 +56,7 @@ public class O2PTest
     [Test]
     public async Task Filter_by_namespace_Test()
     {
-        var url = TestSample.NorthWindV4;
+        var url = OdataService.Northwind4;
         var connString = new OdataConnectionString
         {
             ServiceUrl = url
@@ -116,8 +117,9 @@ public class O2PTest
         //Arrange
         var cs = new OdataConnectionString
         {
-            ServiceUrl = TestSample.NorthWindV4
+            ServiceUrl = OdataService.Northwind4
         };
+
         //Act
         var ps = new PocoSetting();
         var code = await O2P.GeneratePocoAsync(cs, ps).ConfigureAwait(false);
@@ -135,7 +137,7 @@ public class O2PTest
         {
             ConnectionString = new OdataConnectionString
             {
-                ServiceUrl = TestSample.NorthWindV4
+                ServiceUrl = OdataService.Northwind4
             },
             Setting = new PocoSetting
             {
@@ -163,6 +165,21 @@ public class O2PTest
         //Assert
         code.Should().ContainAll("public partial class Category",
             "public partial class CustomerDemographic");
+    }
+
+    [Test]
+    [Category("mock")]
+    [TestCaseSource(typeof(TestCaseFactory), nameof(TestCaseFactory.TestMockCases))]
+    public async Task OdataService_mock_test(string url, string version)
+    {
+        var connString = new OdataConnectionString
+        {
+            ServiceUrl = url
+        };
+        var o2P = new O2P();
+        var code = await o2P.GenerateAsync(connString).ConfigureAwait(false);
+        Assert.That(code, Does.Contain("public partial class"));
+        Assert.That(o2P.MetaData.MetaDataVersion, Is.EqualTo(version));
     }
 
 #if OPENAPI
@@ -236,6 +253,19 @@ public static class TestCaseFactory
                 "swaggerPin.json",
                 @"""openapi"": ""3.0.1""");
             yield return new TestCaseData(TestSample.UrlTripPinService, "swaggerPin.yml", "openapi: 3.0.1");
+        }
+    }
+
+    public static IEnumerable TestMockCases
+    {
+        get
+        {
+            //url ,version
+            yield return new TestCaseData(OdataService.Northwind, "4.0");
+            yield return new TestCaseData(OdataService.Northwind2, "1.0");
+            yield return new TestCaseData(OdataService.Northwind3, "1.0");
+            yield return new TestCaseData(OdataService.Northwind4, "4.0");
+            yield return new TestCaseData(OdataService.Trippin, "4.0");
         }
     }
 

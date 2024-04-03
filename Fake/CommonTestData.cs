@@ -3,6 +3,7 @@
 namespace OData2Poco.Fake;
 
 using System.Reflection;
+using Common;
 
 internal static class TestSample
 {
@@ -35,6 +36,7 @@ internal static class TestSample
     public static string NorthWindV4 => GetFullPath("northwindV4.xml");
 
     public static string NorthWindV3 => GetFullPath("northwindV3.xml");
+    public static string NorthWindV2 => GetFullPath("northwindV2.xml");
 
     public static string TripPin4Flag => GetFullPath("trippinV4Flags.xml");
 
@@ -73,11 +75,11 @@ internal static class TestSample
         //url ,version ,noOfClasses
         new object[]
         {
-            UrlNorthWindV4, "4.0", 26
+           OdataService.Northwind, "4.0", 26
         },
         new object[]
         {
-            UrlNorthWindV3, "1.0", 26
+            OdataService.Northwind3, "1.0", 26
         }
     ];
 
@@ -86,11 +88,11 @@ internal static class TestSample
         //url ,version ,noOfClasses
         new object[]
         {
-            UrlOdataV4, "4.0", 26
+            OdataService.Northwind4, "4.0", 26
         },
         new object[]
         {
-            UrlOdataV3, "1.0", 26
+            OdataService.Northwind3, "1.0", 26
         }
     ];
 
