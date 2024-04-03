@@ -178,8 +178,11 @@ public class O2PTest
         };
         var o2P = new O2P();
         var code = await o2P.GenerateAsync(connString).ConfigureAwait(false);
-        Assert.That(code, Does.Contain("public partial class"));
-        Assert.That(o2P.MetaData.MetaDataVersion, Is.EqualTo(version));
+        Assert.Multiple(() =>
+        {
+            Assert.That(code, Does.Contain("public partial class"));
+            Assert.That(o2P.MetaData.MetaDataVersion, Is.EqualTo(version));
+        });
     }
 
 #if OPENAPI

@@ -2,6 +2,7 @@
 
 namespace OData2Poco.Tests;
 
+using System.Net;
 using Fake.Common;
 using Http;
 
@@ -10,24 +11,17 @@ public class CustomHttpClientProxyTest
 {
     private readonly string _machineName = Environment.MachineName;
     private readonly string _proxy = "http://localhost:8888";
-    private bool _isLive;
 
     [OneTimeSetUp]
-    public void Setup()
+    public async Task Setup()
     {
-        _isLive = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("LiveTest", EnvironmentVariableTarget.User));
+        if (!await IsProxyAvailable().ConfigureAwait(false))
+            Assert.Ignore("Ignore proxy test in CI");
     }
 
     [Test]
     public async Task Proxy_with_valid_credentials_should_succeed()
     {
-        //test is run only on local machine with proxy running
-        if (!_isLive)
-        {
-            Assert.Ignore("Ignore proxy test in CI");
-            return;
-        }
-
         var url = OdataService.Northwind;
         url = url.Replace("localhost", _machineName);
         var cs = new OdataConnectionString
@@ -44,13 +38,6 @@ public class CustomHttpClientProxyTest
     [Test]
     public void Proxy_with_Invalid_credentials_should_fail()
     {
-        //test is run only on local machine with proxy running
-        if (!_isLive)
-        {
-            Assert.Ignore("Ignore proxy test in CI");
-            return;
-        }
-
         var url = OdataService.Northwind;
         url = url.Replace("localhost", _machineName);
         var cs = new OdataConnectionString
@@ -64,8 +51,32 @@ public class CustomHttpClientProxyTest
         Assert.That(
             customClient.ReadMetaDataAsync,
             Throws.Exception.TypeOf<HttpRequestException>()
-            //  .With.Message.EqualTo(Msg)
-            .With.Message.Contain(Msg)
-            );
+                .With.Message.Contain(Msg)
+        );
+    }
+
+    private async Task<bool> IsProxyAvailable()
+    {
+        var handler = new HttpClientHandler
+        {
+            Proxy = new WebProxy("localhost", 8888), // Fiddler's default settings
+            UseProxy = true
+        };
+        handler.Proxy.Credentials = new NetworkCredential("user", "password");
+        using var httpClient = new HttpClient(handler);
+        var url = "http://www.example.com";
+
+        try
+        {
+            // Send an HTTP HEAD request
+            var request = new HttpRequestMessage(HttpMethod.Head, url);
+            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

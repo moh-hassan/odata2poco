@@ -14,37 +14,31 @@ public sealed class OdataService : IDisposable
 
     private OdataService()
     {
-        _mockServer = WireMockServer.Start(12399);
+        _mockServer = WireMockServer.Start();
+        CreateGzipService("/trippin", TestSample.TripPin4Gzip);
+        CreateService("/northwind", TestSample.NorthWindV4);
+        CreateService("/v4/northwind", TestSample.NorthWindV4);
+        CreateService("/v3/northwind", TestSample.NorthWindV3);
+        CreateService("/v2/northwind", TestSample.NorthWindV2);
+    }
+
+    private void CreateService(string url, string body)
+    {
         _mockServer
-            .Given(Request.Create().WithPath("/trippin/$metadata"))
+            .Given(Request.Create().WithPath($"{url}/$metadata"))
+            .RespondWith(Response.Create()
+                .WithStatusCode(200)
+                .WithBodyFromFile(body));
+    }
+
+    private void CreateGzipService(string url, string body)
+    {
+        _mockServer
+            .Given(Request.Create().WithPath($"{url}/$metadata"))
             .RespondWith(Response.Create()
                 .WithStatusCode(200)
                 .WithHeader("Content-Encoding", "gzip")
-                .WithBodyFromFile(TestSample.TripPin4Gzip));
-
-        _mockServer
-            .Given(Request.Create().WithPath("/northwind/$metadata"))
-            .RespondWith(Response.Create()
-                .WithStatusCode(200)
-                .WithBodyFromFile(TestSample.NorthWindV4));
-
-        _mockServer
-            .Given(Request.Create().WithPath("/v4/northwind/$metadata"))
-            .RespondWith(Response.Create()
-                .WithStatusCode(200)
-                .WithBodyFromFile(TestSample.NorthWindV4));
-
-        _mockServer
-            .Given(Request.Create().WithPath("/v3/northwind/$metadata"))
-            .RespondWith(Response.Create()
-                .WithStatusCode(200)
-                .WithBodyFromFile(TestSample.NorthWindV3));
-
-        _mockServer
-            .Given(Request.Create().WithPath("/v2/northwind/$metadata"))
-            .RespondWith(Response.Create()
-                .WithStatusCode(200)
-                .WithBodyFromFile(TestSample.NorthWindV2));
+                .WithBodyFromFile(body));
     }
 
     public static string Trippin => $"{Instance._mockServer.Urls[0]}/trippin";
