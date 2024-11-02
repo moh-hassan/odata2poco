@@ -2,6 +2,7 @@
 
 namespace OData2Poco;
 
+using System.Text;
 using CustAttributes;
 using TextTransform;
 
@@ -157,6 +158,9 @@ public sealed class PocoClassGeneratorCs : IPocoClassGenerator
         //add properties
         csTemplate.WriteLine(PropertyGenerator.GenerateProperties(ent, PocoSetting));
 
+        //todo
+        //add innere classes for openapi
+        csTemplate.WriteLine(GenerateInnerClasses(ent));
         csTemplate.EndClass();
         if (includeNamespace)
         {
@@ -166,6 +170,7 @@ public sealed class PocoClassGeneratorCs : IPocoClassGenerator
         CodeText = csTemplate.ToString();
         return CodeText;
     }
+
 
     internal string PrefixNamespace(string name)
     {
@@ -216,5 +221,45 @@ public sealed class PocoClassGeneratorCs : IPocoClassGenerator
         }
 
         return h.ToString();
+    }
+
+    internal string GenerateInnerClass(ClassTemplate ent)
+    {
+        //   bool includeNamespace = false;
+        FluentCsTextTemplate csTemplate = new(PocoSetting);
+        var visibility = "public";
+
+        //for enum
+        if (ent.IsEnum)
+        {
+            var elements = string.Join($",{_nl}", ent.EnumElements);
+            var flagAttribute = ent.IsFlags ? "[Flags] " : string.Empty;
+            var enumString = $"\t{flagAttribute}{visibility} enum {ent.Name}{_nl}\t {{{_nl} {elements} {_nl}\t}}";
+            return enumString;
+        }
+
+        csTemplate.StartClass(ent.Name, isPartial: false);
+
+        //add properties
+        csTemplate.WriteLine(PropertyGenerator.GenerateProperties(ent, PocoSetting));
+
+        csTemplate.EndClass();
+        CodeText = csTemplate.ToString();
+        return CodeText;
+    }
+
+    internal string GenerateInnerClasses(ClassTemplate ct)
+    {
+        if (ct.InnerClasses.Count == 0)
+            return string.Empty;
+        var inner = ct.InnerClasses;
+        FluentCsTextTemplate csTemplate = new(PocoSetting);
+        foreach (var item in inner)
+        {
+            csTemplate.WriteLine(GenerateInnerClass(item));
+        }
+
+        CodeText = csTemplate.ToString();
+        return CodeText;
     }
 }

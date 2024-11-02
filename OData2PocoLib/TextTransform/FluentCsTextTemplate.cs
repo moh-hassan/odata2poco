@@ -91,11 +91,12 @@ internal class FluentCsTextTemplate : FluentTextTemplate<FluentCsTextTemplate>
         string inherit = "",
         string visibility = "public",
         bool abstractClass = false,
-        string primaryCtor = "")
+        string primaryCtor = "",
+        bool isPartial = true)
     {
         //syntax: 'public abstract partial class MyClass <primaryCtor>: parent'
         PushTabIndent() // ident one tab
-            .Write(DeclareClass(name, inherit, visibility, abstractClass, primaryCtor))
+            .Write(DeclareClass(name, inherit, visibility, abstractClass, primaryCtor,isPartial))
             .NewLine()
             .LeftBrace()
             .PushSpaceIndent(); //push tab  for the next write block
@@ -107,10 +108,11 @@ internal class FluentCsTextTemplate : FluentTextTemplate<FluentCsTextTemplate>
         string inherit = "",
         string visibility = "public",
         bool abstractClass = false,
-        string primaryCtor = "")
+        string primaryCtor = "",
+        bool isPartial = true)
     {
         var abstractKeyword = abstractClass ? " abstract" : string.Empty;
-        const string PartialKeyword = " partial";
+        var PartialKeyword = isPartial ? " partial" : string.Empty;
         var baseClass = string.IsNullOrEmpty(inherit) ? string.Empty : $" : {inherit}";
         return $"{visibility}{abstractKeyword}{PartialKeyword} {KeyWord} {name}{primaryCtor}{baseClass}";
     }

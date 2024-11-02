@@ -572,4 +572,126 @@ namespace BookStore
         var expected = @internal ? "internal enum Feature" : "public enum Feature";
         Assert.That(code, Does.Contain(expected));
     }
+
+    [Test]
+    public void Generate_empty_innerClass_should_generate_class()
+    {
+        //Arrange
+        var expected = @"
+public partial class ClassWithInner
+	{
+	    	public class InnerClass
+	    	{	    
+	    	}  
+	}
+";
+        var setting = new PocoSetting();
+
+        var innerClassTemplate = new ClassTemplate(1)
+        {
+            Name = "InnerClass",
+        };
+        var classTemplate = new ClassTemplate(1)
+        {
+            Name = "ClassWithInner",
+            InnerClasses = [innerClassTemplate],
+        };
+        var gen = Moq.Moq4IPocoGenerator(classTemplate);
+
+        //Act
+        var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
+        var code = sut.ClassToString(classTemplate);
+        Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
+    }
+
+    [Test]
+    public void Generate_innerClass_with_properties_should_generate_class()
+    {
+        //Arrange
+        var expected = @"
+public partial class ClassWithInner
+	{
+	    public InnerClass InnerClass {get;set;}     
+	    	public class InnerClass
+	    	{
+	    	    public int Id {get;set;} 
+	    	}
+	}
+";
+        var setting = new PocoSetting();
+
+        var innerClassTemplate = new ClassTemplate
+        {
+            Name = "InnerClass",
+        };
+        //add properties to the inner class
+        innerClassTemplate.Properties.Add(new PropertyTemplate
+        {
+            PropName = "Id",
+            PropType = "int",
+            OriginalName = "Id"
+        });
+        var classTemplate = new ClassTemplate(1)
+        {
+            Name = "ClassWithInner",
+            InnerClasses = [innerClassTemplate],
+        };
+        //add properties to the inner class
+        classTemplate.Properties.Add(new PropertyTemplate
+        {
+            PropName = "InnerClass",
+            PropType = "InnerClass",
+            OriginalName = "InnerClass"
+        });
+        var gen = Moq.Moq4IPocoGenerator(classTemplate);
+
+        //Act
+        var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
+        var code = sut.ClassToString(classTemplate);
+        Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
+    }
+
+    [Test]
+    public void Generate_innerEnum_should_generate_class()
+    {
+        //Arrange
+        var expected = @"
+public partial class ClassWithInnerEnum
+	{
+	    public InnerEnum InnerEnum {get;set;}     
+	    	public enum InnerEnum
+	    	 {
+	     Value1,
+	    Value2 
+	    	}
+	}
+";
+        var setting = new PocoSetting();
+
+        var innerClassTemplate = new ClassTemplate
+        {
+            Name = "InnerEnum",
+            IsEnum = true,
+            EnumElements = ["Value1", "Value2"]
+        };
+        var classTemplate = new ClassTemplate(1)
+        {
+            Name = "ClassWithInnerEnum",
+            InnerClasses = [innerClassTemplate],
+        };
+        //add properties to the inner class
+        classTemplate.Properties.Add(new PropertyTemplate
+        {
+            PropName = "InnerEnum",
+            PropType = "InnerEnum",
+            OriginalName = "InnerEnum"
+        });
+        var gen = Moq.Moq4IPocoGenerator(classTemplate);
+
+        //Act
+        var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
+        var code = sut.ClassToString(classTemplate);
+        Console.WriteLine(code);
+        Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
+    }
 }
