@@ -11,15 +11,16 @@ using Extensions;
 /// </summary>
 public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<ClassTemplate>
 {
+    private static int s_nextId = 1; // Static counter to generate unique IDs
     private readonly AttributeFactory _attributeFactory = AttributeFactory.Default;
 
-    public ClassTemplate(int id) : this()
+    public ClassTemplate() : this(s_nextId++)
     {
-        Id = id;
     }
 
-    private ClassTemplate()
+    public ClassTemplate(int id)
     {
+        Id = id;
         Properties = [];
         Keys = [];
         EnumElements = [];
@@ -30,7 +31,7 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
         NameSpace = string.Empty;
     }
 
-    public int Id { get; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public string BaseType { get; set; }
     public string? Comment { get; set; }
@@ -56,6 +57,8 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
     public bool IsEntity { get; set; }
     public bool IsAbstrct { get; set; }
     public bool IsOpen { get; set; }
+    public bool IsOneOf { get; set; }
+    public List<ClassTemplate> InnerClasses { get; set; } = [];
 
     public List<string> GetAllAttributes()
     {
@@ -74,6 +77,8 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
 
         return string.Join(", ", comments);
     }
+
+    public static void ResetIdCounter() => s_nextId = 1;
 
     public override string ToString()
     {

@@ -48,7 +48,6 @@ public class O2P
     {
         var gen = await PocoFactory.GenerateModel(odataConnString, Setting).ConfigureAwait(false);
         MetaData = gen.MetaData;
-        ClassList = gen.GeneratePocoList();
         return gen;
     }
 
@@ -56,7 +55,6 @@ public class O2P
     {
         var gen = await PocoFactory.GenerateModelAsync(xmlContent, Setting).ConfigureAwait(false);
         MetaData = gen.MetaData;
-        ClassList = gen.GeneratePocoList();
         return gen;
     }
 
