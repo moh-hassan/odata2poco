@@ -4,24 +4,31 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="DynamicExpresso.Core" Version="2.16.1" />
+    <PackageVersion Include="DynamicExpresso.Core" Version="2.17.1" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="1.6.22" />
+    <PackageVersion Include="Microsoft.OpenApi.Readers" Version="1.6.22" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Microsoft.Data.Edm" Version="5.8.5" />
-    <PackageVersion Include="Microsoft.OData.Edm" Version="7.20.0" />
+    
+    <!-- Define package version 8.1.0 for net8 -->
+    <PackageVersion Include="Microsoft.OData.Edm" Version="8.1.0" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <!-- Define package version 7.21.5 for netstandard2.0, net472, and net461 -->
+    <PackageVersion Include="Microsoft.OData.Edm" Version="7.21.5" Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'net461'" />
+
     <PackageVersion Include="CommandLineParser" Version="2.9.1" />
     <PackageVersion Include="ilmerge" Version="3.0.41" />
     <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageVersion Include="nunit" Version="4.1.0" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageVersion Include="NUnit.Analyzers" Version="4.0.1" />
-    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageVersion Include="nunit" Version="4.2.2" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageVersion Include="NUnit.Analyzers" Version="4.3.0" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.1" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
-    <PackageVersion Include="NSubstitute" Version="5.1.0" />
-    <PackageVersion Include="CliWrap" Version="3.6.6" />
+    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="CliWrap" Version="3.6.7" />
     <PackageVersion Include="PolySharp" Version="1.14.1" />
-    <PackageVersion Include="WireMock.Net" Version="1.5.49" />
+    <PackageVersion Include="WireMock.Net" Version="1.6.7" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.16.0.82469" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.1.118" />
   </ItemGroup>
