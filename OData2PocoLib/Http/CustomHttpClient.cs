@@ -4,6 +4,8 @@
 namespace OData2Poco.Http;
 
 using System.Net;
+using System.Reflection;
+using System.Security.Authentication;
 using Extensions;
 using InfraStructure.Logging;
 
@@ -15,6 +17,7 @@ internal class CustomHttpClient : IDisposable
     internal HttpClient _client;
     internal DelegatingHandler? _delegatingHandler;
     internal HttpClientHandler _httpHandler;
+    internal static string UserAgent { get; } = GetHttpAgent();
 
     public CustomHttpClient(OdataConnectionString odataConnectionString)
     {
@@ -38,6 +41,17 @@ internal class CustomHttpClient : IDisposable
     }
 
     public Uri ServiceUri { get; set; }
+
+    private static string GetHttpAgent()
+    {
+        var assembly = Assembly.GetCallingAssembly();
+        var version = assembly.GetName().Version;
+        if (version == null)
+            return "OData2Poco";
+
+        var strVersion = $"OData2Poco/{version.ToString()} (https://github.com/moh-hassan/odata2poco)";
+        return strVersion;
+    }
 
     internal virtual async Task<HttpResponseMessage> GetAsync(string? requestUri)
     {
@@ -108,19 +122,14 @@ internal class CustomHttpClient : IDisposable
             Logger.Warn("Skip Certification Check is set to true.");
         }
 
-        //setup SecurityProtocol
         if (OdataConnection.TlsProtocol > 0)
-        {
-            ServicePointManager.SecurityProtocol |= OdataConnection.TlsProtocol;
-            Logger.Info($"Setting the SSL/TLS protocols to: {OdataConnection.TlsProtocol}");
-        }
-
+            SetupSsl(_httpHandler);
         SetupProxy();
 
         _client.DefaultRequestHeaders
             .TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-        const string Agent = "OData2Poco";
-        _client.DefaultRequestHeaders.Add("User-Agent", Agent);
+        var agent = GetHttpAgent();
+        _client.DefaultRequestHeaders.Add("User-Agent", agent);
         SetupHeader();
 
         if (OdataConnection.Authenticate != AuthenticationType.None)
@@ -130,6 +139,17 @@ internal class CustomHttpClient : IDisposable
         }
 
         return Task.CompletedTask;
+    }
+
+    public void SetupSsl(HttpClientHandler handler)
+    {
+#if NET8_0_OR_GREATER
+        handler.SslProtocols = (SslProtocols)OdataConnection.TlsProtocol;
+        handler.ServerCertificateCustomValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+#else
+        ServicePointManager.SecurityProtocol |= OdataConnection.TlsProtocol;
+#endif
+        Logger.Info($"Setting the SSL/TLS protocols to: {OdataConnection.TlsProtocol}");
     }
 
     private void SetupProxy()

@@ -76,7 +76,7 @@ public class CustomHttpClientTest : BaseTest
         {
             r.RequestUri?.ToString().Should().Be("http://localhost/odata2/api/northwind/$metadata");
             r.Headers.UserAgent.Should().NotBeNull();
-            r.Headers.UserAgent.ToString().Should().Be("OData2Poco");
+            r.Headers.UserAgent.ToString().Should().Contain("OData2Poco");
             r.Headers.Authorization.Should().NotBeNull();
             r.Headers.Authorization?.ToString().Should().Be("Basic dXNlcjE6c2VjcmV0");
         });

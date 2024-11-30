@@ -32,6 +32,19 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
+    public async Task PocoRemoteUrlTest()
+    {
+        //Arrange
+        var url = TestSample.UrlTripPinService;
+        var a = $"-r {url} -v --ssl tls12";
+        //Act
+        var (_, output) = await RunCommand(a).ConfigureAwait(false);
+        Console.WriteLine(output);
+        //Assert
+        Assert.That(output, Does.Contain("public partial class PublicTransportation : PlanItem"));
+    }
+
+    [Test]
     [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
     public async Task DefaultSettingTest(string url, string version, int n)
     {
