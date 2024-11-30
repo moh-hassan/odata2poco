@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0;netstandard2.0;net461;net472</TargetFrameworks>
+    <TargetFrameworks>net9.0;net8.0;netstandard2.0;net472;net461</TargetFrameworks>
     <RootNamespace>OData2Poco</RootNamespace>
     <AssemblyName>OData2Poco</AssemblyName>
     <Authors>Mohamed Hassan</Authors>
@@ -17,6 +17,8 @@
     <PackageReference Include="DynamicExpresso.Core" />
     <PackageReference Include="Microsoft.Data.Edm" />
     <PackageReference Include="Microsoft.OData.Edm" />
+    <PackageReference Include="Microsoft.OpenApi" />
+    <PackageReference Include="Microsoft.OpenApi.Readers" />
     <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
@@ -39,4 +41,5 @@
     <AssemblyOriginatorKeyFile>odata2poco.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
+
 </Project>
