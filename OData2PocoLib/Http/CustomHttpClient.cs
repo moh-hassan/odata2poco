@@ -27,9 +27,14 @@ internal class CustomHttpClient : IDisposable
         {
             UseDefaultCredentials = true,
             AllowAutoRedirect = true,
-            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+            UseCookies = true,
+            CookieContainer = new CookieContainer(),
         };
         _client = new HttpClient(_httpHandler);
+        //set if-modified-since header
+        if (OdataConnection.LastUpdated.HasValue)
+            _client.DefaultRequestHeaders.IfModifiedSince = OdataConnection.LastUpdated;
     }
 
     public CustomHttpClient(OdataConnectionString odataConnectionString,
@@ -71,7 +76,6 @@ internal class CustomHttpClient : IDisposable
     internal async Task<string> ReadMetaDataAsync()
     {
         var url = ServiceUri.AbsoluteUri.EndsWith(".xml") ? ServiceUri.AbsoluteUri : ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
-        //check url is remote xml file
         try
         {
             _response = await GetAsync(url).ConfigureAwait(false);
@@ -79,16 +83,21 @@ internal class CustomHttpClient : IDisposable
             var content = await _response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return content;
         }
-        catch (Exception)
+        catch (HttpRequestException ex) when (_response?.StatusCode == HttpStatusCode.NotModified)
         {
-            if (_response?.StatusCode != HttpStatusCode.Unauthorized)
-            {
-                throw;
-            }
-
+            var lastModified = _response.Content.Headers.LastModified;
+            Logger.Info($"OData Metadata was Last modified on '{lastModified}'.");
+            throw new MetaDataNotUpdatedException("The metadata has not been modified and No code generation is done.", ex);
+        }
+        catch (HttpRequestException ex) when (_response?.StatusCode == HttpStatusCode.Unauthorized)
+        {
             var wwwAuthenticate = _response.Headers.WwwAuthenticate.ToString();
             throw new OData2PocoException(
-                $"HTTP {_response.StatusCode} ({(int)_response.StatusCode}): {wwwAuthenticate}");
+                $"Request failed with status code ({(int)_response.StatusCode}) {_response.StatusCode}.\nWWW-Authenticate: {wwwAuthenticate}", ex);
+        }
+        catch (Exception)
+        {
+            throw;
         }
     }
 
@@ -119,7 +128,7 @@ internal class CustomHttpClient : IDisposable
         if (OdataConnection.SkipCertificationCheck)
         {
             _httpHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
-            Logger.Warn("Skip Certification Check is set to true.");
+            Logger.Warn("Skip certification check is set to true.");
         }
 
         if (OdataConnection.TlsProtocol > 0)
@@ -149,14 +158,14 @@ internal class CustomHttpClient : IDisposable
 #else
         ServicePointManager.SecurityProtocol |= OdataConnection.TlsProtocol;
 #endif
-        Logger.Info($"Setting the SSL/TLS protocols to: {OdataConnection.TlsProtocol}");
+        Logger.Info($"Setting the SSL/TLS protocols to: {OdataConnection.TlsProtocol}.");
     }
 
     private void SetupProxy()
     {
         if (!string.IsNullOrEmpty(OdataConnection.Proxy))
         {
-            Logger.Trace($"Using Proxy: '{OdataConnection.Proxy}'");
+            Logger.Trace($"Using proxy: '{OdataConnection.Proxy}'");
             _httpHandler.UseProxy = true;
             _httpHandler.Proxy = new WebProxy(OdataConnection.Proxy);
             if (!string.IsNullOrEmpty(OdataConnection.ProxyUser))
@@ -172,7 +181,7 @@ internal class CustomHttpClient : IDisposable
                 }
                 else
                 {
-                    Logger.Warn("ProxyUser is not in the correct format. Expected format is 'username:password'.");
+                    Logger.Warn("ProxyUser is not in the correct format. The expected format is 'username:password'.");
                 }
             }
             else
@@ -191,10 +200,13 @@ internal class CustomHttpClient : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        OdataConnection.Password.Dispose();
-        _httpHandler.Dispose();
-        _delegatingHandler?.Dispose();
-        _response?.Dispose();
-        _client.Dispose();
+        if (disposing)
+        {
+            _client.Dispose();
+            _response?.Dispose();
+            _delegatingHandler?.Dispose();
+            _httpHandler.Dispose();
+            OdataConnection.Password.Dispose();
+        }
     }
 }

@@ -19,3 +19,22 @@ public class OData2PocoException : Exception
     {
     }
 }
+
+//System.Net.Http.HttpRequestException: Response status code does not indicate success: 304 (Not Modified)
+[Serializable]
+public class MetaDataNotUpdatedException : Exception
+{
+    public MetaDataNotUpdatedException()
+    {
+    }
+
+    public MetaDataNotUpdatedException(string message)
+        : base(message)
+    {
+    }
+
+    public MetaDataNotUpdatedException(string message, Exception inner)
+        : base(message, inner)
+    {
+    }
+}

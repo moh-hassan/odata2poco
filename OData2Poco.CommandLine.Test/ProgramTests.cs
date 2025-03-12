@@ -3,7 +3,9 @@
 namespace OData2Poco.CommandLine.Test;
 
 using Fake.Common;
+using FluentAssertions.Equivalency;
 using TestUtility;
+using WireMock.ResponseBuilders;
 
 [TestFixture]
 public partial class ProgramTests : BaseTest
@@ -842,5 +844,23 @@ public partial record Flight : PublicTransportation
         //Assert
         output.ToLines().Should().Contain(expected.ToLines());
         exitCode.Should().Be(0);
+    }
+
+    [Test]
+    public void Track_metadata_change_on_server_test()
+    {
+        //This test is not running in the CI/CD pipeline. it acts as a manual test
+        //Arrange
+        var _isLive = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("LiveTest", EnvironmentVariableTarget.User));
+        if (!_isLive)
+            Assert.Ignore("live test");
+
+        var url = Environment.GetEnvironmentVariable("DEMO_URL", EnvironmentVariableTarget.User);
+        var a = $"-r {url} -f {TestSample.DemoCs} -v ";
+        //Act
+        //Assert
+        var ex = Assert.ThrowsAsync<MetaDataNotUpdatedException>(
+            async () => await RunCommand(a).ConfigureAwait(false));
+        Assert.That(ex.Message, Does.Contain("The metadata has not been modified and No code generation is done."));
     }
 }

@@ -97,4 +97,40 @@ public class OptionManagerTest
         dh.AuthHeader.Should().NotBeNull();
         dh.AuthHeader?.ToString().Should().BeEquivalentTo(expected);
     }
+
+    [Test]
+    public void Option_with_fileName_should_configure_lastUpdate()
+    {
+        var options = new Options
+        {
+            ServiceUrl = "http://localhost",
+            CodeFilename = TestSample.DemoCs
+        };
+        //Act
+        var (cs, ps) = new OptionManager(options);
+        Assert.Multiple(() =>
+        {
+            //Assert
+            Assert.That(ps.CodeFilename, Is.EqualTo(options.CodeFilename));
+            Assert.That(cs.LastUpdated, Is.EqualTo(ps.GetLastUpdate()));
+        });
+    }
+
+    [Test]
+    public void Option_with_fileName_should_configure_lastUpdate2()
+    {
+        var options = new Options
+        {
+            ServiceUrl = "http://localhost",
+            CodeFilename = "not_exist_file"
+        };
+        //Act
+        var (cs, ps) = new OptionManager(options);
+        Assert.Multiple(() =>
+        {
+            //Assert
+            Assert.That(ps.CodeFilename, Is.EqualTo(options.CodeFilename));
+            Assert.That(cs.LastUpdated?.Date, Is.EqualTo(ps.GetLastUpdate()?.Date));
+        });
+    }
 }

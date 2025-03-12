@@ -105,6 +105,13 @@ public class PocoSetting : IValidator
     public string AtributeDefs { get; set; }
     public bool IsInternal { get; set; }
     public Ctor WithConstructor { get; set; }
+    private MetaDataTracking MetaDataTracking { get; } = new MetaDataTracking();
+
+    public DateTimeOffset? GetLastUpdate()
+    {
+        var filepath = Path.GetFullPath(CodeFilename);
+        return MetaDataTracking.GetLastUpdate(filepath);
+    }
     public void Validate()
     {
         if (Lang == Language.None)

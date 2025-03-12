@@ -16,12 +16,13 @@ public class OptionManager
 
     public Options PocoOptions { get; }
 
-    public void Deconstruct(out OdataConnectionString connectionString, out PocoSetting? pocoSetting)
+    public void Deconstruct(out OdataConnectionString connectionString, out PocoSetting pocoSetting)
     {
         var json = PocoOptions.ToJson();
         connectionString = json.ToObject<OdataConnectionString>() ??
                            throw new InvalidOperationException("ODataConnectionString is null");
-        pocoSetting = json.ToObject<PocoSetting>();
+        pocoSetting = json.ToObject<PocoSetting>() ?? new PocoSetting();
+        connectionString.SetLastUpdated(pocoSetting.GetLastUpdate());
     }
 
     private void ReadPassword(Options options)

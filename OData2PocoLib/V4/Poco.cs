@@ -49,7 +49,7 @@ internal partial class Poco : IPocoGenerator
 
         //filter model
         if (_setting.Include?.Count > 0) list = list.FilterList(_setting.Include).ToList();
-
+        _logger.Info($"Total classes generated: {list.Count}");
         return list;
     }
 

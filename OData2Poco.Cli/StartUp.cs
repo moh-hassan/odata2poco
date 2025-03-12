@@ -73,6 +73,19 @@ public static class StartUp
             if (!ArgumentParser.ShowVersionOrHelp)
                 Logger.Success($"Total processing time: {s_sw.ElapsedMilliseconds / 1000.0} sec");
         }
+        catch (MetaDataNotUpdatedException ex)
+        {
+            //HttpRequestException status code does not indicate success: 304 (Not Modified)
+            if (ex.InnerException != null)
+                Logger.Warn(ex.InnerException.Message);
+            else
+                Logger.Warn(ex.Message);
+
+            Logger.Info("The OData metadata is not modified, and No code generation is done.");
+            Logger.Info($"Keeping the existing generated file: '{ArgumentParser.ParsedOptions.CodeFilename}'.");
+            RetCode = 0;
+            return;
+        }
         catch (Exception ex)
         {
             RetCode = (int)ExitCodes.HandledException;
@@ -84,11 +97,12 @@ public static class StartUp
             FileSystem.WriteAllText("error.txt", $"{ex.FullExceptionMessage(true)}");
             Logger.Info($"Error details with Stack trace are written to the file: '{Path.GetFullPath("error.txt")}'");
 #endif
+            return;
         }
         finally
         {
             if (!ArgumentParser.ShowVersionOrHelp)
-                Logger.Info($"Application Exit code: {RetCode}");
+                Logger.Info($"Application exit code: {RetCode}");
             Environment.Exit(RetCode);
         }
     }
@@ -103,7 +117,7 @@ public static class StartUp
     {
         RetCode = (int)ExitCodes.UnhandledException;
         if (e.ExceptionObject is Exception exception)
-            Console.WriteLine("Unhandled exception: \r\n{0}", exception.Message);
+            Console.WriteLine("Unhandled exception:\n{0}", exception.Message);
         Environment.Exit(RetCode);
     }
 }

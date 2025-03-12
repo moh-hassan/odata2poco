@@ -64,6 +64,7 @@ internal static class TestSample
     public static string RenameMap2 => GetFullPath("rename_map2.json");
 
     public static string RenameMap3 => GetFullPath("rename_map3.json");
+	public static string DemoCs => GetFullPath("demo.cs");
 
     public static string GetFullPath(string relative)
         => Path.GetFullPath(Path.Combine(BaseDirectory, RelativeFakeFolder, relative));

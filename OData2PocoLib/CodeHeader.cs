@@ -30,7 +30,8 @@ public static class CodeHeader
             Comment,
             pocoGen.MetaData.ServiceUrl,
             pocoGen.MetaData.MetaDataVersion,
-            DateTimeOffset.Now.ToString("s"),
+            //DateTimeOffset.Now.ToString("s"),
+            DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"), //ISO 8601 format as http date
             addArgs ? "//     Parameters: \n" + string.Join(Environment.NewLine, pp) : "//");
         return h.ToString();
     }

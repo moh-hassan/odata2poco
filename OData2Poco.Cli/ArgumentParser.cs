@@ -8,11 +8,9 @@ using InfraStructure.Logging;
 public class ArgumentParser
 {
     private static readonly ILog s_logger = PocoLogger.Default;
-
     public static bool ShowVersionOrHelp { get; set; }
-
     public static StringWriter HelpWriter { get; private set; }
-
+    public static Options ParsedOptions { get; private set; }
     public static string Help => HelpWriter.ToString();
 
     public static string OutPut => s_logger.Output.ToString();
@@ -59,6 +57,7 @@ public class ArgumentParser
         });
 
         var result = parser.ParseArguments<Options>(args);
+        result.WithParsed(options => ParsedOptions = options); // v6.3.0
         return result;
     }
 

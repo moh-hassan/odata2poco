@@ -82,7 +82,6 @@ internal class CsCommand : IPocoCommand
         _logger.Normal($"{new string('-', 15)}Service Information {new string('-', 15)}");
         _logger.Info($"OData Service Url: {_odataConnectionString.ServiceUrl} ");
         _logger.Info($"OData Service Version: {O2PGen.MetaDataVersion} ");
-        _logger.Info($"Number of Entities: {O2PGen.ClassList.Count}");
         _logger.Normal(new string('-', 50));
         _logger.Success("Successfully Generated Poco Model");
     }

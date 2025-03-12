@@ -287,7 +287,11 @@ public class CustomHttpClientTest : BaseTest
         var act = client.ReadMetaDataAsync;
         //Assert
         await act.Should().ThrowAsync<OData2PocoException>()
-            .WithMessage(@"HTTP Unauthorized (401): Bearer error=""invalid_token""").ConfigureAwait(false);
+            .WithMessage("""
+            Request failed with status code (401) Unauthorized.
+            www-authenticate: Bearer error="invalid_token"
+            """.Trim())
+            .ConfigureAwait(false);
     }
 
     [Test]
