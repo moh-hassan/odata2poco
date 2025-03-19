@@ -2,6 +2,7 @@
 
 namespace OData2Poco.CommandLine.Test;
 
+using System.Net;
 using Http;
 
 public class OptionManagerTest
@@ -74,28 +75,39 @@ public class OptionManagerTest
     }
 
     [Test]
-    [TestCase(AuthenticationType.Basic, "Basic dXNlcjE6c2VjcmV0")]
-    [TestCase(AuthenticationType.Token, "Bearer secret")]
-    public async Task Option_with_auth_method_should_success_test(
-        AuthenticationType auth, string expected)
+    [TestCase(AuthenticationType.Basic)]
+    [TestCase(AuthenticationType.Token)]
+    public async Task Option_with_auth_method_should_success_test(AuthenticationType auth)
     {
-        //test flow option->optionManager->CustomHttpClient
         //Arrange
         var options = new Options
         {
-            ServiceUrl = "http://localhost",
-            UserName = "user1",
-            Password = "secret",
+            ServiceUrl = auth == AuthenticationType.Basic
+            ? OdataService.TrippinBasic : OdataService.TrippinBearer,
             Authenticate = auth,
         };
+        if (auth == AuthenticationType.Basic)
+        {
+            options.UserName = "user";
+            options.Password = "secret";
+        }
+        else
+        {
+            options.Password = "secret_token";
+        }
         //Act
         var (cs, _) = new OptionManager(options);
-        var dh = new AuthHandler();
-        var client = cs.ToCustomHttpClient(dh);
-        await client.GetAsync("http://localhost2").ConfigureAwait(false);
+        Console.WriteLine(cs.ToJson());
+        var client = await CustomHttpClient.CreateAsync(cs).ConfigureAwait(false);
+        Console.WriteLine(options.ServiceUrl);
+        var response = await client.ReadMetaDataAsync()
+            .ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         //Assert
-        dh.AuthHeader.Should().NotBeNull();
-        dh.AuthHeader?.ToString().Should().BeEquivalentTo(expected);
+        Assert.That(cs.Authenticate, Is.EqualTo(options.Authenticate));
+        Assert.That( cs.ServiceUrl, Is.EqualTo(options.ServiceUrl));
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        Assert.That(content, Does.Contain("Edm"));
     }
 
     [Test]

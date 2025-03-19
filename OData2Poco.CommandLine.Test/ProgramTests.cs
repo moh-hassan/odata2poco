@@ -2,10 +2,8 @@
 
 namespace OData2Poco.CommandLine.Test;
 
-using Fake.Common;
-using FluentAssertions.Equivalency;
+using System.Threading.Tasks;
 using TestUtility;
-using WireMock.ResponseBuilders;
 
 [TestFixture]
 public partial class ProgramTests : BaseTest
@@ -379,6 +377,32 @@ public enum Feature
         //Arrange
         var url = OdataService.Trippin;
         var a = $"-r {url} -v ";
+        //Act
+        var (exitCode, output) = await RunCommand(a).ConfigureAwait(false);
+        //Assert
+        exitCode.Should().Be(0);
+        Assert.That(output, Does.Contain("public partial class Trip")); //-v
+    }
+
+    [Test]
+    public async Task Url_test_basic_with_valid_user_password()
+    {
+        //Arrange
+        var url = OdataService.TrippinBasic;
+        var a = $"-r {url} -v -o basic -u user -p secret";
+        //Act
+        var (exitCode, output) = await RunCommand(a).ConfigureAwait(false);
+        //Assert
+        exitCode.Should().Be(0);
+        Assert.That(output, Does.Contain("public partial class Trip")); //-v
+    }
+
+    [Test]
+    public async Task Url_test_bearer_valid_token()
+    {
+        //Arrange
+        var url = OdataService.TrippinBearer;
+        var a = $"-r {url} -v -o token  -p secret_token";
         //Act
         var (exitCode, output) = await RunCommand(a).ConfigureAwait(false);
         //Assert
@@ -847,7 +871,7 @@ public partial record Flight : PublicTransportation
     }
 
     [Test]
-    public void Track_metadata_change_on_server_test()
+    public async Task Track_metadata_change_on_server_test()
     {
         //This test is not running in the CI/CD pipeline. it acts as a manual test
         //Arrange
@@ -856,11 +880,24 @@ public partial record Flight : PublicTransportation
             Assert.Ignore("live test");
 
         var url = Environment.GetEnvironmentVariable("DEMO_URL", EnvironmentVariableTarget.User);
-        var a = $"-r {url} -f {TestSample.DemoCs} -v ";
+        var a = $"-r {url} -f test.cs -v ";
         //Act
         //Assert
-        var ex = Assert.ThrowsAsync<MetaDataNotUpdatedException>(
-            async () => await RunCommand(a).ConfigureAwait(false));
-        Assert.That(ex.Message, Does.Contain("The metadata has not been modified and No code generation is done."));
+        if (File.Exists("test.cs"))
+        {
+            //expect 304
+            var ex = Assert.ThrowsAsync<MetaDataNotUpdatedException>(
+                async () => await RunCommand(a).ConfigureAwait(false));
+            Assert.That(ex.Message, Does.Contain("The metadata has not been modified and No code generation is done."));
+        }
+        else
+        {
+            //expect 200
+            var (exitCode, output) = await RunCommand(a).ConfigureAwait(false);
+            Assert.That(exitCode, Is.EqualTo(0));
+            Assert.That(output, Does.Contain("class"));
+        }
     }
+
+   
 }

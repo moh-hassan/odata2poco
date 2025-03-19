@@ -91,7 +91,10 @@ public static class StartUp
             RetCode = (int)ExitCodes.HandledException;
             Logger.Error("Error in executing o2pgen");
 #if DEBUG
-            Logger.Error($"{ex.FullExceptionMessage(true)}");
+            Console.WriteLine("-------------------------- Exception Message for DEBUG ------------------");
+            // Logger.Error($"{ex.FullExceptionMessage(true)}");
+            Logger.Error($"{ex.GetExceptionDetails()}");
+            Console.WriteLine("---------------------------------------------");
 #else
             Logger.Error($"{ex.FullExceptionMessage()}");
             FileSystem.WriteAllText("error.txt", $"{ex.FullExceptionMessage(true)}");

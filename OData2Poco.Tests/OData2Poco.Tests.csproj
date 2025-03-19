@@ -9,6 +9,9 @@
     <NoWarn>$(NoWarn);SA1201;SA1202</NoWarn>
 
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
+    <DefineConstants>$(DefineConstants);TESTLIB</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup Label="FakeData">
     <Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />

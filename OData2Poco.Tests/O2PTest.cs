@@ -6,6 +6,7 @@ using System.Collections;
 using Api;
 using Fake.Common;
 
+[TestFixture]
 public class O2PTest
 {
     [OneTimeSetUp]
@@ -172,10 +173,12 @@ public class O2PTest
     [TestCaseSource(typeof(TestCaseFactory), nameof(TestCaseFactory.TestMockCases))]
     public async Task OdataService_mock_test(string url, string version)
     {
+        Console.WriteLine($"+++++url {url}");
         var connString = new OdataConnectionString
         {
             ServiceUrl = url
         };
+
         var o2P = new O2P();
         var code = await o2P.GenerateAsync(connString).ConfigureAwait(false);
         Assert.Multiple(() =>
@@ -264,11 +267,12 @@ public static class TestCaseFactory
         get
         {
             //url ,version
-            yield return new TestCaseData(OdataService.Northwind, "4.0");
+            yield return new object[] { OdataService.Northwind, "4.0" };
             yield return new TestCaseData(OdataService.Northwind2, "1.0");
             yield return new TestCaseData(OdataService.Northwind3, "1.0");
             yield return new TestCaseData(OdataService.Northwind4, "4.0");
-            yield return new TestCaseData(OdataService.Trippin, "4.0");
+            yield return new object[] { OdataService.Trippin, "4.0" };
+            yield return new object[] { TestSample.UrlNorthWindV4, "4.0" };
         }
     }
 

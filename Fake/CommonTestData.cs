@@ -3,7 +3,6 @@
 namespace OData2Poco.Fake;
 
 using System.Reflection;
-using Common;
 
 internal static class TestSample
 {
