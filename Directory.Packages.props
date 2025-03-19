@@ -11,16 +11,16 @@
     <PackageVersion Include="ilmerge" Version="3.0.41" />
     <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageVersion Include="nunit" Version="4.3.1" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
-    <PackageVersion Include="NUnit.Analyzers" Version="4.5.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageVersion Include="nunit" Version="4.3.2" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
+    <PackageVersion Include="NUnit.Analyzers" Version="4.6.0" />
     <PackageVersion Include="FluentAssertions" Version="7.0.0" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
-    <PackageVersion Include="CliWrap" Version="3.7.0" />
+    <PackageVersion Include="CliWrap" Version="3.8.2" />
     <PackageVersion Include="PolySharp" Version="1.15.0" />
-    <PackageVersion Include="WireMock.Net" Version="1.6.10" />
+    <PackageVersion Include="WireMock.Net" Version="1.7.4" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.16.0.82469" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.1.118" />
   </ItemGroup>
