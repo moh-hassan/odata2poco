@@ -95,6 +95,9 @@ public partial class Options
             "Sets the SSL/TSL protocols. Allowed values: tls, tls11, tls12,tls13. Multiple values separated by comma are allowed,e.g, tls11,tls12.")]
     public SecurityProtocolType TlsProtocol { get; set; }
 
+    [Option('H', "login", HelpText = "Login Url as a separate basic authentication")]
+    public string LoginUrl { get; set; }
+
     //-----------pocoSetting-----------------
 
     [Option('f', "filename", HelpText = "filename to save generated c# code.")]

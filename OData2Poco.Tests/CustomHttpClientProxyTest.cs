@@ -30,8 +30,8 @@ public class CustomHttpClientProxyTest
             Proxy = _proxy,
             ProxyUser = "user:password"
         };
-        using var customClient = new CustomHttpClient(cs);
-        var metaData = await customClient.ReadMetaDataAsync().ConfigureAwait(false);
+        using var customClient = await CustomHttpClient.CreateAsync(cs).ConfigureAwait(false);
+        var metaData = await customClient.ReadMetaDataAsStringAsync().ConfigureAwait(false);
         Assert.That(metaData, Does.StartWith("""<?xml version="1.0" encoding="UTF-8"?>"""));
     }
 
@@ -46,7 +46,7 @@ public class CustomHttpClientProxyTest
             Proxy = _proxy,
             ProxyUser = "user:invalid_password"
         };
-        using var customClient = new CustomHttpClient(cs);
+        using var customClient = CustomHttpClient.CreateAsync(cs).GetAwaiter().GetResult();
         const string Msg = "Response status code does not indicate success: 407";
         Assert.That(
             customClient.ReadMetaDataAsync,

@@ -8,8 +8,12 @@ internal static class MetaDataReader
 {
     public static async Task<MetaDataInfo> LoadMetaDataHttpAsync(OdataConnectionString odataConnString)
     {
-        using var client = new CustomHttpClient(odataConnString);
-        var content = await client.ReadMetaDataAsync().ConfigureAwait(false);
+        using var client = await CustomHttpClient.CreateAsync(odataConnString).ConfigureAwait(false);
+        var response = await client.ReadMetaDataAsync().ConfigureAwait(false);
+        if (response == null)
+            return new MetaDataInfo();
+
+        var content = await (response.Content.ReadAsStringAsync()).ConfigureAwait(false);
 
         var metaData = new MetaDataInfo
         {
@@ -19,15 +23,13 @@ internal static class MetaDataReader
             SchemaNamespace = Helper.GetNameSpace(content),
             MediaType = Media.Http
         };
-        if (client._response != null)
+
+        foreach (var entry in response.Headers)
         {
-            foreach (var entry in client._response.Headers)
-            {
-                var value = entry.Value.FirstOrDefault();
-                if (value == null) continue;
-                var key = entry.Key;
-                metaData.ServiceHeader.Add(key, value);
-            }
+            var value = entry.Value.FirstOrDefault();
+            if (value == null) continue;
+            var key = entry.Key;
+            metaData.ServiceHeader.Add(key, value);
         }
 
         metaData.ServiceVersion = Helper.GetServiceVersion(metaData.ServiceHeader);

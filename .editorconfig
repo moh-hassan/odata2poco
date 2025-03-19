@@ -398,15 +398,18 @@ dotnet_diagnostic.CA1054.severity = none # CA1054: Uri parameters should not be 
 dotdotnet_diagnostic.CA1056.severity = none # CA1056: Uri properties should not be strings
 dotnet_diagnostic.CA1304.severity = none # CA1304: Specify CultureInfo
 dotnet_diagnostic.CA1311.severity = none # CA1311: Specify a culture or use an invariant version
+dotnet_diagnostic.CA1515.severity = none # 
 
 
 ################ test projects ###################333
 [{OData2Poco.Tests/**.cs,OData2Poco.CommandLine.Test/**.cs}]
 dotnet_diagnostic.CA1707.severity = none # CA1707: Identifiers should not contain underscores
 dotnet_diagnostic.IDE0060.severity = none # IDE0060: Remove unused parameter
-dotnet_diagnostic.CA1852.severity = none # 
+dotnet_diagnostic.CA1852.severity = none # CA1852: Make parameter ref read-only
 dotnet_diagnostic.CA1051.severity = none # CA1051: Do not declare visible instance fields
 dotnet_diagnostic.CA2000.severity = none # CA2000: Dispose objects before losing scope
-dotnet_diagnostic.CA1062.severity = none
+dotnet_diagnostic.CA1062.severity = none # CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1050.severity = none # CA1050: Declare types in namespaces
+
 
 

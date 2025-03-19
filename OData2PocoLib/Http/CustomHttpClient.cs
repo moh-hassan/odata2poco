@@ -4,22 +4,25 @@
 namespace OData2Poco.Http;
 
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Security.Authentication;
+using System.Text.RegularExpressions;
 using Extensions;
 using InfraStructure.Logging;
 
 internal class CustomHttpClient : IDisposable
 {
-    public HttpResponseMessage? _response = new();
     internal static readonly ILog Logger = PocoLogger.Default;
     internal readonly OdataConnectionString OdataConnection;
     internal HttpClient _client;
-    internal DelegatingHandler? _delegatingHandler;
     internal HttpClientHandler _httpHandler;
-    internal static string UserAgent { get; } = GetHttpAgent();
+    internal string UserAgent { get; } = GetHttpAgent();
+    public Uri ServiceUri { get; set; }
 
-    public CustomHttpClient(OdataConnectionString odataConnectionString)
+
+    private CustomHttpClient(OdataConnectionString odataConnectionString)
     {
         OdataConnection = odataConnectionString;
         ServiceUri = new Uri(OdataConnection.ServiceUrl);
@@ -32,20 +35,17 @@ internal class CustomHttpClient : IDisposable
             CookieContainer = new CookieContainer(),
         };
         _client = new HttpClient(_httpHandler);
-        //set if-modified-since header
-        if (OdataConnection.LastUpdated.HasValue)
-            _client.DefaultRequestHeaders.IfModifiedSince = OdataConnection.LastUpdated;
     }
 
-    public CustomHttpClient(OdataConnectionString odataConnectionString,
-        DelegatingHandler dh) : this(odataConnectionString)
+    public static async Task<CustomHttpClient> CreateAsync(
+        OdataConnectionString odataConnectionString)
     {
-        _delegatingHandler = dh;
-        _delegatingHandler.InnerHandler = _httpHandler;
-        _client = new HttpClient(_delegatingHandler);
+        var cc = new CustomHttpClient(odataConnectionString);
+        cc.SetHttpClient();
+        await cc.Authenicate().ConfigureAwait(false);
+        await cc.LoginAsync().ConfigureAwait(false);
+        return cc;
     }
-
-    public Uri ServiceUri { get; set; }
 
     private static string GetHttpAgent()
     {
@@ -58,51 +58,68 @@ internal class CustomHttpClient : IDisposable
         return strVersion;
     }
 
-    internal virtual async Task<HttpResponseMessage> GetAsync(string? requestUri)
+    public async Task<HttpResponseMessage?> GetAsync(string url)
     {
-        _ = requestUri ?? throw new ArgumentNullException(nameof(requestUri));
-        await SetHttpClient().ConfigureAwait(false);
-        var response = await _client.GetAsync(new Uri(requestUri)).ConfigureAwait(false);
-        if (response.StatusCode is HttpStatusCode.ServiceUnavailable or
-            HttpStatusCode.GatewayTimeout)
-        {
-            response = await Policy
-                .RetryAsync(() => _client.GetAsync(new Uri(requestUri)), 2).ConfigureAwait(false);
-        }
-
-        return response ?? throw new OData2PocoException("Response is null");
-    }
-
-    internal async Task<string> ReadMetaDataAsync()
-    {
-        var url = ServiceUri.AbsoluteUri.EndsWith(".xml") ? ServiceUri.AbsoluteUri : ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
+        HttpResponseMessage? response = null;
         try
         {
-            _response = await GetAsync(url).ConfigureAwait(false);
-            _response.EnsureSuccessStatusCode();
-            var content = await _response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return content;
+            response = await _client.GetAsync(new Uri(url)).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            return response;
         }
-        catch (HttpRequestException ex) when (_response?.StatusCode == HttpStatusCode.NotModified)
+        catch (Exception ex)
         {
-            var lastModified = _response.Content.Headers.LastModified;
-            Logger.Info($"OData Metadata was Last modified on '{lastModified}'.");
-            throw new MetaDataNotUpdatedException("The metadata has not been modified and No code generation is done.", ex);
+            HandleHttpException(response, ex);
         }
-        catch (HttpRequestException ex) when (_response?.StatusCode == HttpStatusCode.Unauthorized)
+        return response;
+    }
+
+    private async Task<bool> LoginAsync()
+    {
+        var loginUrl = OdataConnection.LogInUrl;
+        if (string.IsNullOrEmpty(loginUrl))
+            return false;
+        Logger.Info($"Logging in using the login URL: {loginUrl}");
+        HttpResponseMessage? response = null;
+        try
         {
-            var wwwAuthenticate = _response.Headers.WwwAuthenticate.ToString();
-            throw new OData2PocoException(
-                $"Request failed with status code ({(int)_response.StatusCode}) {_response.StatusCode}.\nWWW-Authenticate: {wwwAuthenticate}", ex);
+            response = await _client.GetAsync(new Uri(loginUrl)).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            Logger.Info("Login successful and cookies have been stored.");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw;
+            HandleHttpException(response, ex);
         }
+        return true;
+    }
+
+    internal async Task<HttpResponseMessage?> ReadMetaDataAsync()
+    {
+        var url = ServiceUri.AbsoluteUri.EndsWith(".xml")
+            ? ServiceUri.AbsoluteUri
+            : ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
+        //  await Authenicate().ConfigureAwait(false);
+        //used only when there is separate loginUrl
+        // await LoginAsync().ConfigureAwait(false);
+        var response = await GetAsync(url).ConfigureAwait(false);
+        // return content;
+        return response;
+    }
+    internal async Task<string> ReadMetaDataAsStringAsync()
+    {
+        var response = await ReadMetaDataAsync().ConfigureAwait(false);
+        if (response == null) return string.Empty;
+        var metadata = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        return metadata;
     }
 
     private void SetupHeader()
     {
+        //set if-modified-since header
+        if (OdataConnection.LastUpdated.HasValue)
+            _client.DefaultRequestHeaders.IfModifiedSince = OdataConnection.LastUpdated;
+
         if (OdataConnection.HttpHeader == null || !OdataConnection.HttpHeader.Any())
         {
             return;
@@ -110,18 +127,19 @@ internal class CustomHttpClient : IDisposable
 
         foreach (var header in OdataConnection.HttpHeader)
         {
-            header.TryReplaceToBase64(out var header2);
-            var pair = header2.Split([':', '='], 2);
-            if (pair.Length == 2)
+            Console.WriteLine($"Header: {header}");
+            var header2 = header.ReplaceToBase64();
+            var match = Regex.Match(header2, @"^(?<key>[^:=]+)[:=](?<value>.+)$");
+            if (match.Success)
             {
-                var key = pair[0].Trim().Trim('"');
-                var value = pair[1].Trim().Trim('"');
-                _client.DefaultRequestHeaders.TryAddWithoutValidation(key, value);
+                var key = match.Groups["key"].Value.Trim().Trim('"');
+                var value = match.Groups["value"].Value.Trim().Trim('"');
+                _client.DefaultRequestHeaders.Add(key, value);
             }
         }
     }
 
-    private Task SetHttpClient()
+    private void SetHttpClient()
     {
         //setup Skip Certification Check.
         //Use in development environment, but is not recommended in production
@@ -140,14 +158,13 @@ internal class CustomHttpClient : IDisposable
         var agent = GetHttpAgent();
         _client.DefaultRequestHeaders.Add("User-Agent", agent);
         SetupHeader();
+    }
 
-        if (OdataConnection.Authenticate != AuthenticationType.None)
-        {
-            Authenticator auth = new(this);
-            return auth.Authenticate();
-        }
-
-        return Task.CompletedTask;
+    private async Task Authenicate()
+    {
+        if (OdataConnection.Authenticate == AuthenticationType.None) return;
+        Authenticator auth = new(this);
+        await auth.Authenticate().ConfigureAwait(false);
     }
 
     public void SetupSsl(HttpClientHandler handler)
@@ -192,6 +209,42 @@ internal class CustomHttpClient : IDisposable
         }
     }
 
+    private void HandleHttpException(HttpResponseMessage? response, Exception ex)
+    {
+        if (response != null)
+        {
+            // Handle specific status codes
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.NotModified:
+                    // Handle 304 Not Modified
+                    var lastModified = response.Content.Headers.LastModified;
+                    Logger.Warn($"Not Modified Exception: OData Metadata has not been modified.\nLast Modified on: '{lastModified}'.");
+                    var metadataException = new MetaDataNotUpdatedException("The metadata has not been modified and No code generation is done.", ex);
+                    metadataException.Data.Add("StatusCode", response.StatusCode);
+                    metadataException.Data.Add("RequestUri", response.RequestMessage?.RequestUri);
+                    metadataException.Data.Add("LastModified", lastModified);
+                    throw metadataException;
+            }
+        }
+
+        if (ex is HttpRequestException)
+        {
+            Console.WriteLine($"response is null, message={ex.Message}");
+
+            // Handle network-related errors
+            var errorMessage = "A network error occurred while making the HTTP request.";
+            var oData2PocoException = new OData2PocoException(errorMessage, ex
+            );
+            oData2PocoException.Data.Add("StatusCode", response?.StatusCode);
+            oData2PocoException.Data.Add("RequestUri", response?.RequestMessage?.RequestUri);
+            throw oData2PocoException;
+        }
+        else
+        {
+            throw ex;
+        }
+    }
     public void Dispose()
     {
         Dispose(true);
@@ -203,10 +256,71 @@ internal class CustomHttpClient : IDisposable
         if (disposing)
         {
             _client.Dispose();
-            _response?.Dispose();
-            _delegatingHandler?.Dispose();
+            //_response?.Dispose();
+            //_delegatingHandler?.Dispose();
             _httpHandler.Dispose();
             OdataConnection.Password.Dispose();
         }
     }
 }
+
+[Serializable]
+internal class UnauthorizedException : Exception
+{
+    public UnauthorizedException()
+    {
+    }
+
+    public UnauthorizedException(string message) : base(message)
+    {
+    }
+
+    public UnauthorizedException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+
+    protected UnauthorizedException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
+}
+
+[Serializable]
+internal class CustomHttpException : Exception
+{
+    private HttpStatusCode _statusCode;
+    private string _message;
+    private Exception _innerException;
+
+    public CustomHttpException()
+    {
+    }
+
+    public CustomHttpException(string message) : base(message)
+    {
+    }
+
+    public CustomHttpException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+
+    public CustomHttpException(HttpStatusCode statusCode, string errorMessage)
+    {
+        _statusCode = statusCode;
+        ErrorMessage = errorMessage;
+    }
+
+    public CustomHttpException(HttpStatusCode statusCode, string message, Exception innerException)
+    {
+        _statusCode = statusCode;
+        _message = message;
+        _innerException = innerException;
+    }
+
+    protected CustomHttpException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
+
+    public string ErrorMessage { get; }
+}
+
+

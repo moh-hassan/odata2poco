@@ -6,13 +6,13 @@ using Http;
 
 internal static class CustomClientExtensions
 {
-    public static CustomHttpClient ToCustomHttpClient(this OdataConnectionString ocs,
-        DelegatingHandler? dh = null)
-    {
-        return dh == null
-            ? new CustomHttpClient(ocs)
-            : new CustomHttpClient(ocs, dh);
-    }
+    //public static CustomHttpClient ToCustomHttpClient(this OdataConnectionString ocs,
+    //    DelegatingHandler? dh = null)
+    //{
+    //    return dh == null
+    //        ?  CustomHttpClient.CreateAsync(ocs)
+    //        : new CustomHttpClient(ocs, dh);
+    //}
 
     public static string GetBasicAuth(this OdataConnectionString ocs)
     {

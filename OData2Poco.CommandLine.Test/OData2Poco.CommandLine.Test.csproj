@@ -17,6 +17,7 @@
 
 	<ItemGroup Label="mocks">
 		<Compile Include="..\Fake\Common\ODataService.cs" Link="HttpMock\ODataService.cs" />
+		<Compile Include="..\OData2Poco.Tests\OdataServiceSetup.cs" Link="OdataServiceSetup.cs" />
 	</ItemGroup>
 
 

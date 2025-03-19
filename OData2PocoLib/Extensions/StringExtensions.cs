@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 /// <summary>
 ///     Utility for CamelCase/PascalCase Conversion
@@ -378,21 +379,28 @@ public static partial class StringExtensions
     /// <param name="header"></param>
     /// <param name="header2">header in base64 if contained in { }</param>
     /// <returns></returns>
-    public static bool TryReplaceToBase64(this string header, out string header2)
+    public static string ReplaceToBase64(this string text)
     {
-        if (string.IsNullOrEmpty(header))
+        // Check if the text contains '{' and '}'
+        var startIndex = text.IndexOf('{');
+        var endIndex = text.IndexOf('}');
+
+        if (startIndex >= 0 && endIndex > startIndex)
         {
-            header2 = string.Empty;
-            return false;
+            // Extract the content inside '{' and '}'
+            var placeholder = text.Substring(startIndex + 1, endIndex - startIndex - 1);
+
+            // Base64 encode the placeholder
+            var base64Encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(placeholder));
+
+            // Replace the placeholder with the Base64-encoded value
+            var result = text.Remove(startIndex, endIndex - startIndex + 1).Insert(startIndex, base64Encoded);
+
+            return result;
         }
 
-        header2 = header;
-        const string Pattern = @"^.+?(\{[^}]+\})$";
-        var m = Regex.Match(header, Pattern);
-        if (!m.Success) return false;
-        var base64 = m.Groups[1].Value.Trim().Trim('{', '}').ToBase64();
-        header2 = header.Replace(m.Groups[1].Value, base64);
-        return true;
+        // If no '{' and '}' are found, return the original string
+        return text;
     }
 
     public static (string, string) SplitKeyValue(this string input)

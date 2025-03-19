@@ -120,12 +120,12 @@ public class StringExtensionsTest : BaseTest
     }
 
     [Test]
-    [TestCase("Authorization=Basic {user1:password1}", "Authorization=Basic dXNlcjE6cGFzc3dvcmQx", true)]
-    [TestCase("Authorization=Basic abc123", "Authorization=Basic abc123", false)]
-    public void ReplaceToBase64_test(string header, string expectedHeader, bool expectedFlag)
+    [TestCase("Authorization=Basic {user1:password1}", "Authorization=Basic dXNlcjE6cGFzc3dvcmQx")]
+    [TestCase("Authorization=Basic abc123", "Authorization=Basic abc123")]
+    public void ReplaceToBase64_test(string header, string expectedHeader)
     {
-        var flag = header.TryReplaceToBase64(out var header2);
-        flag.Should().Be(expectedFlag);
+        var header2 = header.ReplaceToBase64();
+       // flag.Should().Be(expectedFlag);
         header2.Should().Be(expectedHeader);
     }
 

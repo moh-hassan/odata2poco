@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 using CliWrap;
-using Fake.Common;
 
 public class IntegrationTest
 {

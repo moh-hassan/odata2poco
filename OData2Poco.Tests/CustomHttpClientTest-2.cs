@@ -15,8 +15,9 @@ public class CustomHttpClientTest2
         {
             ServiceUrl = url
         };
-        using var customClient = new CustomHttpClient(cs);
-        var metaData = await customClient.ReadMetaDataAsync().ConfigureAwait(false);
+        using var customClient = await CustomHttpClient.CreateAsync(cs).ConfigureAwait(false);
+        var response = await customClient.ReadMetaDataAsync().ConfigureAwait(false);
+        var metaData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         metaData.Should().StartWith(@"<?xml version=""1.0"" encoding=""UTF-8""?>");
     }
 
@@ -28,8 +29,9 @@ public class CustomHttpClientTest2
         {
             ServiceUrl = url
         };
-        using var customClient = new CustomHttpClient(cs);
-        var metaData = await customClient.ReadMetaDataAsync().ConfigureAwait(false);
+        using var customClient = await CustomHttpClient.CreateAsync(cs).ConfigureAwait(false);
+        var response = await customClient.ReadMetaDataAsync().ConfigureAwait(false);
+        var metaData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         metaData.Should().StartWith(@"<?xml version=""1.0"" encoding=""UTF-8""?>");
     }
 }

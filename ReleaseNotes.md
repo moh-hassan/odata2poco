@@ -1,5 +1,10 @@
 # OData2Poco 
 
+## Version 6.4.0
+- New Feature: Avoid generating code when no change in metadata since last generation.
+- New Feature: - Support login, capture cookies.
+
+
 ## Version 6.3.2
 **Release Date:**  March 18, 2024
 - Fix : Generate ParameterLess Constructor beside the Parameterized one to avoid compilation error CS7036 when class inherits parent.

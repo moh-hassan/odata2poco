@@ -29,6 +29,7 @@ public class OdataConnectionString
     public SecurityProtocolType TlsProtocol { get; set; }
     public IEnumerable<string>? HttpHeader { get; set; }
     public bool SkipCertificationCheck { get; set; }
+    public string? LogInUrl { get; set; }
     internal DateTimeOffset? LastUpdated { get; set; }
     public static OdataConnectionString Create(string url)
     {
