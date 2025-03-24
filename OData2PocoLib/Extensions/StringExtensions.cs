@@ -381,6 +381,7 @@ public static partial class StringExtensions
     /// <returns></returns>
     public static string ReplaceToBase64(this string text)
     {
+        _ = text ?? throw new ArgumentNullException(nameof(text));
         // Check if the text contains '{' and '}'
         var startIndex = text.IndexOf('{');
         var endIndex = text.IndexOf('}');

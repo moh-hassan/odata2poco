@@ -1,35 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net8.0;net472</TargetFrameworks>
-		<Authors>Mohamed Hassan</Authors>
-		<Product>OData2Poco</Product>
-		<IsTestProject>true</IsTestProject>
-		<DefineConstants>$(DefineConstants);Test_Cli</DefineConstants>
+  <PropertyGroup>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+    <Authors>Mohamed Hassan</Authors>
+    <Product>OData2Poco</Product>
+    <IsTestProject>true</IsTestProject>
+    <DefineConstants>$(DefineConstants);Test_Cli</DefineConstants>
     <NoWarn>$(NoWarn);SA1201;SA1202</NoWarn>
-	</PropertyGroup>
+  </PropertyGroup>
 
-	<ItemGroup Label="FakeData">
-		<Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />
-		<Compile Include="..\Fake\CommonTestData.cs" Link="Utility\CommonTestData.cs" />
-		<Compile Include="..\Fake\TestExtensions.cs" Link="TestExtensions.cs" />
-	</ItemGroup>
-
-
-	<ItemGroup Label="mocks">
-		<Compile Include="..\Fake\Common\ODataService.cs" Link="HttpMock\ODataService.cs" />
-		<Compile Include="..\OData2Poco.Tests\OdataServiceSetup.cs" Link="OdataServiceSetup.cs" />
-	</ItemGroup>
+  <ItemGroup Label="FakeData">
+    <Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />
+    <Compile Include="..\Fake\CommonTestData.cs" Link="Utility\CommonTestData.cs" />
+    <Compile Include="..\Fake\TestCaseSources.cs" Link="TestCaseSources.cs" />
+    <Compile Include="..\Fake\TestExtensions.cs" Link="TestExtensions.cs" />
+  </ItemGroup>
 
 
-	<ItemGroup>
-	  <ProjectReference Include="..\OData2Poco.Cli\OData2Poco.Cli.csproj" />
-	</ItemGroup>
+  <ItemGroup Label="mocks">
+    <Compile Include="..\Fake\Common\ODataService.cs" Link="HttpMock\ODataService.cs" />
+    <Compile Include="..\OData2Poco.Tests\OdataServiceSetup.cs" Link="OdataServiceSetup.cs" />
+  </ItemGroup>
 
 
-	<ItemGroup>
-	  <PackageReference Update="NUnit.Analyzers">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-	  </PackageReference>
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OData2Poco.Cli\OData2Poco.Cli.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Update="NUnit.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>

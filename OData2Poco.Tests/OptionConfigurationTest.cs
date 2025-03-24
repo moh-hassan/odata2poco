@@ -103,7 +103,6 @@ public class OptionConfigurationTest : BaseTest
         //Assert
         flag.Should().BeFalse();
         cli.Should().BeEquivalentTo(args);
-        Console.WriteLine(error);
         error.Should().BeNull();
     }
 

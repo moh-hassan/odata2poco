@@ -2,9 +2,8 @@
 
 namespace OData2Poco.Tests;
 
-using System.Collections;
 using Api;
-using Fake.Common;
+using static OData2Poco.Fake.TestCaseSources;
 
 [TestFixture]
 public class O2PTest
@@ -16,7 +15,7 @@ public class O2PTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task GenerateDefaultTest(string url, string version, int n)
     {
         var connString = new OdataConnectionString
@@ -72,7 +71,7 @@ public class O2PTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task GenerateFromXmlContents(string fileName, string version, int n)
     {
         var xml = File.ReadAllText(fileName);
@@ -170,10 +169,9 @@ public class O2PTest
 
     [Test]
     [Category("mock")]
-    [TestCaseSource(typeof(TestCaseFactory), nameof(TestCaseFactory.TestMockCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(TestMockCases))]
     public async Task OdataService_mock_test(string url, string version)
     {
-        Console.WriteLine($"+++++url {url}");
         var connString = new OdataConnectionString
         {
             ServiceUrl = url
@@ -247,35 +245,6 @@ public static class TestCaseFactory
         }}  
      }}
 ";
-
-    public static IEnumerable TestCases
-    {
-        get
-        {
-            yield return new TestCaseData(TestSample.NorthWindV4, "swagger.json", "\"openapi\": \"3.0.1\"");
-            yield return new TestCaseData(TestSample.NorthWindV4, "swagger.yml", "openapi: 3.0.1");
-            yield return new TestCaseData(
-                TestSample.UrlTripPinService,
-                "swaggerPin.json",
-                @"""openapi"": ""3.0.1""");
-            yield return new TestCaseData(TestSample.UrlTripPinService, "swaggerPin.yml", "openapi: 3.0.1");
-        }
-    }
-
-    public static IEnumerable TestMockCases
-    {
-        get
-        {
-            //url ,version
-            yield return new object[] { OdataService.Northwind, "4.0" };
-            yield return new TestCaseData(OdataService.Northwind2, "1.0");
-            yield return new TestCaseData(OdataService.Northwind3, "1.0");
-            yield return new TestCaseData(OdataService.Northwind4, "4.0");
-            yield return new object[] { OdataService.Trippin, "4.0" };
-            yield return new object[] { TestSample.UrlNorthWindV4, "4.0" };
-        }
-    }
-
     private static string Path2Json(string path)
     {
         return path.Replace(@"\", @"\\");

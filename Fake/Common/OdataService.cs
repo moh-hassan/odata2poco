@@ -11,8 +11,8 @@ internal sealed class OdataService : IDisposable
     private static readonly Lazy<OdataService> s_instance = new(() =>
     new OdataService());
     internal static OdataService Instance => s_instance.Value;
-    public static string BaseAddress => Instance._mockServer.Urls[0];
-    internal static bool IsStarted => Instance._mockServer.IsStarted;
+    public static string BaseAddress => Instance.MockServer.Urls[0];
+    internal static bool IsStarted => Instance.MockServer.IsStarted;
     public static string Trippin => Instance.TrippinUrl;
     public static string TrippinBasic => Instance.TrippinBasicUrl;
     public static string TrippinBearer => Instance.TrippinBearerUrl;
@@ -20,24 +20,17 @@ internal sealed class OdataService : IDisposable
     public static string Northwind4 => Instance.Northwind4Url;
     public static string Northwind3 => Instance.Northwind3Url;
     public static string Northwind2 => Instance.Northwind2Url;
-
-    internal readonly WireMockServer _mockServer;
-
-#if TESTLIB
-    private readonly int _port = 5678;
-#else
-    private readonly int _port = 5679;
-#endif
+    internal WireMockServer MockServer { get; }
     private bool _disposedValue;
-
     private OdataService()
     {
         var setting = new WireMock.Settings.WireMockServerSettings
         {
-            Port = IsRunningInVisualStudio() ? _port : 0,
+            // Port = IsRunningInVisualStudio() ? _port : 0,
+            Port = 0,
             StartAdminInterface = true,
         };
-        _mockServer = WireMockServer.Start(setting);
+        MockServer = WireMockServer.Start(setting);
         InitializeWireMockServer();
     }
 
@@ -58,7 +51,7 @@ internal sealed class OdataService : IDisposable
             throw new OData2PocoException("Failed to start OData service");
         }
         Console.WriteLine("OData service is started");
-        Console.WriteLine($"OData service is running on {_mockServer.Urls[0]}");
+        Console.WriteLine($"OData service is running on {MockServer.Urls[0]}");
         Console.WriteLine($"Trippin: {Trippin}");
         Console.WriteLine($"TrippinBasic: {TrippinBasic}");
         Console.WriteLine($"TrippinBearer: {TrippinBearer}");
@@ -77,54 +70,52 @@ internal sealed class OdataService : IDisposable
         TrippinBasicUrl = CreateServiceWithBasicAuth("/trippin/basic", TestSample.TripPin4);
         TrippinBearerUrl = CreateServiceWithBearerTokenAuth("/trippin/bearer", TestSample.TripPin4);
     }
-
-
     private string CreateService(string path, string body)
     {
-        _mockServer
+        MockServer
             .Given(Request.Create().WithPath($"{path}/$metadata").UsingGet())
             .RespondWith(Response.Create()
                 .WithStatusCode(200)
                 .WithHeader("Content-Type", "application/xml")
                 .WithBodyFromFile(body));
-        return $"{_mockServer.Urls[0]}{path}";
+        return $"{MockServer.Urls[0]}{path}";
     }
 
     private string CreateGzipService(string path, string body)
     {
-        _mockServer
+        MockServer
             .Given(Request.Create().WithPath($"{path}/$metadata").UsingGet())
             .RespondWith(Response.Create()
                 .WithStatusCode(200)
                 .WithHeader("Content-Encoding", "gzip")
                 .WithBodyFromFile(body));
-        return $"{_mockServer.Urls[0]}{path}";
+        return $"{MockServer.Urls[0]}{path}";
     }
 
     private string CreateServiceWithBasicAuth(string path, string body, string user = "user", string password = "secret")
     {
-        _mockServer
+        MockServer
             .Given(Request.Create().WithPath($"{path}/$metadata").UsingGet()
             .WithHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user}:{password}"))))
             .RespondWith(Response.Create()
                 .WithStatusCode(200)
                 .WithHeader("Content-Type", "application/xml")
                 .WithBodyFromFile(body));
-        return $"{_mockServer.Urls[0]}{path}";
+        return $"{MockServer.Urls[0]}{path}";
     }
 
     private string CreateServiceWithBearerTokenAuth(string path,
         string body,
         string token = "secret_token")
     {
-        _mockServer
+        MockServer
            .Given(Request.Create().WithPath($"{path}/$metadata").UsingGet()
            .WithHeader("Authorization", $"Bearer {token}"))
            .RespondWith(Response.Create()
                .WithStatusCode(200)
                .WithHeader("Content-Type", "application/xml")
                .WithBodyFromFile(body));
-        return $"{_mockServer.Urls[0]}{path}";
+        return $"{MockServer.Urls[0]}{path}";
     }
 
     private bool IsRunningInVisualStudio()
@@ -147,8 +138,8 @@ internal sealed class OdataService : IDisposable
         {
             if (disposing)
             {
-                _mockServer.Stop();
-                _mockServer.Dispose();
+                MockServer.Stop();
+                MockServer.Dispose();
             }
 
             _disposedValue = true;

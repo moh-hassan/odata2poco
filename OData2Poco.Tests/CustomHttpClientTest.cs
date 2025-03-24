@@ -2,7 +2,6 @@
 
 namespace OData2Poco.Tests;
 using Http;
-using OData2Poco.Fake.Common;
 
 [NonParallelizable]
 public class CustomHttpClientTest : BaseTest
@@ -63,7 +62,7 @@ public class CustomHttpClientTest : BaseTest
             Domain = "localhost"
         };
 
-        //Act       
+        //Act
         //Assert
         await AssertConnectionAsync(connection).ConfigureAwait(false);
     }
@@ -85,7 +84,7 @@ public class CustomHttpClientTest : BaseTest
             Authenticate = AuthenticationType.None
         };
 
-        //Act       
+        //Act
         //Assert
         await AssertConnectionAsync(connection).ConfigureAwait(false);
     }

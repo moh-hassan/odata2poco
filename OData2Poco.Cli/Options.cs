@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-#pragma warning disable SA1117
 namespace OData2Poco.CommandLine;
 
 using System.Net;
@@ -70,22 +69,28 @@ public partial class Options
         "OAuth2 Token Parameters with key=value separated by Ampersand '&' formated as: 'client_id=xxx&client_secret=xxx&...', no space allowed.")]
     public string TokenParams { get; set; }
 
-    [Option("param-file", Hidden = true,
+    [Option("param-file",
+        Hidden = true,
         HelpText = "Path to parameter file (json or text format. Postman Environment is supported)")]
     public string ParamFile { get; set; } //v3.1
 
-    [Option('o', "auth", Default = AuthenticationType.None,
+    [Option('o',
+        "auth",
+        Default = AuthenticationType.None,
         HelpText = "Authentication type, allowed values: none, basic, token, oauth2.")]
     public AuthenticationType Authenticate { get; set; } = AuthenticationType.None;
 
-    [Option('H', "http-header", Separator = ';',
+    [Option('H',
+        "http-header",
+        Separator = ';',
         HelpText = "Http Header as a list of key/value pair separated by ';' e.g. key1:value1;ky2:value2.")]
     public IEnumerable<string> HttpHeader { get; set; } = [];
 
     /// <summary>
     /// Skip Certification Check. This switch is only intended to be used for hosts using a self-signed certificate for testing purposes. This is not recommended in production environment
     /// </summary>
-    [Option('S', "skip-check",
+    [Option('S',
+        "skip-check",
         HelpText =
             "Skips certificate validation checks that include all validations such as trusted root authority, expiration, ... .")]
     public bool SkipCertificationCheck { get; set; }
@@ -121,14 +126,18 @@ public partial class Options
     [Option('m', "namespace", HelpText = "A namespace prefix for the OData namespace")]
     public string NamespacePrefix { get; set; }
 
-    [Option('c', "case", Default = CaseEnum.None,
+    [Option('c',
+        "case",
+        Default = CaseEnum.None,
         HelpText = "Convert Class Property  case. Allowed values are: pas, camel, kebab, snake or none")]
     public CaseEnum NameCase { get; set; } = CaseEnum.None;
 
     /// <summary>
     /// Convert case of Entity Name`
     /// </summary>
-    [Option('C', "entity-case", Default = CaseEnum.None,
+    [Option('C',
+        "entity-case",
+        Default = CaseEnum.None,
         HelpText = "Type pas or camel to Convert Entity Name to PascalCase or CamelCase")]
     public CaseEnum EntityNameCase { get; set; }
 
@@ -141,14 +150,16 @@ public partial class Options
     // see fit.
     public RenameMap RenameMap { get; set; }
 
-    [Option('a', "attribute",
+    [Option('a',
+        "attribute",
         HelpText = "Attributes that are built-in or user defined by option 'att-defs'.")]
     public IEnumerable<string> Attributes { get; set; } = [];
 
     [Option('g', "gen-project", HelpText = "Generate a class library (.Net Stnadard) project csproj/vbproj.")]
     public bool GenerateProject { get; set; }
 
-    [Option('w', "show-warning",
+    [Option('w',
+        "show-warning",
         HelpText = "Show warning messages of renaming properties/classes whose name is a reserved keyword.")]
     public bool ShowWarning { get; set; }
 
@@ -167,7 +178,8 @@ public partial class Options
     /// <summary>
     /// Allow Nulable Reference Type in c#8, feature #43
     /// </summary>
-    [Option('B', "enable-nullable-reference",
+    [Option('B',
+        "enable-nullable-reference",
         HelpText =
             "Enable nullable for all reference types including option -b for primitive  types by adding ? to types")]
     public bool EnableNullableReferenceTypes { get; set; }
@@ -175,7 +187,9 @@ public partial class Options
     [Option('I', "init-only", HelpText = "Allow setter of class property to be 'init' instead of 'set' (c# 9 feature)")]
     public bool InitOnly { get; set; }
 
-    [Option('O', "open-api", Hidden = true,
+    [Option('O',
+        "open-api",
+        Hidden = true,
         HelpText = "Path of file .json /.yml for OpenApi or Swagger Specification version 3.")]
     public string OpenApiFileName { get; set; }
 

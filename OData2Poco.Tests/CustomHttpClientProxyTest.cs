@@ -3,7 +3,6 @@
 namespace OData2Poco.Tests;
 
 using System.Net;
-using Fake.Common;
 using Http;
 
 [Category("proxy")]

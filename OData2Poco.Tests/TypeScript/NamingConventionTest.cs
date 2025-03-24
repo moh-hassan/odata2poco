@@ -4,54 +4,11 @@ namespace OData2Poco.Tests.TypeScript;
 
 using System.Collections;
 using OData2Poco.TypeScript;
-
+using static OData2Poco.Fake.TestCaseSources;
 public class NamingConventionTest : BaseTest
 {
-    public static IEnumerable TestCases
-    {
-        get
-        {
-            yield return new TestCaseData(false, "Flight", "PublicTransportation");
-            yield return new TestCaseData(true,
-                "MicrosoftODataSampleServiceModelsTripPinFlight",
-                "MicrosoftODataSampleServiceModelsTripPinPublicTransportation");
-        }
-    }
-
-    //(bool useFullName, string expectedProperties)
-    public static IEnumerable PropertyTestCases
-    {
-        get
-        {
-            yield return new TestCaseData(false, @"
-number
-string
-string
-string
-number
-Date
-Date
-string[]
-Photo[]
-PlanItem[]"
-                .Trim());
-            yield return new TestCaseData(true, @"
-number
-string
-string
-string
-number
-Date
-Date
-string[]
-MicrosoftODataSampleServiceModelsTripPinPhoto[]
-MicrosoftODataSampleServiceModelsTripPinPlanItem[]"
-                .Trim());
-        }
-    }
-
     [Test]
-    [TestCaseSource(nameof(TestCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(TestCases3))]
     public void Naming_convention_for_className_and_baseType_test(
         bool useFullName,
         string expectedClassName,
@@ -72,7 +29,7 @@ MicrosoftODataSampleServiceModelsTripPinPlanItem[]"
     }
 
     [Test]
-    [TestCaseSource(nameof(PropertyTestCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(PropertyTestCases))]
     public void Naming_convention_for_proprty_type_test(bool useFullName,
         string expectedProperties)
     {

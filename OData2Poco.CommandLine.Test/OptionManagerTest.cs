@@ -97,17 +97,18 @@ public class OptionManagerTest
         }
         //Act
         var (cs, _) = new OptionManager(options);
-        Console.WriteLine(cs.ToJson());
         var client = await CustomHttpClient.CreateAsync(cs).ConfigureAwait(false);
-        Console.WriteLine(options.ServiceUrl);
         var response = await client.ReadMetaDataAsync()
             .ConfigureAwait(false);
         var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        //Assert
-        Assert.That(cs.Authenticate, Is.EqualTo(options.Authenticate));
-        Assert.That( cs.ServiceUrl, Is.EqualTo(options.ServiceUrl));
-        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        Assert.That(content, Does.Contain("Edm"));
+        Assert.Multiple(() =>
+        {
+            //Assert
+            Assert.That(cs.Authenticate, Is.EqualTo(options.Authenticate));
+            Assert.That(cs.ServiceUrl, Is.EqualTo(options.ServiceUrl));
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(content, Does.Contain("Edm"));
+        });
     }
 
     [Test]

@@ -78,8 +78,6 @@ public sealed class ClassTemplate : IEquatable<ClassTemplate?>, IComparable<Clas
         return string.Join(", ", comments);
     }
 
-    public static void ResetIdCounter() => s_nextId = 1;
-
     public override string ToString()
     {
         // 'id:name(parent)'

@@ -1,0 +1,21 @@
+<RunSettings>
+    <NUnit>
+
+        <UseParentFQNForParametrizedTests>true</UseParentFQNForParametrizedTests>
+        <UseNUnitIdforTestCaseId>true</UseNUnitIdforTestCaseId>
+        <Verbosity>5</Verbosity>
+        <ConsoleOut>1</ConsoleOut>
+
+        <TestOutputXml>TestOutputXml</TestOutputXml>
+        <OutputXmlFolderMode>UseResultDirectory</OutputXmlFolderMode>
+        <DumpXmlTestDiscovery>true</DumpXmlTestDiscovery>
+        <DumpXmlTestResults>true</DumpXmlTestResults>
+
+        <!--
+-->
+    </NUnit>
+    <RunConfiguration>
+        <DisableParallelization>false</DisableParallelization>
+        <ConsoleLogOutput>true</ConsoleLogOutput>
+    </RunConfiguration>
+</RunSettings>

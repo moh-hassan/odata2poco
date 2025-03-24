@@ -7,8 +7,8 @@
     <IsTestProject>true</IsTestProject>
     <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
     <NoWarn>$(NoWarn);SA1201;SA1202</NoWarn>
-
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
     <DefineConstants>$(DefineConstants);TESTLIB</DefineConstants>
   </PropertyGroup>
@@ -17,6 +17,7 @@
     <Compile Include="..\Fake\CommonTest.cs" Link="CommonTest.cs" />
     <Compile Include="..\Fake\CommonTestData.cs" Link="CommonTestData.cs" />
     <Compile Include="..\Fake\projectTestData.cs" Link="projectTestData.cs" />
+    <Compile Include="..\Fake\TestCaseSources.cs" Link="TestCaseSources.cs" />
     <Compile Include="..\Fake\TestExtensions.cs" Link="TestExtensions.cs" />
     <Compile Include="..\Fake\TsTestData.cs" Link="TsTestData.cs" />
     <Compile Include="..\OData2Poco.CommandLine.Test\Utility\HelpTestExtension.cs" Link="HelpTestExtension.cs" />
@@ -33,4 +34,5 @@
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) ">
     <Reference Include="System.Net.Http" />
   </ItemGroup>
+
 </Project>

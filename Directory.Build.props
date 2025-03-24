@@ -62,6 +62,16 @@
     <PackageReference Include="WireMock.Net" />
   </ItemGroup>
 
+  <PropertyGroup  Condition="'$(IsTestProject)' == 'true'">
+    <EnableNUnitRunner>true</EnableNUnitRunner>
+    <OutputType>Exe</OutputType>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+    <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+    <TestingPlatformCaptureOutput>true</TestingPlatformCaptureOutput>
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)\nunit.runsettings</RunSettingsFilePath> 
+
+  </PropertyGroup>
+  
   <ItemGroup>
     <None Include="$(SolutionDir)license.txt" Pack="true" PackagePath="" />
     <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\" />
@@ -96,7 +106,7 @@
     <GlobalAnalyzerConfigFiles Include="$(MSBuildThisFileDirectory)/SonarDotnet.Analyzers.globalconfig" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <PropertyGroup>
     <DebugType>portable</DebugType>
   </PropertyGroup>
 

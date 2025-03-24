@@ -4,6 +4,7 @@ namespace OData2Poco.CommandLine.Test;
 
 using System.Threading.Tasks;
 using TestUtility;
+using static OData2Poco.Fake.TestCaseSources;
 
 [TestFixture]
 public partial class ProgramTests : BaseTest
@@ -39,13 +40,12 @@ public partial class ProgramTests : BaseTest
         var a = $"-r {url} -v --ssl tls12";
         //Act
         var (_, output) = await RunCommand(a).ConfigureAwait(false);
-        Console.WriteLine(output);
         //Assert
         Assert.That(output, Does.Contain("public partial class PublicTransportation : PlanItem"));
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task DefaultSettingTest(string url, string version, int n)
     {
         //Arrange
@@ -63,7 +63,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task PocoSettingTest(string url, string version, int n)
     {
         //Arrange
@@ -147,7 +147,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task NullableDatatypeTest(string url, string version, int n)
     {
         //Arrange
@@ -190,7 +190,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     [Category("json")]
     public async Task PocoSettingWithJsonAttributeTest(string url, string version, int n)
     {
@@ -209,7 +209,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     [Category("json3")]
     public async Task PocoSettingWithJsonAttributeNetCore3Test(string url, string version, int n)
     {
@@ -227,7 +227,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task PocoSettingWithJsonAttributeAndCamelCaseTest(string url, string version, int n)
     {
         //Arrange
@@ -243,7 +243,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task PocoSettingWithJsonAttributePasCaseTest(string url, string version, int n)
     {
         //Arrange
@@ -259,7 +259,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task PocoSettingEagerTest(string url, string version, int n)
     {
         //Arrange
@@ -273,7 +273,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task PocoSettingInheritTest(string url, string version, int n)
     {
         //Arrange
@@ -286,7 +286,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task PocoSettingNamespaceTest(string url, string version, int n)
     {
         var a = $"-r {url} -v -m MyNamespace1.MyNamespace2";
@@ -298,7 +298,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task FileWithSettingTest(string url, string version, int n)
     {
         //Arrange
@@ -315,7 +315,7 @@ public partial class ProgramTests : BaseTest
     }
 
     [Test]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task FolderMaybeNotExistTest(string url, string version, int n)
     {
         //Arrange
@@ -412,8 +412,8 @@ public enum Feature
 
     [Test]
     [Category("code_header")]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.UrlNorthwindCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(UrlNorthwindCases))]
     public async Task CodeHeaderTest(string url, string version, int n)
     {
         //Arrange
@@ -526,7 +526,7 @@ public enum Feature
 
     [Test]
     [Category("filter")]
-    [TestCaseSource(typeof(TestSample), nameof(TestSample.FileCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(FileCases))]
     public async Task Model_filter_multi_values_for_v3_v4_test(string url, string _, int __)
     {
         //Arrange
@@ -894,10 +894,11 @@ public partial record Flight : PublicTransportation
         {
             //expect 200
             var (exitCode, output) = await RunCommand(a).ConfigureAwait(false);
-            Assert.That(exitCode, Is.EqualTo(0));
-            Assert.That(output, Does.Contain("class"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(exitCode, Is.EqualTo(0));
+                Assert.That(output, Does.Contain("class"));
+            });
         }
     }
-
-   
 }

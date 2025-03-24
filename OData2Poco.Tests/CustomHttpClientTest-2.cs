@@ -2,7 +2,6 @@
 
 namespace OData2Poco.Tests;
 
-using Fake.Common;
 using Http;
 
 public class CustomHttpClientTest2

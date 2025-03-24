@@ -691,7 +691,6 @@ public partial class ClassWithInnerEnum
         //Act
         var sut = PocoClassGeneratorCs.GenerateCsPocoClass(gen, setting);
         var code = sut.ClassToString(classTemplate);
-        Console.WriteLine(code);
         Assert.That(code.TrimAllSpace(), Does.Contain(expected.TrimAllSpace()));
     }
 }

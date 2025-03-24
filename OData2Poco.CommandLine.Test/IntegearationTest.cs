@@ -5,30 +5,20 @@ namespace OData2Poco.CommandLine.Test;
 using System.Collections;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Text;
 using CliWrap;
-
+using static OData2Poco.Fake.TestCaseSources;
 public class IntegrationTest
 {
-    private static readonly string s_url = OdataService.Trippin;
     private string Config => Configure();
     private string Os => CheckOs();
-
-    public static IEnumerable TestCases
-    {
-        get
-        {
-            yield return new TestCaseData($"-r {s_url} -v", 0, "public partial class Airline");
-            yield return new TestCaseData($"-r {s_url} -v -Y", 1, "ERROR(S)");
-            yield return new TestCaseData($"-r {s_url} -v -G record -I", 0, "public partial record Airline");
-        }
-    }
 
 #if !DEBUG && !NETCOREAPP
     //Windows release only
     [Test]
     [Category("integration")]
-    [TestCaseSource(nameof(TestCases))]
+    [TestCaseSource(typeof(TestCaseSources), nameof(TestCases2))]
     public async Task O2pgen_exe_can_run_in_windows_and_linux_with_mono_installed(
         string options,
         int expectedExitCode,
@@ -55,7 +45,7 @@ public class IntegrationTest
     public async Task O2pgen_exe_release_is_not_merged_test(string fw)
     {
         //Arrange
-        var args = $"-r {s_url} -v";
+        var args = $"-r {OdataService.Trippin} -v";
         //Act
         var (exitCode, output) = await RunAsync(args, fw, Config).ConfigureAwait(false);
         //Assert
@@ -71,7 +61,7 @@ public class IntegrationTest
     {
         //Arrange
         var fw = "net472";
-        var args = $"-r {s_url} -v";
+        var args = $"-r {OdataService.Trippin} -v";
         //Act
         var (exitCode, output) = await RunAsync(args, fw, Config, isMerged).ConfigureAwait(false);
         //Assert

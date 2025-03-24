@@ -1,12 +1,10 @@
 ﻿// Copyright (c) Mohamed Hassan & Contributors. All rights reserved. See License.md in the project root for license information.
 
-#pragma warning disable SA1202
 namespace OData2Poco.Http;
 
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Runtime.Serialization;
 using System.Security.Authentication;
 using System.Text.RegularExpressions;
 using Extensions;
@@ -18,10 +16,8 @@ internal class CustomHttpClient : IDisposable
     internal readonly OdataConnectionString OdataConnection;
     internal HttpClient _client;
     internal HttpClientHandler _httpHandler;
+    public Uri ServiceUri { get; }
     internal string UserAgent { get; } = GetHttpAgent();
-    public Uri ServiceUri { get; set; }
-
-
     private CustomHttpClient(OdataConnectionString odataConnectionString)
     {
         OdataConnection = odataConnectionString;
@@ -47,17 +43,6 @@ internal class CustomHttpClient : IDisposable
         return cc;
     }
 
-    private static string GetHttpAgent()
-    {
-        var assembly = Assembly.GetCallingAssembly();
-        var version = assembly.GetName().Version;
-        if (version == null)
-            return "OData2Poco";
-
-        var strVersion = $"OData2Poco/{version.ToString()} (https://github.com/moh-hassan/odata2poco)";
-        return strVersion;
-    }
-
     public async Task<HttpResponseMessage?> GetAsync(string url)
     {
         HttpResponseMessage? response = null;
@@ -73,7 +58,31 @@ internal class CustomHttpClient : IDisposable
         }
         return response;
     }
+    internal async Task<HttpResponseMessage?> ReadMetaDataAsync()
+    {
+        var url = ServiceUri.AbsoluteUri.EndsWith(".xml")
+            ? ServiceUri.AbsoluteUri
+            : ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
+        var response = await GetAsync(url).ConfigureAwait(false);
+        return response;
+    }
+    internal async Task<string> ReadMetaDataAsStringAsync()
+    {
+        var response = await ReadMetaDataAsync().ConfigureAwait(false);
+        if (response == null) return string.Empty;
+        var metadata = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        return metadata;
+    }
+    private static string GetHttpAgent()
+    {
+        var assembly = Assembly.GetCallingAssembly();
+        var version = assembly.GetName().Version;
+        if (version == null)
+            return "OData2Poco";
 
+        var strVersion = $"OData2Poco/{version} (https://github.com/moh-hassan/odata2poco)";
+        return strVersion;
+    }
     private async Task<bool> LoginAsync()
     {
         var loginUrl = OdataConnection.LogInUrl;
@@ -94,26 +103,6 @@ internal class CustomHttpClient : IDisposable
         return true;
     }
 
-    internal async Task<HttpResponseMessage?> ReadMetaDataAsync()
-    {
-        var url = ServiceUri.AbsoluteUri.EndsWith(".xml")
-            ? ServiceUri.AbsoluteUri
-            : ServiceUri.AbsoluteUri.TrimEnd('/') + "/$metadata";
-        //  await Authenicate().ConfigureAwait(false);
-        //used only when there is separate loginUrl
-        // await LoginAsync().ConfigureAwait(false);
-        var response = await GetAsync(url).ConfigureAwait(false);
-        // return content;
-        return response;
-    }
-    internal async Task<string> ReadMetaDataAsStringAsync()
-    {
-        var response = await ReadMetaDataAsync().ConfigureAwait(false);
-        if (response == null) return string.Empty;
-        var metadata = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return metadata;
-    }
-
     private void SetupHeader()
     {
         //set if-modified-since header
@@ -127,7 +116,6 @@ internal class CustomHttpClient : IDisposable
 
         foreach (var header in OdataConnection.HttpHeader)
         {
-            Console.WriteLine($"Header: {header}");
             var header2 = header.ReplaceToBase64();
             var match = Regex.Match(header2, @"^(?<key>[^:=]+)[:=](?<value>.+)$");
             if (match.Success)
@@ -167,7 +155,7 @@ internal class CustomHttpClient : IDisposable
         await auth.Authenticate().ConfigureAwait(false);
     }
 
-    public void SetupSsl(HttpClientHandler handler)
+    private void SetupSsl(HttpClientHandler handler)
     {
 #if NET8_0_OR_GREATER
         handler.SslProtocols = (SslProtocols)OdataConnection.TlsProtocol;
@@ -193,7 +181,6 @@ internal class CustomHttpClient : IDisposable
                     var proxyUserName = credentials[0];
                     var proxyPassword = credentials[1];
                     _httpHandler.Proxy.Credentials = new NetworkCredential(proxyUserName, proxyPassword);
-                    //disable default credentials
                     _httpHandler.UseDefaultCredentials = false;
                 }
                 else
@@ -213,7 +200,6 @@ internal class CustomHttpClient : IDisposable
     {
         if (response != null)
         {
-            // Handle specific status codes
             switch (response.StatusCode)
             {
                 case HttpStatusCode.NotModified:
@@ -230,9 +216,6 @@ internal class CustomHttpClient : IDisposable
 
         if (ex is HttpRequestException)
         {
-            Console.WriteLine($"response is null, message={ex.Message}");
-
-            // Handle network-related errors
             var errorMessage = "A network error occurred while making the HTTP request.";
             var oData2PocoException = new OData2PocoException(errorMessage, ex
             );
@@ -256,71 +239,8 @@ internal class CustomHttpClient : IDisposable
         if (disposing)
         {
             _client.Dispose();
-            //_response?.Dispose();
-            //_delegatingHandler?.Dispose();
             _httpHandler.Dispose();
             OdataConnection.Password.Dispose();
         }
     }
 }
-
-[Serializable]
-internal class UnauthorizedException : Exception
-{
-    public UnauthorizedException()
-    {
-    }
-
-    public UnauthorizedException(string message) : base(message)
-    {
-    }
-
-    public UnauthorizedException(string message, Exception innerException) : base(message, innerException)
-    {
-    }
-
-    protected UnauthorizedException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
-    }
-}
-
-[Serializable]
-internal class CustomHttpException : Exception
-{
-    private HttpStatusCode _statusCode;
-    private string _message;
-    private Exception _innerException;
-
-    public CustomHttpException()
-    {
-    }
-
-    public CustomHttpException(string message) : base(message)
-    {
-    }
-
-    public CustomHttpException(string message, Exception innerException) : base(message, innerException)
-    {
-    }
-
-    public CustomHttpException(HttpStatusCode statusCode, string errorMessage)
-    {
-        _statusCode = statusCode;
-        ErrorMessage = errorMessage;
-    }
-
-    public CustomHttpException(HttpStatusCode statusCode, string message, Exception innerException)
-    {
-        _statusCode = statusCode;
-        _message = message;
-        _innerException = innerException;
-    }
-
-    protected CustomHttpException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
-    }
-
-    public string ErrorMessage { get; }
-}
-
-

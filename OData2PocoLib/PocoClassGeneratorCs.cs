@@ -170,8 +170,6 @@ public sealed class PocoClassGeneratorCs : IPocoClassGenerator
         CodeText = csTemplate.ToString();
         return CodeText;
     }
-
-
     internal string PrefixNamespace(string name)
     {
         var namespc = name;
@@ -194,7 +192,44 @@ public sealed class PocoClassGeneratorCs : IPocoClassGenerator
 
         return reducedName;
     }
+    internal string GenerateInnerClass(ClassTemplate ent)
+    {
+        //   bool includeNamespace = false;
+        FluentCsTextTemplate csTemplate = new(PocoSetting);
+        var visibility = "public";
 
+        //for enum
+        if (ent.IsEnum)
+        {
+            var elements = string.Join($",{_nl}", ent.EnumElements);
+            var flagAttribute = ent.IsFlags ? "[Flags] " : string.Empty;
+            var enumString = $"\t{flagAttribute}{visibility} enum {ent.Name}{_nl}\t {{{_nl} {elements} {_nl}\t}}";
+            return enumString;
+        }
+
+        csTemplate.StartClass(ent.Name, isPartial: false);
+
+        //add properties
+        csTemplate.WriteLine(PropertyGenerator.GenerateProperties(ent, PocoSetting));
+
+        csTemplate.EndClass();
+        CodeText = csTemplate.ToString();
+        return CodeText;
+    }
+    internal string GenerateInnerClasses(ClassTemplate ct)
+    {
+        if (ct.InnerClasses.Count == 0)
+            return string.Empty;
+        var inner = ct.InnerClasses;
+        FluentCsTextTemplate csTemplate = new(PocoSetting);
+        foreach (var item in inner)
+        {
+            csTemplate.WriteLine(GenerateInnerClass(item));
+        }
+
+        CodeText = csTemplate.ToString();
+        return CodeText;
+    }
     private string GetHeader()
     {
         return CodeHeader.GetHeader(_pocoGen);
@@ -221,45 +256,5 @@ public sealed class PocoClassGeneratorCs : IPocoClassGenerator
         }
 
         return h.ToString();
-    }
-
-    internal string GenerateInnerClass(ClassTemplate ent)
-    {
-        //   bool includeNamespace = false;
-        FluentCsTextTemplate csTemplate = new(PocoSetting);
-        var visibility = "public";
-
-        //for enum
-        if (ent.IsEnum)
-        {
-            var elements = string.Join($",{_nl}", ent.EnumElements);
-            var flagAttribute = ent.IsFlags ? "[Flags] " : string.Empty;
-            var enumString = $"\t{flagAttribute}{visibility} enum {ent.Name}{_nl}\t {{{_nl} {elements} {_nl}\t}}";
-            return enumString;
-        }
-
-        csTemplate.StartClass(ent.Name, isPartial: false);
-
-        //add properties
-        csTemplate.WriteLine(PropertyGenerator.GenerateProperties(ent, PocoSetting));
-
-        csTemplate.EndClass();
-        CodeText = csTemplate.ToString();
-        return CodeText;
-    }
-
-    internal string GenerateInnerClasses(ClassTemplate ct)
-    {
-        if (ct.InnerClasses.Count == 0)
-            return string.Empty;
-        var inner = ct.InnerClasses;
-        FluentCsTextTemplate csTemplate = new(PocoSetting);
-        foreach (var item in inner)
-        {
-            csTemplate.WriteLine(GenerateInnerClass(item));
-        }
-
-        CodeText = csTemplate.ToString();
-        return CodeText;
     }
 }

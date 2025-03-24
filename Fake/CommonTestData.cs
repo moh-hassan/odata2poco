@@ -63,50 +63,8 @@ internal static class TestSample
     public static string RenameMap2 => GetFullPath("rename_map2.json");
 
     public static string RenameMap3 => GetFullPath("rename_map3.json");
-	public static string DemoCs => GetFullPath("demo.cs");
+    public static string DemoCs => GetFullPath("demo.cs");
 
     public static string GetFullPath(string relative)
         => Path.GetFullPath(Path.Combine(BaseDirectory, RelativeFakeFolder, relative));
-
-    #region Test Cases
-
-    internal static object[] UrlNorthwindCases =
-    [
-        //url ,version ,noOfClasses
-        new object[]
-        {
-           OdataService.Northwind, "4.0", 26
-        },
-        new object[]
-        {
-            OdataService.Northwind3, "1.0", 26
-        }
-    ];
-
-    internal static object[] UrlOdataCases =
-    [
-        //url ,version ,noOfClasses
-        new object[]
-        {
-            OdataService.Northwind4, "4.0", 26
-        },
-        new object[]
-        {
-            OdataService.Northwind3, "1.0", 26
-        }
-    ];
-
-    internal static object[] FileCases =
-    [
-        new object[]
-        {
-            NorthWindV4, "4.0", 11
-        },
-        new object[]
-        {
-            NorthWindV3, "1.0", 11
-        }
-    ];
-
-    #endregion
 }

@@ -125,7 +125,6 @@ public class StringExtensionsTest : BaseTest
     public void ReplaceToBase64_test(string header, string expectedHeader)
     {
         var header2 = header.ReplaceToBase64();
-       // flag.Should().Be(expectedFlag);
         header2.Should().Be(expectedHeader);
     }
 
