@@ -1,8 +1,11 @@
 # OData2Poco 
 
 ## Version 6.4.0
-- New Feature: Avoid generating code when no change in metadata since last generation.
-- New Feature: - Support login, capture cookies.
+**Release Date:**  April 1, 2025
+
+- New Feature: Avoid generating code when no change in metadata since last generation (#52).
+- New Feature: Add new option ```login``` which support Cookie-Based Authentication (Session-Based Authentication)
+- Refactoring: Updating test projects to support Microsoft Test Platform (MTP).
 
 
 ## Version 6.3.2

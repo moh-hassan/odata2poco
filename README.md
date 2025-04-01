@@ -2,6 +2,14 @@
 **OData2Poco** is a code generation tool for generating plain-old CLR objects (POCO/DTO) in c# and typescript from OData feeds. 
 POCO classes can be used in a typed RESTful client OData services. Code generation can be controlled by setting many options.
 
+----------
+## OData2Poco 6.4.0 is now available!
+The version v6.4.0 is released on April 1,2025 and it is now available in nuget! The new major enhancement are:
+- New Feature: Avoid generating code when there is no change in the metadata since last generation (#52).
+- New Feature: Add new option ```login``` which support Cookie-Based Authentication (Session-Based Authentication). The new feature help SAP users for login to Cookie-Based Authentication Odata service.
+
+Read how to use the [new features](https://github.com/moh-hassan/odata2poco/wiki/v6_4_0)
+
 -----
 
 [![NuGet Version](https://img.shields.io/nuget/v/OData2Poco.CommandLine.svg?label=nuget%20ClassLibrary&style=flat)](https://www.nuget.org/packages/OData2Poco) </p>
@@ -13,7 +21,7 @@ POCO classes can be used in a typed RESTful client OData services. Code generati
 |Branch    |Build status   |
 |----------|---------------|
 |Master    |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco/branch/master)|
-
+|Develop    |[![Build status](https://ci.appveyor.com/api/projects/status/sjaqqu70ex31n8se?svg=true)](https://ci.appveyor.com/project/moh-hassan/odata2poco/branch/develop)|
 -----------
 
 ## Development packages
@@ -218,9 +226,6 @@ This project uses free code signing provided by [SignPath.io](https://signpath.i
 Starting with v6.2, o2pgen.exe and all odata2poco.xxx.nupkg packages are signed. Code signing is applied only to odata2poco project code in the [odata2poco repository](https://github.com/moh-hassan/odata2poco) master branch and built on AppVeyor.  The odata2poco.xxx.nupkg packages contain third-party libraries used by odata2poco, which may or may not be signed.  
 
 ## Acknowledgements: 
-
-**Thank you [JetBrains](https://www.jetbrains.com "JetBrain") for [Resharper](https://www.jetbrains.com/resharper/ "Resharper") open source license**
-<img src="art/jb_beam.png" alt="signpath" width="200"/>
 
 **Thank you [SignPath](https://signpath.io?utm_source=foundation&utm_medium=github&utm_campaign=odata2poco) for free code signing.**
 

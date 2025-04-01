@@ -14,16 +14,12 @@ environment:
 pull_requests:
   do_not_increment_build_number: false
 
-install:
-  - ps: |
-      Invoke-WebRequest -Uri https://dot.net/v1/dotnet-install.ps1 -OutFile $env:TEMP\dotnet-install.ps1
-      & $env:TEMP\dotnet-install.ps1 -Version 9.0.100 -InstallDir $env:ProgramFiles\dotnet
-
 init:
   - ps: |
       git config --global core.autocrlf input
       $env:CAN_PUBLISH = $true
       $env:O2P_VERSION = $env:APPVEYOR_BUILD_VERSION
+      $ver = $env:APPVEYOR_BUILD_VERSION
       Write-Host "APPVEYOR_BUILD_VERSION='$env:APPVEYOR_BUILD_VERSION'" -ForegroundColor Yellow      
 
       if ($env:APPVEYOR_REPO_TAG -eq "true") {
@@ -34,7 +30,8 @@ init:
           $env:O2P_VERSION = $ver
         }
         try
-        {         
+        {       
+          Write-Host "Try to update-AppveyorBuild to version: $ver"   -ForegroundColor Yellow          
           Update-AppveyorBuild -Version $ver 
           Write-Host "Update-AppveyorBuild Success to change version to TAG: '$env:APPVEYOR_REPO_TAG_NAME'"   -ForegroundColor Green          
         }
@@ -45,6 +42,7 @@ init:
           $env:CAN_PUBLISH = $false
         }
       }
+      
   - ps: |
       Write-Host "APPVEYOR_BUILD_VERSION='$env:APPVEYOR_BUILD_VERSION'" -ForegroundColor Yellow
       Write-Host "APPVEYOR_REPO_TAG_NAME= '$env:APPVEYOR_REPO_TAG_NAME'" -ForegroundColor Yellow      
