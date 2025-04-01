@@ -30,21 +30,11 @@ public class OdataConnectionString
     public IEnumerable<string>? HttpHeader { get; set; }
     public bool SkipCertificationCheck { get; set; }
     public string? LogInUrl { get; set; }
-    internal DateTimeOffset? LastUpdated { get; private set; }
     public static OdataConnectionString Create(string url)
     {
         return new OdataConnectionString
         {
             ServiceUrl = url,
         };
-    }
-    public void SetLastUpdated(DateTimeOffset? lastUpdated)
-    {
-        LastUpdated = lastUpdated;
-    }
-    public void SetLastUpdated(PocoSetting pocoSetting)
-    {
-        if (pocoSetting == null) return;
-        SetLastUpdated(pocoSetting.GetLastUpdate());
     }
 }

@@ -14,7 +14,9 @@ public class CustomHttpClientTest2
         {
             ServiceUrl = url
         };
-        using var customClient = await CustomHttpClient.CreateAsync(cs).ConfigureAwait(false);
+        var ps = new PocoSetting();
+        using var customClient = await CustomHttpClient
+            .CreateAsync(cs, ps).ConfigureAwait(false);
         var response = await customClient.ReadMetaDataAsync().ConfigureAwait(false);
         var metaData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         metaData.Should().StartWith(@"<?xml version=""1.0"" encoding=""UTF-8""?>");
@@ -28,7 +30,9 @@ public class CustomHttpClientTest2
         {
             ServiceUrl = url
         };
-        using var customClient = await CustomHttpClient.CreateAsync(cs).ConfigureAwait(false);
+        var ps = new PocoSetting();
+        using var customClient = await CustomHttpClient
+            .CreateAsync(cs, ps).ConfigureAwait(false);
         var response = await customClient.ReadMetaDataAsync().ConfigureAwait(false);
         var metaData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         metaData.Should().StartWith(@"<?xml version=""1.0"" encoding=""UTF-8""?>");

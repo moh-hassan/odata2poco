@@ -20,6 +20,7 @@ internal class CustomHttpClient : IDisposable
     internal string UserAgent { get; } = GetHttpAgent();
     private CustomHttpClient(OdataConnectionString odataConnectionString)
     {
+        _ = odataConnectionString ?? throw new ArgumentNullException(nameof(odataConnectionString));
         OdataConnection = odataConnectionString;
         ServiceUri = new Uri(OdataConnection.ServiceUrl);
         _httpHandler = new HttpClientHandler
@@ -34,10 +35,12 @@ internal class CustomHttpClient : IDisposable
     }
 
     public static async Task<CustomHttpClient> CreateAsync(
-        OdataConnectionString odataConnectionString)
+       OdataConnectionString odataConnectionString, PocoSetting pocoSetting)
     {
+        _ = pocoSetting ?? throw new ArgumentNullException(nameof(pocoSetting));
         var cc = new CustomHttpClient(odataConnectionString);
         cc.SetHttpClient();
+        cc._client.DefaultRequestHeaders.IfModifiedSince = pocoSetting.GetLastUpdate();
         await cc.Authenicate().ConfigureAwait(false);
         await cc.LoginAsync().ConfigureAwait(false);
         return cc;
@@ -106,8 +109,8 @@ internal class CustomHttpClient : IDisposable
     private void SetupHeader()
     {
         //set if-modified-since header
-        if (OdataConnection.LastUpdated.HasValue)
-            _client.DefaultRequestHeaders.IfModifiedSince = OdataConnection.LastUpdated;
+        //if (OdataConnection.LastUpdated.HasValue)
+        //    _client.DefaultRequestHeaders.IfModifiedSince = OdataConnection.LastUpdated;
 
         if (OdataConnection.HttpHeader == null || !OdataConnection.HttpHeader.Any())
         {

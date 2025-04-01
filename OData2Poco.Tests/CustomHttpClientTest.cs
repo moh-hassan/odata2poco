@@ -8,10 +8,15 @@ public class CustomHttpClientTest : BaseTest
 {
     private string _token = "secret_token";
     private string _base64 = "user:secret".ToBase64();
-
-    private async Task AssertConnectionAsync(OdataConnectionString connection)
+    private PocoSetting _pocoSetting = new PocoSetting()
     {
-        using var client = await CustomHttpClient.CreateAsync(connection).ConfigureAwait(false);
+        CodeFilename = TestSample.DemoCs,
+    };
+    private async Task AssertConnectionAsync(OdataConnectionString connection,
+        PocoSetting pocoSetting)
+    {
+        using var client = await CustomHttpClient
+            .CreateAsync(connection, pocoSetting).ConfigureAwait(false);
         var metadata = await client.ReadMetaDataAsStringAsync().ConfigureAwait(false);
         Assert.That(metadata, Is.Not.Empty);
         Assert.That(metadata, Does.StartWith("""<?xml version="1.0" encoding="UTF-8"?>""").IgnoreCase);
@@ -28,10 +33,9 @@ public class CustomHttpClientTest : BaseTest
             ServiceUrl = url,
             Authenticate = AuthenticationType.None
         };
-
         //Act
         //Assert
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     [Test]
@@ -46,7 +50,7 @@ public class CustomHttpClientTest : BaseTest
         };
         //Act
         //Assert
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     [Test]
@@ -64,7 +68,7 @@ public class CustomHttpClientTest : BaseTest
 
         //Act
         //Assert
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     [Test]
@@ -86,7 +90,7 @@ public class CustomHttpClientTest : BaseTest
 
         //Act
         //Assert
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     [Test]
@@ -104,7 +108,7 @@ public class CustomHttpClientTest : BaseTest
             ]
         };
 
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     [Test]
@@ -120,7 +124,7 @@ public class CustomHttpClientTest : BaseTest
             ]
         };
 
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     [Test]
@@ -136,7 +140,7 @@ public class CustomHttpClientTest : BaseTest
             ]
         };
 
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     [Test]
@@ -154,7 +158,7 @@ public class CustomHttpClientTest : BaseTest
             ]
         };
 
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     [Test]
@@ -174,7 +178,7 @@ public class CustomHttpClientTest : BaseTest
             ]
         };
 
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     #region Auth live Test
@@ -190,7 +194,7 @@ public class CustomHttpClientTest : BaseTest
             Authenticate = AuthenticationType.Token
         };
 
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     [Test]
@@ -206,7 +210,7 @@ public class CustomHttpClientTest : BaseTest
             ]
         };
 
-        await AssertConnectionAsync(connection).ConfigureAwait(false);
+        await AssertConnectionAsync(connection, _pocoSetting).ConfigureAwait(false);
     }
 
     #endregion

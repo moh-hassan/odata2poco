@@ -22,7 +22,6 @@ public class OptionManager
         connectionString = json.ToObject<OdataConnectionString>() ??
                            throw new InvalidOperationException("ODataConnectionString is null");
         pocoSetting = json.ToObject<PocoSetting>() ?? new PocoSetting();
-        connectionString.SetLastUpdated(pocoSetting.GetLastUpdate());
     }
 
     private void ReadPassword(Options options)

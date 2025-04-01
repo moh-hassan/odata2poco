@@ -34,7 +34,10 @@ internal static class PocoFactory
     internal static async Task<IPocoGenerator> GenerateModel(OdataConnectionString connectionString,
         PocoSetting setting)
     {
-        var metaData = await MetaDataReader.LoadMetadataAsync(connectionString).ConfigureAwait(false);
+        _ = setting ?? throw new ArgumentNullException(nameof(setting));
+        var metaData = await MetaDataReader
+            .LoadMetadataAsync(connectionString, setting)
+            .ConfigureAwait(false);
         var generator = Create(metaData, setting);
         return generator;
     }

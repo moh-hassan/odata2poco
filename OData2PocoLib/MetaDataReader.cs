@@ -6,9 +6,10 @@ using Http;
 
 internal static class MetaDataReader
 {
-    public static async Task<MetaDataInfo> LoadMetaDataHttpAsync(OdataConnectionString odataConnString)
+    public static async Task<MetaDataInfo> LoadMetaDataHttpAsync(OdataConnectionString odataConnString, PocoSetting pocoSetting)
     {
-        using var client = await CustomHttpClient.CreateAsync(odataConnString).ConfigureAwait(false);
+        _ = pocoSetting ?? throw new ArgumentNullException(nameof(pocoSetting));
+        using var client = await CustomHttpClient.CreateAsync(odataConnString, pocoSetting).ConfigureAwait(false);
         var response = await client.ReadMetaDataAsync().ConfigureAwait(false);
         if (response == null)
             return new MetaDataInfo();
@@ -54,8 +55,10 @@ internal static class MetaDataReader
         return metaData;
     }
 
-    public static async Task<MetaDataInfo> LoadMetadataAsync(OdataConnectionString odataConnString)
+    public static async Task<MetaDataInfo> LoadMetadataAsync(OdataConnectionString odataConnString,
+        PocoSetting pocoSetting)
     {
+        _ = pocoSetting ?? throw new ArgumentNullException(nameof(pocoSetting));
         MetaDataInfo metaData;
         if (!odataConnString.ServiceUrl.StartsWith("http"))
         {
@@ -66,7 +69,7 @@ internal static class MetaDataReader
             return metaData;
         }
 
-        metaData = await LoadMetaDataHttpAsync(odataConnString).ConfigureAwait(false);
+        metaData = await LoadMetaDataHttpAsync(odataConnString, pocoSetting).ConfigureAwait(false);
         return metaData;
     }
 }

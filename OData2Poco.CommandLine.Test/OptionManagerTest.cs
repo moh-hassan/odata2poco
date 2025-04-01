@@ -96,8 +96,8 @@ public class OptionManagerTest
             options.Password = "secret_token";
         }
         //Act
-        var (cs, _) = new OptionManager(options);
-        var client = await CustomHttpClient.CreateAsync(cs).ConfigureAwait(false);
+        var (cs, ps) = new OptionManager(options);
+        var client = await CustomHttpClient.CreateAsync(cs, ps).ConfigureAwait(false);
         var response = await client.ReadMetaDataAsync()
             .ConfigureAwait(false);
         var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -121,11 +121,12 @@ public class OptionManagerTest
         };
         //Act
         var (cs, ps) = new OptionManager(options);
+        var lastUpdate = ps.GetLastUpdate();
         Assert.Multiple(() =>
         {
             //Assert
             Assert.That(ps.CodeFilename, Is.EqualTo(options.CodeFilename));
-            Assert.That(cs.LastUpdated, Is.EqualTo(ps.GetLastUpdate()));
+            Assert.That(lastUpdate, Is.Not.Null);
         });
     }
 
@@ -139,11 +140,13 @@ public class OptionManagerTest
         };
         //Act
         var (cs, ps) = new OptionManager(options);
+        var lastUpdate = ps.GetLastUpdate();
         Assert.Multiple(() =>
         {
             //Assert
             Assert.That(ps.CodeFilename, Is.EqualTo(options.CodeFilename));
-            Assert.That(cs.LastUpdated?.Date, Is.EqualTo(ps.GetLastUpdate()?.Date));
+            //Assert.That(cs.LastUpdated?.Date, Is.EqualTo(ps.GetLastUpdate()?.Date));
+            Assert.That(lastUpdate, Is.Null);
         });
     }
 }

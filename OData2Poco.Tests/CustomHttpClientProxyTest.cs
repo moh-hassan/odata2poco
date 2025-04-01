@@ -10,6 +10,7 @@ public class CustomHttpClientProxyTest
 {
     private readonly string _machineName = Environment.MachineName;
     private readonly string _proxy = "http://localhost:8888";
+    private PocoSetting ps = new PocoSetting();
 
     [OneTimeSetUp]
     public async Task Setup()
@@ -29,7 +30,9 @@ public class CustomHttpClientProxyTest
             Proxy = _proxy,
             ProxyUser = "user:password"
         };
-        using var customClient = await CustomHttpClient.CreateAsync(cs).ConfigureAwait(false);
+        using var customClient = await CustomHttpClient
+            .CreateAsync(cs, ps)
+            .ConfigureAwait(false);
         var metaData = await customClient.ReadMetaDataAsStringAsync().ConfigureAwait(false);
         Assert.That(metaData, Does.StartWith("""<?xml version="1.0" encoding="UTF-8"?>"""));
     }
@@ -45,7 +48,7 @@ public class CustomHttpClientProxyTest
             Proxy = _proxy,
             ProxyUser = "user:invalid_password"
         };
-        using var customClient = CustomHttpClient.CreateAsync(cs).GetAwaiter().GetResult();
+        using var customClient = CustomHttpClient.CreateAsync(cs, ps).GetAwaiter().GetResult();
         const string Msg = "Response status code does not indicate success: 407";
         Assert.That(
             customClient.ReadMetaDataAsync,

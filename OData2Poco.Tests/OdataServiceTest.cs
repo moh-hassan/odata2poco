@@ -10,6 +10,11 @@ using static OData2Poco.Fake.TestCaseSources;
 [Category("OdataService")]
 public class OdataServiceTest
 {
+    private PocoSetting _pocoSetting = new PocoSetting()
+    {
+        CodeFilename = TestSample.DemoCs,
+    };
+
     private HttpClient CreateClient()
     {
         var handler = new HttpClientHandler()
@@ -107,7 +112,7 @@ public class OdataServiceTest
             Authenticate = AuthenticationType.None
         };
 
-        var client = await CustomHttpClient.CreateAsync(connString)
+        var client = await CustomHttpClient.CreateAsync(connString, _pocoSetting)
             .ConfigureAwait(false);
         var response = await client.ReadMetaDataAsync().ConfigureAwait(false);
         var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -128,7 +133,7 @@ public class OdataServiceTest
             Authenticate = AuthenticationType.None
         };
 
-        var client = await CustomHttpClient.CreateAsync(connString)
+        var client = await CustomHttpClient.CreateAsync(connString, _pocoSetting)
             .ConfigureAwait(false);
         var response = await client.ReadMetaDataAsync().ConfigureAwait(false);
         Assert.That(response.IsSuccessStatusCode, Is.True);
