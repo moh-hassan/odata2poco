@@ -1,6 +1,6 @@
 
 #nuget version is only changed by  RELEASE TAG 
-version: 6.4.0-preview-{build} 
+version: 6.4.0-{build} 
 
 image: Visual Studio 2022
 
@@ -80,12 +80,20 @@ after_test:
    pushd .\build
    $source="https://www.myget.org/F/odata2poco/api/v3/index.json"
    $key=$env:MYGET_KEY 
-   nuget push *.nupkg -Source $source -ApiKey $key   
+   # nuget push *.nupkg -Source $source -ApiKey $key   
    popd
 
 artifacts: 
 - path: .\build\odata2poco-%O2P_VERSION%-unsigned.zip
   name: o2p_zip   
+- path: .\build\o2pgen.exe
+  name: o2p_exe
+- path: .\build\OData2Poco.dotnet.o2pgen*.nupkg
+  name: global_tool
+- path: .\build\OData2Poco.CommandLine.*.nupkg
+  name: o2pgen
+- path: .\build\OData2Poco.*.nupkg
+  name: lib 
 
 deploy:
 #Github    
@@ -95,11 +103,15 @@ deploy:
   artifact: o2p_zip          
   prerelease: false  
   #draft: true
-  #on:  
-  #  APPVEYOR_REPO_TAG: true
+  on:  
+    APPVEYOR_REPO_TAG: true
  
-- provider: Webhook
-  url: https://app.signpath.io/API/v1/%SIGNPATH_ORGANIZATION_ID%/Integrations/AppVeyor?ProjectSlug=%SIGNPATH_PROJECT_SLUG%&SigningPolicySlug=%SIGNPATH_SIGNING_POLICY_SLUG%&ArtifactConfigurationSlug=%ARTIFACT_CONFIGURATION_SLUG%
-  authorization: 'Bearer %SIGNPATH_CI_USER_TOKEN%'  
+- provider: NuGet
+  artifact: /.*(\.)nupkg/
+
+  api_key:
+    secure: nyNU/876I5+kVWX/5000lDD5iNiOwxSrb5pW7MKVLkw1JWqGu6PwM/6kLlwpa8v3
   on:
-     APPVEYOR_REPO_TAG: true
+    APPVEYOR_REPO_TAG: true # Deploy on tag push only.
+    branch: master          # Release from master branch only.
+     
