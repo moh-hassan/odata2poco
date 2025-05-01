@@ -1,6 +1,6 @@
 
 #nuget version is only changed by  RELEASE TAG 
-version: 6.4.0-{build} 
+version: 6.5.0-env-{build} 
 
 image: Visual Studio 2022
 
@@ -16,6 +16,9 @@ pull_requests:
 
 init:
   - ps: |
+      # Enable RDP for the build agent
+      # iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
       git config --global core.autocrlf input
       $env:CAN_PUBLISH = $true
       $env:O2P_VERSION = $env:APPVEYOR_BUILD_VERSION
@@ -47,6 +50,10 @@ init:
       Write-Host "APPVEYOR_BUILD_VERSION='$env:APPVEYOR_BUILD_VERSION'" -ForegroundColor Yellow
       Write-Host "APPVEYOR_REPO_TAG_NAME= '$env:APPVEYOR_REPO_TAG_NAME'" -ForegroundColor Yellow      
 
+install:
+  - ps: |
+      & "$env:APPVEYOR_BUILD_FOLDER\scripts\proxy.ps1"      
+
 configuration: Release
 
 skip_commits:
@@ -63,6 +70,7 @@ build_script:
 - cmd: dotnet build OData2Poco.sln -c Release --version-suffix %APPVEYOR_BUILD_VERSION% 
 
 test_script: 
+- ps:  Write-Output $(netstat -ano | Select-String ":8888")
 - cmd: dotnet test OData2Poco.Tests/ 
 - cmd: dotnet test OData2Poco.CommandLine.Test/
 
@@ -114,4 +122,8 @@ deploy:
   on:
     APPVEYOR_REPO_TAG: true # Deploy on tag push only.
     branch: master          # Release from master branch only.
-     
+
+# on_finish:
+#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+   

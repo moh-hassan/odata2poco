@@ -2,21 +2,23 @@
 
 namespace OData2Poco.Tests;
 
-using System.Net;
 using Http;
 
 [Category("proxy")]
 public class CustomHttpClientProxyTest
 {
-    private readonly string _machineName = Environment.MachineName;
-    private readonly string _proxy = "http://localhost:8888";
+    private int _port = 8888;
+    private string _proxy => $"http://localhost:{_port}";
+    private string _machineName = Environment.MachineName;
+
     private PocoSetting ps = new PocoSetting();
 
     [OneTimeSetUp]
-    public async Task Setup()
+    public void Setup()
     {
-        if (!await IsProxyAvailable().ConfigureAwait(false))
-            Assert.Ignore("Ignore proxy test in CI");
+        if (PortChecker.IsPortInUse(_port, "mitmdump"))
+            return;
+        Assert.Ignore("Ignore proxy test. mitmdump is not running");
     }
 
     [Test]
@@ -41,7 +43,7 @@ public class CustomHttpClientProxyTest
     public void Proxy_with_Invalid_credentials_should_fail()
     {
         var url = OdataService.Northwind;
-        url = url.Replace("localhost", _machineName);
+        url = url.Replace("localhost", _machineName); //proxy bypass localhost in net472
         var cs = new OdataConnectionString
         {
             ServiceUrl = url,
@@ -52,33 +54,8 @@ public class CustomHttpClientProxyTest
         const string Msg = "Response status code does not indicate success: 407";
         Assert.That(
             customClient.ReadMetaDataAsync,
-            Throws.Exception.TypeOf<HttpRequestException>()
+            Throws.Exception.TypeOf<OData2PocoException>()
                 .With.Message.Contain(Msg)
         );
-    }
-
-    private async Task<bool> IsProxyAvailable()
-    {
-        var handler = new HttpClientHandler
-        {
-            Proxy = new WebProxy("localhost", 8888), // Fiddler's default settings
-            UseProxy = true
-        };
-        handler.Proxy.Credentials = new NetworkCredential("user", "password");
-        using var httpClient = new HttpClient(handler);
-        var url = "http://www.example.com";
-
-        try
-        {
-            // Send an HTTP HEAD request
-            var request = new HttpRequestMessage(HttpMethod.Head, url);
-            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
     }
 }

@@ -219,7 +219,7 @@ internal class CustomHttpClient : IDisposable
 
         if (ex is HttpRequestException)
         {
-            var errorMessage = "A network error occurred while making the HTTP request.";
+            var errorMessage = ex.Message;
             var oData2PocoException = new OData2PocoException(errorMessage, ex
             );
             oData2PocoException.Data.Add("StatusCode", response?.StatusCode);
