@@ -81,9 +81,10 @@ public class IntegrationTest
 
     private (string workDir, string exe) GetBinFolder(string project,
         string fw,
-        string configuration = "Release",
-        bool isMerged = false)
+        string configuration
+        )
     {
+        var isMerged = configuration == "Release";
         var wd = Path.GetFullPath(Path.Combine(TestSample.SolutionFolder, project, "Bin", configuration, fw));
         if (isMerged && configuration == "Release" && fw.StartsWith("net4"))
         {
@@ -98,14 +99,14 @@ public class IntegrationTest
     }
 
     private async Task<(int exitCode, StringBuilder output)> RunAsync(string args,
-        string fw = "net472",
-        string configuration = "Release",
+        string fw,
+        string configuration,
         bool isMerged = false)
     {
         var project = fw.StartsWith("net4")
             ? "OData2Poco.CommandLine"
             : "OData2Poco.dotnet.o2pgen";
-        var (workDir, exe) = GetBinFolder(project, fw, configuration, isMerged);
+        var (workDir, exe) = GetBinFolder(project, fw, configuration);
         var program = exe;
         if (exe.EndsWith("dll"))
         {

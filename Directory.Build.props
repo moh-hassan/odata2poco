@@ -60,6 +60,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="WireMock.Net" />
+   <!-- <PackageReference Include="Microsoft.Testing.Platform.MSBuild"/> -->
+
   </ItemGroup>
 
   <PropertyGroup  Condition="'$(IsTestProject)' == 'true'">
@@ -68,8 +70,9 @@
     <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
     <TestingPlatformCaptureOutput>true</TestingPlatformCaptureOutput>
-    <RunSettingsFilePath>$(MSBuildThisFileDirectory)\nunit.runsettings</RunSettingsFilePath> 
-
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)nunit.runsettings</RunSettingsFilePath>
+    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --settings $(RunSettingsFilePath)</TestingPlatformCommandLineArguments>
+    <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
   </PropertyGroup>
   
   <ItemGroup>

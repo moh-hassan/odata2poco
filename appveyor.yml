@@ -1,6 +1,6 @@
 
 #nuget version is only changed by  RELEASE TAG 
-version: 6.5.0-env-{build} 
+version: 6.5.0-dev-{build} 
 
 image: Visual Studio 2022
 
@@ -71,8 +71,7 @@ build_script:
 
 test_script: 
 - ps:  Write-Output $(netstat -ano | Select-String ":8888")
-- cmd: dotnet test OData2Poco.Tests/ 
-- cmd: dotnet test OData2Poco.CommandLine.Test/
+- cmd: dotnet test  --no-build --no-restore
 
 after_test:
 - cmd: dotnet pack OData2Poco.CommandLine/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  
@@ -91,6 +90,10 @@ after_test:
    # nuget push *.nupkg -Source $source -ApiKey $key   
    popd
 
+- ps: |
+   & "$env:APPVEYOR_BUILD_FOLDER\scripts\ZipTestResults.ps1"   
+
+
 artifacts: 
 - path: .\build\odata2poco-%O2P_VERSION%-unsigned.zip
   name: o2p_zip   
@@ -102,6 +105,8 @@ artifacts:
   name: o2pgen
 - path: .\build\OData2Poco.*.nupkg
   name: lib 
+- path: .\build\TestResultsAll.zip
+  name: TestResults
 
 deploy:
 #Github    
