@@ -236,7 +236,13 @@ internal partial class Poco : IPocoGenerator
         if (ct.TypeKind != EdmTypeKind.Entity)
             return string.Empty;
         var entitySet = EntitySets
-            .Where(m => m.EntityType().FullName() == ct.FullName())
+               .Where(m =>
+#if NET8_0_OR_GREATER
+    m.EntityType.FullName() == ct.FullName()
+#else
+    m.EntityType().FullName() == ct.FullName()
+#endif
+    )
             .DefaultIfEmpty().First();
         return entitySet != null ? entitySet.Name : ct.Name;
     }
