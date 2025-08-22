@@ -9,8 +9,8 @@
         <UseNUnitIdforTestCaseId>true</UseNUnitIdforTestCaseId>
         <Verbosity>5</Verbosity>
         <ConsoleOut>1</ConsoleOut>
-        <TestOutputXml>TestOutputXml</TestOutputXml>
-        <OutputXmlFolderMode>UseResultDirectory</OutputXmlFolderMode>
+        <TestOutputXml>TestResults</TestOutputXml>
+        <OutputXmlFolderMode>RelativeToWorkFolder</OutputXmlFolderMode>
         <DumpXmlTestDiscovery>true</DumpXmlTestDiscovery>
         <DumpXmlTestResults>true</DumpXmlTestResults>    
     </NUnit>    

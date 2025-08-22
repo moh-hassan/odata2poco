@@ -71,7 +71,7 @@ build_script:
 
 test_script: 
 - ps:  Write-Output $(netstat -ano | Select-String ":8888")
-- cmd: dotnet test  --no-build --no-restore
+- cmd: dotnet test  -c Release --no-build --no-restore
 
 after_test:
 - cmd: dotnet pack OData2Poco.CommandLine/ -c Release --version-suffix %APPVEYOR_BUILD_VERSION%  

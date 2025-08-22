@@ -60,21 +60,21 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="WireMock.Net" />
-   <!-- <PackageReference Include="Microsoft.Testing.Platform.MSBuild"/> -->
 
   </ItemGroup>
 
   <PropertyGroup  Condition="'$(IsTestProject)' == 'true'">
-    <EnableNUnitRunner>true</EnableNUnitRunner>
-    <OutputType>Exe</OutputType>
-    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
-    <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
-    <TestingPlatformCaptureOutput>true</TestingPlatformCaptureOutput>
     <RunSettingsFilePath>$(MSBuildThisFileDirectory)nunit.runsettings</RunSettingsFilePath>
-    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --settings $(RunSettingsFilePath)</TestingPlatformCommandLineArguments>
+    <RunSettingsFilePathArgs>--settings $(RunSettingsFilePath)</RunSettingsFilePathArgs>
+    
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>    
+    <EnableNUnitRunner>true</EnableNUnitRunner>
+    <OutputType>Exe</OutputType>  
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+    <TestingPlatformCaptureOutput>false</TestingPlatformCaptureOutput>
+    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) $(RunSettingsFilePathArgs)</TestingPlatformCommandLineArguments>         
   </PropertyGroup>
-  
+
   <ItemGroup>
     <None Include="$(SolutionDir)license.txt" Pack="true" PackagePath="" />
     <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\" />
