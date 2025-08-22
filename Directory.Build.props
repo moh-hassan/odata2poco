@@ -45,7 +45,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" /> 
     <PackageReference Include="nunit" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="FluentAssertions" />
@@ -71,8 +71,11 @@
     <EnableNUnitRunner>true</EnableNUnitRunner>
     <OutputType>Exe</OutputType>  
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
-    <TestingPlatformCaptureOutput>false</TestingPlatformCaptureOutput>
+    <TestingPlatformCaptureOutput>true</TestingPlatformCaptureOutput>
     <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) $(RunSettingsFilePathArgs)</TestingPlatformCommandLineArguments>         
+    <!-- Ensure binding redirects on .NET Framework test runners -->
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
 
   <ItemGroup>
